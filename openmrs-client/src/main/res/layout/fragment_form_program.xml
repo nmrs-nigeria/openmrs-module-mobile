@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ The contents of this file are subject to the OpenMRS Public License
+  ~ Version 1.0 (the "License"); you may not use this file except in
+  ~ compliance with the License. You may obtain a copy of the License at
+  ~ http://license.openmrs.org
+  ~
+  ~ Software distributed under the License is distributed on an "AS IS"
+  ~ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing rights and limitations
+  ~ under the License.
+  ~
+  ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
+
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/hivEnrollmentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/hivEnrollmentButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/hiv_enrollment_label"/>
+
+                    <TextView
+                        android:id="@+id/hivEnrollmentLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/hivEnrollmentButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/hiv_enrollment_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/careCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/careCardButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/care_card_label" />
+
+                    <TextView
+                        android:id="@+id/careCardLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/careCardButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/care_card_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+
+
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/adultinitView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/adultinitButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/adult_initial_clinical_label"/>
+
+                    <TextView
+                        android:id="@+id/adultinitLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/adultinitButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/adult_initial_clinical_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/pedinitView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/pedinitButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/Ped_initial_clinical_label" />
+
+                    <TextView
+                        android:id="@+id/pedinitLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pedinitButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/Ped_initial_clinical_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+
+        <TableRow>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/deliveryView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/deliveryButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/delivery_label" />
+
+                    <TextView
+                        android:id="@+id/deliveryLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/deliveryButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/delivery_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/pmtcthtsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/pmtcthtsButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/hts_pmtct_label" />
+
+                    <TextView
+                        android:id="@+id/pmtcthtsLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pmtcthtsButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/hts_pmtct_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/artComView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/artComButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/art_commencement_label"/>
+
+                    <TextView
+                        android:id="@+id/artComLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/artComButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/art_commencement_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/clientTracView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/clientTracButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/client_tracking_label" />
+
+                    <TextView
+                        android:id="@+id/clientTracLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/clientTracButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/client_tracking_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+        </TableRow>
+        <TableRow>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margin_short"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:id="@+id/ancTrackingView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:visibility="gone"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ancTrackingButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width_program"
+                    android:layout_height="@dimen/dashboard_icon_height_width_program"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/dashboard_icon_margin_program"
+                    android:contentDescription="@string/general_antenatal_label" />
+
+                <TextView
+                    android:id="@+id/ancTrackingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ancTrackingButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/general_antenatal_label"
+                    android:textSize="@dimen/dashboard_text_size" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margin_short"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:id="@+id/partnerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:visibility="gone"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/partnerButton"
+                    android:layout_width="@dimen/dashboard_icon_height_width_program"
+                    android:layout_height="@dimen/dashboard_icon_height_width_program"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/dashboard_icon_margin_program"
+                    android:contentDescription="@string/partner_label" />
+
+                <TextView
+                    android:id="@+id/partnerLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/partnerButton"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                    android:text="@string/partner_label"
+                    android:textSize="@dimen/dashboard_text_size" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </TableRow>
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/labView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/labButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/laboratory_label" />
+
+                    <TextView
+                        android:id="@+id/labLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/labButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/laboratory_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/pharmacyView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/pharmacyButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/pharmacy_order_label" />
+
+                    <TextView
+                        android:id="@+id/pharmacyLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pharmacyButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/pharmacy_order_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/clientinteakeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/clientinteakeButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/client_intake_label" />
+
+                    <TextView
+                        android:id="@+id/clientinteakeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/clientinteakeButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/client_intake_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/clientRefView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/clientRefButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/client_referal_label" />
+
+                    <TextView
+                        android:id="@+id/clientRefLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/clientRefButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/client_referal_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/maternalView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/maternalButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/maternal_cohort_label" />
+
+                    <TextView
+                        android:id="@+id/maternalLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/maternalButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/maternal_cohort_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/transferView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/transferButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/transfer_label" />
+
+                    <TextView
+                        android:id="@+id/transferLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/transferButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/transfer_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+        <TableRow>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/childView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/childButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/child_birth_label" />
+
+                    <TextView
+                        android:id="@+id/childLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/childButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/child_birth_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/heifView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/heifButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/hei_follow_up_label" />
+
+                    <TextView
+                        android:id="@+id/heifLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/heifButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/hei_follow_up_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+
+
+    </TableLayout>
+
+</ScrollView>
