@@ -170,6 +170,16 @@
                 android:value=".activities.dashboard.DashboardActivity" />
         </activity>
         <activity
+            android:name=".activities.syncedvisits.SyncedVisitsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/action_synced_entry"
+            android:parentActivityName=".activities.dashboard.DashboardActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.dashboard.DashboardActivity" />
+        </activity>
+        <activity
             android:name=".activities.addeditpatient.AddEditPatientActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_register_patient"

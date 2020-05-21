@@ -12,7 +12,7 @@
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 
-package org.openmrs.mobile.activities.syncedpatients;
+package org.openmrs.mobile.activities.syncedvisits;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,8 +41,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SyncedPatientsRecyclerViewAdapter extends RecyclerView.Adapter<SyncedPatientsRecyclerViewAdapter.PatientViewHolder> {
-    private SyncedPatientsFragment mContext;
+public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<SyncedVisitsRecyclerViewAdapter.PatientViewHolder> {
+    private SyncedVisitsFragment mContext;
     private List<Patient> mItems;
     private boolean multiSelect = false;
     private ArrayList<Patient> selectedItems = new ArrayList<>();
@@ -75,21 +74,21 @@ public class SyncedPatientsRecyclerViewAdapter extends RecyclerView.Adapter<Sync
         }
     };
 
-    public SyncedPatientsRecyclerViewAdapter(SyncedPatientsFragment context, List<Patient> items){
+    public SyncedVisitsRecyclerViewAdapter(SyncedVisitsFragment context, List<Patient> items){
         this.mContext = context;
         this.mItems = items;
     }
 
     @NonNull
     @Override
-    public SyncedPatientsRecyclerViewAdapter.PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SyncedVisitsRecyclerViewAdapter.PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_find_synced_patients, parent, false);
         FontsUtil.setFont((ViewGroup) itemView);
         return new PatientViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SyncedPatientsRecyclerViewAdapter.PatientViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull SyncedVisitsRecyclerViewAdapter.PatientViewHolder holder, final int position) {
         holder.update(mItems.get(position));
 
         final Patient patient = mItems.get(position);
@@ -105,8 +104,13 @@ public class SyncedPatientsRecyclerViewAdapter extends RecyclerView.Adapter<Sync
         if (null != patient.getGender()) {
             holder.mGender.setText(patient.getGender());
         }
-
-
+        if (patient.isSynced()) {
+            holder.mSyncedStatus.setText("Synced");
+            holder.mSyncedStatus.setTextColor(Color.GREEN);
+        }else{
+            holder.mSyncedStatus.setText("Pending");
+            holder.mSyncedStatus.setTextColor(Color.RED);
+        }
         try{
             holder.mBirthDate.setText(DateUtils.convertTime(DateUtils.convertTime(patient.getBirthdate())));
         }
@@ -128,7 +132,7 @@ public class SyncedPatientsRecyclerViewAdapter extends RecyclerView.Adapter<Sync
         private TextView mGender;
         private TextView mAge;
         private TextView mBirthDate;
-
+        private TextView mSyncedStatus;
         private ColorStateList cardBackgroundColor;
 
         public PatientViewHolder(View itemView) {
@@ -139,7 +143,7 @@ public class SyncedPatientsRecyclerViewAdapter extends RecyclerView.Adapter<Sync
             mGender = itemView.findViewById(R.id.syncedPatientGender);
             mAge = itemView.findViewById(R.id.syncedPatientAge);
             mBirthDate = itemView.findViewById(R.id.syncedPatientBirthDate);
-
+            mSyncedStatus = itemView.findViewById(R.id.syncedStatus);
 
             cardBackgroundColor = mRowLayout.getCardBackgroundColor();
         }

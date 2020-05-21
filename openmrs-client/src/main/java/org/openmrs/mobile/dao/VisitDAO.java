@@ -565,10 +565,34 @@ public class VisitDAO {
         return createObservableIO(() -> {
             List<Encountercreate> encountercreatelist = new Select()
                     .from(Encountercreate.class)
-                    .where("patientid = ?",patientID)
+                    .where("patientid = ? AND synced = 0",patientID)
                     .execute();
             return encountercreatelist;
         });
     }
+
+    public List<Encountercreate> getLocalEncounterByPatientIDStr(final Long patientID, final String formname) {
+        List<Encountercreate> encountercreateliststr = new Select()
+                .from(Encountercreate.class)
+                .where("patientid = ? AND formname = ?",patientID, formname)
+                .execute();
+        return encountercreateliststr;
+    }
+
+    public List<Encountercreate> getLocalEncounterByPatientIDEligible(final Long patientID, final String formname, final String eligible) {
+        List<Encountercreate> encountercreatelist = new Select()
+                .from(Encountercreate.class)
+                .where("patientid = ? AND formname = ? AND eligble = ?",patientID, formname, eligible)
+                .execute();
+        return encountercreatelist;
+    }
+
+//    public List<Encountercreate> getLocalEncounterByPatientIDStr(final Long patientID) {
+//        List<Encountercreate> encountercreatelist = new Select()
+//                .from(Encountercreate.class)
+//                .where("patientid = ? AND synced = 'false'",patientID)
+//                .execute();
+//        return encountercreatelist;
+//    }
 
 }

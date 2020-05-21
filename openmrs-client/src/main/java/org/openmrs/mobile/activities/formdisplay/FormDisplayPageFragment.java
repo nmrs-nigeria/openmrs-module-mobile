@@ -3,7 +3,7 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
  * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- *
+ * <p>
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat;
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
+import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
 import org.openmrs.mobile.listeners.watcher.NumericValidatorWatcher;
@@ -65,7 +66,7 @@ import java.util.Map;
 
 public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.Presenter.PagePresenter> implements FormDisplayContract.View.PageView {
 
-    private List<InputField> inputFields =new ArrayList<>();
+    private List<InputField> inputFields = new ArrayList<>();
     private List<SelectOneField> selectOneFields = new ArrayList<>();
     private List<SelectManyFields> selectManyFields = new ArrayList<>();
     private LinearLayout mParent;
@@ -110,13 +111,13 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             FormFieldsWrapper formFieldsWrapper = (FormFieldsWrapper) savedInstanceState.getSerializable(ApplicationConstants.BundleKeys.FORM_FIELDS_BUNDLE);
             inputFields = formFieldsWrapper.getInputFields();
 
-            for(InputField field:inputFields){
+            for (InputField field : inputFields) {
                 View v = getActivity().findViewById(field.getId());
-                if(v != null && v instanceof DiscreteSeekBar) {
+                if (v != null && v instanceof DiscreteSeekBar) {
                     DiscreteSeekBar sb = (DiscreteSeekBar) v;
                     sb.setProgress(field.getValue().intValue());
                 }
-                if(field.isRed()){
+                if (field.isRed()) {
                     RangeEditText ed = getActivity().findViewById(field.getId());
                     ed.setTextColor(ContextCompat.getColor(OpenMRS.getInstance(), R.color.red));
                 }
@@ -134,7 +135,6 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     public void attachQuestionToSection(LinearLayout section, LinearLayout question) {
         section.addView(question);
     }
-
 
 
     @Override
@@ -164,19 +164,19 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             if (question.getRepeatConcept() == null) {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT));
-            }else{
+            } else {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
             }
             sectionLinearLayout.addView(vv);
 
 
-            if ((question.getQuestionOptions().getMax() != null) && (!(question.getQuestionOptions().isAllowDecimal())) ){
+            if ((question.getQuestionOptions().getMax() != null) && (!(question.getQuestionOptions().isAllowDecimal()))) {
                 ed.setName(question.getLabel());
                 ed.setSingleLine(true);
                 ed.setLowerlimit(Double.parseDouble(question.getQuestionOptions().getMax()));
                 ed.setUpperlimit(Double.parseDouble(question.getQuestionOptions().getMin()));
                 ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                ed.setPadding(15,0,0,15);
+                ed.setPadding(15, 0, 0, 15);
                 if (question.getQuestionOptions().isAllowDecimal()) {
                     ed.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 } else {
@@ -188,15 +188,14 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 TextWatcher textWatcher = new NumericValidatorWatcher(ed, Double.parseDouble(question.getQuestionOptions().getMax()), Double.parseDouble(question.getQuestionOptions().getMin()));
                 ed.addTextChangedListener(textWatcher);
                 sectionLinearLayout.addView(ed, layoutParams);
-            }
-            else {
+            } else {
                 ed.setName(question.getLabel());
                 ed.setSingleLine(true);
                 ed.setLowerlimit(-1.0);
                 ed.setUpperlimit(-1.0);
                 ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 FontsUtil.setFont(ed, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
-                ed.setPadding(15,0,0,10);
+                ed.setPadding(15, 0, 0, 10);
                 if (question.getQuestionOptions().isAllowDecimal()) {
                     ed.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 } else {
@@ -206,10 +205,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 //                ed.setId(customHashCode(question.getQuestionOptions().getConcept()));
                 sectionLinearLayout.addView(ed, layoutParams);
             }
-            if(question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")){
+            if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")) {
                 ed.setVisibility(View.VISIBLE);
                 vv.setVisibility(View.VISIBLE);
-            }else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")){
+            } else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")) {
                 ed.setVisibility(View.GONE);
                 vv.setVisibility(View.GONE);
             }
@@ -219,12 +218,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     vv.setVisibility(View.GONE);
                 }
             }
-        }else{
+        } else {
             InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setGroupConcept(question.getGroupConcept());
             field.setQuestionLabel(question.getLabel());
             field.setRepeatConcept(question.getRepeatConcept());
-            InputField inputField = getInputField(field.getConcept(),field.getId());
+            InputField inputField = getInputField(field.getConcept(), field.getId());
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -240,19 +239,19 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             if (question.getRepeatConcept() == null) {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT));
-            }else{
+            } else {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
             }
             sectionLinearLayout.addView(vv);
 
 
-            if ((question.getQuestionOptions().getMax() != null) && (!(question.getQuestionOptions().isAllowDecimal())) ){
+            if ((question.getQuestionOptions().getMax() != null) && (!(question.getQuestionOptions().isAllowDecimal()))) {
                 ed.setName(question.getLabel());
                 ed.setSingleLine(true);
                 ed.setLowerlimit(Double.parseDouble(question.getQuestionOptions().getMax()));
                 ed.setUpperlimit(Double.parseDouble(question.getQuestionOptions().getMin()));
                 ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                ed.setPadding(15,0,0,10);
+                ed.setPadding(15, 0, 0, 10);
                 if (question.getQuestionOptions().isAllowDecimal()) {
                     ed.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 } else {
@@ -264,15 +263,14 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 TextWatcher textWatcher = new NumericValidatorWatcher(ed, Double.parseDouble(question.getQuestionOptions().getMax()), Double.parseDouble(question.getQuestionOptions().getMin()));
                 ed.addTextChangedListener(textWatcher);
                 sectionLinearLayout.addView(ed, layoutParams);
-            }
-            else {
+            } else {
                 ed.setName(question.getLabel());
                 ed.setSingleLine(true);
                 ed.setLowerlimit(-1.0);
                 ed.setUpperlimit(-1.0);
                 ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 FontsUtil.setFont(ed, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
-                ed.setPadding(15,0,0,10);
+                ed.setPadding(15, 0, 0, 10);
                 if (question.getQuestionOptions().isAllowDecimal()) {
                     ed.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 } else {
@@ -282,10 +280,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 //                ed.setId(customHashCode(question.getQuestionOptions().getConcept()));
                 sectionLinearLayout.addView(ed, layoutParams);
             }
-            if(question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")){
+            if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")) {
                 ed.setVisibility(View.VISIBLE);
                 vv.setVisibility(View.VISIBLE);
-            }else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")){
+            } else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")) {
                 ed.setVisibility(View.GONE);
                 vv.setVisibility(View.GONE);
             }
@@ -381,7 +379,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     vv.setVisibility(View.GONE);
                 }
             }
-        }else {
+        } else {
             InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
             field.setGroupConcept(question.getGroupConcept());
@@ -520,12 +518,14 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 }
 
             }
-        }else {
-            InputField field = new InputField(question.getQuestionOptions().getConcept(),question.getRepeatConcept(), question.getType());
+        } else {
+            InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
             field.setGroupConcept(question.getGroupConcept());
             field.setRepeatConcept(question.getRepeatConcept());
-            InputField inputField = getInputField(field.getConcept());
+//            InputField inputField = getInputField(field.getConcept());
+            InputField inputField = getInputField(field.getConcept(), field.getId());
+
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -597,36 +597,36 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         return textView;
     }
 
-    public InputField getInputField(String concept){
+    public InputField getInputField(String concept) {
         for (InputField inputField : inputFields) {
-            if(concept.equals(inputField.getConcept())){
+            if (concept.equals(inputField.getConcept())) {
                 return inputField;
             }
         }
         return null;
     }
 
-    public InputField getInputField(String concept, int hashConcept){
+    public InputField getInputField(String concept, int hashConcept) {
         for (InputField inputField : inputFields) {
-            if(concept.equals(inputField.getConcept()) && hashConcept == inputField.getId()){
+            if (concept.equals(inputField.getConcept()) && hashConcept == inputField.getId()) {
                 return inputField;
             }
         }
         return null;
     }
 
-    public SelectOneField getSelectOneField(String concept){
-        for (SelectOneField selectOneField: selectOneFields) {
-            if(concept.equals(selectOneField.getConcept())){
+    public SelectOneField getSelectOneField(String concept) {
+        for (SelectOneField selectOneField : selectOneFields) {
+            if (concept.equals(selectOneField.getConcept())) {
                 return selectOneField;
             }
         }
         return null;
     }
 
-    public SelectOneField getSelectOneField(String concept, int hashConcept){
-        for (SelectOneField selectOneField: selectOneFields) {
-            if(concept.equals(selectOneField.getConcept())&& hashConcept == selectOneField.getId()){
+    public SelectOneField getSelectOneField(String concept, int hashConcept) {
+        for (SelectOneField selectOneField : selectOneFields) {
+            if (concept.equals(selectOneField.getConcept()) && hashConcept == selectOneField.getId()) {
                 return selectOneField;
             }
         }
@@ -707,7 +707,18 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     textView.setVisibility(View.GONE);
                 }
             }
-        }else{
+//            int uh = spinner.getId();
+//            int yy = customHashCode("1fb46619-abcd-405a-81c9-3c9018473729");
+//            if (spinner.getId() == customHashCode("1fb46619-abcd-405a-81c9-3c9018473729")){
+//                if (spinner.getSelectedItem() != null && spinner.getSelectedItem().toString().equals("Negative")){
+//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+//                    fdActivity.setmStep(6);
+//                }else{
+//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+//                    fdActivity.setmStep(1);
+//                }
+//            }
+        } else {
             TextView textView = new TextView(getActivity());
             textView.setPadding(10, 20, 0, 0);
             textView.setText(question.getLabel());
@@ -757,7 +768,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             sectionLinearLayout.setLayoutParams(linearLayoutParams);
             sectionLinearLayout.addView(questionLinearLayout);
 
-            SelectOneField selectOneField = getSelectOneField(spinnerField.getConcept(),spinnerField.getId());
+            SelectOneField selectOneField = getSelectOneField(spinnerField.getConcept(), spinnerField.getId());
             if (selectOneField != null) {
                 spinner.setSelection(selectOneField.getChosenAnswerPosition());
                 setOnItemSelectedListener(spinner, selectOneField, question, 0);
@@ -780,6 +791,18 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     textView.setVisibility(View.GONE);
                 }
             }
+
+//            if (spinner.getId() == customHashCode("1fb46619-abcd-405a-81c9-3c9018473729")){
+//                if (spinner.getSelectedItem() != null && spinner.getSelectedItem().toString().equals("Negative")){
+//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+//                    fdActivity.setmStep(6);
+//                }else{
+//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+//                    fdActivity.setmStep(1);
+//                }
+//            }
+
+
         }
     }
 
@@ -842,10 +865,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             selectManyFields.add(checkField);
         }
 
-        if(question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")){
+        if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")) {
             linearLayoutCheckBox.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
-        }else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")){
+        } else if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("hide")) {
             linearLayoutCheckBox.setVisibility(View.GONE);
             textView.setVisibility(View.GONE);
         }
@@ -861,7 +884,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     private void setOnItemSelectedListener(Spinner spinner, final SelectOneField spinnerField, Question question, int mPosition) {
 
         if (mPosition != -1) {
-            spinnerField.setAnswer(mPosition );
+            spinnerField.setAnswer(mPosition);
         }
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -873,6 +896,44 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
                 if (StringUtils.notEmpty(question.getChildControl())) {
                     triggerDependantControl(spinnerField.getChosenAnswer(), question.getChildControl());
+                }
+                if (spinnerField.getConcept().equals("1fb46619-abcd-405a-81c9-3c9018473729")) {
+                    if (spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
+                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+                        fdActivity.setmStep(1);
+                        fdActivity.setEligible(true);
+                    }else if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Negative")){
+                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+                        fdActivity.setmStep(6);
+                        fdActivity.setEligible(false);
+
+                    }
+                }
+
+                if (spinnerField.getConcept().equals("282e74ab-df7a-4f11-83a3-2724757e0714") ||
+                        spinnerField.getConcept().equals("48a962e6-419d-444f-a3f3-986092e40b0d") ||
+                        spinnerField.getConcept().equals("1f0ff684-7348-416a-b566-9d2440d64fe8") ||
+                        spinnerField.getConcept().equals("7cf78f74-dd87-4b96-9471-bc56907afe6d") ||
+                        spinnerField.getConcept().equals("1001cadb-ac25-433f-ae49-197cde7b12ca") ||
+                        spinnerField.getConcept().equals("42bc0bd7-5739-4771-8f91-b3d1bf2bea72") ||
+                        spinnerField.getConcept().equals("fa008dc8-7d4a-4f0c-af07-59d283d1cc7c") ||
+                        spinnerField.getConcept().equals("079887df-3684-4e59-abe1-13b829671829") ||
+                        spinnerField.getConcept().equals("6e69cd24-3812-46a6-a0f8-9d869b7f5a87")){
+                    if (spinnerField.getChosenAnswer()!= null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
+                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+                        fdActivity.setmStep(1);
+                        fdActivity.setEligible(true);
+                    }else if(spinnerField.getChosenAnswer()!= null && (spinnerField.getChosenAnswer().getLabel().equals("Negative")
+                            || spinnerField.getChosenAnswer().getLabel().equals("Unknown") || spinnerField.getChosenAnswer().getLabel().equals("Never")|| spinnerField.getChosenAnswer().getLabel().equals("No")) ) {
+                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+                        fdActivity.setmStep(13);
+                        fdActivity.setEligible(false);
+
+                    }
+                }
+                if (spinnerField.getConcept().equals("282e74ab-df7a-4f11-83a3-2724757e0714") && spinnerField.getChosenAnswer() == null){
+                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+                    fdActivity.setmStep(0);
                 }
 
                 if (question.getQuestionOptions().getControl() != null) {
@@ -913,6 +974,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_SALT));
 
                 if (childSpinner != null) {
+                    childSpinner.setSelected(false);
                     if (conditionOptions.getDisplayType().equals("show") && answer.getLabel().equals(conditionOptions.getWhen())) {
                         childSpinner.setVisibility(View.VISIBLE);
                         if (label != null) {
@@ -927,7 +989,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     }
                 }
             } else if (conditionOptions.getControlType().equals(CONTROL_TYPE_CHECK)) {
-                LinearLayout childCheckBox = (LinearLayout) mParent.findViewById(customHashCode(conditionOptions.getChildControl()+ LABEL_ID_CHECK));
+                LinearLayout childCheckBox = (LinearLayout) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_CHECK));
                 TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_SALT));
 
                 if (childCheckBox != null) {
@@ -955,7 +1017,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                         linearLayout.setVisibility(View.GONE);
                     }
                 }
-            }else if (conditionOptions.getControlType().equals(CONTROL_TYPE_RADIO)) {
+            } else if (conditionOptions.getControlType().equals(CONTROL_TYPE_RADIO)) {
                 RadioGroup childRadioButton = (RadioGroup) mParent.findViewById(customHashCode(conditionOptions.getChildControl()));
                 TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_SALT));
 
@@ -1000,12 +1062,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     @Override
     public void createAndAttachSelectQuestionRadioButton(Question question, LinearLayout sectionLinearLayout) {
         TextView textView = new TextView(getActivity());
-        textView.setPadding(20,0,0,0);
+        textView.setPadding(20, 0, 0, 0);
         textView.setText(question.getLabel());
 
         RadioGroup radioGroup = new RadioGroup(getActivity());
 
-        
+
         for (Answer answer : question.getQuestionOptions().getAnswers()) {
             RadioButton radioButton = new RadioButton(getActivity());
             radioButton.setText(answer.getLabel());
@@ -1025,7 +1087,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         sectionLinearLayout.setLayoutParams(linearLayoutParams);
 
         SelectOneField selectOneField = getSelectOneField(radioGroupField.getConcept());
-        if(selectOneField != null){
+        if (selectOneField != null) {
             if (selectOneField.getChosenAnswerPosition() != -1) {
                 RadioButton radioButton = (RadioButton) radioGroup.getChildAt(selectOneField.getChosenAnswerPosition());
                 radioButton.setChecked(true);
@@ -1049,36 +1111,36 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
         if (selectManyField != null) {
             selectManyField.setGroupConcept(question.getGroupConcept());
-                int j = 0;
-                for (Answer answer : question.getQuestionOptions().getAnswers()) {
-                    CheckBox checkBox = new CheckBox(getActivity());
-                    Answer ans = getAnswer(selectManyField.getChosenAnswerList(), answer.getConcept());
-                    if (ans != null) {
-                        checkBox.setText(ans.getLabel());
-                        checkBox.setId(customHashCode(ans.getConcept()));
-                        checkBox.setChecked(true);
-                        FontsUtil.setFont(checkBox, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
-                        checkBox.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                onCheckboxClicked(v, selectManyField, checkBox.getId());
-                            }
-                        });
-                    } else {
-                        checkBox.setText(answer.getLabel());
-                        checkBox.setId(customHashCode(answer.getConcept()));
-                        FontsUtil.setFont(checkBox, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
-                        checkBox.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                onCheckboxClicked(v, selectManyField, checkBox.getId());
-                            }
-                        });
-                    }
-                    linearLayoutCheckBox.addView(checkBox);
-                    idManager.put(customHashCode(answer.getConcept()), j);
-                    j++;
+            int j = 0;
+            for (Answer answer : question.getQuestionOptions().getAnswers()) {
+                CheckBox checkBox = new CheckBox(getActivity());
+                Answer ans = getAnswer(selectManyField.getChosenAnswerList(), answer.getConcept());
+                if (ans != null) {
+                    checkBox.setText(ans.getLabel());
+                    checkBox.setId(customHashCode(ans.getConcept()));
+                    checkBox.setChecked(true);
+                    FontsUtil.setFont(checkBox, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+                    checkBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onCheckboxClicked(v, selectManyField, checkBox.getId());
+                        }
+                    });
+                } else {
+                    checkBox.setText(answer.getLabel());
+                    checkBox.setId(customHashCode(answer.getConcept()));
+                    FontsUtil.setFont(checkBox, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+                    checkBox.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onCheckboxClicked(v, selectManyField, checkBox.getId());
+                        }
+                    });
                 }
+                linearLayoutCheckBox.addView(checkBox);
+                idManager.put(customHashCode(answer.getConcept()), j);
+                j++;
+            }
             selectManyFields.add(selectManyField);
             LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1089,6 +1151,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             sectionLinearLayout.setLayoutParams(linearLayoutParams);
         }
     }
+
     @Override
     public void editAndAttachSelectQuestionRadioButton(Question question, LinearLayout sectionLinearLayout, SelectOneField radioField) {
         TextView textView = new TextView(getActivity());
@@ -1130,6 +1193,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             selectOneFields.add(radioGroupField);
         }
     }
+
     @Override
     public void editAndAttachSelectQuestionDropdown(Question question, LinearLayout sectionLinearLayout, SelectOneField selectOne) {
         if (question.getRepeatConcept() == null) {
@@ -1205,9 +1269,9 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     textView.setVisibility(View.GONE);
                 }
             }
-        }else {
+        } else {
             TextView textView = new TextView(getActivity());
-            textView.setPadding(10,20,0,0);
+            textView.setPadding(10, 20, 0, 0);
             textView.setText(question.getLabel());
             textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
@@ -1231,7 +1295,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
 
             spinner.setId(customHashCode(question.getQuestionOptions().getConcept() + question.getRepeatConcept()));
-            ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels){
+            ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     View view = super.getView(position, convertView, parent);
@@ -1259,8 +1323,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 spinner.setSelection(getIndex(spinner, answer.getLabel()));
                 if (answer.getLabel() == null) {
                     setOnItemSelectedListener(spinner, selectOne, question, -1);
-                }else
-                {
+                } else {
                     setOnItemSelectedListener(spinner, selectOne, question, getIndex(spinner, answer.getLabel()));
                 }
                 selectOne.setQuestionLabel(question.getLabel());
@@ -1285,6 +1348,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             }
         }
     }
+
     @Override
     public void editAndAttachNumericQuestionEditText(Question question, LinearLayout sectionLinearLayout, String ans) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -1339,12 +1403,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     vv.setVisibility(View.GONE);
                 }
             }
-        }else{
+        } else {
             InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
             field.setGroupConcept(question.getGroupConcept());
             field.setRepeatConcept(question.getRepeatConcept());
-            InputField inputField = getInputField(field.getConcept(),field.getId());
+            InputField inputField = getInputField(field.getConcept(), field.getId());
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -1391,6 +1455,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             }
         }
     }
+
     @Override
     public void editAndAttachDateQuestionEditText(Question question, LinearLayout sectionLinearLayout, String ans) {
         Calendar myCalendar = Calendar.getInstance();
@@ -1456,12 +1521,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     vv.setVisibility(View.GONE);
                 }
             }
-        }else{
-            InputField field = new InputField(question.getQuestionOptions().getConcept(),question.getRepeatConcept(), question.getType());
+        } else {
+            InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
             field.setGroupConcept(question.getGroupConcept());
             field.setRepeatConcept(question.getRepeatConcept());
-            InputField inputField = getInputField(field.getConcept(),field.getId());
+            InputField inputField = getInputField(field.getConcept(), field.getId());
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -1469,7 +1534,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT+question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
@@ -1481,7 +1546,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             ed.setText(ans);
             ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             ed.setInputType(InputType.TYPE_CLASS_DATETIME);
-            ed.setPadding(15,0,0,10);
+            ed.setPadding(15, 0, 0, 10);
             ed.setId(field.getId());
             FontsUtil.setFont(ed, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
             sectionLinearLayout.addView(ed, layoutParams);
@@ -1518,6 +1583,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         }
 
     }
+
     @Override
     public void editAndAttachTextQuestionEditText(Question question, LinearLayout sectionLinearLayout, String ans) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -1567,12 +1633,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     vv.setVisibility(View.GONE);
                 }
             }
-        }else{
+        } else {
             InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getRepeatConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
             field.setGroupConcept(question.getGroupConcept());
             field.setRepeatConcept(question.getRepeatConcept());
-            InputField inputField = getInputField(field.getConcept(),field.getId());
+            InputField inputField = getInputField(field.getConcept(), field.getId());
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -1580,7 +1646,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT+question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
@@ -1592,7 +1658,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 ed.setText(ans);
                 ed.setInputType(InputType.TYPE_CLASS_TEXT);
                 ed.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                ed.setPadding(15,0,0,10);
+                ed.setPadding(15, 0, 0, 10);
                 ed.setId(field.getId());
                 FontsUtil.setFont(ed, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
 
@@ -1659,12 +1725,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         LinearLayout questionLinearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams layoutParams = getAndAdjustLinearLayoutParams(questionLinearLayout);
 
-        TextView tv=new TextView(getActivity());
+        TextView tv = new TextView(getActivity());
         tv.setText(questionLabel);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
         FontsUtil.setFont(tv, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
-        questionLinearLayout.addView(tv,layoutParams);
+        questionLinearLayout.addView(tv, layoutParams);
 
         return questionLinearLayout;
     }
@@ -1674,13 +1740,13 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         LinearLayout sectionLinearLayout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams layoutParams = getAndAdjustLinearLayoutParams(sectionLinearLayout);
 
-        TextView tv=new TextView(getActivity());
+        TextView tv = new TextView(getActivity());
         tv.setText(sectionLabel);
         tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,22);
-        tv.setTextColor(ContextCompat.getColor(getActivity(),R.color.primary));
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
         FontsUtil.setFont(tv, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
-        sectionLinearLayout.addView(tv,layoutParams);
+        sectionLinearLayout.addView(tv, layoutParams);
         sectionLinearLayout.setId(customHashCode(sectionLabel));
 
         return sectionLinearLayout;
@@ -1735,27 +1801,25 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
     @Override
     public List<InputField> getInputFields() {
-        for (InputField field:inputFields) {
-            try{
+        for (InputField field : inputFields) {
+            try {
                 RangeEditText ed = getActivity().findViewById(field.getId());
-            if(!isEmpty(ed)){
-                if (ed.getText().toString().trim().matches(regexStr)) {
-                    field.setValue(Double.parseDouble(ed.getText().toString()));
-                    field.setValueAll(ed.getText().toString());
-                    field.setAnswerLabel(ed.getText().toString());
-                    boolean isRed = (ed.getCurrentTextColor() == ContextCompat.getColor(OpenMRS.getInstance(), R.color.red));
-                    field.setIsRed(isRed);
+                if (!isEmpty(ed)) {
+                    if (ed.getText().toString().trim().matches(regexStr)) {
+                        field.setValue(Double.parseDouble(ed.getText().toString()));
+                        field.setValueAll(ed.getText().toString());
+                        field.setAnswerLabel(ed.getText().toString());
+                        boolean isRed = (ed.getCurrentTextColor() == ContextCompat.getColor(OpenMRS.getInstance(), R.color.red));
+                        field.setIsRed(isRed);
+                    } else {
+                        field.setValueAll(ed.getText().toString().trim());
+                        field.setAnswerLabel(ed.getText().toString());
+                    }
                 } else {
-                    field.setValueAll(ed.getText().toString().trim());
-                    field.setAnswerLabel(ed.getText().toString());
+                    field.setValue(-1.0);
+                    field.setValueAll("");
                 }
-            }
-            else{
-                field.setValue(-1.0);
-                field.setValueAll("");
-            }
-        }
-            catch (ClassCastException e ) {
+            } catch (ClassCastException e) {
                 DiscreteSeekBar dsb = getActivity().findViewById(field.getId());
                 field.setValue((double) dsb.getProgress());
             }
@@ -1773,10 +1837,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     public List<SelectManyFields> getSelectManyFields() {
         return selectManyFields;
     }
+
     @Override
     public void setSelectManyFields(List<SelectManyFields> selectManyFields) {
         this.selectManyFields = selectManyFields;
     }
+
     @Override
     public void setSelectOneFields(List<SelectOneField> selectOneFields) {
         this.selectOneFields = selectOneFields;
@@ -1840,11 +1906,11 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
                             }
                         }
-                    }else{
+                    } else {
 //                        allEmpty = true;
                         empties.add(true);
                     }
-                }else {
+                } else {
 //                    allEmpty = false;
                     empties.add(false);
                 }

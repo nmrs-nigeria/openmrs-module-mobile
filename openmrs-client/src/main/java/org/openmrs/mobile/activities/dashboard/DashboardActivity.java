@@ -15,13 +15,15 @@
 package org.openmrs.mobile.activities.dashboard;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.widget.Toolbar;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
+import org.openmrs.mobile.utilities.LogOutTimerUtil;
 
-public class DashboardActivity extends ACBaseActivity {
+public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil.LogOutListener {
 
     /*TODO: Permission handling to be coded later, moving to SDK 22 for now.
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
@@ -95,5 +97,21 @@ public class DashboardActivity extends ACBaseActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LogOutTimerUtil.startLogoutTimer(this, this);
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        LogOutTimerUtil.startLogoutTimer(this, this);
+    }
+
+    @Override
+    public void doLogout() {
+        logout();
+    }
 
 }

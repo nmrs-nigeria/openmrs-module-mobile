@@ -90,7 +90,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     }
 
     @Override
-    public void createEncounter() {
+    public void createEncounter(boolean isEligible) {
         List<InputField> inputFields = new ArrayList<>();
         List<SelectOneField> radioGroupFields = new ArrayList<>();
         List<SelectManyFields> selectManyFields = new ArrayList<>();
@@ -117,13 +117,15 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
         int ct = activefrag.size();
         for (int i = 0; i < activefrag.size(); i++) {
             FormDisplayPageFragment formPageFragment = (FormDisplayPageFragment) activefrag.get(i);
-            if (!formPageFragment.checkInputFields()) {
-                valid = false;
-                break;
+            if (formPageFragment != null) {
+                if (!formPageFragment.checkInputFields()) {
+                    valid = false;
+                    break;
+                }
+                inputFields.addAll(formPageFragment.getInputFields());
+                radioGroupFields.addAll(formPageFragment.getSelectOneFields());
+                selectManyFields.addAll(formPageFragment.getSelectManyFields());
             }
-            inputFields.addAll(formPageFragment.getInputFields());
-            radioGroupFields.addAll(formPageFragment.getSelectOneFields());
-            selectManyFields.addAll(formPageFragment.getSelectManyFields());
         }
 
         if (valid) {
@@ -298,6 +300,11 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             encountercreate.setFormUuid(getFormResourceByName(mFormname).getUuid());
             encountercreate.setObslist();
             encountercreate.setObslistLocal();
+            if (isEligible){
+                encountercreate.setEligible("Yes");
+            }else{
+                encountercreate.setEligible("No");
+            }
             if (mEncounterDate != null) {
                 encountercreate.setEncounterDatetime(mEncounterDate);
             }

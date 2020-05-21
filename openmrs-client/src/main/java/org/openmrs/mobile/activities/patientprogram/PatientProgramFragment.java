@@ -108,10 +108,10 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
                 startNewActivity(FormProgramActivity.class,"HTS");
                 break;
             case R.id.heiView:
-                startNewActivity(FormProgramActivity.class,"HEI");
+//                startNewActivity(FormProgramActivity.class,"HEI");
                 break;
             case R.id.pmtctView:
-                startNewActivity(FormProgramActivity.class,"PMTCT");
+//                startNewActivity(FormProgramActivity.class,"PMTCT");
                 break;
             default:
                 // Do nothing
@@ -165,10 +165,10 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
      */
     @Override
     public void bindDrawableResources() {
-        bindDrawableResource(mhtsButton, R.drawable.ico_vitals);
-        bindDrawableResource(martButton, R.drawable.ico_vitals);
-        bindDrawableResource(mpmtctButton, R.drawable.ico_vitals);
-        bindDrawableResource(mheiButton, R.drawable.ico_vitals);
+        bindDrawableResource(mhtsButton, R.drawable.healthcare);
+        bindDrawableResource(martButton, R.drawable.medical_art);
+        bindDrawableResource(mpmtctButton, R.drawable.holidays);
+        bindDrawableResource(mheiButton, R.drawable.healthcare_and_medical);
         changeColorOfDashboardIcons();
         if (ThemeUtils.isDarkModeActivated()) {
             changeColorOfDashboardIcons();

@@ -82,6 +82,9 @@ public class Encountercreate extends Model implements Serializable{
     @Expose
     private String location;
 
+    @Column(name = "eligble")
+    private String eligible;
+
     @Column(name = "obsLocal")
     private String obslistLocal;
 
@@ -208,6 +211,11 @@ public class Encountercreate extends Model implements Serializable{
         this.visitDate = visitDate;
     }
 
+    public String getEligible() {
+        return eligible;
+    }
 
-
+    public void setEligible(String eligible) {
+        this.eligible = eligible;
+    }
 }

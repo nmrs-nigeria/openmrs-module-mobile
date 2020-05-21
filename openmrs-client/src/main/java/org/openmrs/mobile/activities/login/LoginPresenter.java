@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,12 +95,12 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
         if (validateLoginFields(username, password, url)) {
             loginView.hideSoftKeys();
             if ((!mOpenMRS.getUsername().equals(ApplicationConstants.EMPTY_STRING) &&
-                 !mOpenMRS.getUsername().equals(username)) ||
-               ((!mOpenMRS.getServerUrl().equals(ApplicationConstants.EMPTY_STRING) &&
-                 !mOpenMRS.getServerUrl().equals(oldUrl))) ||
-               (!mOpenMRS.getHashedPassword().equals(ApplicationConstants.EMPTY_STRING) &&
-                 !BCrypt.checkpw(password, mOpenMRS.getHashedPassword())) ||
-               mWipeRequired) {
+                    !mOpenMRS.getUsername().equals(username)) ||
+                    ((!mOpenMRS.getServerUrl().equals(ApplicationConstants.EMPTY_STRING) &&
+                            !mOpenMRS.getServerUrl().equals(oldUrl))) ||
+                    (!mOpenMRS.getHashedPassword().equals(ApplicationConstants.EMPTY_STRING) &&
+                            !BCrypt.checkpw(password, mOpenMRS.getHashedPassword())) ||
+                    mWipeRequired) {
                 loginView.showWarningDialog();
             } else {
                 authenticateUser(username, password, url);
@@ -137,6 +138,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                             } else {
                                 mOpenMRS.setSessionToken(session.getSessionId());
                                 mOpenMRS.setPasswordAndHashedPassword(password);
+//                                mOpenMRS.setLocation(mOpenMRS.getLocation());
                             }
 
                             visitRepository.getVisitType(new GetVisitTypeCallbackListener() {
@@ -216,63 +218,117 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                     .observeOn(Schedulers.io())
                     .subscribe();
         }
+        Location location = locationDAO.findLocationByName(selectedLocation);
+        mOpenMRS.setLocationID(location.getId());
+        mOpenMRS.setLocationUUID(location.getUuid());
+        mOpenMRS.setLocationDisplay(location.getDisplay());
+        mOpenMRS.setLocationParent(location.getParentLocationUuid());
+        mOpenMRS.setLocationDescription(location.getDescription());
+
     }
 
     @Override
-    public void loadLocations(final String url) {
+    public void loadLocations(final String url, final String name) {
         loginView.showLocationLoadingAnimation();
-
-        if (NetworkUtils.hasNetwork()) {
-            String locationEndPoint = url + ApplicationConstants.API.REST_ENDPOINT + "location";
-            Call<Results<Location>> call =
-                    restApi.getLocations(locationEndPoint, "Login Location", "full");
-            call.enqueue(new Callback<Results<Location>>() {
-                @Override
-                public void onResponse(@NonNull Call<Results<Location>> call, @NonNull Response<Results<Location>> response) {
-                    if (response.isSuccessful()) {
-                        RestServiceBuilder.changeBaseUrl(url.trim());
-                        mOpenMRS.setServerUrl(url);
-                        loginView.initLoginForm(response.body().getResults(), url);
-                        loginView.startFormListService();
-                        loginView.setLocationErrorOccurred(false);
-                    } else {
-                        loginView.showInvalidURLSnackbar("Failed to fetch server's locations");
-                        loginView.setLocationErrorOccurred(true);
-                        loginView.initLoginForm(new ArrayList<>(), url);
-                    }
-                    loginView.hideUrlLoadingAnimation();
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<Results<Location>> call, @NonNull Throwable t) {
-                    loginView.hideUrlLoadingAnimation();
-                    loginView.showInvalidURLSnackbar(t.getMessage());
-                    loginView.initLoginForm(new ArrayList<>(), url);
-                    loginView.setLocationErrorOccurred(true);
-                }
-            });
+        List<Location> locations = new ArrayList<>();
+        if (StringUtils.notEmpty(mOpenMRS.getLocation())) {
+            Location location = new Location();
+            location.setUuid(mOpenMRS.getLocationUUID());
+            location.setDisplay(mOpenMRS.getLocationDisplay());
+            location.setName(mOpenMRS.getLocation());
+            location.setDescription(mOpenMRS.getLocationDescription());
+            locations.add(location);
+            loginView.initLoginForm(locations, url);
+            loginView.setLocationErrorOccurred(false);
         } else {
-            addSubscription(locationDAO.getLocations()
-                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(locations -> {
-                        if (locations.size() > 0) {
-                            loginView.initLoginForm(locations, url);
+            if (NetworkUtils.hasNetwork()) {
+                String locationEndPoint = url + ApplicationConstants.API.REST_ENDPOINT + "location";
+                Call<Results<Location>> call =
+                        restApi.getLocations(locationEndPoint, "Login Location", "full");
+                call.enqueue(new Callback<Results<Location>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Results<Location>> call, @NonNull Response<Results<Location>> response) {
+                        if (response.isSuccessful()) {
+                            RestServiceBuilder.changeBaseUrl(url.trim());
+                            mOpenMRS.setServerUrl(url);
+                            loginView.initLoginForm(response.body().getResults(), url);
+                            loginView.startFormListService();
                             loginView.setLocationErrorOccurred(false);
                         } else {
-                            loginView.showToast("Network not available.", ToastUtil.ToastType.ERROR);
+                            loginView.showInvalidURLSnackbar("Failed to fetch server's locations");
                             loginView.setLocationErrorOccurred(true);
+                            loginView.initLoginForm(new ArrayList<>(), url);
                         }
-                        loginView.hideLoadingAnimation();
-                    }));
-        }
+                        loginView.hideUrlLoadingAnimation();
+                    }
 
+                    @Override
+                    public void onFailure(@NonNull Call<Results<Location>> call, @NonNull Throwable t) {
+                        loginView.hideUrlLoadingAnimation();
+                        loginView.showInvalidURLSnackbar(t.getMessage());
+                        loginView.initLoginForm(new ArrayList<>(), url);
+                        loginView.setLocationErrorOccurred(true);
+                    }
+                });
+            } else {
+                loginView.showToast("Network not available.", ToastUtil.ToastType.ERROR);
+                loginView.setLocationErrorOccurred(true);
+            }
+
+
+//
+//
+//        if (NetworkUtils.hasNetwork()) {
+//            String locationEndPoint = url + ApplicationConstants.API.REST_ENDPOINT + "location";
+//            Call<Results<Location>> call =
+//                    restApi.getLocations(locationEndPoint, "Login Location", "full");
+//            call.enqueue(new Callback<Results<Location>>() {
+//                @Override
+//                public void onResponse(@NonNull Call<Results<Location>> call, @NonNull Response<Results<Location>> response) {
+//                    if (response.isSuccessful()) {
+//                        RestServiceBuilder.changeBaseUrl(url.trim());
+//                        mOpenMRS.setServerUrl(url);
+//                        loginView.initLoginForm(response.body().getResults(), url);
+//                        loginView.startFormListService();
+//                        loginView.setLocationErrorOccurred(false);
+//                    } else {
+//                        loginView.showInvalidURLSnackbar("Failed to fetch server's locations");
+//                        loginView.setLocationErrorOccurred(true);
+//                        loginView.initLoginForm(new ArrayList<>(), url);
+//                    }
+//                    loginView.hideUrlLoadingAnimation();
+//                }
+//
+//                @Override
+//                public void onFailure(@NonNull Call<Results<Location>> call, @NonNull Throwable t) {
+//                    loginView.hideUrlLoadingAnimation();
+//                    loginView.showInvalidURLSnackbar(t.getMessage());
+//                    loginView.initLoginForm(new ArrayList<>(), url);
+//                    loginView.setLocationErrorOccurred(true);
+//                }
+//            });
+//        } else {
+//            addSubscription(locationDAO.getLocations()
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(locations -> {
+//                        if (locations.size() > 0) {
+//                            loginView.initLoginForm(locations, url);
+//                            loginView.setLocationErrorOccurred(false);
+//                        } else {
+//                            loginView.showToast("Network not available.", ToastUtil.ToastType.ERROR);
+//                            loginView.setLocationErrorOccurred(true);
+//                        }
+//                        loginView.hideLoadingAnimation();
+//                    }));
+//        }
+        }
     }
 
     private boolean validateLoginFields(String username, String password, String url) {
         return StringUtils.notEmpty(username) || StringUtils.notEmpty(password) || StringUtils.notEmpty(url);
     }
 
-    private void setData(String sessionToken,String url, String username, String password) {
+    private void setData(String sessionToken, String url, String username, String password) {
         mOpenMRS.setSessionToken(sessionToken);
         mOpenMRS.setServerUrl(url);
         mOpenMRS.setUsername(username);

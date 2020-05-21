@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -247,9 +248,12 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         }
     }
 
+
+
     @Override
-    public void showFormList(String[] forms, String programName, List<String> formName) {
+    public void showFormList(String[] forms, String programName, List<String> formName, boolean isElig, boolean isEnrol, boolean isFTime) {
         formsName = formName;
+        FormProgramActivity fPActivity = (FormProgramActivity) getActivity();
         for (String form : forms){
             switch (programName){
                 case "PMTCT":
@@ -283,10 +287,50 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 case "HTS":
                     switch (form){
                         case "Client intake form":
-                            mclientinteakeView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()) {
+                                if(isElig || !isFTime) {
+                                    mclientinteakeView.setVisibility(View.GONE);
+                                }else{
+                                    mclientinteakeView.setVisibility(View.VISIBLE);
+                                }
+                            }else{
+                                mclientinteakeView.setVisibility(View.GONE);
+                            }
+                            break;
+                        case "HIV Enrollment":
+                            if (fPActivity.isFirstTime() && !isElig) {
+                                mhivEnrollmentView.setVisibility(View.GONE);
+                            }else{
+                                if(fPActivity.isEligible() || isElig) {
+                                    if(fPActivity.isEnrolled() || isEnrol) {
+                                        mhivEnrollmentView.setVisibility(View.GONE);
+                                    }else{
+                                        mhivEnrollmentView.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
                             break;
                         case "Client Referral Form":
-                            mclientRefView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime() && !isElig) {
+                                mclientRefView.setVisibility(View.GONE);
+                            }else{
+                                if(fPActivity.isEligible() || isElig) {
+                                    if(fPActivity.isEnrolled() || isEnrol) {
+                                        mclientRefView.setVisibility(View.GONE);
+                                    }else{
+                                        mclientRefView.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                            break;
+                        case "Pharmacy Order Form":
+                            if (((fPActivity.isFirstTime() || !fPActivity.isEnrolled()) && !isEnrol)) {
+                                mpharmacyView.setVisibility(View.GONE);
+                            }else{
+                                if(fPActivity.isEligible() || isEnrol) {
+                                    mpharmacyView.setVisibility(View.VISIBLE);
+                                }
+                            }
                             break;
                         default:
                             // Do nothing
@@ -404,21 +448,21 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
     public void bindDrawableResources() {
         bindDrawableResource(mmaternalButton, R.drawable.ico_vitals);
         bindDrawableResource(mheifButton, R.drawable.ico_vitals);
-        bindDrawableResource(mhivEnrollmentButton, R.drawable.ico_vitals);
+        bindDrawableResource(mhivEnrollmentButton, R.drawable.web);
         bindDrawableResource(mcareCardButton, R.drawable.ico_vitals);
         bindDrawableResource(mlabButton, R.drawable.ico_vitals);
-        bindDrawableResource(mpharmacyButton, R.drawable.ico_vitals);
+        bindDrawableResource(mpharmacyButton, R.drawable.tools_and_utensils);
         bindDrawableResource(madultinitButton, R.drawable.ico_vitals);
 
         bindDrawableResource(mpedinitButton, R.drawable.ico_vitals);
         bindDrawableResource(mtransferButton, R.drawable.ico_vitals);
-        bindDrawableResource(mclientRefButton, R.drawable.ico_vitals);
+        bindDrawableResource(mclientRefButton, R.drawable.arrow);
         bindDrawableResource(martComButton, R.drawable.ico_vitals);
 
         bindDrawableResource(mclientTracButton, R.drawable.ico_vitals);
         bindDrawableResource(mancTrackingButton, R.drawable.ico_vitals);
         bindDrawableResource(mpartnerButton, R.drawable.ico_vitals);
-        bindDrawableResource(mclientinteakeButton, R.drawable.ico_vitals);
+        bindDrawableResource(mclientinteakeButton, R.drawable.medical_client_intake);
 
         bindDrawableResource(mdeliveryButton, R.drawable.ico_vitals);
         bindDrawableResource(mmaternalButton, R.drawable.ico_vitals);
@@ -436,16 +480,20 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         final int purpleColorResId = R.color.dark_purple;
         final int blueColorResId = R.color.snooper_blue;
         ImageUtils.changeImageViewTint(getContext(), mdeliveryButton, purpleColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mclientinteakeButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mmaternalButton, purpleColorResId);
         ImageUtils.changeImageViewTint(getContext(), mpmtcthtsButton, purpleColorResId);
-        ImageUtils.changeImageViewTint(getContext(), mchildButton, purpleColorResId);
-        ImageUtils.changeImageViewTint(getContext(), mlabButton, purpleColorResId);
-        ImageUtils.changeImageViewTint(getContext(), mpharmacyButton, purpleColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mhivEnrollmentButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mclientRefButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mpharmacyButton, greenColorResId);
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.submit_done_menu, menu);
     }
+
+
+
 
 }

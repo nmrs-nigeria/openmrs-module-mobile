@@ -31,7 +31,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/hivEnrollmentView"
+                    android:id="@+id/labView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -40,24 +40,24 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/hivEnrollmentButton"
+                        android:id="@+id/labButton"
                         android:layout_width="@dimen/dashboard_icon_height_width_program"
                         android:layout_height="@dimen/dashboard_icon_height_width_program"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin_program"
-                        android:contentDescription="@string/hiv_enrollment_label"/>
+                        android:contentDescription="@string/laboratory_label" />
 
                     <TextView
-                        android:id="@+id/hivEnrollmentLabel"
+                        android:id="@+id/labLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/hivEnrollmentButton"
+                        android:layout_below="@id/labButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/hiv_enrollment_label"
+                        android:text="@string/laboratory_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 
@@ -357,46 +357,46 @@
         </TableRow>
         <TableRow>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/margin_short"
-            android:layout_weight="1">
 
-            <RelativeLayout
-                android:id="@+id/ancTrackingView"
-                android:layout_width="match_parent"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:visibility="gone"
-                android:focusable="true">
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/ancTrackingButton"
-                    android:layout_width="@dimen/dashboard_icon_height_width_program"
-                    android:layout_height="@dimen/dashboard_icon_height_width_program"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/dashboard_icon_margin_program"
-                    android:contentDescription="@string/general_antenatal_label" />
-
-                <TextView
-                    android:id="@+id/ancTrackingLabel"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/clientinteakeView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/ancTrackingButton"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                    android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                    android:text="@string/general_antenatal_label"
-                    android:textSize="@dimen/dashboard_text_size" />
-            </RelativeLayout>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
 
-        </androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/clientinteakeButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/client_intake_label" />
 
+                    <TextView
+                        android:id="@+id/clientinteakeLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/clientinteakeButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/client_intake_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -449,46 +449,6 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/labView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:visibility="gone"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/labButton"
-                        android:layout_width="@dimen/dashboard_icon_height_width_program"
-                        android:layout_height="@dimen/dashboard_icon_height_width_program"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="@dimen/dashboard_icon_margin_program"
-                        android:contentDescription="@string/laboratory_label" />
-
-                    <TextView
-                        android:id="@+id/labLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/labButton"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/laboratory_label"
-                        android:textSize="@dimen/dashboard_text_size" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/margin_short"
-                android:layout_weight="1">
-
-                <RelativeLayout
                     android:id="@+id/pharmacyView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -520,10 +480,51 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/ancTrackingView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ancTrackingButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/general_antenatal_label" />
+
+                    <TextView
+                        android:id="@+id/ancTrackingLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/ancTrackingButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/general_antenatal_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
 
         </TableRow>
         <TableRow>
+
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
@@ -533,7 +534,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/clientinteakeView"
+                    android:id="@+id/hivEnrollmentView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -542,24 +543,24 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/clientinteakeButton"
+                        android:id="@+id/hivEnrollmentButton"
                         android:layout_width="@dimen/dashboard_icon_height_width_program"
                         android:layout_height="@dimen/dashboard_icon_height_width_program"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin_program"
-                        android:contentDescription="@string/client_intake_label" />
+                        android:contentDescription="@string/hiv_enrollment_label"/>
 
                     <TextView
-                        android:id="@+id/clientinteakeLabel"
+                        android:id="@+id/hivEnrollmentLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/clientinteakeButton"
+                        android:layout_below="@id/hivEnrollmentButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/client_intake_label"
+                        android:text="@string/hiv_enrollment_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 

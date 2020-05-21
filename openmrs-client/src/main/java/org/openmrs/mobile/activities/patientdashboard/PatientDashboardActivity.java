@@ -178,6 +178,7 @@ public class PatientDashboardActivity extends ACBaseActivity {
         updateFabLayout.setVisibility(View.VISIBLE);
         deleteFabLayout.animate().translationY(-resources.getDimension(R.dimen.custom_fab_bottom_margin_55));
         updateFabLayout.animate().translationY(-resources.getDimension(R.dimen.custom_fab_bottom_margin_105));
+
     }
 
     public static void closeFABMenu() {
@@ -216,7 +217,7 @@ public class PatientDashboardActivity extends ACBaseActivity {
             updateFAB.setVisibility(View.GONE);
         } else {
             additionalActionsFAB.setVisibility(View.VISIBLE);
-            visitFAB.setVisibility(View.GONE);
+            visitFAB.setVisibility(View.VISIBLE);
 
             // will animate back the icon back to its original angle instantaneously
             ObjectAnimator.ofFloat(additionalActionsFAB, "rotation", 180f, 0f).setDuration(0).start();

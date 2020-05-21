@@ -24,6 +24,7 @@ import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.models.Module;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PersonName;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.utilities.ApplicationConstants;
@@ -127,6 +128,7 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
         boolean stateError = false;
         boolean cityError = false;
         boolean postalError = false;
+        boolean uniqueIdError = false;
 
         mPatientInfoView.setErrorsVisibility(givenNameError, familyNameError, dateOfBirthError, genderError, addressError, countryError, countryNull, stateError, cityError, postalError);
 
@@ -184,8 +186,22 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
         if (StringUtils.isBlank(patient.getAddress().getPostalCode())) {
             postalError = true;
         }
+        if (patient.getIdentifiers().isEmpty()){
+            uniqueIdError = true;
+        }
+        for (PatientIdentifier identifier: patient.getIdentifiers()){
+            if (identifier.getDisplay().equals("Hospital Number")){
+                if (StringUtils.isBlank(identifier.getIdentifier())) {
+                    uniqueIdError = true;
+                }
+            }
+        }
 
-        boolean result = !givenNameError && !familyNameError && !dateOfBirthError && !addressError && !countryError && !genderError;
+//        if (StringUtils.isBlank(patient.getIdentifiers().)) {
+//            uniqueIdError = true;
+//        }
+
+        boolean result = !givenNameError && !familyNameError && !dateOfBirthError && !addressError && !countryError && !genderError && !uniqueIdError;
         if (result) {
             mPatient = patient;
             return true;

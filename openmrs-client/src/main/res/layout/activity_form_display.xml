@@ -49,19 +49,33 @@
                 android:layout_marginTop="10dp"
                 android:id="@+id/buttonContainer">
                 <Button
-                    android:id="@+id/btn_next"
-                    android:layout_width="match_parent"
+                    android:id="@+id/btn_previous"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_submit_selector"
                     android:textColor="@color/white"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:visibility="gone"
+                    android:text="@string/action_previous"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_submit_selector"
+                    android:textColor="@color/white"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:text="@string/action_next"/>
                 <Button
                     android:id="@+id/btn_finish"
-                    android:layout_width="match_parent"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_submit_selector"
                     android:textColor="@color/white"
                     android:text="@string/action_submit"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:visibility="gone"/>
             </RelativeLayout>
 
@@ -86,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:orientation="horizontal">
-            <androidx.viewpager.widget.ViewPager
+            <org.openmrs.mobile.utilities.SwipeDisabledViewPager
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/container"
                 android:layout_width="match_parent"

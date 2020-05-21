@@ -38,7 +38,7 @@ public class FormDisplayPagePresenter extends BasePresenter implements FormDispl
     public List<List<SelectManyFields>> mSelectManyFields = new LinkedList<>();
     private String encounterDate = null;
     private String personGender = null;
-
+    public boolean isNew =  true;
     public FormDisplayPagePresenter(FormDisplayContract.View.PageView mFormPageView, Page page) {
         this.mFormDisplayPageView = mFormPageView;
         this.mPage = page;
@@ -79,23 +79,26 @@ public class FormDisplayPagePresenter extends BasePresenter implements FormDispl
 
     @Override
     public void subscribe() {
-        if (this.mFormFieldsWrapper == null) {
-            //For follow up
-            List<Section> sectionList = mPage.getSections();
-            for (Section section : sectionList) {
-                addSection(section);
-            }
-        } else {
-            for (Page page : this.pageList) {
-                mInputFields.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getInputFields());
-                mSelectOneField.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getSelectOneFields());
-                mSelectManyFields.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getSelectManyFields());
+        if (isNew) {
+            if (this.mFormFieldsWrapper == null) {
+                //For follow up
+                List<Section> sectionList = mPage.getSections();
+                for (Section section : sectionList) {
+                    addSection(section);
+                }
+            } else {
+                for (Page page : this.pageList) {
+                    mInputFields.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getInputFields());
+                    mSelectOneField.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getSelectOneFields());
+                    mSelectManyFields.add(this.mFormFieldsWrapper.get(pageList.indexOf(page)).getSelectManyFields());
 
+                }
+                List<Section> sectionList = mPage.getSections();
+                for (Section section : sectionList) {
+                    addSection(section);
+                }
             }
-            List<Section> sectionList = mPage.getSections();
-            for (Section section : sectionList) {
-                addSection(section);
-            }
+            isNew = false;
         }
     }
 

@@ -55,7 +55,7 @@
     <string name="reg_phone_hint">Phone Number</string>
     <string name="reg_surname_hint">Family Name</string>
     <string name="reg_ques_name">What\'s the patient\'s name?</string>
-    <string name="reg_ident_name">What\'s the patient\'s hospital mumber?</string>
+    <string name="reg_ident_name">What\'s the patient\'s hospital number?</string>
     <string name="reg_phone_number">Phone Number?</string>
     <string name="reg_ids_name">Other IDs?</string>
     <string name="reg_ques_gender">What\'s the patient\'s gender?</string>
@@ -153,6 +153,7 @@
     <string name="dialog_button_register_new">Register new</string>
     <string name="dialog_button_merge">Merge</string>
     <string name="action_next">Next</string>
+    <string name="action_previous">Previous</string>
     <string name="action_register">Register Patient</string>
     <string name="dialog_button_select_location">Select Location</string>
 
@@ -166,7 +167,7 @@
 
     <!-- FindPatients activity -->
     <string name="action_find_patients">Find Patients</string>
-    <string name="action_synced_patients">Synced Patients</string>
+    <string name="action_synced_patients">Patients</string>
     <string name="action_download_patients">Download Patients</string>
     <string name="action_add_patients">Add Patients</string>
     <string name="search_patient_hint">Patient name</string>
@@ -179,7 +180,8 @@
     <!-- Dashboard Activity -->
     <string name="dashboard_search_icon_label">Find Patients</string>
     <string name="dashboard_registry_icon_label">Register Patient</string>
-    <string name="dashboard_visits_icon_label">Active Visits</string>
+<!--    <string name="dashboard_visits_icon_label">Synced Status</string>-->
+    <string name="dashboard_visits_icon_label">Synced Status</string>
     <string name="dashboard_forms_icon_label">Form Entry</string>
 
     <!-- ART Programs -->
@@ -248,8 +250,9 @@
     <string name="date_picker_title">Select Date of Birth</string>
 
     <!-- Find Active visit activity -->
-    <string name="action_active_visits">Active Visits</string>
+    <string name="action_active_visits">Synced Status</string>
     <string name="action_form_entry">Form Entry</string>
+    <string name="action_synced_entry">Synced Status</string>
     <string name="action_patient_program">Patient Programs</string>
     <string name="action_patient_program_forms">Patient Programs Forms</string>
     <string name="action_find_visits">Find Active Visits</string>

@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -43,10 +44,13 @@ import java.util.List;
 public class FormDisplayActivity extends ACBaseActivity implements FormDisplayContract.View.MainView {
 
     private ViewPager mViewPager;
-    private Button mBtnNext, mBtnFinish;
+    private Button mBtnNext, mBtnFinish, mBtnPrevious;
     private int mDotsCount;
     private ImageView[] mDots;
     private Long personID = null;
+    private int mStep = 1;
+    private boolean isEligible = false;
+    private String formName;
 
     private FormDisplayContract.Presenter.MainPresenter mPresenter;
 
@@ -61,7 +65,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         String valuereference = null;
         if(bundle!=null) {
             valuereference = (String)bundle.get(ApplicationConstants.BundleKeys.VALUEREFERENCE);
-            String formName = (String) bundle.get(ApplicationConstants.BundleKeys.FORM_NAME);
+            formName = (String) bundle.get(ApplicationConstants.BundleKeys.FORM_NAME);
             personID = (Long) bundle.get(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
             getSupportActionBar().setTitle(formName + " Form");
         }
@@ -140,11 +144,16 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         LinearLayout pagerIndicator = findViewById(R.id.viewPagerCountDots);
 
         mBtnNext = findViewById(R.id.btn_next);
+        mBtnPrevious = findViewById(R.id.btn_previous);
         mBtnFinish = findViewById(R.id.btn_finish);
+//        mChronometer = (Chronometer) getView().findViewById(R.id.chronometer);
+        mBtnNext.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem()+getmStep()));
+        mBtnPrevious.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem()-getmStep()));
 
-        mBtnNext.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1));
-        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter());
+        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter(isEligible));
         mViewPager = findViewById(R.id.container);
+
+
 
         mViewPager.setAdapter(formPageAdapter);
 
@@ -156,11 +165,33 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                 }
                 mDots[position].setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.selecteditem_dot));
 
+
+                Spinner spinner = (Spinner) findViewById(customHashCode("1fb46619-abcd-405a-81c9-3c9018473729"));
+                // Consider this when it causes skip for other form
+                if (spinner != null && spinner.getSelectedItem() != null && position == 7 &&  spinner.getSelectedItem().toString().equals("Negative")){
+                    setmStep(6);
+                }
                 if (position + 1 == mDotsCount) {
                     mBtnNext.setVisibility(View.GONE);
+                    mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.VISIBLE);
-                } else {
+                } else if (position == 0){
                     mBtnNext.setVisibility(View.VISIBLE);
+                    mBtnPrevious.setVisibility(View.GONE);
+                    mBtnFinish.setVisibility(View.GONE);
+                    if (formName.equals("Client intake form")) {
+                        if (isEligible) {
+                            setmStep(1);
+                        } else {
+                            setmStep(13);
+                        }
+                    }else{
+                        setmStep(1);
+                    }
+                }
+                else {
+                    mBtnNext.setVisibility(View.VISIBLE);
+                    mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.GONE);
                 }
             }
@@ -193,9 +224,11 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         mDots[0].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selecteditem_dot));
         if(mDotsCount ==1) {
             mBtnNext.setVisibility(View.GONE);
+            mBtnPrevious.setVisibility(View.GONE);
             mBtnFinish.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Override
     public void enableSubmitButton(boolean enabled) {
@@ -212,5 +245,29 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         String[] parts = fragmentTag.split(":");
         return Integer.parseInt(parts[3]);
     }
-    
+
+    public int getmStep() {
+        return mStep;
+    }
+
+    public void setmStep(int mStep) {
+        this.mStep = mStep;
+    }
+
+    private int customHashCode(String inputString) {
+//        int hashCode = inputString.hashCode();
+//        if (hashCode < 1) {
+//            String temp = Integer.toString(hashCode).substring(1);
+//            return Integer.parseInt(temp);
+//        }
+        return Math.abs(inputString.hashCode());
+    }
+
+    public boolean isEligible() {
+        return isEligible;
+    }
+
+    public void setEligible(boolean eligible) {
+        isEligible = eligible;
+    }
 }

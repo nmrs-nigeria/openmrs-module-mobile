@@ -25,6 +25,11 @@ public abstract class ApplicationConstants {
     public static final String AUTHORIZATION_TOKEN = "authorisation";
     public static final String SECRET_KEY = "secretKey";
     public static final String LOCATION = "location";
+    public static final Long LOCATION_ID = 0L;
+    public static final String LOCATION_UUID = "location_uuid";
+    public static final String LOCATION_DISPLAY = "location_display";
+    public static final String LOCATION_PARENT_LOCATION_UUID = "location_parent_location_uuid";
+    public static final String LOCATION_DESCRIPTION = "location_description";
     public static final String VISIT_TYPE_UUID = "visit_type_uuid";
     public static final String LAST_SESSION_TOKEN = "last_session_id";
     public static final String LAST_LOGIN_SERVER_URL = "last_login_server_url";

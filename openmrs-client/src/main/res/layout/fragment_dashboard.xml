@@ -150,6 +150,51 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
+                    android:id="@+id/dashboardProviderManagementView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/dashboardProviderManagementButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width"
+                        android:layout_height="@dimen/dashboard_icon_height_width"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin"
+                        android:src="@mipmap/ic_provider" />
+
+                    <TextView
+                        android:id="@+id/dashboardProviderManagementLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/dashboardProviderManagementButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/action_provider_management"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </TableRow>
+
+        <TableRow>
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
                     android:id="@+id/captureVitalsView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -181,49 +226,6 @@
 
             </androidx.cardview.widget.CardView>
 
-
-        </TableRow>
-
-        <TableRow>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/margin_short"
-                android:layout_weight="1">
-
-                <RelativeLayout
-                    android:id="@+id/dashboardProviderManagementView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/dashboardProviderManagementButton"
-                        android:layout_width="@dimen/dashboard_icon_height_width"
-                        android:layout_height="@dimen/dashboard_icon_height_width"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:src="@mipmap/ic_provider" />
-
-                    <TextView
-                        android:id="@+id/dashboardProviderManagementLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dashboardProviderManagementButton"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/action_provider_management"
-                        android:textSize="@dimen/dashboard_text_size" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
 
 
         </TableRow>

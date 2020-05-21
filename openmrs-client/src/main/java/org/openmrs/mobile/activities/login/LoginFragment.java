@@ -340,6 +340,9 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         setLocationErrorOccurred(false);
         mLastCorrectURL = serverURL;
         mUrl.setText(serverURL);
+        if (StringUtils.notEmpty(mOpenMRS.getLocation())){
+            mUrl.setEnabled(false);
+        }
         mLocationsList = locationsList;
         List<String> items = getLocationStringList(locationsList);
         final LocationArrayAdapter adapter = new LocationArrayAdapter(this.getActivity(), items);
@@ -361,7 +364,9 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         Intent intent = new Intent(mOpenMRS.getApplicationContext(), DashboardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mOpenMRS.getApplicationContext().startActivity(intent);
-        mPresenter.saveLocationsToDatabase(mLocationsList, mDropdownLocation.getSelectedItem().toString());
+        if (!StringUtils.notEmpty(mOpenMRS.getLocation())){
+            mPresenter.saveLocationsToDatabase(mLocationsList, mDropdownLocation.getSelectedItem().toString());
+        }
     }
 
     @Override
@@ -429,16 +434,19 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
 
     public void setUrl(String url) {
         URLValidator.ValidationResult result = URLValidator.validate(url);
+        String location  = mOpenMRS.getLocation();
+
         if (result.isURLValid()) {
-            mPresenter.loadLocations(result.getUrl());
+            mPresenter.loadLocations(result.getUrl(),location);
         } else {
             showInvalidURLSnackbar("Invalid URL");
         }
     }
 
     public void hideURLDialog() {
+        String location  = mOpenMRS.getLocation();
         if (mLocationsList == null) {
-            mPresenter.loadLocations(mLastCorrectURL);
+            mPresenter.loadLocations(mLastCorrectURL,location);
         } else {
             initLoginForm(mLocationsList, mLastCorrectURL);
         }

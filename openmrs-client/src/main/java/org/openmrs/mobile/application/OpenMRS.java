@@ -155,6 +155,36 @@ public class OpenMRS extends Application {
         editor.apply();
     }
 
+    public void setLocationUUID(String location_uuid) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.LOCATION_UUID, location_uuid);
+        editor.apply();
+    }
+
+    public void setLocationDisplay(String location_display) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.LOCATION_DISPLAY, location_display);
+        editor.apply();
+    }
+
+    public void setLocationID(Long location_Id) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putLong(ApplicationConstants.LOCATION_DISPLAY, location_Id);
+        editor.apply();
+    }
+
+    public void setLocationDescription(String location_description) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.LOCATION_DESCRIPTION, location_description);
+        editor.apply();
+    }
+
+    public void setLocationParent (String location_parent_location_uuid) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.LOCATION_PARENT_LOCATION_UUID, location_parent_location_uuid);
+        editor.apply();
+    }
+
     public void setVisitTypeUUID(String visitTypeUUID) {
         SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
         editor.putString(ApplicationConstants.VISIT_TYPE_UUID, visitTypeUUID);
@@ -210,6 +240,27 @@ public class OpenMRS extends Application {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION, ApplicationConstants.EMPTY_STRING);
     }
+    public String getLocationUUID() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.LOCATION_UUID, ApplicationConstants.EMPTY_STRING);
+    }
+    public String getLocationDisplay() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.LOCATION_DISPLAY, ApplicationConstants.EMPTY_STRING);
+    }
+    public String getLocationDescription() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.LOCATION_DESCRIPTION, ApplicationConstants.EMPTY_STRING);
+    }
+    public String getLocationParent() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.LOCATION_PARENT_LOCATION_UUID, ApplicationConstants.EMPTY_STRING);
+    }
+
+//    public Long getLocationID() {
+//        SharedPreferences prefs = getOpenMRSSharedPreferences();
+//        return prefs.getL(ApplicationConstants.LOCATION_ID, ApplicationConstants.EMPTY_STRING);
+//    }
 
     public String getVisitTypeUUID() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();

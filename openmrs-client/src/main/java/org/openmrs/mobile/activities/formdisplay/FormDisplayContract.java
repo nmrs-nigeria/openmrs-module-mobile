@@ -65,7 +65,7 @@ public interface FormDisplayContract {
     interface Presenter {
 
         interface MainPresenter extends BasePresenterContract {
-            void createEncounter();
+            void createEncounter(boolean isEligible);
         }
 
         interface PagePresenter extends BasePresenterContract {

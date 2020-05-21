@@ -43,6 +43,7 @@ import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
+import org.openmrs.mobile.activities.syncedvisits.SyncedVisitsActivity;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.ThemeUtils;
@@ -118,7 +119,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         Target viewTarget = new ViewTarget(R.id.activeVisitsView, this.getActivity());
         new ShowcaseView.Builder(this.getActivity())
                 .setTarget(viewTarget)
-                .setContentTitle("Active Visits")
+                .setContentTitle("Synced Status")
                 .setContentText("Click here to get the list of all the currently active visits")
                 .hideOnTouchOutside()
                 .setStyle(R.style.CustomShowcaseTheme)
@@ -233,7 +234,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
 
     private void hideVisitAndFormEntry(){
         mCaptureVitalsView.setVisibility(View.GONE);
-        mActiveVisitsView.setVisibility(View.GONE);
+//        mActiveVisitsView.setVisibility(View.GONE);
     }
 
     private void initFragmentFields(View root) {
@@ -341,8 +342,11 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
             case R.id.captureVitalsView:
                 startNewActivity(FormEntryPatientListActivity.class);
                 break;
+//            case R.id.activeVisitsView:
+//                startNewActivity(ActiveVisitsActivity.class);
+//                break;
             case R.id.activeVisitsView:
-                startNewActivity(ActiveVisitsActivity.class);
+                startNewActivity(SyncedVisitsActivity.class);
                 break;
             case R.id.dashboardProviderManagementView:
                 startNewActivity(ProviderManagerDashboardActivity.class);

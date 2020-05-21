@@ -26,6 +26,7 @@ import org.openmrs.mobile.utilities.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import rx.Observable;
 
@@ -42,6 +43,20 @@ public class LocationDAO {
         openHelper.getWritableDatabase().execSQL(new LocationTable().createTableDefinition());
         OpenMRS.getInstance().getOpenMRSLogger().d("All Locations deleted");
     }
+
+
+//    public Observable<List<Location>> getLocationsTry() {
+//        return createObservableIO(() -> {
+//            List<Location> locations = new ArrayList<>();
+//            Location location = new Location();
+//            location.setUuid();
+//            location.setDisplay("fff");
+//            location.setName("fff");
+//            locations.add(location);
+//
+//            return locations;
+//        });
+//    }
 
     public Observable<List<Location>> getLocations() {
         return createObservableIO(() -> {
@@ -65,7 +80,7 @@ public class LocationDAO {
     }
 
     public Location findLocationByName(String name) {
-        if(!StringUtils.notNull(name)){
+        if (!StringUtils.notNull(name)) {
             return null;
         }
         Location location = new Location();
@@ -84,6 +99,33 @@ public class LocationDAO {
             }
         }
         return location;
+    }
+
+    public List<Location> findLocationByNameNew(String name) {
+        List<Location> locations = new ArrayList<>();
+        if (!StringUtils.notEmpty(name)) {
+            return locations;
+        }
+        Location location = new Location();
+        String where = String.format("%s = ?", LocationTable.Column.DISPLAY);
+        String[] whereArgs = new String[]{name};
+
+        DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+        final Cursor cursor = helper.getReadableDatabase().query(LocationTable.TABLE_NAME, null, null, null, null, null, null);
+        if (null != cursor) {
+            try {
+                if (cursor.moveToFirst()) {
+                    location = cursorToLocation(cursor);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (location.getName() != null) {
+            locations.add(location);
+        }
+        return locations;
+
     }
 
     private Location cursorToLocation(Cursor cursor) {

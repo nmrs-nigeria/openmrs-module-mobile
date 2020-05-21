@@ -22,47 +22,6 @@
         android:stretchColumns="1">
 
         <TableRow>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/margin_short"
-                android:layout_weight="1">
-
-                <RelativeLayout
-                    android:id="@+id/artView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/artButton"
-                        android:layout_width="@dimen/dashboard_icon_height_width"
-                        android:layout_height="@dimen/dashboard_icon_height_width"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/art_program_icon_label"/>
-
-                    <TextView
-                        android:id="@+id/artLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/artButton"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/art_program_icon_label"
-                        android:textSize="@dimen/dashboard_text_size" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,10 +60,47 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/artView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/artButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width"
+                        android:layout_height="@dimen/dashboard_icon_height_width"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin"
+                        android:contentDescription="@string/art_program_icon_label"/>
+
+                    <TextView
+                        android:id="@+id/artLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/artButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/art_program_icon_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
         </TableRow>
 
         <TableRow>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -72,7 +72,7 @@ public interface LoginContract {
 
         void saveLocationsToDatabase(List<Location> locationList, String selectedLocation);
 
-        void loadLocations(String url);
+        void loadLocations(String url,String name);
 
     }
 }
