@@ -64,10 +64,10 @@ public class RestServiceBuilderSpecial {
                 Request request = requestBuilder.build();
                 return chain.proceed(request);
             });
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            httpClient.addInterceptor(new SnooperInterceptor());
-            httpClient.addInterceptor(logging);
+//            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            httpClient.addInterceptor(new SnooperInterceptor());
+//            httpClient.addInterceptor(logging);
         }
         OkHttpClient client = httpClient.build();
         Retrofit retrofit = builder.client(client).build();

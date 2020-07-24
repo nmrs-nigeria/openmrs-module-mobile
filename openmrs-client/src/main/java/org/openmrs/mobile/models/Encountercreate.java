@@ -85,6 +85,12 @@ public class Encountercreate extends Model implements Serializable{
     @Column(name = "eligble")
     private String eligible;
 
+    @Column(name = "identifier")
+    private String identifier;
+
+    @Column(name = "identifierType")
+    private String identifierType;
+
     @Column(name = "obsLocal")
     private String obslistLocal;
 
@@ -217,5 +223,21 @@ public class Encountercreate extends Model implements Serializable{
 
     public void setEligible(String eligible) {
         this.eligible = eligible;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public String getIdentifierType() {
+        return identifierType;
+    }
+
+    public void setIdentifierType(String identifierType) {
+        this.identifierType = identifierType;
     }
 }

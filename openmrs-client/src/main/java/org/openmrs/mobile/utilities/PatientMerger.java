@@ -28,25 +28,31 @@ public class PatientMerger {
     }
 
     private void mergePatientsPerson(Patient oldPatient, Patient newPatient) {
-        mergePersonNames(oldPatient.getName(), newPatient.getName());
-        mergePersonAddress(oldPatient.getAddress(), newPatient.getAddress());
-        oldPatient.setGender(getNewValueIfOldIsNull(oldPatient.getGender(), newPatient.getGender()));
-        oldPatient.setBirthdate(getNewValueIfOldIsNull(oldPatient.getBirthdate(), newPatient.getBirthdate()));
+        if (oldPatient != null && newPatient != null) {
+            mergePersonNames(oldPatient.getName(), newPatient.getName());
+            mergePersonAddress(oldPatient.getAddress(), newPatient.getAddress());
+            oldPatient.setGender(getNewValueIfOldIsNull(oldPatient.getGender(), newPatient.getGender()));
+            oldPatient.setBirthdate(getNewValueIfOldIsNull(oldPatient.getBirthdate(), newPatient.getBirthdate()));
+        }
     }
 
     private void mergePersonAddress(PersonAddress oldAddress, PersonAddress newAddress) {
-        oldAddress.setAddress1(getNewValueIfOldIsNull(oldAddress.getAddress1(), newAddress.getAddress1()));
-        oldAddress.setAddress2(getNewValueIfOldIsNull(oldAddress.getAddress2(), newAddress.getAddress2()));
-        oldAddress.setCityVillage(getNewValueIfOldIsNull(oldAddress.getCityVillage(), newAddress.getCityVillage()));
-        oldAddress.setCountry(getNewValueIfOldIsNull(oldAddress.getCountry(), newAddress.getCountry()));
-        oldAddress.setPostalCode(getNewValueIfOldIsNull(oldAddress.getPostalCode(), newAddress.getPostalCode()));
-        oldAddress.setStateProvince(getNewValueIfOldIsNull(oldAddress.getStateProvince(), newAddress.getStateProvince()));
+        if (oldAddress != null && newAddress != null) {
+            oldAddress.setAddress1(getNewValueIfOldIsNull(oldAddress.getAddress1(), newAddress.getAddress1()));
+            oldAddress.setAddress2(getNewValueIfOldIsNull(oldAddress.getAddress2(), newAddress.getAddress2()));
+            oldAddress.setCityVillage(getNewValueIfOldIsNull(oldAddress.getCityVillage(), newAddress.getCityVillage()));
+            oldAddress.setCountry(getNewValueIfOldIsNull(oldAddress.getCountry(), newAddress.getCountry()));
+            oldAddress.setPostalCode(getNewValueIfOldIsNull(oldAddress.getPostalCode(), newAddress.getPostalCode()));
+            oldAddress.setStateProvince(getNewValueIfOldIsNull(oldAddress.getStateProvince(), newAddress.getStateProvince()));
+        }
     }
 
     private void mergePersonNames(PersonName oldName, PersonName newName) {
-        oldName.setGivenName(getNewValueIfOldIsNull(oldName.getGivenName(), newName.getGivenName()));
-        oldName.setMiddleName(getNewValueIfOldIsNull(oldName.getMiddleName(), newName.getMiddleName()));
-        oldName.setFamilyName(getNewValueIfOldIsNull(oldName.getFamilyName(), newName.getFamilyName()));
+        if (oldName != null && newName != null) {
+            oldName.setGivenName(getNewValueIfOldIsNull(oldName.getGivenName(), newName.getGivenName()));
+            oldName.setMiddleName(getNewValueIfOldIsNull(oldName.getMiddleName(), newName.getMiddleName()));
+            oldName.setFamilyName(getNewValueIfOldIsNull(oldName.getFamilyName(), newName.getFamilyName()));
+        }
     }
 
     private String getNewValueIfOldIsNull(String oldValue, String newValue){

@@ -366,6 +366,90 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
+                    android:id="@+id/adultRSTView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/adultRSTButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/adult_rst_label" />
+
+                    <TextView
+                        android:id="@+id/adultRSTLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/adultRSTButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/adult_rst_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/childRSTView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:visibility="gone"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/childRSTButton"
+                        android:layout_width="@dimen/dashboard_icon_height_width_program"
+                        android:layout_height="@dimen/dashboard_icon_height_width_program"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/dashboard_icon_margin_program"
+                        android:contentDescription="@string/child_rst_label" />
+
+                    <TextView
+                        android:id="@+id/childRSTLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/childRSTButton"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
+                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
+                        android:text="@string/child_rst_label"
+                        android:textSize="@dimen/dashboard_text_size" />
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </TableRow>
+        <TableRow>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_short"
+                android:layout_weight="1">
+
+                <RelativeLayout
                     android:id="@+id/clientinteakeView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

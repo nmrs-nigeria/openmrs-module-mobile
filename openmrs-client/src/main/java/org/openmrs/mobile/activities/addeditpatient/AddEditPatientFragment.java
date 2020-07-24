@@ -97,6 +97,7 @@ import org.openmrs.mobile.models.PersonName;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FontsUtil;
+import org.openmrs.mobile.utilities.IdGeneratorUtil;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.StringUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
@@ -368,17 +369,17 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         }
 
         // Unique ID validation
-        if (ViewUtils.isEmpty(edunique)) {
-            uniqueerror.setText(emptyError);
-            uniqueIdTIL.setErrorEnabled(true);
-            uniqueIdTIL.setError(emptyError);
-        } else if (!ViewUtils.validateText(ViewUtils.getInput(edunique), ViewUtils.ILLEGAL_CHARACTERS)) {
-            uniqueerror.setText(familyNameError);
-            uniqueIdTIL.setErrorEnabled(true);
-            uniqueIdTIL.setError(familyNameError);
-        } else {
-            uniqueIdTIL.setErrorEnabled(false);
-        }
+//        if (ViewUtils.isEmpty(edunique)) {
+//            uniqueerror.setText(emptyError);
+//            uniqueIdTIL.setErrorEnabled(true);
+//            uniqueIdTIL.setError(emptyError);
+//        } else if (!ViewUtils.validateText(ViewUtils.getInput(edunique), ViewUtils.ILLEGAL_CHARACTERS)) {
+//            uniqueerror.setText(familyNameError);
+//            uniqueIdTIL.setErrorEnabled(true);
+//            uniqueIdTIL.setError(familyNameError);
+//        } else {
+//            uniqueIdTIL.setErrorEnabled(false);
+//        }
 //        patient.se
         // Add names
         PersonName name = new PersonName();
@@ -462,39 +463,46 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
             patientIdentifier.setDisplay("Hospital Number");
             patientIdentifier.setIdentifierType(identifierType);
             identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edanc)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edanc));
-            IdentifierType identifierType = new IdentifierType("ANC Number");
-            patientIdentifier.setDisplay("ANC Number");
+        }else {
+            final PatientIdentifier patientIdentifier = new PatientIdentifier();
+            patientIdentifier.setIdentifier(IdGeneratorUtil.getAlphaNumericString(10));
+            IdentifierType identifierType = new IdentifierType("Hospital Number");
+            patientIdentifier.setDisplay("Hospital Number");
             patientIdentifier.setIdentifierType(identifierType);
             identifiers.add(patientIdentifier);
         }
-        if (!ViewUtils.isEmpty(edart)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edart));
-            IdentifierType identifierType = new IdentifierType("ART Number");
-            patientIdentifier.setDisplay("ART Number");
-            patientIdentifier.setIdentifierType(identifierType);
-            identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edhts)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edhts));
-            IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
-            patientIdentifier.setDisplay("HIV testing Id (Client Code)");
-            patientIdentifier.setIdentifierType(identifierType);
-            identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edhei)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edhei));
-            IdentifierType identifierType = new IdentifierType("Exposed Infant Id");
-            patientIdentifier.setDisplay("Exposed Infant Id");
-            patientIdentifier.setIdentifierType(identifierType);
-            identifiers.add(patientIdentifier);
-        }
+//        if (!ViewUtils.isEmpty(edanc)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edanc));
+//            IdentifierType identifierType = new IdentifierType("ANC Number");
+//            patientIdentifier.setDisplay("ANC Number");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edart)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edart));
+//            IdentifierType identifierType = new IdentifierType("ART Number");
+//            patientIdentifier.setDisplay("ART Number");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edhts)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edhts));
+//            IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
+//            patientIdentifier.setDisplay("HIV testing Id (Client Code)");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edhei)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edhei));
+//            IdentifierType identifierType = new IdentifierType("Exposed Infant Id");
+//            patientIdentifier.setDisplay("Exposed Infant Id");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            identifiers.add(patientIdentifier);
+//        }
         patient.setIdentifiers(identifiers);
         updatePatientWithData(patient);
         patient.setUuid(" ");
@@ -514,38 +522,38 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
             patientIdentifier.setDisplay("Hospital Number");
             identifiers.add(patientIdentifier);
         }
-        if (!ViewUtils.isEmpty(edanc)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edanc));
-            IdentifierType identifierType = new IdentifierType("ANC Number");
-            patientIdentifier.setIdentifierType(identifierType);
-            patientIdentifier.setDisplay("ANC Number");
-            identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edart)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edart));
-            IdentifierType identifierType = new IdentifierType("ART Number");
-            patientIdentifier.setIdentifierType(identifierType);
-            patientIdentifier.setDisplay("ART Number");
-            identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edhts)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edhts));
-            IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
-            patientIdentifier.setIdentifierType(identifierType);
-            patientIdentifier.setDisplay("HIV testing Id (Client Code)");
-            identifiers.add(patientIdentifier);
-        }
-        if (!ViewUtils.isEmpty(edhei)){
-            PatientIdentifier patientIdentifier = new PatientIdentifier();
-            patientIdentifier.setIdentifier(ViewUtils.getInput(edhei));
-            IdentifierType identifierType = new IdentifierType("Exposed Infant Id");
-            patientIdentifier.setIdentifierType(identifierType);
-            patientIdentifier.setDisplay("Exposed Infant Id");
-            identifiers.add(patientIdentifier);
-        }
+//        if (!ViewUtils.isEmpty(edanc)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edanc));
+//            IdentifierType identifierType = new IdentifierType("ANC Number");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            patientIdentifier.setDisplay("ANC Number");
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edart)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edart));
+//            IdentifierType identifierType = new IdentifierType("ART Number");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            patientIdentifier.setDisplay("ART Number");
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edhts)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edhts));
+//            IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            patientIdentifier.setDisplay("HIV testing Id (Client Code)");
+//            identifiers.add(patientIdentifier);
+//        }
+//        if (!ViewUtils.isEmpty(edhei)){
+//            PatientIdentifier patientIdentifier = new PatientIdentifier();
+//            patientIdentifier.setIdentifier(ViewUtils.getInput(edhei));
+//            IdentifierType identifierType = new IdentifierType("Exposed Infant Id");
+//            patientIdentifier.setIdentifierType(identifierType);
+//            patientIdentifier.setDisplay("Exposed Infant Id");
+//            identifiers.add(patientIdentifier);
+//        }
         patient.setIdentifiers(identifiers);
         return updatePatientWithData(patient);
     }
@@ -596,7 +604,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         return (!ViewUtils.isEmpty(edfname) ||
                 (!ViewUtils.isEmpty(edmname)) ||
                 (!ViewUtils.isEmpty(edlname)) ||
-                (!ViewUtils.isEmpty(edunique)) ||
+//                (!ViewUtils.isEmpty(edunique)) ||
                 (!ViewUtils.isEmpty(eddob)) ||
                 (!ViewUtils.isEmpty(edyr)) ||
                 (!ViewUtils.isEmpty(edaddr1)) ||

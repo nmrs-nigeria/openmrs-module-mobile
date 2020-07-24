@@ -23,6 +23,9 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
     private boolean isEligible;
     private boolean isEnrolled;
     private boolean isFirstTime;
+    private boolean isCompleted;
+    private boolean isPositive = false;
+    private boolean isClientExist = false;
 
     public FormProgramPresenter(FormProgramContract.View view, long patientId, String programName) {
         this.view = view;
@@ -73,18 +76,41 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
             formName.add(formResourceList.get(i).getName());
         }
 
-        List<Encountercreate> encountercreateList = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId,"Client intake form");
-        if(encountercreateList.isEmpty()){
+        List<Encountercreate> encountercreateListAdult = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId,"Risk Assessment Pediatric");
+        List<Encountercreate> encountercreateListChild = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId,"Risk Stratification Adult");
+        if(encountercreateListAdult.isEmpty() && encountercreateListChild.isEmpty()){
             this.isFirstTime = true;
         }else{
             this.isFirstTime = false;
         }
 
-        List<Encountercreate> encountercreateListEligible = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "Client intake form","Yes");
-        if(encountercreateListEligible.isEmpty()){
+        List<Encountercreate> encountercreateListEligibleChild = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "Risk Assessment Pediatric","Yes");
+        List<Encountercreate> encountercreateListEligibleAdult = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "Risk Stratification Adult","Yes");
+
+        if(encountercreateListEligibleChild.isEmpty() && encountercreateListEligibleAdult.isEmpty()){
             isEligible = false;
         }else{
             isEligible = true;
+        }
+
+//        if(encountercreateListEligibleAdult.isEmpty()){
+//            isEligible = false;
+//        }else{
+//            isEligible = true;
+//        }
+
+        List<Encountercreate> encountercreateList = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "Client intake form","Yes");
+        if(encountercreateList.isEmpty()){
+            isPositive = false;
+        }else{
+            isPositive = true;
+        }
+
+        List<Encountercreate> encountercreateListClientExist = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId, "Client intake form");
+        if(encountercreateListClientExist.isEmpty()){
+            isClientExist = false;
+        }else{
+            isClientExist = true;
         }
 
         List<Encountercreate> encountercreateListEnrolled = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId, "HIV Enrollment");
@@ -94,7 +120,14 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
             isEnrolled = true;
         }
 
-        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime);
+        List<Encountercreate> encountercreateListCompleted = new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId, "Pharmacy Order Form");
+        if(encountercreateListCompleted.isEmpty()){
+            isCompleted = false;
+        }else{
+            isCompleted = true;
+        }
+
+        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime,isCompleted,isPositive,isClientExist);
     }
 
     @Override
@@ -105,8 +138,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
             if (resource.getName().equals("json"))
                 valueRefString = resource.getValueReference();
         }
-
-        EncounterType encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
+        EncounterType encType = new EncounterType();
+        String e_type = formsStringArray[position];
+        if (e_type.equals("Risk Assessment Pediatric")) {
+            encType = encounterDAO.getEncounterTypeByFormName("Risk Stratification Pediatrics");
+        }else{
+            encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
+        }
         if (encType != null) {
             String encounterType = encType.getUuid();
             view.startFormDisplayActivity(formName, patientId, valueRefString, encounterType);
@@ -137,5 +175,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
 
     public void setFirstTime(boolean firstTime) {
         isFirstTime = firstTime;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }

@@ -58,7 +58,7 @@
     <string name="reg_ident_name">What\'s the patient\'s hospital number?</string>
     <string name="reg_phone_number">Phone Number?</string>
     <string name="reg_ids_name">Other IDs?</string>
-    <string name="reg_ques_gender">What\'s the patient\'s gender?</string>
+    <string name="reg_ques_gender">What\'s the patient\'s sex?</string>
     <string name="reg_ques_dob">What\'s the patient\'s birth date?</string>
     <string name="label_or">Or</string>
     <string name="reg_ques_address">Address</string>
@@ -203,6 +203,8 @@
     <string name="maternal_cohort_label">Maternal Cohort Register</string>
     <!-- HTS Programs -->
     <string name="client_intake_label">Client Intake</string>
+    <string name="adult_rst_label">Risk Stratification Adult</string>
+    <string name="child_rst_label">Risk Assessment Pediatric</string>
     <!-- HEI Programs -->
     <string name="child_birth_label">Child Birth Registration</string>
     <string name="hei_follow_up_label">HEI Follow Up</string>

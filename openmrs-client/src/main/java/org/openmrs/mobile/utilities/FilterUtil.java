@@ -14,6 +14,9 @@
 
 package org.openmrs.mobile.utilities;
 
+import com.activeandroid.query.Select;
+
+import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Visit;
 
@@ -39,6 +42,77 @@ public class FilterUtil {
             if (doesAnySearchableWordFitQuery(searchableWords, query)) {
                 filteredList.add(patient);
             }
+
+        }
+        return filteredList;
+    }
+
+    public static List<Patient> getPatientsFilteredByQuery(List<Patient> patientList) {
+        List<Patient> filteredList = new ArrayList<>();
+
+        for (Patient patient : patientList) {
+            List<Encountercreate> encCreateList = new Select()
+                    .from(Encountercreate.class)
+                    .where("patientid = ?",patient.getId())
+                    .execute();
+            if (encCreateList.isEmpty() ){
+                filteredList.add(patient);
+            }
+            else{
+                List<Encountercreate> encCreateListSynced = new Select()
+                        .from(Encountercreate.class)
+                        .where("patientid = ? AND synced = 0",patient.getId())
+                        .execute();
+                if(!encCreateListSynced.isEmpty()){
+                    filteredList.add(patient);
+                }else{
+                    List<Encountercreate> encCreateListEligible = new Select()
+                            .from(Encountercreate.class)
+                            .where("patientid = ? AND synced = 1 AND eligble = ?",patient.getId(),"Yes")
+                            .execute();
+                    if (!encCreateListEligible.isEmpty()){
+                        if (encCreateListEligible.size() == 1) {
+                            List<Encountercreate> encCreateListPositive = new Select()
+                                    .from(Encountercreate.class)
+                                    .where("patientid = ? AND synced = 1 AND formname = 'Client intake form' AND eligble = 'No'",patient.getId())
+                                    .execute();
+                            if (encCreateListPositive.isEmpty()) {
+                                filteredList.add(patient);
+                            }
+                        }
+                        if(encCreateListEligible.size() == 2){
+                            List<Encountercreate> encCreateListPositive = new Select()
+                                    .from(Encountercreate.class)
+                                    .where("patientid = ? AND synced = 1 AND formname = 'Client intake form' AND eligble = 'Yes'",patient.getId())
+                                    .execute();
+                            if (!encCreateListPositive.isEmpty()){
+                                List<Encountercreate> encCreateListEnrolled = new Select()
+                                        .from(Encountercreate.class)
+                                        .where("patientid = ? AND synced = 1 AND formname = 'HIV Enrollment'",patient.getId())
+                                        .execute();
+                                List<Encountercreate> encCreateListReferred = new Select()
+                                        .from(Encountercreate.class)
+                                        .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'",patient.getId())
+                                        .execute();
+                                List<Encountercreate> encCreateListPharm= new Select()
+                                        .from(Encountercreate.class)
+                                        .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'",patient.getId())
+                                        .execute();
+                                if (!encCreateListEnrolled.isEmpty() &&  encCreateListPharm.isEmpty() ){
+                                    filteredList.add(patient);
+                                }
+                                if(encCreateListEnrolled.isEmpty() && encCreateListReferred.isEmpty()) {
+                                    filteredList.add(patient);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+
+
 
         }
         return filteredList;

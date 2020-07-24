@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public final class DateUtils {
+    public static final String DEFAULT_DATE_FORMAT_IDENTIFIER = "dd/MM/yy";
     public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
     public static final String DATE_WITH_TIME_FORMAT = "dd/MM/yyyy HH:mm";
 
@@ -58,6 +59,10 @@ public final class DateUtils {
 
     public static String convertTime(long timestamp) {
         return convertTime(timestamp, DEFAULT_DATE_FORMAT, TimeZone.getDefault());
+    }
+
+    public static String convertTimeIdentifier(long timestamp) {
+        return convertTime(timestamp, DEFAULT_DATE_FORMAT_IDENTIFIER, TimeZone.getDefault());
     }
 
     public static Long convertTime(String dateAsString) {

@@ -58,6 +58,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
     private ImageView mmaternalButton;
     private ImageView mpmtcthtsButton;
     private ImageView mchildButton;
+    private ImageView mchildRSTButton;
+    private ImageView madultRSTButton;
     private RelativeLayout mhivEnrollmentView;
     private RelativeLayout mcareCardView;
     private RelativeLayout mlabView;
@@ -76,6 +78,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
     private RelativeLayout mmaternalView;
     private RelativeLayout mpmtcthtsView;
     private RelativeLayout mchildView;
+    private RelativeLayout mchildRSTView;
+    private RelativeLayout madultRSTView;
+
     private SparseArray<Bitmap> mBitmapCache;
     private List<String> formsName = new ArrayList<>();
     public static FormProgramFragment newInstance() {
@@ -120,6 +125,10 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         mmaternalButton  = root.findViewById(R.id.maternalButton);
         mpmtcthtsButton  = root.findViewById(R.id.pmtcthtsButton);
         mchildButton  = root.findViewById(R.id.childButton);
+        mchildRSTButton  = root.findViewById(R.id.childRSTButton);
+
+        madultRSTButton  = root.findViewById(R.id.adultRSTButton);
+
         mhivEnrollmentView  = root.findViewById(R.id.hivEnrollmentView);
         mcareCardView  = root.findViewById(R.id.careCardView);
         mlabView  = root.findViewById(R.id.labView);
@@ -138,6 +147,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         mmaternalView  = root.findViewById(R.id.maternalView);
         mpmtcthtsView  = root.findViewById(R.id.pmtcthtsView);
         mchildView  = root.findViewById(R.id.childView);
+        mchildRSTView  = root.findViewById(R.id.childRSTView);
+        madultRSTView  = root.findViewById(R.id.adultRSTView);
 
 
     }
@@ -161,6 +172,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         mmaternalView.setOnClickListener(this);
         mpmtcthtsView.setOnClickListener(this);
         mchildView.setOnClickListener(this);
+        mchildRSTView.setOnClickListener(this);
+        madultRSTView.setOnClickListener(this);
 
     }
 
@@ -242,6 +255,14 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 position = formsName.indexOf("Adult Initial Clinical Evaluation");
                 mPresenter.listItemClicked(position,"Adult Initial Clinical Evaluation");
                 break;
+            case R.id.adultRSTView:
+                position = formsName.indexOf("Risk Stratification Adult");
+                mPresenter.listItemClicked(position,"Risk Stratification Adult");
+                break;
+            case R.id.childRSTView:
+                position = formsName.indexOf("Risk Assessment Pediatric");
+                mPresenter.listItemClicked(position,"Risk Assessment Pediatric");
+                break;
             default:
                 // Do nothing
                 break;
@@ -251,7 +272,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
 
 
     @Override
-    public void showFormList(String[] forms, String programName, List<String> formName, boolean isElig, boolean isEnrol, boolean isFTime) {
+    public void showFormList(String[] forms, String programName, List<String> formName, boolean isElig, boolean isEnrol, boolean isFTime, boolean isCompl, boolean isPos, boolean isClient) {
         formsName = formName;
         FormProgramActivity fPActivity = (FormProgramActivity) getActivity();
         for (String form : forms){
@@ -287,25 +308,50 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 case "HTS":
                     switch (form){
                         case "Client intake form":
-                            if (fPActivity.isFirstTime()) {
-                                if(isElig || !isFTime) {
+                            if (fPActivity.isFirstTime() && !isElig) {
+                                    mclientinteakeView.setVisibility(View.GONE);
+                            }else{
+                                if (fPActivity.isClientExist() || isClient ) {
                                     mclientinteakeView.setVisibility(View.GONE);
                                 }else{
                                     mclientinteakeView.setVisibility(View.VISIBLE);
                                 }
+                            }
+                            break;
+                        case "Risk Assessment Pediatric":
+                            if (fPActivity.isFirstTime()) {
+                                if(isElig || !isFTime) {
+                                    mchildRSTView.setVisibility(View.GONE);
+                                }else{
+                                    mchildRSTView.setVisibility(View.VISIBLE);
+                                }
                             }else{
-                                mclientinteakeView.setVisibility(View.GONE);
+                                mchildRSTView.setVisibility(View.GONE);
+                            }
+                            break;
+                        case "Risk Stratification Adult":
+                            if (fPActivity.isFirstTime()) {
+                                if(isElig || !isFTime) {
+                                    madultRSTView.setVisibility(View.GONE);
+                                }else{
+                                    madultRSTView.setVisibility(View.VISIBLE);
+                                }
+                            }else{
+                                madultRSTView.setVisibility(View.GONE);
                             }
                             break;
                         case "HIV Enrollment":
-                            if (fPActivity.isFirstTime() && !isElig) {
+                            if (fPActivity.isFirstTime() && !isElig ) {
                                 mhivEnrollmentView.setVisibility(View.GONE);
                             }else{
                                 if(fPActivity.isEligible() || isElig) {
                                     if(fPActivity.isEnrolled() || isEnrol) {
                                         mhivEnrollmentView.setVisibility(View.GONE);
                                     }else{
+                                        if(isPos || fPActivity.isPositive())
                                         mhivEnrollmentView.setVisibility(View.VISIBLE);
+                                        else mhivEnrollmentView.setVisibility(View.GONE);
+
                                     }
                                 }
                             }
@@ -318,7 +364,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                                     if(fPActivity.isEnrolled() || isEnrol) {
                                         mclientRefView.setVisibility(View.GONE);
                                     }else{
+                                        if(isPos || fPActivity.isPositive())
                                         mclientRefView.setVisibility(View.VISIBLE);
+                                        else mclientRefView.setVisibility(View.GONE);
                                     }
                                 }
                             }
@@ -327,8 +375,14 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             if (((fPActivity.isFirstTime() || !fPActivity.isEnrolled()) && !isEnrol)) {
                                 mpharmacyView.setVisibility(View.GONE);
                             }else{
-                                if(fPActivity.isEligible() || isEnrol) {
-                                    mpharmacyView.setVisibility(View.VISIBLE);
+                                if((fPActivity.isEligible() || isEnrol) && !fPActivity.isCompleted()) {
+                                    if(!isCompl) {
+                                        mpharmacyView.setVisibility(View.VISIBLE);
+                                    }else{
+                                        mpharmacyView.setVisibility(View.GONE);
+                                    }
+                                }else{
+                                    mpharmacyView.setVisibility(View.GONE);
                                 }
                             }
                             break;
@@ -364,6 +418,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
 //                        case "Client Referral Form":
 //                            mclientRefView.setVisibility(View.VISIBLE);
 //                            break;
+                        case "Risk Stratification Adult":
+                            madultRSTView.setVisibility(View.VISIBLE);
+                            break;
                         case "Pharmacy Order Form":
                             mpharmacyView.setVisibility(View.VISIBLE);
                             break;
@@ -463,6 +520,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         bindDrawableResource(mancTrackingButton, R.drawable.ico_vitals);
         bindDrawableResource(mpartnerButton, R.drawable.ico_vitals);
         bindDrawableResource(mclientinteakeButton, R.drawable.medical_client_intake);
+        bindDrawableResource(mchildRSTButton, R.drawable.healthcare_and_medical);
+        bindDrawableResource(madultRSTButton, R.drawable.adult);
+
 
         bindDrawableResource(mdeliveryButton, R.drawable.ico_vitals);
         bindDrawableResource(mmaternalButton, R.drawable.ico_vitals);
@@ -485,6 +545,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         ImageUtils.changeImageViewTint(getContext(), mpmtcthtsButton, purpleColorResId);
         ImageUtils.changeImageViewTint(getContext(), mhivEnrollmentButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mclientRefButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mchildRSTButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), madultRSTButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mpharmacyButton, greenColorResId);
     }
     @Override

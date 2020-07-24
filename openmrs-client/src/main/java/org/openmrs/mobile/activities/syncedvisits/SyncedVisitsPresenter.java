@@ -106,6 +106,7 @@ public class SyncedVisitsPresenter extends BasePresenter implements SyncedVisits
                             syncedVisitsView.updateListVisibility(true);
                         }
                     }
+                    patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
                     syncedVisitsView.updateAdapter(patientList);
                 }));
 

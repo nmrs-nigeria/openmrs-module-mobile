@@ -12,10 +12,13 @@ package org.openmrs.mobile.activities.formdisplay;
 
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.widget.Spinner;
 
+import org.intellij.lang.annotations.Identifier;
 import org.joda.time.LocalDateTime;
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.api.EncounterService;
+import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.api.repository.VisitRepository;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.dao.LocationDAO;
@@ -25,20 +28,24 @@ import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
 import org.openmrs.mobile.models.Answer;
 import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Obscreate;
 import org.openmrs.mobile.models.ObscreateLocal;
 import org.openmrs.mobile.models.Obsgroup;
 import org.openmrs.mobile.models.ObsgroupLocal;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
+import org.openmrs.mobile.utilities.IdGeneratorUtil;
 import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.SelectManyFields;
 import org.openmrs.mobile.utilities.SelectOneField;
 import org.openmrs.mobile.utilities.ToastUtil;
+import org.openmrs.mobile.utilities.ViewUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +71,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     private Patient mPatient;
     private FormPageAdapter mPageAdapter;
     private String mEncounterDate = null;
+    private String mPatientIdentifier = null;
     private LocationDAO locationDAO;
     private VisitRepository visitRepository;
     private long mEntryID = 0;
@@ -90,7 +98,12 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     }
 
     @Override
-    public void createEncounter(boolean isEligible) {
+    public void createEncounter(boolean isEligible, boolean isValid, String mMessage) {
+
+        if (!isValid){
+            ToastUtil.error("Please ensure you enter the visit date or other compulsory fields. ");
+            return;
+        }
         List<InputField> inputFields = new ArrayList<>();
         List<SelectOneField> radioGroupFields = new ArrayList<>();
         List<SelectManyFields> selectManyFields = new ArrayList<>();
@@ -134,6 +147,9 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 if (input.getObs().equals("encounterDate")) {
                     this.mEncounterDate = DateUtils.convertTime(DateUtils.convertTime(input.getValueAll()), DateUtils.OPEN_MRS_REQUEST_FORMAT);
                 }
+                if (input.getObs().equals("patientIdentifier")) {
+                    this.mPatientIdentifier = input.getValueAll();
+                }
                 if(input.getGroupConcept() != null && !obsGroupList.contains(input.getGroupConcept())){
                     obsGroupList.add(input.getGroupConcept());
                 }
@@ -144,6 +160,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                         obscreate.setValue(String.valueOf(input.getValueAll()));
                         obscreate.setObsDatetime(mEncounterDate);
                         obscreate.setPerson(mPatient.getUuid());
+                        observations.add(obscreate);
                         observations.add(obscreate);
 
                         ObscreateLocal obscreateLocal = new ObscreateLocal();
@@ -293,6 +310,18 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     }
                 }
             }
+            if (mFormname.equals("Risk Stratification Adult")){
+                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
+            }
+            if (mFormname.equals("Risk Assessment Pediatric")){
+                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
+            }
+            if(mFormname.equals("HIV Enrollment")){
+                encountercreate.setIdentifier(mPatientIdentifier);
+                encountercreate.setIdentifierType("ART Number");
+            }
             encountercreate.setObservations(observations);
             encountercreate.setObservationsLocal(observationsLocal);
             encountercreate.setFormname(mFormname);
@@ -300,6 +329,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             encountercreate.setFormUuid(getFormResourceByName(mFormname).getUuid());
             encountercreate.setObslist();
             encountercreate.setObslistLocal();
+
             if (isEligible){
                 encountercreate.setEligible("Yes");
             }else{
@@ -345,13 +375,82 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
 
             if (!mPatient.isSynced()) {
+                PatientIdentifier identifier = mPatient.getIdentifier();
+                identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
+                List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
+                identifiers.add(identifier);
+                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                    IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
+                    patientIdentifier.setDisplay("HIV testing Id (Client Code)");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                }
+                if (mFormname.equals("HIV Enrollment")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(this.mPatientIdentifier);
+                    IdentifierType identifierType = new IdentifierType("ART Number");
+                    patientIdentifier.setDisplay("ART Number");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                }
+                mPatient.setIdentifiers(identifiers);
                 mPatient.addEncounters(encountercreate.getId());
                 new PatientDAO().updatePatient(mPatient.getId(), mPatient);
-                ToastUtil.error("Patient not yet synced. Form data is saved locally " +
+                ToastUtil.warning("Patient not yet synced. Form data is saved locally " +
                         "and will sync when internet connection is restored. ");
                 mFormDisplayView.enableSubmitButton(true);
                 mFormDisplayView.quitFormEntry();
             } else {
+                PatientIdentifier identifier = mPatient.getIdentifier();
+                identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
+                List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
+                identifiers.add(identifier);
+                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                    IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
+                    patientIdentifier.setDisplay("HIV testing Id (Client Code)");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                    mPatient.setIdentifiers(identifiers);
+                    PatientRepository patientRepository = new PatientRepository();
+                    patientRepository.updatePatient(mPatient, new DefaultResponseCallbackListener() {
+                        @Override
+                        public void onResponse() {
+//                            ToastUtil.success("Patient identifier successfully synchronized.");
+                        }
+
+                        @Override
+                        public void onErrorResponse(String errorMessage) {
+//                            ToastUtil.error("Patient identifier synchronization not successful.");
+
+                        }
+                    });
+                }
+                if (mFormname.equals("HIV Enrollment")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(this.mPatientIdentifier);
+                    IdentifierType identifierType = new IdentifierType("ART Number");
+                    patientIdentifier.setDisplay("ART Number");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                    mPatient.setIdentifiers(identifiers);
+                    PatientRepository patientRepository = new PatientRepository();
+                    patientRepository.updatePatient(mPatient, new DefaultResponseCallbackListener() {
+                        @Override
+                        public void onResponse() {
+//                            ToastUtil.success("Patient identifier successfully synchronized.");
+                        }
+
+                        @Override
+                        public void onErrorResponse(String errorMessage) {
+//                            ToastUtil.error("Patient identifier synchronization not successful.");
+
+                        }
+                    });
+                }
                 new EncounterService().addEncounter(encountercreate, mEncounterDate, new DefaultResponseCallbackListener() {
                     @Override
                     public void onResponse() {

@@ -138,8 +138,9 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                             } else {
                                 mOpenMRS.setSessionToken(session.getSessionId());
                                 mOpenMRS.setPasswordAndHashedPassword(password);
-//                                mOpenMRS.setLocation(mOpenMRS.getLocation());
+                                mOpenMRS.setSystemId(session.getUser().getSystemId());
                             }
+                            OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
 
                             visitRepository.getVisitType(new GetVisitTypeCallbackListener() {
                                 @Override
@@ -156,8 +157,8 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                                 public void onErrorResponse(String errorMessage) {
 
                                     OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
-                                    loginView.showToast("Failed to fetch visit type",
-                                            ToastUtil.ToastType.ERROR);
+//                                    loginView.showToast("Failed to fetch visit type",
+//                                            ToastUtil.ToastType.ERROR);
                                 }
                             });
                             setLogin(true, url);
@@ -193,6 +194,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                     loginView.finishLoginActivity();
                 } else {
                     loginView.hideLoadingAnimation();
+                    loginView.showInvalidLoginOrPasswordSnackbar();
                     loginView.showToast(R.string.auth_failed_dialog_message,
                             ToastUtil.ToastType.ERROR);
                 }

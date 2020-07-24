@@ -138,25 +138,25 @@ public class MergePatientsRecycleViewAdapter extends RecyclerView.Adapter<MergeP
     }
 
     private void setPatientAdres(PatientViewHolder holder, Patient patient) {
-        if (null != patient.getAddress().getAddress1()) {
+        if (patient != null && patient.getAddress() != null && null != patient.getAddress().getAddress1()) {
             holder.mAddres.setText(patient.getAddress().getAddress1());
             if (Objects.equal(patient.getAddress().getAddress1(), newPatient.getAddress().getAddress1())) {
                 setStyleForMatchedPatientFields(holder.mAddres);
             }
         }
-        if (null != patient.getAddress().getPostalCode()) {
+        if (patient != null && patient.getAddress() != null && null != patient.getAddress().getPostalCode()) {
             holder.mPostalCode.setText(patient.getAddress().getPostalCode());
             if (Objects.equal(patient.getAddress().getPostalCode(), newPatient.getAddress().getPostalCode())) {
                 setStyleForMatchedPatientFields(holder.mPostalCode);
             }
         }
-        if (null != patient.getAddress().getCityVillage()) {
+        if (patient != null && patient.getAddress() != null && null != patient.getAddress().getCityVillage()) {
             holder.mCity.setText(patient.getAddress().getCityVillage());
             if (Objects.equal(patient.getAddress().getCityVillage(), newPatient.getAddress().getCityVillage())) {
                 setStyleForMatchedPatientFields(holder.mCity);
             }
         }
-        if (null != patient.getAddress().getCountry()) {
+        if (patient != null && patient.getAddress() != null && null != patient.getAddress().getCountry()) {
             holder.mCountry.setText(patient.getAddress().getCountry());
             if (Objects.equal(patient.getAddress().getCountry(), newPatient.getAddress().getCountry())) {
                 setStyleForMatchedPatientFields(holder.mCountry);
@@ -165,19 +165,19 @@ public class MergePatientsRecycleViewAdapter extends RecyclerView.Adapter<MergeP
     }
 
     private void setPatientName(PatientViewHolder holder, Patient patient) {
-        if (null != patient.getName().getGivenName()) {
+        if (patient != null && patient.getName() != null && null != patient.getName().getGivenName()) {
             holder.mGivenName.setText(patient.getName().getGivenName());
             if (Objects.equal(patient.getName().getGivenName(), newPatient.getName().getGivenName())) {
                 setStyleForMatchedPatientFields(holder.mGivenName);
             }
         }
-        if (null != patient.getName().getMiddleName()) {
+        if (patient != null && patient.getName() != null && null != patient.getName().getMiddleName()) {
             holder.mMiddleName.setText(patient.getName().getMiddleName());
             if (Objects.equal(patient.getName().getMiddleName(), newPatient.getName().getMiddleName())) {
                 setStyleForMatchedPatientFields(holder.mMiddleName);
             }
         }
-        if (null != patient.getName().getFamilyName()) {
+        if (patient != null && patient.getName() != null && null != patient.getName().getFamilyName()) {
             holder.mFamilyName.setText(patient.getName().getFamilyName());
             if (Objects.equal(patient.getName().getFamilyName(), newPatient.getName().getFamilyName())) {
                 setStyleForMatchedPatientFields(holder.mFamilyName);

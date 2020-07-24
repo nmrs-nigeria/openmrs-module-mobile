@@ -3,6 +3,7 @@ buildscript {
     repositories {
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
     }
 
     dependencies {
@@ -106,6 +107,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io"}
     google()
 }
 
@@ -174,6 +176,7 @@ dependencies {
     // Swipe reveal layout
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.github.javiersantos:AppUpdater:2.7'
 }
 
 play {

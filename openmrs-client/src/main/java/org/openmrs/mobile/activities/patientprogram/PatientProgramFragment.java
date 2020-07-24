@@ -102,7 +102,7 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.artView:
-                startNewActivity(FormProgramActivity.class, "ART");
+//                startNewActivity(FormProgramActivity.class, "ART");
                 break;
             case R.id.htsView:
                 startNewActivity(FormProgramActivity.class,"HTS");

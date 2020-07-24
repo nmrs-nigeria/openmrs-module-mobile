@@ -6,7 +6,7 @@ http://www.androprogrammer.com/2015/06/view-pager-with-circular-indicator.html*/
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
  * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- *
+ * <p>
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
@@ -18,9 +18,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -36,7 +38,10 @@ import org.openmrs.mobile.models.Page;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FormService;
+import org.openmrs.mobile.utilities.RangeEditText;
+import org.openmrs.mobile.utilities.StringUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
+import org.openmrs.mobile.utilities.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +55,8 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private Long personID = null;
     private int mStep = 1;
     private boolean isEligible = false;
+    private boolean isValid = false;
+    private String mMessage;
     private String formName;
 
     private FormDisplayContract.Presenter.MainPresenter mPresenter;
@@ -63,8 +70,8 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
         Bundle bundle = getIntent().getExtras();
         String valuereference = null;
-        if(bundle!=null) {
-            valuereference = (String)bundle.get(ApplicationConstants.BundleKeys.VALUEREFERENCE);
+        if (bundle != null) {
+            valuereference = (String) bundle.get(ApplicationConstants.BundleKeys.VALUEREFERENCE);
             formName = (String) bundle.get(ApplicationConstants.BundleKeys.FORM_NAME);
             personID = (Long) bundle.get(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
             getSupportActionBar().setTitle(formName + " Form");
@@ -92,7 +99,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     }
 
     @Override
-    public void onAttachFragment (Fragment fragment) {
+    public void onAttachFragment(Fragment fragment) {
         attachPresenterToFragment(fragment);
         super.onAttachFragment(fragment);
     }
@@ -104,24 +111,23 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
             String personGender = null;
             String valueRef = null;
             ArrayList<FormFieldsWrapper> formFieldsWrappers = null;
-            if(bundle!=null) {
+            if (bundle != null) {
                 Patient patient = new PatientDAO().findPatientByID(Long.toString(personID));
-                valueRef = (String)bundle.get(ApplicationConstants.BundleKeys.VALUEREFERENCE);
+                valueRef = (String) bundle.get(ApplicationConstants.BundleKeys.VALUEREFERENCE);
                 formFieldsWrappers = bundle.getParcelableArrayList(ApplicationConstants.BundleKeys.FORM_FIELDS_LIST_BUNDLE);
                 personGender = patient.getGender();
-                encounterDate = (String)bundle.get(ApplicationConstants.BundleKeys.ENCOUNTERDATETIME);
+                encounterDate = (String) bundle.get(ApplicationConstants.BundleKeys.ENCOUNTERDATETIME);
             }
             Form form = FormService.getForm(valueRef);
             List<Page> pageList = form.getPages();
             for (Page page : pageList) {
-                if(formFieldsWrappers != null){
-                    new FormDisplayPagePresenter((FormDisplayPageFragment) fragment, pageList.get(getFragmentNumber(fragment)), formFieldsWrappers,pageList,encounterDate);
+                if (formFieldsWrappers != null) {
+                    new FormDisplayPagePresenter((FormDisplayPageFragment) fragment, pageList.get(getFragmentNumber(fragment)), formFieldsWrappers, pageList, encounterDate);
 
                 } else {
-                    if(personGender != null){
+                    if (personGender != null) {
                         new FormDisplayPagePresenter((FormDisplayPageFragment) fragment, pageList.get(getFragmentNumber(fragment)), personGender);
-                    }
-                    else{
+                    } else {
                         new FormDisplayPagePresenter((FormDisplayPageFragment) fragment, pageList.get(getFragmentNumber(fragment)));
                     }
                 }
@@ -147,12 +153,11 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         mBtnPrevious = findViewById(R.id.btn_previous);
         mBtnFinish = findViewById(R.id.btn_finish);
 //        mChronometer = (Chronometer) getView().findViewById(R.id.chronometer);
-        mBtnNext.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem()+getmStep()));
-        mBtnPrevious.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem()-getmStep()));
+        mBtnNext.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem() + getmStep()));
+        mBtnPrevious.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem() - getmStep()));
 
-        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter(isEligible));
+        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter(isEligible,isValid,mMessage));
         mViewPager = findViewById(R.id.container);
-
 
 
         mViewPager.setAdapter(formPageAdapter);
@@ -161,32 +166,71 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
             @Override
             public void onPageSelected(int position) {
                 for (int i = 0; i < mDotsCount; i++) {
-                    mDots[i].setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.nonselecteditem_dot));
+                    mDots[i].setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.nonselecteditem_dot));
                 }
-                mDots[position].setImageDrawable(ContextCompat.getDrawable(getBaseContext(),R.drawable.selecteditem_dot));
+                mDots[position].setImageDrawable(ContextCompat.getDrawable(getBaseContext(), R.drawable.selecteditem_dot));
 
+                Spinner spinner = findViewById(customHashCode("1fb46619-abcd-405a-81c9-3c9018473729"));
 
-                Spinner spinner = (Spinner) findViewById(customHashCode("1fb46619-abcd-405a-81c9-3c9018473729"));
                 // Consider this when it causes skip for other form
-                if (spinner != null && spinner.getSelectedItem() != null && position == 7 &&  spinner.getSelectedItem().toString().equals("Negative")){
-                    setmStep(6);
+                if (spinner != null) {
+                    spinner.setEnabled(false);
+                    Spinner spinnerScreening = (Spinner) findViewById(customHashCode("b75f5803-34e9-46ea-bd41-c174670a13c7"));
+                    Spinner spinnerConfirmatory = (Spinner) findViewById(customHashCode("1183a13b-cc22-43df-8c57-fefe7acebd3e"));
+                    Spinner spinnerBreaker = (Spinner) findViewById(customHashCode("2e46d331-a956-49a2-b9eb-f74b8946fa08"));
+                    String textScreening = spinnerScreening.getSelectedItem().toString();
+                    String textConfirmatory = spinnerConfirmatory.getSelectedItem().toString();
+                    String textBreaker = spinnerBreaker.getSelectedItem().toString();
+                    if (StringUtils.notEmpty(textScreening) && textScreening.equals("Reactive")) {
+                        spinner.setSelection(1);
+                        setmStep(1);
+                    } else if (StringUtils.notEmpty(textScreening) && textScreening.equals("Non-reactive")) {
+                        spinner.setSelection(0);
+                        if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Non-reactive")) {
+                            spinner.setSelection(2);
+                        } else if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Reactive")) {
+                            spinner.setSelection(0);
+                            if (StringUtils.notEmpty(textBreaker) && textBreaker.equals("Reactive")) {
+                                spinner.setSelection(1);
+                                setmStep(1);
+                            } else if (StringUtils.notEmpty(textBreaker) && textBreaker.equals("Non-reactive")) {
+                                spinner.setSelection(2);
+                            }
+
+                        }
+
+
+                    }
+
                 }
+//                if (spinner != null && spinner.getSelectedItem() != null && position == 6 && spinner.getSelectedItem().toString().equals("Negative")) {
+//                    setmStep(6);
+//                }
+
+
+
                 if (position + 1 == mDotsCount) {
                     mBtnNext.setVisibility(View.GONE);
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.VISIBLE);
-                } else if (position == 0){
+                    RangeEditText visitDateEditText = findViewById(customHashCode("6bcaf85b-8504-4c7f-b510-a50436236b80"));
+                    if (visitDateEditText != null && !ViewUtils.isEmpty(visitDateEditText)){
+                        isValid = true;
+                    }
+                } else if (position == 0) {
                     mBtnNext.setVisibility(View.VISIBLE);
                     mBtnPrevious.setVisibility(View.GONE);
                     mBtnFinish.setVisibility(View.GONE);
                     if (formName.equals("Client intake form")) {
-                        if (isEligible) {
-                            setmStep(1);
-                        } else {
-                            setmStep(13);
-                        }
-                    }else{
                         setmStep(1);
+                    }
+
+                }else if (position == 1){
+                    setmStep(1);
+                    mBtnPrevious.setVisibility(View.VISIBLE);
+                    RangeEditText visitDateEditText = findViewById(customHashCode("6bcaf85b-8504-4c7f-b510-a50436236b80"));
+                    if (visitDateEditText != null && !ViewUtils.isEmpty(visitDateEditText)){
+                        isValid = true;
                     }
                 }
                 else {
@@ -195,10 +239,12 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     mBtnFinish.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // This method is intentionally empty
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
                 // This method is intentionally empty
@@ -222,7 +268,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
             pagerIndicator.addView(mDots[i], params);
         }
         mDots[0].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.selecteditem_dot));
-        if(mDotsCount ==1) {
+        if (mDotsCount == 1) {
             mBtnNext.setVisibility(View.GONE);
             mBtnPrevious.setVisibility(View.GONE);
             mBtnFinish.setVisibility(View.VISIBLE);
@@ -269,5 +315,21 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
     public void setEligible(boolean eligible) {
         isEligible = eligible;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
+    public String getmMessage() {
+        return mMessage;
+    }
+
+    public void setmMessage(String mMessage) {
+        this.mMessage = mMessage;
     }
 }

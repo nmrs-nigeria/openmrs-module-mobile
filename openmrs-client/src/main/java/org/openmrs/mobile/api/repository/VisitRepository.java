@@ -177,7 +177,7 @@ public class VisitRepository {
         visit.setStartDatetime(encounterDate);
         visit.setPatient(patient);
         visit.setLocation(locationDAO.findLocationByName(OpenMRS.getInstance().getLocation()));
-        visit.setVisitType(new VisitType(null, OpenMRS.getInstance().getVisitTypeUUID()));
+        visit.setVisitType(new VisitType(null, ApplicationConstants.DEFAULT_VISIT_TYPE_UUID));
 
         Call<Visit> call = restApi.startVisit(visit);
         call.enqueue(new Callback<Visit>() {

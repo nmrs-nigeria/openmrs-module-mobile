@@ -486,8 +486,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            app:errorEnabled="true"
-                            app:helperText="*Required">
+                            app:errorEnabled="true">
 
                             <EditText
                                 android:id="@+id/uniqueid"
@@ -526,6 +525,7 @@
                         android:layout_marginRight="12dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/reg_ids_name"
+                        android:visibility="gone"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                     <LinearLayout
@@ -533,6 +533,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="0dp"
                         android:background="@drawable/card"
+                        android:visibility="gone"
                         android:orientation="vertical">
 
                         <CheckBox

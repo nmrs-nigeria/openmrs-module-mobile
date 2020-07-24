@@ -66,7 +66,7 @@ public class EncounterService extends IntentService {
                         }
                     });
         } else
-            ToastUtil.error("No internet connection. Form data is saved locally " +
+            ToastUtil.warning("No internet connection. Form data is saved locally " +
                     "and will sync when internet connection is restored. ");
     }
 
@@ -139,6 +139,8 @@ public class EncounterService extends IntentService {
                     @Override
                     public void onResponse() {
                         // This method is intentionally empty
+                        ToastUtil.error("uu");
+
                     }
 
                     @Override
@@ -204,12 +206,14 @@ public class EncounterService extends IntentService {
                         encounter.getObservations().get(i).setDisplayValue
                                 (encountercreate.getObservations().get(i).getValue());
                     }
-                    List<Encounter> encounterList = visit.getEncounters();
-                    encounterList.add(encounter);
-                    visitDAO.saveOrUpdate(visit, patientid)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(id ->
-                                    ToastUtil.success(formname + " data saved successfully"));
+                    if (visit != null) {
+                        List<Encounter> encounterList = visit.getEncounters();
+                        encounterList.add(encounter);
+                        visitDAO.saveOrUpdate(visit, patientid)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(id ->
+                                        ToastUtil.success(formname + " data saved successfully"));
+                    }
                 });
     }
 
@@ -262,7 +266,7 @@ public class EncounterService extends IntentService {
 
 
         } else {
-            ToastUtil.error("No internet connection. Form data is saved locally " +
+            ToastUtil.warning("No internet connection. Form data is saved locally " +
                     "and will sync when internet connection is restored. ");
         }
     }

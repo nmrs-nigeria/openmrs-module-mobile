@@ -155,6 +155,12 @@ public class OpenMRS extends Application {
         editor.apply();
     }
 
+    public void setSystemId(String systemId) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.SYSTEM_ID, systemId);
+        editor.apply();
+    }
+
     public void setLocationUUID(String location_uuid) {
         SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
         editor.putString(ApplicationConstants.LOCATION_UUID, location_uuid);
@@ -255,6 +261,11 @@ public class OpenMRS extends Application {
     public String getLocationParent() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION_PARENT_LOCATION_UUID, ApplicationConstants.EMPTY_STRING);
+    }
+
+    public String getSystemId() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.SYSTEM_ID, ApplicationConstants.EMPTY_STRING);
     }
 
 //    public Long getLocationID() {

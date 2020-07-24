@@ -21,6 +21,8 @@ import org.openmrs.mobile.utilities.SelectOneField;
 
 import java.util.List;
 
+import retrofit2.http.Body;
+
 public interface FormDisplayContract {
 
     interface View {
@@ -65,7 +67,7 @@ public interface FormDisplayContract {
     interface Presenter {
 
         interface MainPresenter extends BasePresenterContract {
-            void createEncounter(boolean isEligible);
+            void createEncounter(boolean isEligible, boolean isValid, String mMessage);
         }
 
         interface PagePresenter extends BasePresenterContract {

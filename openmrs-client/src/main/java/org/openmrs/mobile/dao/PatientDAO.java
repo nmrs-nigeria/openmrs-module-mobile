@@ -67,7 +67,8 @@ public class PatientDAO {
             DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
             Cursor cursor = openHelper.getReadableDatabase().query(PatientTable.TABLE_NAME,
                     null, null, null, null, null, null);
-
+            DatabaseUtils.dumpCursorToString(cursor);
+            Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
             if (null != cursor) {
                 try {
                     while (cursor.moveToNext()) {
@@ -81,6 +82,7 @@ public class PatientDAO {
             return patients;
         });
     }
+
 
     public List<Patient> getAllPatientsLocal() {
             List<Patient> patients = new ArrayList<>();

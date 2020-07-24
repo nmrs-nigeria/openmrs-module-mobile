@@ -70,6 +70,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     private List<SelectOneField> selectOneFields = new ArrayList<>();
     private List<SelectManyFields> selectManyFields = new ArrayList<>();
     private LinearLayout mParent;
+    boolean shouldMoveOne = false;
+    boolean shouldMoveThirteen = false;
     Map<Integer, Integer> idManager = new HashMap<Integer, Integer>();
     String regexStr = "^[1-9]\\d*(\\.\\d+)?$";
     private static final String LABEL_ID_SALT = "UNIQUE_LABEL";
@@ -326,7 +328,6 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
             //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
-            //        ed.setEnabled(false);
             ed.setClickable(true);
             ed.setFocusable(false);
             ed.setName(question.getLabel());
@@ -707,17 +708,6 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     textView.setVisibility(View.GONE);
                 }
             }
-//            int uh = spinner.getId();
-//            int yy = customHashCode("1fb46619-abcd-405a-81c9-3c9018473729");
-//            if (spinner.getId() == customHashCode("1fb46619-abcd-405a-81c9-3c9018473729")){
-//                if (spinner.getSelectedItem() != null && spinner.getSelectedItem().toString().equals("Negative")){
-//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-//                    fdActivity.setmStep(6);
-//                }else{
-//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-//                    fdActivity.setmStep(1);
-//                }
-//            }
         } else {
             TextView textView = new TextView(getActivity());
             textView.setPadding(10, 20, 0, 0);
@@ -792,15 +782,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 }
             }
 
-//            if (spinner.getId() == customHashCode("1fb46619-abcd-405a-81c9-3c9018473729")){
-//                if (spinner.getSelectedItem() != null && spinner.getSelectedItem().toString().equals("Negative")){
-//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-//                    fdActivity.setmStep(6);
-//                }else{
-//                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-//                    fdActivity.setmStep(1);
-//                }
-//            }
+
 
 
         }
@@ -897,44 +879,147 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 if (StringUtils.notEmpty(question.getChildControl())) {
                     triggerDependantControl(spinnerField.getChosenAnswer(), question.getChildControl());
                 }
+                FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
+
+                // Check if the test result is positive or negative in client intake form
                 if (spinnerField.getConcept().equals("1fb46619-abcd-405a-81c9-3c9018473729")) {
                     if (spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
-                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
                         fdActivity.setmStep(1);
                         fdActivity.setEligible(true);
                     }else if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Negative")){
-                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
                         fdActivity.setmStep(6);
                         fdActivity.setEligible(false);
 
                     }
-                }
 
-                if (spinnerField.getConcept().equals("282e74ab-df7a-4f11-83a3-2724757e0714") ||
-                        spinnerField.getConcept().equals("48a962e6-419d-444f-a3f3-986092e40b0d") ||
-                        spinnerField.getConcept().equals("1f0ff684-7348-416a-b566-9d2440d64fe8") ||
-                        spinnerField.getConcept().equals("7cf78f74-dd87-4b96-9471-bc56907afe6d") ||
-                        spinnerField.getConcept().equals("1001cadb-ac25-433f-ae49-197cde7b12ca") ||
-                        spinnerField.getConcept().equals("42bc0bd7-5739-4771-8f91-b3d1bf2bea72") ||
-                        spinnerField.getConcept().equals("fa008dc8-7d4a-4f0c-af07-59d283d1cc7c") ||
-                        spinnerField.getConcept().equals("079887df-3684-4e59-abe1-13b829671829") ||
-                        spinnerField.getConcept().equals("6e69cd24-3812-46a6-a0f8-9d869b7f5a87")){
-                    if (spinnerField.getChosenAnswer()!= null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
-                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-                        fdActivity.setmStep(1);
-                        fdActivity.setEligible(true);
-                    }else if(spinnerField.getChosenAnswer()!= null && (spinnerField.getChosenAnswer().getLabel().equals("Negative")
-                            || spinnerField.getChosenAnswer().getLabel().equals("Unknown") || spinnerField.getChosenAnswer().getLabel().equals("Never")|| spinnerField.getChosenAnswer().getLabel().equals("No")) ) {
-                        FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-                        fdActivity.setmStep(13);
-                        fdActivity.setEligible(false);
+                }
+                // Check if the pharmacy order form regimen line is adult or child
+                if (spinnerField.getConcept().equals("91bf2c14-1677-4c7f-be1b-99a2b64231b4") && spinnerField.getChosenAnswer()!= null) {
+                    Spinner spinner = (Spinner) mParent.findViewById(customHashCode("718864d2-dd9b-4210-80fe-21e6f8dcbb14"));
+                    String text = spinner.getSelectedItem().toString();
+                    Spinner spinnerFirstLineAdult= mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    TextView textView =  mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
+                    Spinner spinnerSecondLineAdult= mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    TextView textViewSecond =  mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
+                    Spinner spinnerThirdLineAdult= mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7"));
+                    TextView textViewThird =  mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7" + LABEL_ID_SALT ));
+
+                    Spinner spinnerFirstLineChild= mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    TextView textViewChild =  mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
+                    Spinner spinnerSecondLineChild= mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    TextView textViewSecondChild =  mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
+                    Spinner spinnerThirdLineChild= mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae"));
+                    TextView textViewThirdChild =  mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae" + LABEL_ID_SALT ));
+                    if (text.equals("Adult")){
+                        spinnerFirstLineChild.setVisibility(View.GONE);
+                        textViewChild.setVisibility(View.GONE);
+                        spinnerSecondLineChild.setVisibility(View.GONE);
+                        textViewSecondChild.setVisibility(View.GONE);
+                        spinnerThirdLineChild.setVisibility(View.GONE);
+                        textViewThirdChild.setVisibility(View.GONE);
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
+                            spinnerFirstLineAdult.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+                            spinnerSecondLineAdult.setVisibility(View.GONE);
+                            textViewSecond.setVisibility(View.GONE);
+                            spinnerThirdLineAdult.setVisibility(View.GONE);
+                            textViewThird.setVisibility(View.GONE);
+                        }
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
+                            spinnerSecondLineAdult.setVisibility(View.VISIBLE);
+                            textViewSecond.setVisibility(View.VISIBLE);
+                            spinnerFirstLineAdult.setVisibility(View.GONE);
+                            textView.setVisibility(View.GONE);
+                            spinnerThirdLineAdult.setVisibility(View.GONE);
+                            textViewThird.setVisibility(View.GONE);
+                        }
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
+                            spinnerThirdLineAdult.setVisibility(View.VISIBLE);
+                            textViewThird.setVisibility(View.VISIBLE);
+                            spinnerFirstLineAdult.setVisibility(View.GONE);
+                            textView.setVisibility(View.GONE);
+                            spinnerSecondLineAdult.setVisibility(View.GONE);
+                            textViewSecond.setVisibility(View.GONE);
+                        }
+                    } else if(text.equals("Child")){
+                        spinnerFirstLineAdult.setVisibility(View.GONE);
+                        textView.setVisibility(View.GONE);
+                        spinnerSecondLineAdult.setVisibility(View.GONE);
+                        textViewSecond.setVisibility(View.GONE);
+                        spinnerThirdLineAdult.setVisibility(View.GONE);
+                        textViewThird.setVisibility(View.GONE);
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
+                            spinnerFirstLineChild.setVisibility(View.VISIBLE);
+                            textViewChild.setVisibility(View.VISIBLE);
+                            spinnerSecondLineChild.setVisibility(View.GONE);
+                            textViewSecondChild.setVisibility(View.GONE);
+                            spinnerThirdLineChild.setVisibility(View.GONE);
+                            textViewThirdChild.setVisibility(View.GONE);
+                        }
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
+                            spinnerSecondLineChild.setVisibility(View.VISIBLE);
+                            textViewSecondChild.setVisibility(View.VISIBLE);
+                            spinnerFirstLineChild.setVisibility(View.GONE);
+                            textViewChild.setVisibility(View.GONE);
+                            spinnerThirdLineChild.setVisibility(View.GONE);
+                            textViewThirdChild.setVisibility(View.GONE);
+                        }
+                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
+                            spinnerThirdLineChild.setVisibility(View.VISIBLE);
+                            textViewThirdChild.setVisibility(View.VISIBLE);
+                            spinnerFirstLineChild.setVisibility(View.GONE);
+                            textViewChild.setVisibility(View.GONE);
+                            spinnerSecondLineChild.setVisibility(View.GONE);
+                            textViewSecondChild.setVisibility(View.GONE);
+                        }
+                    }
+                }
+//
+                if (spinnerField.getConcept().equals("46320a3c-72cf-48b6-ad32-a4ce6912de91") ||
+                        spinnerField.getConcept().equals("6c4ebfeb-f613-493a-993a-ff5efa012e6d") ||
+                        spinnerField.getConcept().equals("0183f460-8798-46d3-8a9d-f92569b4d73c") ||
+                        spinnerField.getConcept().equals("828b885c-c191-44d3-9f63-b1d1ec8e7457") ||
+                        spinnerField.getConcept().equals("8f82fdc8-a062-46ac-8070-f7601a017f64") ||
+                        spinnerField.getConcept().equals("023fb1ae-c41e-4fc3-b512-7a47e29f77b1") ||
+                        spinnerField.getConcept().equals("ea49fa12-cfea-4178-863c-eefe97051cb1") ||
+                        spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26") ||
+                        spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")){
+
+                    if (spinnerField.getChosenAnswer() != null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
+                        shouldMoveOne = true;
 
                     }
                 }
-                if (spinnerField.getConcept().equals("282e74ab-df7a-4f11-83a3-2724757e0714") && spinnerField.getChosenAnswer() == null){
-                    FormDisplayActivity fdActivity = (FormDisplayActivity) getActivity();
-                    fdActivity.setmStep(0);
+                if (spinnerField.getConcept().equals("cacc7904-58f6-4c71-8525-2e663021a73b") ||
+                        spinnerField.getConcept().equals("ecb19ce0-4b7f-4092-a168-69030f37f326") ||
+                        spinnerField.getConcept().equals("b58a1127-1862-438e-9069-ad3e79955cfa") ||
+                        spinnerField.getConcept().equals("1c733781-71e5-4d3b-99d6-0cfdddc3281c") ||
+                        spinnerField.getConcept().equals("3b027b15-1b39-41e3-8341-2f2f1f747fc5") ||
+                        spinnerField.getConcept().equals("30909867-d0cd-47f7-9cca-14896c92fd4d") ||
+                        spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")){
+
+                    if (spinnerField.getChosenAnswer() != null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
+                        shouldMoveOne = true;
+                    }
                 }
+                if (spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")){
+                    Spinner spinner = (Spinner) mParent.findViewById(customHashCode("26605b5d-127d-4e1f-98af-1f537c6a3b48"));
+                    String text = spinner.getSelectedItem().toString();
+                    if (StringUtils.notEmpty(text)){
+                        fdActivity.setValid(true);
+                    }
+                }
+                if (spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")){
+                    Spinner spinner = (Spinner) mParent.findViewById(customHashCode("8dda2a65-c030-4e35-8ad1-942543047e26"));
+                    String text = spinner.getSelectedItem().toString();
+                    if (StringUtils.notEmpty(text)){
+                        fdActivity.setValid(true);
+                    }
+                }
+                if (shouldMoveOne) {
+                    fdActivity.setEligible(true);
+                }
+
 
                 if (question.getQuestionOptions().getControl() != null) {
                     if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel() != null) {

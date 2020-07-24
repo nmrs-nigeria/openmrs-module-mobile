@@ -189,19 +189,19 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
         if (patient.getIdentifiers().isEmpty()){
             uniqueIdError = true;
         }
-        for (PatientIdentifier identifier: patient.getIdentifiers()){
-            if (identifier.getDisplay().equals("Hospital Number")){
-                if (StringUtils.isBlank(identifier.getIdentifier())) {
-                    uniqueIdError = true;
-                }
-            }
-        }
+//        for (PatientIdentifier identifier: patient.getIdentifiers()){
+//            if (identifier.getDisplay().equals("Hospital Number")){
+//                if (StringUtils.isBlank(identifier.getIdentifier())) {
+//                    uniqueIdError = true;
+//                }
+//            }
+//        }
 
 //        if (StringUtils.isBlank(patient.getIdentifiers().)) {
 //            uniqueIdError = true;
 //        }
 
-        boolean result = !givenNameError && !familyNameError && !dateOfBirthError && !addressError && !countryError && !genderError && !uniqueIdError;
+        boolean result = !givenNameError && !familyNameError && !dateOfBirthError && !addressError && !countryError && !genderError;
         if (result) {
             mPatient = patient;
             return true;

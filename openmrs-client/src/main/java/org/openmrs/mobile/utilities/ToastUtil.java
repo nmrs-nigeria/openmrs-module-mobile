@@ -63,6 +63,10 @@ public final class ToastUtil {
         showToast(OpenMRS.getInstance(), ToastType.ERROR, message, Toast.LENGTH_SHORT);
     }
 
+    public static void warning(String message) {
+        showToast(OpenMRS.getInstance(), ToastType.WARNING, message, Toast.LENGTH_SHORT);
+    }
+
     public static void showShortToast(Context context, ToastType type, int textId) {
         showToast(context, type, context.getResources().getString(textId), Toast.LENGTH_SHORT);
     }

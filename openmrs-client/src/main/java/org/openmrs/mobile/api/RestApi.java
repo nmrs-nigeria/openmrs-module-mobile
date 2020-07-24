@@ -10,6 +10,7 @@
 
 package org.openmrs.mobile.api;
 
+import org.intellij.lang.annotations.Identifier;
 import org.openmrs.mobile.models.Concept;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
@@ -25,6 +26,7 @@ import org.openmrs.mobile.models.Obscreate;
 import org.openmrs.mobile.models.Observation;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientDto;
+import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PatientPhoto;
 import org.openmrs.mobile.models.Provider;
 import org.openmrs.mobile.models.Results;
@@ -130,6 +132,10 @@ public interface RestApi {
 
     @POST("patient/{uuid}")
     Call<PatientDto> updatePatient(@Body PatientDto patientDto, @Path("uuid") String uuid,
+                                   @Query("v") String representation);
+
+    @POST("patient/{uuid}/identifier")
+    Call<PatientDto> updatePatientIdentifier(@Path("uuid") String uuid, @Body PatientIdentifier identifier,
                                    @Query("v") String representation);
 
     @GET("module")

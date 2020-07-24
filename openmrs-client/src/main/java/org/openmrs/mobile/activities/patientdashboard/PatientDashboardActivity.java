@@ -48,12 +48,13 @@ import org.openmrs.mobile.activities.patientdashboard.vitals.PatientVitalsFragme
 import org.openmrs.mobile.activities.patientprogram.PatientProgramActivity;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ImageUtils;
+import org.openmrs.mobile.utilities.LogOutTimerUtil;
 import org.openmrs.mobile.utilities.TabUtil;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class PatientDashboardActivity extends ACBaseActivity {
+public class PatientDashboardActivity extends ACBaseActivity implements LogOutTimerUtil.LogOutListener{
 
     private String mId;
 
@@ -245,5 +246,21 @@ public class PatientDashboardActivity extends ACBaseActivity {
                     .getDrawable(R.drawable.ic_edit_white_24dp)), 400);
         }
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LogOutTimerUtil.startLogoutTimer(this, this);
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        LogOutTimerUtil.startLogoutTimer(this, this);
+    }
+
+    @Override
+    public void doLogout() {
+        logout();
     }
 }

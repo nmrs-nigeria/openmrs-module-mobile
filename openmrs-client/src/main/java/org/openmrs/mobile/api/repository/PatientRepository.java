@@ -62,6 +62,7 @@ public class PatientRepository extends RetrofitRepository {
     private PatientDAO patientDao;
     private LocationRepository locationRepository;
     private RestApi restApi;
+    PatientIdentifier identifierHts;
 
     public PatientRepository(){
         this.logger = new OpenMRSLogger();
@@ -211,45 +212,115 @@ public class PatientRepository extends RetrofitRepository {
      * Update Patient
      */
     public void updatePatient(final Patient patient, @Nullable final DefaultResponseCallbackListener callbackListener) {
-        PatientDto patientDto = patient.getPatientDto();
+
         if (NetworkUtils.isOnline()) {
-                Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
-                call.enqueue(new Callback<PatientDto>() {
-                    @Override
-                    public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
-                        if (response.isSuccessful()) {
-                            PatientDto patientDto = response.body();
-                            patient.setBirthdate(patientDto.getPerson().getBirthdate());
+            AndroidDeferredManager dm = new AndroidDeferredManager();
+            dm.when(locationRepository.getLocationUuid(), getIdGenPatientIdentifier(), getPatientIdentifierTypeUuid())
+                    .done(results -> {
+                        final List<PatientIdentifier> identifiers = new ArrayList<>();
+                        IdentifierType openmrsType = new IdentifierType();
+                        List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
+                        Results<IdentifierType> identifierTypesResults = (Results<IdentifierType>)results.get(2).getResult();
+                        for (PatientIdentifier p : identifiersPatients){
+                            for (IdentifierType resultIdentifiertype : identifierTypesResults.getResults()){
+                                if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
+                                    final PatientIdentifier identifier = new PatientIdentifier();
+                                    identifier.setLocation((Location) results.get(0).getResult());
+                                    identifier.setIdentifier(p.getIdentifier());
+                                    identifier.setIdentifierType(resultIdentifiertype);
+                                    identifiers.add(identifier);
+                                    if(resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number")){
+                                        identifierHts = identifier;
+                                    }
+                                }
+                                if(resultIdentifiertype.getDisplay().equals("OpenMRS ID")){
+                                    openmrsType = resultIdentifiertype;
+                                }
 
-                            patient.setUuid(patient.getUuid());
-                            if (patient.getPhoto() != null)
-                                uploadPatientPhoto(patient);
-
-                            patientDao.updatePatient(patient.getId(), patient);
-
-                            ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
-                                    + " updated");
-                            if (callbackListener != null) {
-                                callbackListener.onResponse();
-                            }
-                        } else {
-                            ToastUtil.error("Patient " + patient.getPerson().getName().getNameString()
-                                    + " cannot be updated due to server error" + response.message());
-                            if (callbackListener != null) {
-                                callbackListener.onErrorResponse(response.message());
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
-                        ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
-                                + " cannot be updated due to request error: " + t.toString());
-                        if (callbackListener != null) {
-                            callbackListener.onErrorResponse(t.getMessage());
+                        final PatientIdentifier identifier = new PatientIdentifier();
+                        identifier.setLocation((Location) results.get(0).getResult());
+                        identifier.setIdentifier((String) results.get(1).getResult());
+                        identifier.setIdentifierType(openmrsType);
+                        identifiers.add(identifier);
+
+                        patient.setIdentifiers(identifiers);
+
+                        PatientDto patientDto = patient.getPatientDto();
+
+                        Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+                        call.enqueue(new Callback<PatientDto>() {
+                            @Override
+                            public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
+                                if (response.isSuccessful()) {
+                                    PatientDto patientDto = response.body();
+                                    patient.setBirthdate(patientDto.getPerson().getBirthdate());
+
+                                    patient.setUuid(patient.getUuid());
+                                    if (patient.getPhoto() != null)
+                                        uploadPatientPhoto(patient);
+
+                                    patientDao.updatePatient(patient.getId(), patient);
+
+                                    ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
+                                            + " updated");
+                                    if (callbackListener != null) {
+                                        callbackListener.onResponse();
+                                    }
+                                } else {
+                                    ToastUtil.error("Patient " + patient.getPerson().getName().getNameString()
+                                            + " cannot be updated due to server error" + response.message());
+                                    if (callbackListener != null) {
+                                        callbackListener.onErrorResponse(response.message());
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
+                                ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
+                                        + " cannot be updated due to request error: " + t.toString());
+                                if (callbackListener != null) {
+                                    callbackListener.onErrorResponse(t.getMessage());
+                                }
+                            }
+                        });
+
+                        if (identifierHts != null){
+                            Call<PatientDto> callIdentifier = restApi.updatePatientIdentifier(patient.getUuid(),identifierHts, "full");
+                            callIdentifier.enqueue(new Callback<PatientDto>() {
+                                @Override
+                                public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
+                                    if (response.isSuccessful()) {
+
+                                        ToastUtil.success("Patient new identifier added successfully");
+                                        if (callbackListener != null) {
+                                            callbackListener.onResponse();
+                                        }
+                                    } else {
+                                        ToastUtil.error("Adding patient new identifier failed");
+                                        if (callbackListener != null) {
+                                            callbackListener.onErrorResponse(response.message());
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
+                                    ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
+                                            + " cannot be updated due to request error: " + t.toString());
+                                    if (callbackListener != null) {
+                                        callbackListener.onErrorResponse(t.getMessage());
+                                    }
+                                }
+                            });
                         }
-                    }
-                });
+
+
+                    });
+
 
         } else {
             ToastUtil.notify("Sync is off. Patient Update data is saved locally " +

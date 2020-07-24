@@ -19,6 +19,13 @@ import android.util.Log;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.AppUpdaterUtils;
+import com.github.javiersantos.appupdater.enums.AppUpdaterError;
+import com.github.javiersantos.appupdater.enums.Display;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.github.javiersantos.appupdater.objects.Update;
+
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
@@ -58,6 +65,17 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setIcon(R.drawable.openmrs_action_logo);
         }
+
+        new AppUpdater(this)
+                .setUpdateFrom(UpdateFrom.JSON)
+                .setDisplay(Display.DIALOG)
+                .setTitleOnUpdateAvailable("Update available")
+                .showEvery(5)
+                .setCancelable(false)
+                .showAppUpdated(true)
+                .setUpdateJSON("http://nmrs.savannahinnovations.com/update.json")
+                .start();
+
 
         // Create fragment
         DashboardFragment dashboardFragment =
