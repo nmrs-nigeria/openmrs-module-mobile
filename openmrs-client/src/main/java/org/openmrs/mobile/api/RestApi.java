@@ -28,6 +28,7 @@ import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientDto;
 import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PatientPhoto;
+import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Provider;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.models.Session;
@@ -166,6 +167,9 @@ public interface RestApi {
 
     @POST("provider")
     Call<Provider> addProvider(@Body Provider provider);
+
+    @POST("programenrollment")
+    Call<ProgramEnrollment> addProgram(@Body ProgramEnrollment programEnrollment);
 
     @POST("provider/{uuid}")
     Call<Provider> editProvider(@Path("uuid") String uuid,
