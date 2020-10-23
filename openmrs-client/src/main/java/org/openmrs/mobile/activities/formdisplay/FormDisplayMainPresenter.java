@@ -17,9 +17,13 @@ import android.widget.Spinner;
 import org.intellij.lang.annotations.Identifier;
 import org.joda.time.LocalDateTime;
 import org.openmrs.mobile.activities.BasePresenter;
+import org.openmrs.mobile.api.CustomApiCallback;
 import org.openmrs.mobile.api.EncounterService;
+import org.openmrs.mobile.api.RestApi;
+import org.openmrs.mobile.api.RestServiceBuilder;
 import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.api.repository.VisitRepository;
+import org.openmrs.mobile.api.retrofit.ProgramRepository;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
@@ -36,6 +40,7 @@ import org.openmrs.mobile.models.Obsgroup;
 import org.openmrs.mobile.models.ObsgroupLocal;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
+import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
@@ -62,8 +67,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import static org.openmrs.mobile.utilities.DateUtils.DATE_WITH_TIME_FORMAT;
 import static org.openmrs.mobile.utilities.FormService.getFormResourceByName;
 
-public class FormDisplayMainPresenter extends BasePresenter implements FormDisplayContract.Presenter.MainPresenter {
-
+public class FormDisplayMainPresenter extends BasePresenter implements FormDisplayContract.Presenter.MainPresenter, CustomApiCallback {
+    private RestApi restApi;
     private final long mPatientID;
     private final String mEncountertype;
     private final String mFormname;
@@ -89,6 +94,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             this.mEntryID = (long) bundle.get(ApplicationConstants.BundleKeys.ENTRIES_ID);
         }
         mFormDisplayView.setPresenter(this);
+        restApi = RestServiceBuilder.createService(RestApi.class);
+
 
     }
 
@@ -322,6 +329,10 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("ART Number");
             }
+            if(mFormname.equals("General Antenatal Care")){
+                encountercreate.setIdentifier(mPatientIdentifier);
+                encountercreate.setIdentifierType("ANC Number");
+            }
             encountercreate.setObservations(observations);
             encountercreate.setObservationsLocal(observationsLocal);
             encountercreate.setFormname(mFormname);
@@ -379,7 +390,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
                 identifiers.add(identifier);
-                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
+                if (mFormname.equals("Client intake form")) {
                     PatientIdentifier patientIdentifier = new PatientIdentifier();
                     patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
                     IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
@@ -392,6 +403,14 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     patientIdentifier.setIdentifier(this.mPatientIdentifier);
                     IdentifierType identifierType = new IdentifierType("ART Number");
                     patientIdentifier.setDisplay("ART Number");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                }
+                if (mFormname.equals("General Antenatal Care")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(this.mPatientIdentifier);
+                    IdentifierType identifierType = new IdentifierType("ANC Number");
+                    patientIdentifier.setDisplay("ANC Number");
                     patientIdentifier.setIdentifierType(identifierType);
                     identifiers.add(patientIdentifier);
                 }
@@ -407,7 +426,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
                 identifiers.add(identifier);
-                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
+//                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
+                if (mFormname.equals("Client intake form")) {
                     PatientIdentifier patientIdentifier = new PatientIdentifier();
                     patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
                     IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
@@ -428,6 +448,12 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
                         }
                     });
+                    ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                    programEnrollment.setPatient(mPatient.getUuid());
+                    programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
+                    programEnrollment.setDateEnrolled(mEncounterDate);
+                    ProgramRepository programRepository = new ProgramRepository();
+                    programRepository.addProgram(restApi, programEnrollment, this);
                 }
                 if (mFormname.equals("HIV Enrollment")) {
                     PatientIdentifier patientIdentifier = new PatientIdentifier();
@@ -450,6 +476,40 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
                         }
                     });
+                    ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                    programEnrollment.setPatient(mPatient.getUuid());
+                    programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
+                    programEnrollment.setDateEnrolled(mEncounterDate);
+                    ProgramRepository programRepository = new ProgramRepository();
+                    programRepository.addProgram(restApi, programEnrollment, this);
+                }
+                if (mFormname.equals("General Antenatal Care")) {
+                    PatientIdentifier patientIdentifier = new PatientIdentifier();
+                    patientIdentifier.setIdentifier(this.mPatientIdentifier);
+                    IdentifierType identifierType = new IdentifierType("ANC Number");
+                    patientIdentifier.setDisplay("ANC Number");
+                    patientIdentifier.setIdentifierType(identifierType);
+                    identifiers.add(patientIdentifier);
+                    mPatient.setIdentifiers(identifiers);
+                    PatientRepository patientRepository = new PatientRepository();
+                    patientRepository.updatePatient(mPatient, new DefaultResponseCallbackListener() {
+                        @Override
+                        public void onResponse() {
+//                            ToastUtil.success("Patient identifier successfully synchronized.");
+                        }
+
+                        @Override
+                        public void onErrorResponse(String errorMessage) {
+//                            ToastUtil.error("Patient identifier synchronization not successful.");
+
+                        }
+                    });
+                    ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                    programEnrollment.setPatient(mPatient.getUuid());
+                    programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
+                    programEnrollment.setDateEnrolled(mEncounterDate);
+                    ProgramRepository programRepository = new ProgramRepository();
+                    programRepository.addProgram(restApi, programEnrollment, this);
                 }
                 new EncounterService().addEncounter(encountercreate, mEncounterDate, new DefaultResponseCallbackListener() {
                     @Override
@@ -469,5 +529,14 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
         } else {
             mFormDisplayView.enableSubmitButton(true);
         }
+    }
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onFailure() {
+
     }
 }

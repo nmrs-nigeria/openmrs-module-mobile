@@ -229,7 +229,7 @@ public class PatientRepository extends RetrofitRepository {
                                     identifier.setIdentifier(p.getIdentifier());
                                     identifier.setIdentifierType(resultIdentifiertype);
                                     identifiers.add(identifier);
-                                    if(resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number")){
+                                    if(resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number") || resultIdentifiertype.getDisplay().equals("ANC Number")){
                                         identifierHts = identifier;
                                     }
                                 }

@@ -1007,6 +1007,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     String text = spinner.getSelectedItem().toString();
                     if (StringUtils.notEmpty(text)){
                         fdActivity.setValid(true);
+                    }else{
+                        fdActivity.setValid(false);
                     }
                 }
                 if (spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")){
@@ -1014,6 +1016,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     String text = spinner.getSelectedItem().toString();
                     if (StringUtils.notEmpty(text)){
                         fdActivity.setValid(true);
+                    }else{
+                        fdActivity.setValid(false);
                     }
                 }
                 if (shouldMoveOne) {

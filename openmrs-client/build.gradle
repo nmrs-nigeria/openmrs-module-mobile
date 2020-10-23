@@ -64,11 +64,21 @@ android {
             signingConfig signingConfigs.release
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    def relativeRootDir = output.packageApplication.outputDirectory.toPath()
-                            .relativize(rootDir.toPath()).toFile()
-                    output.outputFileName = new File("$relativeRootDir/openmrs-client/release/", output.outputFile.name)
+                    def outputDir = new File("${project.buildDir.absolutePath}/outputs/apk/${variant.flavorName}/${variant.buildType.name}")
+                    def outputFileName = "app-${variant.flavorName}-${variant.buildType.name}.apk"
+                    // def outputFile = new File("$outputDir/$outputFileName")
+
+                    variant.packageApplicationProvider.get().outputDirectory = new File("$outputDir")
+                    output.outputFileName = outputFileName
                 }
             }
+//            applicationVariants.all { variant ->
+//                variant.outputs.each { output ->
+//                    def relativeRootDir = output.packageApplication.outputDirectory.toPath()
+//                            .relativize(rootDir.toPath()).toFile()
+//                    output.outputFileName = new File("$relativeRootDir/openmrs-client/release/", output.outputFile.name)
+//                }
+//            }
         }
         debug {
             testCoverageEnabled true

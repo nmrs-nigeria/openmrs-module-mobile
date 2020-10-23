@@ -55,7 +55,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private Long personID = null;
     private int mStep = 1;
     private boolean isEligible = false;
-    private boolean isValid = false;
+    private boolean isValid = true;
     private String mMessage;
     private String formName;
 
@@ -181,14 +181,14 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     String textScreening = spinnerScreening.getSelectedItem().toString();
                     String textConfirmatory = spinnerConfirmatory.getSelectedItem().toString();
                     String textBreaker = spinnerBreaker.getSelectedItem().toString();
-                    if (StringUtils.notEmpty(textScreening) && textScreening.equals("Reactive")) {
-                        spinner.setSelection(1);
+                    if (StringUtils.notEmpty(textScreening) && textScreening.equals("Non-reactive")) {
+                        spinner.setSelection(2);
                         setmStep(1);
-                    } else if (StringUtils.notEmpty(textScreening) && textScreening.equals("Non-reactive")) {
+                    } else if (StringUtils.notEmpty(textScreening) && textScreening.equals("Reactive")) {
                         spinner.setSelection(0);
-                        if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Non-reactive")) {
-                            spinner.setSelection(2);
-                        } else if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Reactive")) {
+                        if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Reactive")) {
+                            spinner.setSelection(1);
+                        } else if (StringUtils.notEmpty(textConfirmatory) && textConfirmatory.equals("Non-reactive")) {
                             spinner.setSelection(0);
                             if (StringUtils.notEmpty(textBreaker) && textBreaker.equals("Reactive")) {
                                 spinner.setSelection(1);
@@ -203,9 +203,6 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     }
 
                 }
-//                if (spinner != null && spinner.getSelectedItem() != null && position == 6 && spinner.getSelectedItem().toString().equals("Negative")) {
-//                    setmStep(6);
-//                }
 
 
 

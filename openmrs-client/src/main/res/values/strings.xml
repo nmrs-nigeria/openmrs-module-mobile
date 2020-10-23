@@ -421,8 +421,11 @@
     <string name="identifier_hint">Identifier</string>
     <string name="identifier_description">* Identifier can be anything. Eg. Doctor, Nurse, Clerk, etc</string>
     <string name="add_provider_no_network_msg">Cannot add provider when offline.</string>
+    <string name="add_program_no_network_msg">Cannot add provider when offline.</string>
     <string name="add_provider_success_msg">Successfully added provider.</string>
     <string name="add_provider_failure_msg">Failed to add provider.</string>
+    <string name="add_program_success_msg">Successfully added program.</string>
+    <string name="add_program_failure_msg">Failed to add program.</string>
     <string name="edit_provider_no_network_msg">Cannot edit provider when offline.</string>
     <string name="edit_provider_success_msg">Successfully edited provider.</string>
     <string name="edit_provider_failure_msg">Failed to edit provider.</string>
