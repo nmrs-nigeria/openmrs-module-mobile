@@ -59,6 +59,15 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
             this.isFirstTime = false;
         }
 
+        List<Encountercreate> encountercreateGenCare= new VisitDAO().getLocalEncounterByPatientIDStr(Long.parseLong(mPatientID),"General Antenatal Care");
+        if(encountercreateGenCare.isEmpty()){
+            this.isFirstTime = true;
+        }else{
+            this.isFirstTime = false;
+        }
+
+
+
         List<Encountercreate> encountercreateListEligibleChild = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Assessment Pediatric","Yes");
         List<Encountercreate> encountercreateListEligibleAdult = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Stratification Adult","Yes");
         if(encountercreateListEligibleChild.isEmpty()){

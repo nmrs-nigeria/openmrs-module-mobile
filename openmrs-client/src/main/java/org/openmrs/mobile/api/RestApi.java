@@ -117,6 +117,9 @@ public interface RestApi {
     @POST("visit")
     Call<Visit> startVisit(@Body Visit visit);
 
+    @POST("programenrollment")
+    Call<ProgramEnrollment> createProgram(@Body ProgramEnrollment programEnrollment);
+
     @GET("visit")
     Call<Results<Visit>> findVisitsByPatientUUID(@Query("patient") String patientUUID,
                                                  @Query("v") String representation);

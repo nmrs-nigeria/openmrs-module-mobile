@@ -28,6 +28,8 @@ import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListAc
 import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
+import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.ImageUtils;
@@ -102,7 +104,7 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.artView:
-//                startNewActivity(FormProgramActivity.class, "ART");
+                startNewActivity(FormProgramActivity.class, "ART");
                 break;
             case R.id.htsView:
                 startNewActivity(FormProgramActivity.class,"HTS");
@@ -111,7 +113,13 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
 //                startNewActivity(FormProgramActivity.class,"HEI");
                 break;
             case R.id.pmtctView:
-//                startNewActivity(FormProgramActivity.class,"PMTCT");
+                Patient patient = new PatientDAO().findPatientByID(patientID);
+                if(("F").equals(patient.getGender())) {
+                    startNewActivity(FormProgramActivity.class, "PMTCT");
+                }
+                else{
+                    mpmtctView.setVisibility(View.GONE);
+                }
                 break;
             default:
                 // Do nothing

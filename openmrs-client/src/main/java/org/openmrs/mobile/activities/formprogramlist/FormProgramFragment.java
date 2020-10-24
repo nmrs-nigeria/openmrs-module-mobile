@@ -280,25 +280,53 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 case "PMTCT":
                     switch (form) {
                         case "Delivery register":
-                            mdeliveryView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mdeliveryView.setVisibility(View.GONE);
+                            }else{
+                                mdeliveryView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "General Antenatal Care":
-                            mancTrackingView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mancTrackingView.setVisibility(View.VISIBLE);
+                            }else{
+                                mancTrackingView.setVisibility(View.GONE);
+                            }
                             break;
-                        case "Laboratory Order and Result form":
-                            mlabView.setVisibility(View.VISIBLE);
+                        case "Client Referral Form":
+                            if (fPActivity.isFirstTime()){
+                                mclientRefView.setVisibility(View.GONE);
+                            }else{
+                                mclientRefView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "Partner Register":
-                            mpartnerView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mpartnerView.setVisibility(View.GONE);
+                            }else{
+                                mpartnerView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "Pharmacy Order Form":
-                            mpharmacyView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mpharmacyView.setVisibility(View.GONE);
+                            }else{
+                                mpharmacyView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "PMTCT HTS Register":
-                            mpmtcthtsView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mpmtcthtsView.setVisibility(View.GONE);
+                            }else{
+                                mpmtcthtsView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "Maternal Cohort Register":
-                            mmaternalView.setVisibility(View.VISIBLE);
+                            if (fPActivity.isFirstTime()){
+                                mmaternalView.setVisibility(View.GONE);
+                            }else{
+                                mmaternalView.setVisibility(View.VISIBLE);
+                            }
                             break;
                         default:
                             // Do nothing
@@ -407,34 +435,34 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 case "ART":
                     switch (form) {
                         case "Adult Initial Clinical Evaluation":
-                            madultinitView.setVisibility(View.VISIBLE);
+                            madultinitView.setVisibility(View.GONE);
                             break;
                         case "ART Commencement Form":
-                            martComView.setVisibility(View.VISIBLE);
+                            martComView.setVisibility(View.GONE);
                             break;
                         case "Care Card":
-                            mcareCardView.setVisibility(View.VISIBLE);
+                            mcareCardView.setVisibility(View.GONE);
                             break;
 //                        case "Client Referral Form":
 //                            mclientRefView.setVisibility(View.VISIBLE);
 //                            break;
                         case "Risk Stratification Adult":
-                            madultRSTView.setVisibility(View.VISIBLE);
+                            madultRSTView.setVisibility(View.GONE);
                             break;
                         case "Pharmacy Order Form":
                             mpharmacyView.setVisibility(View.VISIBLE);
                             break;
                         case "Client Tracking and Termination":
-                            mclientTracView.setVisibility(View.VISIBLE);
+                            mclientTracView.setVisibility(View.GONE);
                             break;
                         case "HIV Enrollment":
-                            mhivEnrollmentView.setVisibility(View.VISIBLE);
+                            mhivEnrollmentView.setVisibility(View.GONE);
                             break;
                         case "Laboratory Order and Result form":
                             mlabView.setVisibility(View.VISIBLE);
                             break;
                         case "Pediatric Initial Clinical Evaluation":
-                            mpedinitView.setVisibility(View.VISIBLE);
+                            mpedinitView.setVisibility(View.GONE);
                             break;
                         default:
                             // Do nothing
@@ -507,7 +535,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         bindDrawableResource(mheifButton, R.drawable.ico_vitals);
         bindDrawableResource(mhivEnrollmentButton, R.drawable.web);
         bindDrawableResource(mcareCardButton, R.drawable.ico_vitals);
-        bindDrawableResource(mlabButton, R.drawable.ico_vitals);
+        bindDrawableResource(mlabButton, R.drawable.microscope);
         bindDrawableResource(mpharmacyButton, R.drawable.tools_and_utensils);
         bindDrawableResource(madultinitButton, R.drawable.ico_vitals);
 
@@ -518,15 +546,15 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
 
         bindDrawableResource(mclientTracButton, R.drawable.ico_vitals);
         bindDrawableResource(mancTrackingButton, R.drawable.ico_vitals);
-        bindDrawableResource(mpartnerButton, R.drawable.ico_vitals);
+        bindDrawableResource(mpartnerButton, R.drawable.couple);
         bindDrawableResource(mclientinteakeButton, R.drawable.medical_client_intake);
         bindDrawableResource(mchildRSTButton, R.drawable.healthcare_and_medical);
         bindDrawableResource(madultRSTButton, R.drawable.adult);
 
 
-        bindDrawableResource(mdeliveryButton, R.drawable.ico_vitals);
-        bindDrawableResource(mmaternalButton, R.drawable.ico_vitals);
-        bindDrawableResource(mpmtcthtsButton, R.drawable.ico_vitals);
+        bindDrawableResource(mdeliveryButton, R.drawable.teddy_bear);
+        bindDrawableResource(mmaternalButton, R.drawable.holidays);
+        bindDrawableResource(mpmtcthtsButton, R.drawable.healthcare);
         bindDrawableResource(mchildButton, R.drawable.ico_vitals);
         changeColorOfDashboardIcons();
         if (ThemeUtils.isDarkModeActivated()) {
@@ -548,6 +576,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         ImageUtils.changeImageViewTint(getContext(), mchildRSTButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), madultRSTButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mpharmacyButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mlabButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mpartnerButton, purpleColorResId);
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
