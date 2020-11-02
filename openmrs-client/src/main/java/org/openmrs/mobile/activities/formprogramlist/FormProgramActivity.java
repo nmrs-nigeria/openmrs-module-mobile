@@ -21,6 +21,8 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
     private boolean isCompleted = false;
     private boolean isPositive = false;
     private boolean isClientExist = false;
+    private boolean isFirstTimeANC = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +63,9 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
 
         List<Encountercreate> encountercreateGenCare= new VisitDAO().getLocalEncounterByPatientIDStr(Long.parseLong(mPatientID),"General Antenatal Care");
         if(encountercreateGenCare.isEmpty()){
-            this.isFirstTime = true;
+            this.isFirstTimeANC = true;
         }else{
-            this.isFirstTime = false;
+            this.isFirstTimeANC = false;
         }
 
 
@@ -71,6 +73,11 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
         List<Encountercreate> encountercreateListEligibleChild = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Assessment Pediatric","Yes");
         List<Encountercreate> encountercreateListEligibleAdult = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Stratification Adult","Yes");
         if(encountercreateListEligibleChild.isEmpty()){
+            isEligible = false;
+        }else{
+            isEligible = true;
+        }
+        if(encountercreateListEligibleAdult.isEmpty()){
             isEligible = false;
         }else{
             isEligible = true;
@@ -140,6 +147,14 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
 
     public void setPositive(boolean positive) {
         isPositive = positive;
+    }
+
+    public boolean isFirstTimeANC() {
+        return isFirstTimeANC;
+    }
+
+    public void setFirstTimeANC(boolean firstTimeANC) {
+        isFirstTimeANC = firstTimeANC;
     }
 
     public boolean isClientExist() {

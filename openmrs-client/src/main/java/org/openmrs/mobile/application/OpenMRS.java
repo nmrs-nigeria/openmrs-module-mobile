@@ -66,8 +66,10 @@ public class OpenMRS extends Application {
         AndroidSnooper.init(this);
         Intent i = new Intent(this, FormListService.class);
         startService(i);
-        Intent intent = new Intent(this, AuthenticateCheckService.class);
-        startService(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Intent intent = new Intent(this, AuthenticateCheckService.class);
+            startService(intent);
+        }
     }
 
     protected void initializeDB() {

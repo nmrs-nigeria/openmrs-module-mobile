@@ -16,6 +16,7 @@ import android.content.Intent;
 import com.activeandroid.query.Select;
 
 import org.openmrs.mobile.api.repository.VisitRepository;
+import org.openmrs.mobile.api.retrofit.ProgramRepository;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
@@ -24,6 +25,7 @@ import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
@@ -38,12 +40,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class EncounterService extends IntentService {
+public class EncounterService extends IntentService implements CustomApiCallback {
 
     private final RestApi apiService = RestServiceBuilder.createService(RestApi.class);
-
+    private RestApi restApi;
     public EncounterService() {
         super("Save Encounter");
+        restApi = RestServiceBuilder.createService(RestApi.class);
     }
 
 
@@ -227,6 +230,31 @@ public class EncounterService extends IntentService {
                 Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
                 if (!encountercreate.getSynced() &&
                         patient.isSynced()) {
+                    if (encountercreate.getFormname().equals("Client intake form")) {
+                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                        programEnrollment.setPatient(encountercreate.getPatient());
+                        programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
+                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                        ProgramRepository programRepository = new ProgramRepository();
+                        programRepository.addProgram(restApi, programEnrollment, this);
+                    }
+                    if (encountercreate.getFormname().equals("HIV Enrollment")) {
+
+                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                        programEnrollment.setPatient(encountercreate.getPatient());
+                        programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
+                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                        ProgramRepository programRepository = new ProgramRepository();
+                        programRepository.addProgram(restApi, programEnrollment, this);
+                    }
+                    if (encountercreate.getFormname().equals("General Antenatal Care")) {
+                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                        programEnrollment.setPatient(encountercreate.getPatient());
+                        programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
+                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                        ProgramRepository programRepository = new ProgramRepository();
+                        programRepository.addProgram(restApi, programEnrollment, this);
+                    }
                     new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(visit -> {
@@ -306,6 +334,14 @@ public class EncounterService extends IntentService {
 //                    "and will sync when internet connection is restored. ");
 //        }
 //    }
+    @Override
+    public void onSuccess() {
 
+    }
+
+    @Override
+    public void onFailure() {
+
+    }
 
 }

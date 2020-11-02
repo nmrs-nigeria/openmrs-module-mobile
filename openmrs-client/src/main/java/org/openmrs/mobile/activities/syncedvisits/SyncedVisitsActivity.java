@@ -15,6 +15,7 @@
 package org.openmrs.mobile.activities.syncedvisits;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +28,15 @@ import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivity;
 import org.openmrs.mobile.activities.syncedvisits.SyncedVisitsFragment;
 import org.openmrs.mobile.activities.syncedvisits.SyncedVisitsPresenter;
+import org.openmrs.mobile.api.EncounterService;
+import org.openmrs.mobile.api.PatientService;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.services.SyncService;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.StringUtils;
+import org.openmrs.mobile.utilities.ToastUtil;
+
+import java.util.Objects;
 
 public class SyncedVisitsActivity extends ACBaseActivity {
 
@@ -83,6 +90,13 @@ public class SyncedVisitsActivity extends ACBaseActivity {
         switch (id) {
             case R.id.syncbutton:
                 enableAddPatient(OpenMRS.getInstance().getSyncState());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
+                    Intent i = new Intent(this, PatientService.class);
+                    this.startService(i);
+                    Intent i1 = new Intent(this, EncounterService.class);
+                    this.startService(i1);
+                }
                 break;
             case R.id.actionAddPatients:
                 Intent intent = new Intent(this, LastViewedPatientsActivity.class);

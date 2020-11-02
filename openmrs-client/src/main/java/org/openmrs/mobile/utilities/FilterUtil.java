@@ -108,6 +108,14 @@ public class FilterUtil {
 
                         }
                     }
+
+                    List<Encountercreate> encCreateListANC = new Select()
+                            .from(Encountercreate.class)
+                            .where("patientid = ? AND formname = 'General Antenatal Care'",patient.getId())
+                            .execute();
+                    if (!encCreateListANC.isEmpty()) {
+                        filteredList.add(patient);
+                    }
                 }
             }
 
