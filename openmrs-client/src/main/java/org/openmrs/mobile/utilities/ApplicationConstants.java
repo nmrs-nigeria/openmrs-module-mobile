@@ -101,6 +101,7 @@ public abstract class ApplicationConstants {
     public abstract static class ServiceActions {
         public static final String START_CONCEPT_DOWNLOAD_ACTION = "com.openmrs.mobile.services.conceptdownloadservice.action.startforeground";
         public static final String STOP_CONCEPT_DOWNLOAD_ACTION = "com.openmrs.mobile.services.conceptdownloadservice.action.stopforeground";
+        public static final String START_SYNC_ACTION = "com.openmrs.mobile.services.syncservice.action.startforeground";
     }
 
     public abstract static class BroadcastActions {

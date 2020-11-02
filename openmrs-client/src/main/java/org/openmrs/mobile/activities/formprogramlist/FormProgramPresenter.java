@@ -26,6 +26,8 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
     private boolean isCompleted;
     private boolean isPositive = false;
     private boolean isClientExist = false;
+    private boolean isAncExist = false;
+
 
     public FormProgramPresenter(FormProgramContract.View view, long patientId, String programName) {
         this.view = view;
@@ -127,7 +129,14 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
             isCompleted = true;
         }
 
-        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime,isCompleted,isPositive,isClientExist);
+        List<Encountercreate> encountercreateGenCareA= new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId,"General Antenatal Care");
+        if(encountercreateGenCareA.isEmpty()){
+            isAncExist = false;
+        }else{
+            isAncExist = true;
+        }
+
+        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime,isCompleted,isPositive,isClientExist, isAncExist);
     }
 
     @Override
@@ -183,5 +192,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    public boolean isAncExist() {
+        return isAncExist;
+    }
+
+    public void setAncExist(boolean ancExist) {
+        isAncExist = ancExist;
     }
 }

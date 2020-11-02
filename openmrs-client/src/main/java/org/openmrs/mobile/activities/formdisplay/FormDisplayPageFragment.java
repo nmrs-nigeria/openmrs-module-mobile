@@ -362,7 +362,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), date, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH));
-                    mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+//                    mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
                     mDatePicker.show();
                 }
             });
@@ -437,7 +437,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), date, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH));
-                    mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
+//                    mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
                     mDatePicker.show();
                 }
             });

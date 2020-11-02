@@ -272,58 +272,97 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
 
 
     @Override
-    public void showFormList(String[] forms, String programName, List<String> formName, boolean isElig, boolean isEnrol, boolean isFTime, boolean isCompl, boolean isPos, boolean isClient) {
+    public void showFormList(String[] forms, String programName, List<String> formName, boolean isElig, boolean isEnrol, boolean isFTime, boolean isCompl, boolean isPos, boolean isClient, boolean isAnc) {
         formsName = formName;
         FormProgramActivity fPActivity = (FormProgramActivity) getActivity();
         for (String form : forms){
             switch (programName){
                 case "PMTCT":
                     switch (form) {
+
                         case "Delivery register":
-                            if (fPActivity.isFirstTime()){
-                                mdeliveryView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if(isAnc){
+                                    mdeliveryView.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    mdeliveryView.setVisibility(View.GONE);
+                                }
+
                             }else{
                                 mdeliveryView.setVisibility(View.VISIBLE);
                             }
                             break;
                         case "General Antenatal Care":
-                            if (fPActivity.isFirstTime()){
-                                mancTrackingView.setVisibility(View.VISIBLE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc){
+                                    mancTrackingView.setVisibility(View.GONE);
+                                }else{
+                                    mancTrackingView.setVisibility(View.VISIBLE);
+                                }
+
                             }else{
                                 mancTrackingView.setVisibility(View.GONE);
                             }
                             break;
                         case "Client Referral Form":
-                            if (fPActivity.isFirstTime()){
-                                mclientRefView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc) {
+                                    mclientRefView.setVisibility(View.GONE);
+                                }else{
+                                    mclientRefView.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 mclientRefView.setVisibility(View.VISIBLE);
                             }
                             break;
                         case "Partner Register":
-                            if (fPActivity.isFirstTime()){
-                                mpartnerView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc) {
+                                    mpartnerView.setVisibility(View.GONE);
+                                }else{
+                                    mpartnerView.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 mpartnerView.setVisibility(View.VISIBLE);
                             }
                             break;
                         case "Pharmacy Order Form":
-                            if (fPActivity.isFirstTime()){
-                                mpharmacyView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc) {
+                                    mpharmacyView.setVisibility(View.GONE);
+                                }else{
+                                    mpharmacyView.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 mpharmacyView.setVisibility(View.VISIBLE);
                             }
                             break;
                         case "PMTCT HTS Register":
-                            if (fPActivity.isFirstTime()){
-                                mpmtcthtsView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc) {
+                                    mpmtcthtsView.setVisibility(View.GONE);
+                                }else{
+                                    mpmtcthtsView.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 mpmtcthtsView.setVisibility(View.VISIBLE);
                             }
                             break;
                         case "Maternal Cohort Register":
-                            if (fPActivity.isFirstTime()){
-                                mmaternalView.setVisibility(View.GONE);
+                            assert fPActivity != null;
+                            if (fPActivity.isFirstTimeANC()){
+                                if (isAnc) {
+                                    mmaternalView.setVisibility(View.GONE);
+                                }else{
+                                    mmaternalView.setVisibility(View.VISIBLE);
+                                }
                             }else{
                                 mmaternalView.setVisibility(View.VISIBLE);
                             }
