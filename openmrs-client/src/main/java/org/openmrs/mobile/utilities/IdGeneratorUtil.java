@@ -45,7 +45,7 @@ public class IdGeneratorUtil  {
         String[] systemArray = systemId.split("-");
         String curTime = DateUtils.convertTimeIdentifier(System.currentTimeMillis());
         String[] timeArray = curTime.split("/");
-        return "CT-" + systemArray[0] +  timeArray[0]+timeArray[1]+timeArray[2] ;
+        return "CT-" + systemArray[0] +  timeArray[0]+timeArray[1]+timeArray[2]+timeArray[3]+timeArray[4];
     }
     public static String getIdentifierGeneratedHospital(){
         String systemId = OpenMRS.getInstance().getSystemId();

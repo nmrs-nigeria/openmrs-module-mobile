@@ -90,13 +90,13 @@ public class SyncedVisitsActivity extends ACBaseActivity {
         switch (id) {
             case R.id.syncbutton:
                 enableAddPatient(OpenMRS.getInstance().getSyncState());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
-                    Intent i = new Intent(this, PatientService.class);
-                    this.startService(i);
-                    Intent i1 = new Intent(this, EncounterService.class);
-                    this.startService(i1);
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                    ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
+//                    Intent i = new Intent(this, PatientService.class);
+//                    this.startService(i);
+//                    Intent i1 = new Intent(this, EncounterService.class);
+//                    this.startService(i1);
+//                }
                 break;
             case R.id.actionAddPatients:
                 Intent intent = new Intent(this, LastViewedPatientsActivity.class);
