@@ -31,6 +31,7 @@ public final class DateUtils {
     public static final String DEFAULT_DATE_FORMAT_IDENTIFIER = "dd/MM/yy";
     public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
     public static final String DATE_WITH_TIME_FORMAT = "dd/MM/yyyy HH:mm";
+    public static final String DATE_WITH_TIME_FORMAT2 = "dd/MM/yyyy/HH/mm";
 
     private static final String OPEN_MRS_RESPONSE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String OPEN_MRS_REQUEST_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -62,7 +63,7 @@ public final class DateUtils {
     }
 
     public static String convertTimeIdentifier(long timestamp) {
-        return convertTime(timestamp, DEFAULT_DATE_FORMAT_IDENTIFIER, TimeZone.getDefault());
+        return convertTime(timestamp, DATE_WITH_TIME_FORMAT2, TimeZone.getDefault());
     }
 
     public static Long convertTime(String dateAsString) {

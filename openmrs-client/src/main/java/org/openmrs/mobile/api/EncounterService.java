@@ -40,6 +40,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.android.schedulers.AndroidSchedulers;
 
+import static org.openmrs.mobile.utilities.FormService.getFormResourceByName;
+
 public class EncounterService extends IntentService implements CustomApiCallback {
 
     private final RestApi apiService = RestServiceBuilder.createService(RestApi.class);
@@ -161,6 +163,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
 
         if (NetworkUtils.isOnline()) {
             encountercreate.pullObslist();
+            encountercreate.setFormUuid(getFormResourceByName(encountercreate.getFormname()).getUuid());
             Call<Encounter> call = apiService.createEncounter(encountercreate);
             call.enqueue(new Callback<Encounter>() {
                 @Override
@@ -201,23 +204,25 @@ public class EncounterService extends IntentService implements CustomApiCallback
 
     private void linkvisit(Long patientid, String formname, Encounter encounter, Encountercreate encountercreate) {
         VisitDAO visitDAO = new VisitDAO();
-        visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(visit -> {
-                    encounter.setEncounterType(new EncounterType(formname));
-                    for (int i = 0; i < encountercreate.getObservations().size(); i++) {
-                        encounter.getObservations().get(i).setDisplayValue
-                                (encountercreate.getObservations().get(i).getValue());
-                    }
-                    if (visit != null) {
-                        List<Encounter> encounterList = visit.getEncounters();
-                        encounterList.add(encounter);
-                        visitDAO.saveOrUpdate(visit, patientid)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(id ->
-                                        ToastUtil.success(formname + " data saved successfully"));
-                    }
-                });
+
+            visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(visit -> {
+                        encounter.setEncounterType(new EncounterType(formname));
+                        for (int i = 0; i < encountercreate.getObservations().size(); i++) {
+                            encounter.getObservations().get(i).setDisplayValue
+                                    (encountercreate.getObservations().get(i).getValue());
+                        }
+                        if (visit != null) {
+                            List<Encounter> encounterList = visit.getEncounters();
+                            encounterList.add(encounter);
+                            visitDAO.saveOrUpdate(visit, patientid)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(id ->
+                                            ToastUtil.success(formname + " data saved successfully"));
+                        }
+                    });
+
     }
 
     @Override
@@ -259,35 +264,39 @@ public class EncounterService extends IntentService implements CustomApiCallback
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(visit -> {
                                 if (visit != null) {
+                                    new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                    encountercreate.setVisit(visit.getUuid());
+                                    visit.setStopDatetime(null);
+                                    new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
 
-                                    new VisitRepository().syncVisit(patient,visit,encountercreate, new DefaultResponseCallbackListener() {
-                                        @Override
-                                        public void onResponse() {
-                                            encountercreate.setVisit(visit.getUuid());
-                                            syncEncounter(encountercreate);
-                                        }
+                                    syncEncounter(encountercreate);
 
-                                        @Override
-                                        public void onErrorResponse(String errorMessage) {
-                                            ToastUtil.error(errorMessage);
-                                        }
-                                    });
-
-//                                    List<Encountercreate> enccreatelist = new Select()
-//                                            .from(Encountercreate.class)
-//                                            .where("visit = ? AND synced = 1",encountercreate.getVisit())
-//                                            .execute();
-//                                    if (enccreatelist.isEmpty()){
-//                                        new VisitRepository().syncVisit(patient,visit,encountercreate);
-//                                    }else {
-//                                        new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-//                                        encountercreate.setVisit(visit.getUuid());
-//                                        syncEncounter(encountercreate);
-//                                    }
-                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                                 } else {
+                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                                     startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
                                 }
+//                                if (visit != null) {
+//                                    Long visitId = new VisitDAO().getVisitsIDByDate(encountercreate.getPatientId(), encountercreate.getEncounterDatetime());
+//
+//                                    new VisitRepository().syncVisit(patient,visit,encountercreate, new DefaultResponseCallbackListener() {
+//                                        @Override
+//                                        public void onResponse() {
+////                                            encountercreate.setVisit(visit.getUuid());
+////                                            syncEncounter(encountercreate);
+//                                        }
+//
+//                                        @Override
+//                                        public void onErrorResponse(String errorMessage) {
+//                                            ToastUtil.error(errorMessage);
+//                                        }
+//                                    });
+//
+////
+//                                    // Uncomment if needed
+//                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+//                                } else {
+//                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
+//                                }
                             });
                 }
             }

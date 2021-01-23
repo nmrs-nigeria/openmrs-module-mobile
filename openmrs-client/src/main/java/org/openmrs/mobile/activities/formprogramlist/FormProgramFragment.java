@@ -311,9 +311,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
                                 if (isAnc) {
-                                    mclientRefView.setVisibility(View.GONE);
-                                }else{
                                     mclientRefView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mclientRefView.setVisibility(View.GONE);
                                 }
                             }else{
                                 mclientRefView.setVisibility(View.VISIBLE);
@@ -323,9 +323,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
                                 if (isAnc) {
-                                    mpartnerView.setVisibility(View.GONE);
-                                }else{
                                     mpartnerView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mpartnerView.setVisibility(View.GONE);
                                 }
                             }else{
                                 mpartnerView.setVisibility(View.VISIBLE);
@@ -335,9 +335,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
                                 if (isAnc) {
-                                    mpharmacyView.setVisibility(View.GONE);
-                                }else{
                                     mpharmacyView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mpharmacyView.setVisibility(View.GONE);
                                 }
                             }else{
                                 mpharmacyView.setVisibility(View.VISIBLE);
@@ -347,9 +347,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
                                 if (isAnc) {
-                                    mpmtcthtsView.setVisibility(View.GONE);
-                                }else{
                                     mpmtcthtsView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mpmtcthtsView.setVisibility(View.GONE);
                                 }
                             }else{
                                 mpmtcthtsView.setVisibility(View.VISIBLE);
@@ -359,9 +359,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
                                 if (isAnc) {
-                                    mmaternalView.setVisibility(View.GONE);
-                                }else{
                                     mmaternalView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mmaternalView.setVisibility(View.GONE);
                                 }
                             }else{
                                 mmaternalView.setVisibility(View.VISIBLE);

@@ -51,7 +51,7 @@ public class ProgramRepository {
                 @Override
                 public void onFailure(@NotNull Call<ProgramEnrollment> call, @NotNull Throwable t) {
 //                    ToastUtil.error(OpenMRS.getInstance().getString(R.string.add_program_failure_msg));
-                    OpenMRS.getInstance().getOpenMRSLogger().e("Failed to add program. Error:  " + t.getMessage());
+//                    OpenMRS.getInstance().getOpenMRSLogger().e("Failed to add program. Error:  " + t.getMessage());
                     callback.onFailure();
                 }
             });

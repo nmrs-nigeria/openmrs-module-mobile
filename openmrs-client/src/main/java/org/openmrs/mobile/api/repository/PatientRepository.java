@@ -155,7 +155,7 @@ public class PatientRepository extends RetrofitRepository {
 
                             @Override
                             public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
-                                ToastUtil.notify("Patient[" + patient.getId() + "] cannot be synced due to request error: " + t.toString());
+                                ToastUtil.notify("Patient[" + patient.getId() + "] cannnot be synced due to request error: " + t.toString());
                                 deferred.reject(t);
                                 if (callbackListener != null) {
                                     callbackListener.onErrorResponse(t.getMessage());

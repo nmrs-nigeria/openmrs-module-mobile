@@ -167,7 +167,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                         obscreate.setValue(String.valueOf(input.getValueAll()));
                         obscreate.setObsDatetime(mEncounterDate);
                         obscreate.setPerson(mPatient.getUuid());
-                        observations.add(obscreate);
+//                        observations.add(obscreate);
                         observations.add(obscreate);
 
                         ObscreateLocal obscreateLocal = new ObscreateLocal();
