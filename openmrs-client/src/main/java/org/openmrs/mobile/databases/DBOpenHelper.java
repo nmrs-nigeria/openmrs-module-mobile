@@ -18,13 +18,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 
 import org.openmrs.mobile.R;
+import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.databases.tables.ConceptTable;
 import org.openmrs.mobile.databases.tables.EncounterTable;
+import org.openmrs.mobile.databases.tables.FingerPrintTable;
 import org.openmrs.mobile.databases.tables.LocationTable;
 import org.openmrs.mobile.databases.tables.ObservationTable;
 import org.openmrs.mobile.databases.tables.PatientTable;
@@ -55,6 +58,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
     private EncounterTable mEncounterTable;
     private ObservationTable mObservationTable;
     private LocationTable mLocationTable;
+    private FingerPrintTable mFingerPrintTable;
 
     public DBOpenHelper(Context context) {
         super(context, null, DATABASE_VERSION);
@@ -64,6 +68,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         this.mEncounterTable = new EncounterTable();
         this.mObservationTable = new ObservationTable();
         this.mLocationTable = new LocationTable();
+        this.mFingerPrintTable = new FingerPrintTable();
     }
 
     @Override
@@ -81,6 +86,9 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         logOnCreate(mObservationTable.toString());
         sqLiteDatabase.execSQL(mLocationTable.createTableDefinition());
         logOnCreate(mLocationTable.toString());
+
+        sqLiteDatabase.execSQL(mFingerPrintTable.createTableDefinition());
+        logOnCreate(mFingerPrintTable.toString());
     }
 
     @Override
@@ -452,5 +460,65 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
+    }
+
+    public long insertFingerPrint(SQLiteDatabase db, PatientBiometricContract fingerPrintObj) {
+        long id;
+
+        if(!TableExists(db, FingerPrintTable.TABLE_NAME)){
+            db.execSQL(mFingerPrintTable.createTableDefinition());
+            logOnCreate(mFingerPrintTable.toString());
+        }
+        SQLiteStatement pbsStatement = db.compileStatement(mFingerPrintTable.insertIntoTableDefinition());
+
+        try {
+            db.beginTransaction();
+            bindString(1, fingerPrintObj.getBiometricInfo_Id(), pbsStatement);
+            bindLong(2, (long) fingerPrintObj.getPatienId(), pbsStatement);
+            bindString(3, fingerPrintObj.getTemplate(), pbsStatement);
+            bindLong(4, (long) fingerPrintObj.getImageWidth(), pbsStatement);
+            bindLong(5, (long) fingerPrintObj.getImageHeight(), pbsStatement);
+            bindLong(6, (long) fingerPrintObj.getImageDPI(), pbsStatement);
+            bindLong(7, (long) fingerPrintObj.getImageQuality(), pbsStatement);
+            bindString(8, fingerPrintObj.getFingerPositions().toString(), pbsStatement);
+            bindString(9, fingerPrintObj.getSerialNumber(), pbsStatement);
+            bindString(10, fingerPrintObj.getModel(), pbsStatement);
+            bindString(11, fingerPrintObj.getManufacturer(), pbsStatement);
+            bindLong(12, (long) fingerPrintObj.getSyncStatus(), pbsStatement);
+            bindLong(13, (long) fingerPrintObj.getCreator(), pbsStatement);
+
+            id = pbsStatement.executeInsert();
+            pbsStatement.clearBindings();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            pbsStatement.close();
+        }
+        return id;
+    }
+
+    public int updateFingerPrint(SQLiteDatabase db, PatientBiometricContract fingerPrintObj) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(FingerPrintTable.Column.template, "");
+        newValues.put(FingerPrintTable.Column.SyncStatus, fingerPrintObj.getSyncStatus());
+
+        String[] whereArgs = new String[]{String.valueOf(fingerPrintObj.getPatienId())};
+
+       String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
+        return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+
+
+    public boolean TableExists(SQLiteDatabase db, String tableName) {
+
+        String query = "select DISTINCT tbl_name from sqlite_master where tbl_name = '"+tableName+"'";
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            if(cursor!=null) {
+                if(cursor.getCount()>0) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

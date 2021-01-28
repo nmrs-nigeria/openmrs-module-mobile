@@ -46,6 +46,7 @@ import org.openmrs.mobile.activities.patientdashboard.visits.PatientVisitsFragme
 import org.openmrs.mobile.activities.patientdashboard.vitals.PatientDashboardVitalsPresenter;
 import org.openmrs.mobile.activities.patientdashboard.vitals.PatientVitalsFragment;
 import org.openmrs.mobile.activities.patientprogram.PatientProgramActivity;
+import org.openmrs.mobile.activities.pbs.PatientBiometricActivity;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
@@ -61,7 +62,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     public PatientDashboardContract.PatientDashboardMainPresenter mPresenter;
 
     static boolean isActionFABOpen = false;
-    public static FloatingActionButton additionalActionsFAB, updateFAB, deleteFAB, visitFAB;
+    public static FloatingActionButton additionalActionsFAB, updateFAB, deleteFAB, visitFAB, pbsFAB;
     public static LinearLayout deleteFabLayout, updateFabLayout;
     public static Resources resources;
 
@@ -157,6 +158,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         updateFabLayout = findViewById(R.id.custom_fab_update_ll);
         deleteFabLayout = findViewById(R.id.custom_fab_delete_ll);
         visitFAB = findViewById(R.id.activity_patient_visit_action_fab);
+        pbsFAB = findViewById(R.id.activity_patient_pbs_action_fab);
 
         additionalActionsFAB.setOnClickListener(v -> {
             animateFAB(isActionFABOpen);
@@ -170,6 +172,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         deleteFAB.setOnClickListener(v -> showDeletePatientDialog());
         updateFAB.setOnClickListener(v -> startPatientUpdateActivity(mPresenter.getPatientId()));
         visitFAB.setOnClickListener(v -> startPatientProgramActivity(mPresenter.getPatientId()));
+        pbsFAB.setOnClickListener(v -> startPatientPBSActivity(mPresenter.getPatientId()));
 
     }
 
@@ -204,6 +207,13 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         startActivity(patientProgram);
     }
 
+    public void startPatientPBSActivity(long patientId) {
+        Intent pbsProgram = new Intent(this, PatientBiometricActivity.class);
+        pbsProgram.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE,
+                String.valueOf(patientId));
+        startActivity(pbsProgram);
+    }
+
     /**
      * This method is called from other Fragments only when they are visible to the user.
      *
@@ -216,9 +226,11 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
             additionalActionsFAB.setVisibility(View.GONE);
             visitFAB.setVisibility(View.GONE);
             updateFAB.setVisibility(View.GONE);
+            pbsFAB.setVisibility(View.GONE);
         } else {
             additionalActionsFAB.setVisibility(View.VISIBLE);
             visitFAB.setVisibility(View.VISIBLE);
+            pbsFAB.setVisibility(View.VISIBLE);
 
             // will animate back the icon back to its original angle instantaneously
             ObjectAnimator.ofFloat(additionalActionsFAB, "rotation", 180f, 0f).setDuration(0).start();

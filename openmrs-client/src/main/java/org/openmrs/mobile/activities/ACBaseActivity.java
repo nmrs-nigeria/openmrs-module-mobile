@@ -21,6 +21,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -362,6 +363,7 @@ public abstract class ACBaseActivity extends AppCompatActivity {
     }
 
     public void showAppCrashDialog(String error) {
+        Log.v("Error", error);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
         alertDialogBuilder.setTitle(R.string.crash_dialog_title);
