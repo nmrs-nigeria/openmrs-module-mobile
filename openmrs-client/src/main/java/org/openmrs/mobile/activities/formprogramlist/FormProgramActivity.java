@@ -20,8 +20,10 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
     private boolean isEligible = false;
     private boolean isCompleted = false;
     private boolean isPositive = false;
+    private boolean isAncPositive = false;
     private boolean isClientExist = false;
     private boolean isFirstTimeANC = false;
+    private boolean isFirstTimePMTCTHts = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,12 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
         }else{
             this.isPositive = true;
         }
+        List<Encountercreate> encountercreateAncList = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "PMTCT HTS Register","Yes");
+        if(encountercreateAncList.isEmpty()){
+            this.isAncPositive = false;
+        }else{
+            this.isAncPositive = true;
+        }
         List<Encountercreate> encountercreateListAdult = new VisitDAO().getLocalEncounterByPatientIDStr(Long.parseLong(mPatientID),"Risk Assessment Pediatric");
         List<Encountercreate> encountercreateListChild = new VisitDAO().getLocalEncounterByPatientIDStr(Long.parseLong(mPatientID),"Risk Stratification Adult");
         if(encountercreateListAdult.isEmpty() && encountercreateListChild.isEmpty()){
@@ -68,7 +76,12 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
             this.isFirstTimeANC = false;
         }
 
-
+        List<Encountercreate> encountercreatePmtctHts= new VisitDAO().getLocalEncounterByPatientIDStr(Long.parseLong(mPatientID),"PMTCT HTS Register");
+        if(encountercreatePmtctHts.isEmpty()){
+            this.isFirstTimePMTCTHts = true;
+        }else{
+            this.isFirstTimePMTCTHts = false;
+        }
 
         List<Encountercreate> encountercreateListEligibleChild = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Assessment Pediatric","Yes");
         List<Encountercreate> encountercreateListEligibleAdult = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Risk Stratification Adult","Yes");
@@ -153,8 +166,24 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
         return isFirstTimeANC;
     }
 
+    public boolean isAncPositive() {
+        return isAncPositive;
+    }
+
+    public void setAncPositive(boolean ancPositive) {
+        isAncPositive = ancPositive;
+    }
+
     public void setFirstTimeANC(boolean firstTimeANC) {
         isFirstTimeANC = firstTimeANC;
+    }
+
+    public boolean isFirstTimePMTCTHts() {
+        return isFirstTimePMTCTHts;
+    }
+
+    public void setFirstTimePMTCTHts(boolean firstTimePMTCTHts) {
+        isFirstTimePMTCTHts = firstTimePMTCTHts;
     }
 
     public boolean isClientExist() {

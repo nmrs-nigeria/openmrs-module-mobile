@@ -204,8 +204,6 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
                 }
 
-
-
                 if (position + 1 == mDotsCount) {
                     mBtnNext.setVisibility(View.GONE);
                     mBtnPrevious.setVisibility(View.VISIBLE);
@@ -235,6 +233,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.GONE);
                 }
+
             }
 
             @Override

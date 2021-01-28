@@ -25,8 +25,10 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
     private boolean isFirstTime;
     private boolean isCompleted;
     private boolean isPositive = false;
+    private boolean isAncPositive = false;
     private boolean isClientExist = false;
     private boolean isAncExist = false;
+    private boolean isPmtctHtsExist = false;
 
 
     public FormProgramPresenter(FormProgramContract.View view, long patientId, String programName) {
@@ -101,6 +103,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
 //            isEligible = true;
 //        }
 
+        List<Encountercreate> encountercreateAncList = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "PMTCT HTS Register","Yes");
+        if(encountercreateAncList.isEmpty()){
+            isAncPositive = false;
+        }else{
+            isAncPositive = true;
+        }
+
         List<Encountercreate> encountercreateList = new VisitDAO().getLocalEncounterByPatientIDEligible(this.patientId, "Client intake form","Yes");
         if(encountercreateList.isEmpty()){
             isPositive = false;
@@ -135,8 +144,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
         }else{
             isAncExist = true;
         }
-
-        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime,isCompleted,isPositive,isClientExist, isAncExist);
+        List<Encountercreate> encountercreatePmtctHts= new VisitDAO().getLocalEncounterByPatientIDStr(this.patientId,"PMTCT HTS Register");
+        if(encountercreatePmtctHts.isEmpty()){
+            isPmtctHtsExist = false;
+        }else{
+            isPmtctHtsExist = true;
+        }
+        view.showFormList(formsStringArray,programName,formName,isEligible,isEnrolled,isFirstTime,isCompleted,isPositive,isClientExist, isAncExist,isPmtctHtsExist, isAncPositive);
     }
 
     @Override
@@ -200,5 +214,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
 
     public void setAncExist(boolean ancExist) {
         isAncExist = ancExist;
+    }
+
+    public boolean isPmtctHtsExist() {
+        return isPmtctHtsExist;
+    }
+
+    public void setPmtctHtsExist(boolean pmtctHtsExist) {
+        isPmtctHtsExist = pmtctHtsExist;
     }
 }
