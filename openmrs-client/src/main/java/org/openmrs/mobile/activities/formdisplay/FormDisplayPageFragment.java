@@ -893,6 +893,14 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     }
 
                 }
+                // Check if the test result is positive or negative in PMTCT HTS
+                if (spinnerField.getConcept().equals("159427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")) {
+                    if (spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
+                        fdActivity.setEligible(true);
+                    }else if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Negative")){
+                        fdActivity.setEligible(false);
+                    }
+                }
                 // Check if the pharmacy order form regimen line is adult or child
                 if (spinnerField.getConcept().equals("91bf2c14-1677-4c7f-be1b-99a2b64231b4") && spinnerField.getChosenAnswer()!= null) {
                     Spinner spinner = (Spinner) mParent.findViewById(customHashCode("718864d2-dd9b-4210-80fe-21e6f8dcbb14"));

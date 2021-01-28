@@ -45,6 +45,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -170,12 +171,12 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     private EditText edmonth;
     private EditText edaddr1;
     private EditText edaddr2;
-    private EditText edcity;
+    private AutoCompleteTextView edcity;
     private EditText edunique;
     private EditText edphonenumber;
     private AutoCompleteTextView edstate;
     private CountryCodePicker mCountryCodePicker;
-    private EditText edpostal;
+    private AutoCompleteTextView edpostal;
 
     private EditText edart;
     private EditText edanc;
@@ -757,6 +758,8 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         }
     }
 
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -772,6 +775,31 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         gen.setOnCheckedChangeListener((radioGroup, checkedId) -> gendererror.setVisibility(View.GONE));
         edstate.setOnFocusChangeListener((view, hasFocus) -> addSuggestionsToCities());
 
+        edstate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                String selection = (String)parent.getItemAtPosition(position);
+                int resourceId = getActivity().getResources().getIdentifier(selection.toLowerCase(), "array", getContext().getPackageName());
+                if (resourceId != 0) {
+                    String[] lgas = getContext().getResources().getStringArray(resourceId);
+                    ArrayAdapter<String> lga_adapter = new ArrayAdapter<>(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, lgas);
+                    edcity.setAdapter(lga_adapter);
+                }
+            }
+        });
+        edcity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
+                String selection = (String)parent.getItemAtPosition(position);
+                selection = "lga_" + selection.toLowerCase().replace("'","").replace(" ", "_").replace("-","_").replace("/","_");
+                int resourceId = getActivity().getResources().getIdentifier(selection, "array", getContext().getPackageName());
+                if (resourceId != 0) {
+                    String[] wards = getContext().getResources().getStringArray(resourceId);
+                    ArrayAdapter<String> ward_adapter = new ArrayAdapter<>(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, wards);
+                    edpostal.setAdapter(ward_adapter);
+                }
+            }
+        });
         eddob.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
