@@ -62,6 +62,10 @@ public class PatientService extends IntentService {
                 intent1.putExtra(ApplicationConstants.BundleKeys.PATIENTS_AND_MATCHES, patientAndMatchesWrapper);
                 startActivity(intent1);
             }
+
+            //sync finger print
+            new FingerPrintSyncService().autoSyncFingerPrint();
+
         } else {
             ToastUtil.warning(getString(R.string.activity_no_internet_connection) +
                     getString(R.string.activity_sync_after_connection));

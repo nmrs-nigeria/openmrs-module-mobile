@@ -11,6 +11,9 @@
 package org.openmrs.mobile.api;
 
 import org.intellij.lang.annotations.Identifier;
+import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
+import org.openmrs.mobile.activities.pbs.PatientBiometricSyncResponseModel;
 import org.openmrs.mobile.models.Concept;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
@@ -37,6 +40,7 @@ import org.openmrs.mobile.models.User;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.models.VisitType;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -177,4 +181,13 @@ public interface RestApi {
     @POST("provider/{uuid}")
     Call<Provider> editProvider(@Path("uuid") String uuid,
                                 @Body Provider provider);
+
+    @GET()
+    Call<String> genericRequest(@Url String url);
+
+    @POST()
+    Call<PatientBiometricSyncResponseModel> syncPBS(@Url String url, @Body PatientBiometricDTO pbsDTO);
+
+    @GET()
+    Call<List<PatientBiometricContract>> checkForExistingPBS(@Url String url, @Query("PatientUUID") String patientUUID);
 }
