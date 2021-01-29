@@ -54,6 +54,10 @@ public class OpenMRSLogger {
         try {
             if (isFolderExist()) {
                 mLogFile = new File(mOpenMRS.getOpenMRSDir() + File.separator + LOG_FILENAME);
+                if (mLogFile.length() > MAX_SIZE && !mIsRotating){
+                    mLogFile.delete();
+                    mLogFile.createNewFile();
+                }
                 if (!mLogFile.createNewFile()) {
                     rotateLogFile();
                 }

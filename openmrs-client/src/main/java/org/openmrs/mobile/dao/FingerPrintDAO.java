@@ -12,6 +12,7 @@ import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
 import org.openmrs.mobile.databases.tables.LocationTable;
 import org.openmrs.mobile.databases.tables.PatientTable;
+import org.openmrs.mobile.databases.tables.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,23 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class FingerPrintDAO {
 
     public long saveFingerPrint(List<PatientBiometricContract> pbs) {
-        for (int i=0; i< pbs.size(); i++){
-          long id =  new FingerPrintTable().insert(pbs.get(i));
-            Log.e(TAG, "return id: " +id);
+        for (int i = 0; i < pbs.size(); i++) {
+            long id = new FingerPrintTable().insert(pbs.get(i));
+            Log.e(TAG, "return id: " + id);
         }
         return 0;
     }
+
+    public long saveFingerPrint(PatientBiometricContract pbs) {
+        long id =  new FingerPrintTable().insert(pbs);
+        Log.e(TAG, "return id: " +id);
+        return id;
+    }
+
+    public void deletePrintPosition(Long patientId, FingerPositions fingerPosition) {
+        new FingerPrintTable().deleteFingerPrintCapture(patientId, fingerPosition);
+    }
+
 
     public void deleteAllPrints() {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
@@ -41,18 +53,29 @@ public class FingerPrintDAO {
     }
 
 
-    public  List<PatientBiometricContract> getAll(boolean IncludeSyncRecord) {
+    public  List<PatientBiometricContract> getAll(boolean IncludeSyncRecord, String patient_Id) {
         List<PatientBiometricContract> pbsList = new ArrayList<>();
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+        String where = "";
 
         final Cursor cursor;
-        if(!IncludeSyncRecord){
-            String where = String.format("%s = ?", FingerPrintTable.Column.SyncStatus);
-            String[] whereArgs = new String[]{"0"};
-            cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
-        } else{
-            cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, null, null, null, null, null);
+        if(!IncludeSyncRecord && patient_Id !=null) {
+            where = FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patient_Id + Table.MasterColumn.AND + FingerPrintTable.Column.SyncStatus + Table.MasterColumn.EQUALS + "0";
         }
+       else if(patient_Id !=null) {
+            where += FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patient_Id;
+        }
+       else if(!IncludeSyncRecord) {
+            where += FingerPrintTable.Column.SyncStatus + Table.MasterColumn.EQUALS + "0";
+        }
+        cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, where, null, null, null, null);
+//        if(!IncludeSyncRecord){
+//            String where = String.format("%s = ?", FingerPrintTable.Column.SyncStatus);
+//            String[] whereArgs = new String[]{"0"};
+//            cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
+//        } else{
+//            cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, null, null, null, null, null);
+//        }
 
         if (null != cursor) {
             try {
@@ -116,14 +139,19 @@ public class FingerPrintDAO {
     public boolean checkFingerPrintExist(String patientId) {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String where = String.format("%s = ?", FingerPrintTable.Column.patient_id);
+        String where = FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patientId;
+                //String.format("%s = ?", FingerPrintTable.Column.patient_id);
         String[] whereArgs = new String[]{patientId};
-        final Cursor cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
+        String sql = "SELECT COUNT(*) as fingerprintCount FROM "+FingerPrintTable.TABLE_NAME + " where "+ where;
+        final Cursor cursor = helper.getReadableDatabase().rawQuery(sql, null);
+                //.query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
+
         if (null != cursor) {
             try {
                 if (cursor.moveToFirst()) {
-                    int id_CI = cursor.getColumnIndex(FingerPrintTable.Column.patient_id);
-                   return Objects.equals(patientId, cursor.getString(id_CI));
+                    int id_CI = cursor.getColumnIndex("fingerprintCount");
+                    return cursor.getInt(id_CI) >=6;
+                   //return Objects.equals(patientId, cursor.getString(id_CI));
                 }
             } finally {
                 cursor.close();

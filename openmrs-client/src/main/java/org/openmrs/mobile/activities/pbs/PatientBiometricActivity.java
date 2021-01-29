@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import org.jsoup.Connection;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.dao.FingerPrintDAO;
@@ -44,11 +42,9 @@ import java.util.Map;
 import SecuGen.FDxSDKPro.JSGFPLib;
 import SecuGen.FDxSDKPro.SGFDxDeviceName;
 import SecuGen.FDxSDKPro.SGFDxErrorCode;
-import SecuGen.FDxSDKPro.SGFDxSecurityLevel;
 import SecuGen.FDxSDKPro.SGFDxTemplateFormat;
 import SecuGen.FDxSDKPro.SGFingerInfo;
 import SecuGen.FDxSDKPro.SGImpressionType;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class PatientBiometricActivity extends AppCompatActivity
@@ -78,7 +74,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     private FingerPositions fingerPosition = null;
     private ImageView fingerPrintImageDisplay;
     private Button fingerLeftThumb, fingerLeftIndex, fingerLeftMiddle, fingerLeftRing, fingerLeftPinky, fingerRightThumb, fingerRightIndex, fingerRightMiddle, fingerRightRing, fingerRightPinky;
-    private final Map<FingerPositions, PatientBiometricContract> patientFingerPrints = new HashMap<>();
+    //private final Map<FingerPositions, PatientBiometricContract> patientFingerPrints = new HashMap<>();
     private final Map<Long, String> deviceErrors = new HashMap<Long, String>(){{
         put(1L, "CREATION FAILED");
         put(2L, "FUNCTION FAILED");
@@ -109,6 +105,11 @@ public class PatientBiometricActivity extends AppCompatActivity
 
     String patientId = "";
     String patientUUID = "";
+    FingerPrintDAO fingerPrintDAO;
+
+    public PatientBiometricActivity(){
+        fingerPrintDAO = new FingerPrintDAO();
+    }
 
 
     public void onClick(View v) {
@@ -123,6 +124,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     }
 
 
+    int fingerPrintCaptureCount = 0;
     public void CapturePrint(){
 
         if (fingerPosition == null) {
@@ -176,69 +178,74 @@ public class PatientBiometricActivity extends AppCompatActivity
             if(template != null){
 
                 //reject finger print if already capture for another finger. Accept and replace if this is the same finger
-                PatientBiometricContract oldCapture = patientFingerPrints.get(fingerPosition);
-                if(CheckIfAlreadyCaptured(mRegisterTemplate, fingerPosition) && oldCapture !=null){
-                    CustomDebug("This finger has been captured before for "+ oldCapture.getFingerPositions(), false);
-                }
-                else{
+//                PatientBiometricContract oldCapture =    patientFingerPrints.get(fingerPosition);
+//                if(CheckIfAlreadyCaptured(mRegisterTemplate, fingerPosition) && oldCapture !=null){
+//                    CustomDebug("This finger has been captured before for "+ oldCapture.getFingerPositions(), false);
+//                }
+//                else{
 
                     //replace old captured value in case it has been captured before
-                    patientFingerPrints.remove(fingerPosition);
-
-                    //add to dictionary
-                    PatientBiometricContract theFinger = new PatientBiometricContract();
-                    theFinger.setImage(Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT));
-                    theFinger.setImageHeight(mImageHeight);
-                    theFinger.setImageWidth(mImageWidth);
-                    theFinger.setFingerPositions(fingerPosition);
-                    theFinger.setCreator(1);
-                    theFinger.setImageQuality(fpInfo.ImageQuality);
-                    theFinger.setPatienId(Integer.parseInt(patientId));
-
-//                   String base64Template =  java.util.Base64.getEncoder().encodeToString(mRegisterTemplate);
-//                    theFinger.setTemplate(base64Template);
-
-                    theFinger.setTemplate(Base64.encodeToString(mRegisterTemplate,Base64.NO_WRAP));
-                    theFinger.setImageDPI(mImageDPI);
-                    theFinger.setSerialNumber(mDeviceSN);
-                    theFinger.setImageByte(mRegisterTemplate);
-                    theFinger.setSyncStatus(0);
-                    patientFingerPrints.put(fingerPosition, theFinger);
+                    //fingerPrintDAO.deletePrintPosition(Long.valueOf(patientId), fingerPosition);
 
                     //color the button
-                    if(isGoodQuality){
+                    if(isGoodQuality) {
+
+                        //add to dictionary
+                        PatientBiometricContract theFinger = new PatientBiometricContract();
+                        theFinger.setImage(Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT));
+                        theFinger.setImageHeight(mImageHeight);
+                        theFinger.setImageWidth(mImageWidth);
+                        theFinger.setFingerPositions(fingerPosition);
+                        theFinger.setCreator(1);
+                        theFinger.setImageQuality(fpInfo.ImageQuality);
+                        theFinger.setPatienId(Integer.parseInt(patientId));
+
+                        //String base64Template =  java.util.Base64.getEncoder().encodeToString(mRegisterTemplate);
+                        //theFinger.setTemplate(base64Template);
+
+                        theFinger.setTemplate(Base64.encodeToString(mRegisterTemplate, Base64.NO_WRAP));
+                        theFinger.setImageDPI(mImageDPI);
+                        theFinger.setSerialNumber(mDeviceSN);
+                        theFinger.setImageByte(mRegisterTemplate);
+                        theFinger.setSyncStatus(0);
+
+                        //save to the database directly
+                        Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
+                        debugMessage(String.valueOf(db_id));
+                        fingerPrintCaptureCount += 1;
+                        //patientFingerPrints.put(fingerPosition, theFinger);
                         colorCapturedButton(fingerPosition, android.R.color.holo_green_light);
                     } else {
                         colorCapturedButton(fingerPosition, android.R.color.holo_orange_light);
                     }
 
                     //enable the save button when 6 fingers has been captured
-                    if(patientFingerPrints.size() >= 6){
+                    if(fingerPrintCaptureCount >= 6){
                         this.mButtonSaveCapture.setClickable(true);
                         this.mButtonSaveCapture.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
                     }
-                }
+                //}
             }
             mRegisterImage = null;
         }
     }
 
 
-    public boolean CheckIfAlreadyCaptured(byte[] mTemplateToMatch, FingerPositions fingerPosition){
-
-        boolean[] matched = new boolean[1];
-        for(PatientBiometricContract contract: patientFingerPrints.values()) {
-
-           sgfplib.MatchTemplate(mTemplateToMatch, contract.getImageByte(), SGFDxSecurityLevel.SL_NORMAL, matched);
-            if (matched[0]) {
-                if(contract.getFingerPositions() != fingerPosition) {
-                    //reject if already captured for another finger
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    public boolean CheckIfAlreadyCaptured(byte[] mTemplateToMatch, FingerPositions fingerPosition){
+//
+//        boolean[] matched = new boolean[1];
+//        for(PatientBiometricContract contract: patientFingerPrints.values()) {
+//
+//           sgfplib.MatchTemplate(mTemplateToMatch, contract.getImageByte(), SGFDxSecurityLevel.SL_NORMAL, matched);
+//            if (matched[0]) {
+//                if(contract.getFingerPositions() != fingerPosition) {
+//                    //reject if already captured for another finger
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     public void CheckIfAlreadyCapturedOnServer(String patientUUID){
 
@@ -264,7 +271,8 @@ public class PatientBiometricActivity extends AppCompatActivity
     public void CheckIfAlreadyCapturedOnLocalDB(String patientId){
         FingerPrintDAO dao = new FingerPrintDAO();
         if(dao.checkFingerPrintExist(patientId)){
-            CustomDebug("Finger Print already captured for this patient on this phone.", true);
+            //fingerPrintCaptureCount = 6;
+            CustomDebug("Finger Print already exit this patient.", true);
         }
     }
 
@@ -280,53 +288,72 @@ public class PatientBiometricActivity extends AppCompatActivity
 
         //FingerPrintSyncService sync = new FingerPrintSyncService();
         ////sync.autoSyncFingerPrint();
-
-        if (patientFingerPrints.size() < 6) {
+        try{
+        if (fingerPrintCaptureCount < 6) {
             CustomDebug("Please captured a minimum of 6 print before saving", false);
             return;
         }
 
         FingerPrintDAO dao = new FingerPrintDAO();
+
+//        PatientBiometricDTO dto = new PatientBiometricDTO();
+//        dto.setFingerPrintList(new ArrayList<>(patientFingerPrints.values()));
+
+
+    if (NetworkUtils.isOnline() && NetworkUtils.hasNetwork() && patientUUID != null) {
+
+        List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
         PatientBiometricDTO dto = new PatientBiometricDTO();
-        dto.setFingerPrintList(new ArrayList<>(patientFingerPrints.values()));
+        dto.setFingerPrintList(new ArrayList<>(pbs));
         dto.setPatientUUID(patientUUID);
 
-        if (NetworkUtils.isOnline()) {
-            new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
-                @Override
-                public void onResponse(PatientBiometricSyncResponseModel obj) {
-                    debugMessage(obj.getErrorMessage());
+        new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
+            @Override
+            public void onResponse(PatientBiometricSyncResponseModel obj) {
+                if(obj !=null && obj.getIsSuccessful()){
+                    CustomDebug(obj.getErrorMessage(), false);
+
+                    PatientBiometricContract _temp =  pbs.get(0);
+                    _temp.setSyncStatus(1);
+                    _temp.setTemplate("");
+                    dao.updatePatientFingerPrintSyncStatus(Long.valueOf(patientId), _temp);
+
                     CustomDebug("Successfully saved to server.", true);
-                    dao.saveFingerPrint(dto.getFingerPrintList());
                 }
+            }
 
-                @Override
-                public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
+            @Override
+            public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
+                if(errorMessage !=null){
                     CustomDebug(errorMessage.getErrorMessage(), false);
-
-                    //save locally
-                     for (PatientBiometricContract contract : dto.getFingerPrintList()){
-                         contract.setTemplate(""); //remove the template before saving
-                         contract.setSyncStatus(1);
-                     }
-                    dao.saveFingerPrint(dto.getFingerPrintList());
-                    CustomDebug("Finger Prints saved offline", true);
                 }
+                //already saved
+                //dao.saveFingerPrint(dto.getFingerPrintList());
+                CustomDebug("Finger Prints saved offline", true);
+            }
 
-                @Override
-                public void onErrorResponse(String errorMessage) {
-                    CustomDebug("Some error occurred", false);
+            @Override
+            public void onErrorResponse(String errorMessage) {
+                CustomDebug(errorMessage, false);
 
-                    //save locally
-                    dao.saveFingerPrint(dto.getFingerPrintList());
-                    CustomDebug("Finger Prints saved offline", true);
-                }
-            });
-        } else {
-            //save locally
-            dao.saveFingerPrint(dto.getFingerPrintList());
-            CustomDebug("Saved offline", true);
-        }
+                //save locally
+                //already saved
+                //dao.saveFingerPrint(dto.getFingerPrintList());
+                CustomDebug("Finger Prints saved offline", true);
+            }
+        });
+    }
+    else {
+        //save locally
+        //dao.saveFingerPrint(dto.getFingerPrintList()); --they are already saved
+        CustomDebug("Saved offline", true);
+    }
+}catch (Exception ex) {
+    CustomDebug(ex.getMessage(), false);
+}
+
+
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -349,14 +376,17 @@ public class PatientBiometricActivity extends AppCompatActivity
         }
 
         Patient patient = new PatientDAO().findPatientByID(patientId);
+        //fingerPrintDAO.deletePrint(Long.valueOf(patientId));
         patientUUID = patient.getUuid();
-
-       if(patientUUID == null){
-           CustomDebug("Patient must be synced first before capturing finger print!",true);
-       }
-
-        CheckIfAlreadyCapturedOnServer(patientUUID);
+//       if(patientUUID == null){
+//           CustomDebug("Patient must be synced first before capturing finger print!",true);
+//       }
+        if(patientUUID != null) {
+            CheckIfAlreadyCapturedOnServer(patientUUID);
+        }
         CheckIfAlreadyCapturedOnLocalDB(patientId);
+
+
 
         mMaxTemplateSize = new int[1];
 
@@ -402,7 +432,10 @@ public class PatientBiometricActivity extends AppCompatActivity
     @Override
     public void onResume() {
 
-        CheckIfAlreadyCapturedOnServer(patientUUID);
+        if(patientUUID !=null){
+            CheckIfAlreadyCapturedOnServer(patientUUID);
+        }
+
         CheckIfAlreadyCapturedOnLocalDB(patientId);
 
         Log.d(TAG, "Enter onResume()");
