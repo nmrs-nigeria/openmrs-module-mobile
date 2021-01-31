@@ -31,24 +31,26 @@ public class FingerPrintSyncService extends Application {
 
     public FingerPrintSyncService() {
         this.restApi = RestServiceBuilder.createService(RestApi.class);
-       // super("Sync Finger Prints");
+        // super("Sync Finger Prints");
     }
-    public FingerPrintSyncService getInstance(){
+
+    public FingerPrintSyncService getInstance() {
         return instance;
     }
+
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         instance = this;
     }
 
 
-    public void CheckServiceStatus(GenericResponseCallbackListener<String> responseCallbackListener){
+    public void CheckServiceStatus(GenericResponseCallbackListener<String> responseCallbackListener) {
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
 
         //String url = baseUrl[0]+"://"+ baseUrl[1].replaceAll("//","") +":2018/api/Client/get";
         //"http://192.168.0.151:2018/api/Client/get"; baseUrl[1].replaceAll("//","");
-        String url = baseUrl[0]+"://"+ baseUrl[1].replaceAll("//","") +":2018/server";
+        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/server";
 
         if (NetworkUtils.isOnline()) {
 
@@ -58,6 +60,7 @@ public class FingerPrintSyncService extends Application {
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                     responseCallbackListener.onResponse(response.body());
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     System.out.print("Some errors");
@@ -66,12 +69,46 @@ public class FingerPrintSyncService extends Application {
         }
     }
 
-    //http://localhost:2018/api/FingerPrint/CheckForPreviousCapture?PatientUUID=17faf42b-543e-435a-ba1d-95888cf4ae2e
-    public void CheckForPreviousCapture(String patientUUID, GenericResponseCallbackListener<List<PatientBiometricContract>> responseCallbackListener){
+    public void retrieveCaptureFromServer(String patientUUID, boolean saveTemplate) {
 
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
 
-        String url = baseUrl[0]+"://"+ baseUrl[1].replaceAll("//","") +":2018/api/FingerPrint/CheckForPreviousCapture";
+        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/CheckForPreviousCapture";
+        //String url = "http://192.168.0.151:2018/api/FingerPrint/CheckForPreviousCapture"; //baseUrl[1].replaceAll("//","");
+
+            Call<List<PatientBiometricContract>> call = restApi.checkForExistingPBS(url, patientUUID);
+            call.enqueue(new Callback<List<PatientBiometricContract>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<PatientBiometricContract>> call, @NonNull retrofit2.Response<List<PatientBiometricContract>> response) {
+                    if (response.isSuccessful()) {
+
+                        if (response.body() != null && response.body().size() >= 6) {
+                           Patient patient =  new PatientDAO().findPatientByUUID(patientUUID);
+                            for (PatientBiometricContract item : response.body()) {
+                                if(!saveTemplate){
+                                    item.setTemplate("");
+                                }
+                                String patientId = String.valueOf(patient.getId());
+                                item.setPatienId(Integer.parseInt(patientId));
+                                item.setSyncStatus(1); //set to already synced
+                            }
+                            new FingerPrintDAO().saveFingerPrint(response.body());
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<PatientBiometricContract>> call, Throwable t) {
+                }
+        });
+    }
+
+
+    //http://localhost:2018/api/FingerPrint/CheckForPreviousCapture?PatientUUID=17faf42b-543e-435a-ba1d-95888cf4ae2e
+    public void CheckForPreviousCapture(String patientUUID, GenericResponseCallbackListener<List<PatientBiometricContract>> responseCallbackListener) {
+
+        String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
+
+        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/CheckForPreviousCapture";
         //String url = "http://192.168.0.151:2018/api/FingerPrint/CheckForPreviousCapture"; //baseUrl[1].replaceAll("//","");
 
         if (NetworkUtils.isOnline()) {
@@ -81,30 +118,26 @@ public class FingerPrintSyncService extends Application {
                 @Override
                 public void onResponse(@NonNull Call<List<PatientBiometricContract>> call, @NonNull retrofit2.Response<List<PatientBiometricContract>> response) {
                     if (response.isSuccessful()) {
-                        if(response.body() !=null)
+                        if (response.body() != null)
                             responseCallbackListener.onResponse(response.body());
                     } else {
-                        responseCallbackListener.onErrorResponse("Some errors");
+                        responseCallbackListener.onErrorResponse("Some server errors occurred");
                     }
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<List<PatientBiometricContract>> call, @NonNull Throwable t) {
-                    System.out.print("Some errors");
+                    System.out.print("Some server errors occurred");
                 }
             });
         }
     }
 
 
-
     public void startSync(PatientBiometricDTO PBSObj, GenericResponseCallbackListener<PatientBiometricSyncResponseModel> responseCallbackListener) {
 
-        Gson gson = new Gson();
-        String json = gson.toJson(PBSObj);
-        System.out.print(json);
-
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
-        String url = baseUrl[0]+"://"+ baseUrl[1].replaceAll("//","") +":2018/api/FingerPrint/SaveToDatabase";
+        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/SaveToDatabase";
 
         if (NetworkUtils.isOnline()) {
 
@@ -119,6 +152,7 @@ public class FingerPrintSyncService extends Application {
                         System.out.print("Error occurred");
                     }
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<PatientBiometricSyncResponseModel> call, @NonNull Throwable t) {
                     responseCallbackListener.onErrorResponse("Some errors");
@@ -129,19 +163,11 @@ public class FingerPrintSyncService extends Application {
     }
 
 
-    public void autoSyncFingerPrint() {
+    public int autoSyncFingerPrint() {
 
         FingerPrintDAO dao = new FingerPrintDAO();
 
-       /*
- dao.deleteAllPrints();
-        PatientBiometricContract dto = prints.get(0);
-        dto.setSyncStatus(1);
-        dao.updatePatientFingerPrintSyncStatus((long) dto.getPatienId(), dto);
-*/
-
-        List<PatientBiometricContract> prints = dao.getAll(false);
-
+        List<PatientBiometricContract> prints = dao.getAll(false,null);
 
         Map<Integer, ArrayList<PatientBiometricContract>> printsForEachPatient = new HashMap<>();
         for (PatientBiometricContract item : prints) {
@@ -157,43 +183,43 @@ public class FingerPrintSyncService extends Application {
 
         PatientDAO pDAO = new PatientDAO();
         List<PatientBiometricDTO> PBS_DTO = new ArrayList<>();
-        for(Map.Entry<Integer, ArrayList<PatientBiometricContract>> entry : printsForEachPatient.entrySet()){
+        for (Map.Entry<Integer, ArrayList<PatientBiometricContract>> entry : printsForEachPatient.entrySet()) {
             PatientBiometricDTO _dto = new PatientBiometricDTO();
 
-           Patient patient = pDAO.findPatientByID(entry.getKey().toString());
-
-           if(patient !=null){
-               _dto.setPatientUUID(patient.getUuid());
-               _dto.setFingerPrintList(entry.getValue());
-               PBS_DTO.add(_dto);
-           }
+            Patient patient = pDAO.findPatientByID(entry.getKey().toString());
+            if (patient != null) {
+                _dto.setPatientUUID(patient.getUuid());
+                _dto.setFingerPrintList(entry.getValue());
+                PBS_DTO.add(_dto);
+            }
         }
 
-       for(PatientBiometricDTO aPrint : PBS_DTO){
-           startSync(aPrint, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
-               @Override
-               public void onResponse(PatientBiometricSyncResponseModel obj) {
-                   if(obj.getIsSuccessful()){
-                       //update
-                       PatientBiometricContract dto = aPrint.getFingerPrintList().get(0);
-                       dto.setSyncStatus(1);
-                       dao.updatePatientFingerPrintSyncStatus((long) dto.getPatienId(), dto);
-//                       //delete from database
-//                       dao.deletePrint((long) aPrint.getFingerPrintList().get(0).getPatienId());
-                   }
-               }
+        final int[] syncCount = {0};
+        for (PatientBiometricDTO aPrint : PBS_DTO) {
+            PatientBiometricContract dto = aPrint.getFingerPrintList().get(0);
 
-               @Override
-               public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
-               }
+            startSync(aPrint, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
+                @Override
+                public void onResponse(PatientBiometricSyncResponseModel obj) {
+                    if (obj.getIsSuccessful()) {
+                        //update
+                        dto.setSyncStatus(1);
+                        dao.updatePatientFingerPrintSyncStatus((long) dto.getPatienId(), dto);
+                        syncCount[0] += 1;
+                    }
+                }
 
-               @Override
-               public void onErrorResponse(String errorMessage) {
-               }
-           });
-       }
+                @Override
+                public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
+                }
 
-       //dao.deleteAllPrints();
+                @Override
+                public void onErrorResponse(String errorMessage) {
+                }
+            });
+        }
+        return syncCount[0];
+        //dao.deleteAllPrints();
     }
 }
 

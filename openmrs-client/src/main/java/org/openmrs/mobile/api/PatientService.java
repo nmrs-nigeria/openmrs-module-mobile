@@ -64,7 +64,10 @@ public class PatientService extends IntentService {
             }
 
             //sync finger print
-            new FingerPrintSyncService().autoSyncFingerPrint();
+           int syncCount = new FingerPrintSyncService().autoSyncFingerPrint();
+            if(syncCount > 0){
+                ToastUtil.notify(syncCount + " patients finger print synced");
+            }
 
         } else {
             ToastUtil.warning(getString(R.string.activity_no_internet_connection) +

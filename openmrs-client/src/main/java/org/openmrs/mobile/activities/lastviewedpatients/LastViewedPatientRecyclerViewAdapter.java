@@ -33,10 +33,14 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openmrs.mobile.R;
+import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.api.repository.VisitRepository;
+import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.DownloadPatientCallbackListener;
+import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FontsUtil;
@@ -367,6 +371,10 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         .subscribe(id -> {
                             new VisitRepository().syncVisitsData(newPatient);
                             new VisitRepository().syncLastVitals(newPatient.getUuid());
+
+                            //retrieve finger print
+                            new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), false);
+
                             patients.remove(patient);
                             notifyDataSetChanged();
                             if (showSnackBar) {

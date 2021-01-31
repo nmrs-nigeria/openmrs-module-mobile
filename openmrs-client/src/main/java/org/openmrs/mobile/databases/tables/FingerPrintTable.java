@@ -1,5 +1,6 @@
 package org.openmrs.mobile.databases.tables;
 
+import org.openmrs.mobile.activities.pbs.FingerPositions;
 import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
@@ -95,6 +96,11 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
     public void delete(long tableObjectID) {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         openHelper.getWritableDatabase().delete(TABLE_NAME, Column.patient_id + Table.MasterColumn.EQUALS + tableObjectID, null);
+    }
+
+    public void deleteFingerPrintCapture(long tableObjectID, FingerPositions fingerPosition) {
+        DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+        openHelper.getWritableDatabase().delete(TABLE_NAME, Column.patient_id + Table.MasterColumn.EQUALS + tableObjectID + MasterColumn.AND + Column.fingerPosition+ MasterColumn.EQUALS+ fingerPosition, null);
     }
 
     @Override

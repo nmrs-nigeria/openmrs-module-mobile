@@ -82,7 +82,7 @@ public abstract class Table<T> {
         public static final String DISPLAY = "display";
         public static final String COMMA = ",";
         public static final String EQUALS = " = ";
-
+        public static final String AND = " and ";
         /**
          * Contains columns type definitions
          */
