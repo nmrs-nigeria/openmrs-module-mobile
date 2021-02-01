@@ -22,6 +22,8 @@ import android.preference.PreferenceManager;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 import com.prateekj.snooper.AndroidSnooper;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -31,6 +33,7 @@ import org.openmrs.mobile.api.FormListService;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.FormResource;
 import org.openmrs.mobile.models.Link;
 import org.openmrs.mobile.models.Obscreate;
@@ -40,6 +43,7 @@ import org.openmrs.mobile.utilities.ApplicationConstants;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OpenMRS extends Application {
@@ -80,9 +84,28 @@ public class OpenMRS extends Application {
         configurationBuilder.addModelClasses(Encountercreate.class);
         configurationBuilder.addModelClasses(Obscreate.class);
         configurationBuilder.addModelClasses(ObscreateLocal.class);
+        configurationBuilder.addModelClasses(Facility.class);
 
 
         ActiveAndroid.initialize(configurationBuilder.create());
+
+
+        List<Facility> facilities = new Select()
+                .from(Facility.class)
+                .execute();
+        if (facilities.isEmpty()){
+            populateFacility();
+        }
+
+
+    }
+    public void populateFacility() {
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Lagos','Mushin General Hospital 1','6hdgkdhejeh2')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Lagos','Mushin General Hospital 2','6hdgkdhejeh3')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Lagos','Mushin General Hospital 3','6hdgkdhejeh4')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Enugu','UNTH Hospital','6hdgkdhejeh5')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Enugu','UNTH General Hospital','6hdgkdhejeh6')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (stateName,facilityName, facilityCode) VALUES('Enugu','General Hospital','6hdgkdhejeh7')");
     }
 
     public static OpenMRS getInstance() {

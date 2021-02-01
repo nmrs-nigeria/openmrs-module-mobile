@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import org.openmrs.mobile.activities.BasePresenterContract;
 import org.openmrs.mobile.activities.BaseView;
+import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.SelectManyFields;
@@ -36,7 +37,8 @@ public interface FormDisplayContract {
         interface PageView extends BaseView<Presenter.PagePresenter> {
             void attachSectionToView(LinearLayout linearLayout);
             void attachQuestionToSection(LinearLayout section, LinearLayout question);
-
+            void createAndAttachSelectQuestionDropdownStateReferredFacility(List<Facility> facilities, LinearLayout sectionLinearLayout);
+            void createAndAttachSelectQuestionDropdownReferredFacility(LinearLayout sectionLinearLayout);
             void createAndAttachNumericQuestionEditText(Question question, LinearLayout sectionLinearLayout);
             void createAndAttachSelectQuestionDropdown(Question question, LinearLayout sectionLinearLayout);
             void createAndAttachSelectQuestionRadioButton(Question question, LinearLayout sectionLinearLayout);

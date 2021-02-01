@@ -36,6 +36,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.activeandroid.query.Select;
+
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
@@ -46,6 +48,9 @@ import org.openmrs.mobile.listeners.watcher.NumericValidatorWatcher;
 import org.openmrs.mobile.models.Answer;
 import org.openmrs.mobile.models.Condition;
 import org.openmrs.mobile.models.Control;
+import org.openmrs.mobile.models.EncounterType;
+import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FontsUtil;
@@ -787,6 +792,160 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
         }
     }
+
+    // For Custom creation of field
+    @Override
+    public void createAndAttachSelectQuestionDropdownStateReferredFacility(List<Facility> facilities, LinearLayout sectionLinearLayout) {
+        TextView textView = new TextView(getActivity());
+        textView.setPadding(10, 20, 0, 0);
+        textView.setText("State of Facility Referred");
+        textView.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efone" + LABEL_ID_SALT));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
+        LinearLayout questionLinearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams questionLinearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        questionLinearLayoutParams.gravity = Gravity.START;
+        questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
+
+        List<String> answerLabels = new ArrayList<>();
+        answerLabels.add("");
+        for (Facility facility : facilities) {
+            answerLabels.add(facility.getStateName());
+        }
+
+        spinner.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efone"));
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                return view;
+            }
+        };
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        questionLinearLayout.addView(textView);
+        questionLinearLayout.addView(spinner);
+        FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+        sectionLinearLayout.setLayoutParams(linearLayoutParams);
+        sectionLinearLayout.addView(questionLinearLayout);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selection = (String)parent.getItemAtPosition(position);
+                List<Facility> facilityNames = new Select()
+                        .from(Facility.class)
+                        .where("stateName = ?",selection)
+                        .execute();
+                List<String> facilityLabels = new ArrayList<>();
+
+                for (Facility facility : facilityNames) {
+                    facilityLabels.add(facility.getFacilityName());
+                }
+                if (!facilityLabels.isEmpty()) {
+                    ArrayAdapter<String> facility_adapter = new ArrayAdapter(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, facilityLabels) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView text = (TextView) view.findViewById(android.R.id.text1);
+                            FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                            return view;
+                        }
+                    };
+                    Spinner spinners = (Spinner)getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
+                    spinners.setAdapter(facility_adapter);
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+   }
+
+    @Override
+    public void createAndAttachSelectQuestionDropdownReferredFacility(LinearLayout sectionLinearLayout) {
+        TextView textView = new TextView(getActivity());
+        textView.setPadding(10, 20, 0, 0);
+        textView.setText("Name of receiving organization");
+        textView.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey" + LABEL_ID_SALT));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
+        LinearLayout questionLinearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams questionLinearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        questionLinearLayoutParams.gravity = Gravity.START;
+        questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
+
+        List<String> answerLabels = new ArrayList<>();
+        answerLabels.add("");
+
+        spinner.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                return view;
+            }
+        };
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        questionLinearLayout.addView(textView);
+        questionLinearLayout.addView(spinner);
+        FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+        sectionLinearLayout.setLayoutParams(linearLayoutParams);
+        sectionLinearLayout.addView(questionLinearLayout);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selection = (String)parent.getItemAtPosition(position);
+                Facility facility = new Select()
+                        .from(Facility.class)
+                        .where("facilityName = ?", selection)
+                        .executeSingle();
+
+                RangeEditText referredFacilityEditText = (RangeEditText) mParent.findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878ef"));
+                if (facility == null) {
+                    referredFacilityEditText.setText("");
+                }else{
+                    referredFacilityEditText.setText(facility.getFacilityCode());
+                }
+
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+    }
+
 
     @Override
     public void createAndAttachSelectQuestionCheckBox(Question question, LinearLayout sectionLinearLayout) {

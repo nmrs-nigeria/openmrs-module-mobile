@@ -12,8 +12,11 @@ package org.openmrs.mobile.activities.formdisplay;
 
 import android.widget.LinearLayout;
 
+import com.activeandroid.query.Select;
+
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
+import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.Page;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.models.Section;
@@ -166,6 +169,15 @@ public class FormDisplayPagePresenter extends BasePresenter implements FormDispl
         }
         if (question.getQuestionOptions().getRendering().equals("check")) {
             mFormDisplayPageView.createAndAttachSelectQuestionCheckBox(question, sectionLinearLayout);
+        }
+        if (question.getQuestionOptions().getConcept().equalsIgnoreCase("de06184b-cc63-47bf-917c-b985a3a878ef")){
+            List<Facility> facilities = new Select()
+                    .distinct()
+                    .from(Facility.class)
+                    .groupBy("stateName")
+                    .execute();
+            mFormDisplayPageView.createAndAttachSelectQuestionDropdownStateReferredFacility(facilities,sectionLinearLayout);
+            mFormDisplayPageView.createAndAttachSelectQuestionDropdownReferredFacility(sectionLinearLayout);
         }
     }
 
