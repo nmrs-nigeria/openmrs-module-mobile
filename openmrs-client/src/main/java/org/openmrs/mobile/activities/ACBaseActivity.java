@@ -190,7 +190,7 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                         Intent ii = new Intent(getApplicationContext(), PatientService.class);
                         getApplicationContext().startService(ii);
 
-                        //This line crashes the App. I commented it out then noticed the forms can sync without it
+                        //This is to handle android sync version 10
                         Intent i1=new Intent(getApplicationContext(), EncounterService.class);
                         getApplicationContext().startService(i1);
                     }else{
