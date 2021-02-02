@@ -92,8 +92,12 @@ public class FormListPresenter extends BasePresenter implements FormListContract
             if (resource.getName().equals("json"))
                 valueRefString = resource.getValueReference();
         }
-
-        EncounterType encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
+        EncounterType encType = new EncounterType();
+        if(formsStringArray[position].equalsIgnoreCase("PMTCT HTS Register")){
+            encType = encounterDAO.getEncounterTypeByFormName("PMTCT (Prevention of mother-to-child trans)");
+        }else {
+            encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
+        }
         if (encType != null) {
             String encounterType = encType.getUuid();
             view.startFormDisplayActivity(formName, patientId, valueRefString, encounterType);

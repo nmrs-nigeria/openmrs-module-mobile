@@ -24,33 +24,15 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "facility")
-public class Facility extends Model implements Serializable{
-
-    @Column(name = "facilityName")
-    public String facilityName;
-
-    @Column(name = "facilityCode")
-    public String facilityCode;
+@Table(name = "lga")
+public class Lga extends Model implements Serializable{
 
     @Column(name = "lgaCode")
     public String lgaCode;
-
-    public String getFacilityName() {
-        return facilityName;
-    }
-
-    public void setFacilityName(String facilityName) {
-        this.facilityName = facilityName;
-    }
-
-    public String getFacilityCode() {
-        return facilityCode;
-    }
-
-    public void setFacilityCode(String facilityCode) {
-        this.facilityCode = facilityCode;
-    }
+    @Column(name = "lgaName")
+    public String lgaName;
+    @Column(name = "stateCode")
+    public String stateCode;
 
     public String getLgaCode() {
         return lgaCode;
@@ -58,5 +40,21 @@ public class Facility extends Model implements Serializable{
 
     public void setLgaCode(String lgaCode) {
         this.lgaCode = lgaCode;
+    }
+
+    public String getLgaName() {
+        return lgaName;
+    }
+
+    public void setLgaName(String lgaName) {
+        this.lgaName = lgaName;
+    }
+
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 }

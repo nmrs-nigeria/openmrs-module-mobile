@@ -24,39 +24,27 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "facility")
-public class Facility extends Model implements Serializable{
+@Table(name = "states")
+public class States extends Model implements Serializable{
 
-    @Column(name = "facilityName")
-    public String facilityName;
+    @Column(name = "stateCode")
+    public String stateCode;
+    @Column(name = "stateName")
+    public String stateName;
 
-    @Column(name = "facilityCode")
-    public String facilityCode;
-
-    @Column(name = "lgaCode")
-    public String lgaCode;
-
-    public String getFacilityName() {
-        return facilityName;
+    public String getStateCode() {
+        return stateCode;
     }
 
-    public void setFacilityName(String facilityName) {
-        this.facilityName = facilityName;
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 
-    public String getFacilityCode() {
-        return facilityCode;
+    public String getStateName() {
+        return stateName;
     }
 
-    public void setFacilityCode(String facilityCode) {
-        this.facilityCode = facilityCode;
-    }
-
-    public String getLgaCode() {
-        return lgaCode;
-    }
-
-    public void setLgaCode(String lgaCode) {
-        this.lgaCode = lgaCode;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

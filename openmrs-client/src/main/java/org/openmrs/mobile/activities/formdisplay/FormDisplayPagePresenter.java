@@ -20,6 +20,7 @@ import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.Page;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.models.Section;
+import org.openmrs.mobile.models.States;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.SelectManyFields;
@@ -171,12 +172,13 @@ public class FormDisplayPagePresenter extends BasePresenter implements FormDispl
             mFormDisplayPageView.createAndAttachSelectQuestionCheckBox(question, sectionLinearLayout);
         }
         if (question.getQuestionOptions().getConcept().equalsIgnoreCase("de06184b-cc63-47bf-917c-b985a3a878ef")){
-            List<Facility> facilities = new Select()
+            List<States> states = new Select()
                     .distinct()
-                    .from(Facility.class)
+                    .from(States.class)
                     .groupBy("stateName")
                     .execute();
-            mFormDisplayPageView.createAndAttachSelectQuestionDropdownStateReferredFacility(facilities,sectionLinearLayout);
+            mFormDisplayPageView.createAndAttachSelectQuestionDropdownStateReferredFacility(states,sectionLinearLayout);
+            mFormDisplayPageView.createAndAttachSelectQuestionDropdownLgaReferredFacility(sectionLinearLayout);
             mFormDisplayPageView.createAndAttachSelectQuestionDropdownReferredFacility(sectionLinearLayout);
         }
     }
