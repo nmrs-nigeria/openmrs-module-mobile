@@ -163,9 +163,16 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
         }
         EncounterType encType = new EncounterType();
         String e_type = formsStringArray[position];
-        if (e_type.equals("Risk Assessment Pediatric")) {
+        if (e_type.equalsIgnoreCase("Risk Assessment Pediatric")) {
             encType = encounterDAO.getEncounterTypeByFormName("Risk Stratification Pediatrics");
-        }else{
+        }
+        else if(e_type.equalsIgnoreCase("PMTCT HTS Register")){
+            encType = encounterDAO.getEncounterTypeByFormName("PMTCT (Prevention of mother-to-child trans)");
+        }
+        else if(e_type.equalsIgnoreCase("Maternal Cohort Register")){
+            encType = encounterDAO.getEncounterTypeByFormName("PMTCT HIV Testing");
+        }
+        else{
             encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
         }
         if (encType != null) {

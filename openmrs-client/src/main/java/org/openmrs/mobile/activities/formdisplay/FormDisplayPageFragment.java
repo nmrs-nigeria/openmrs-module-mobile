@@ -36,6 +36,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.activeandroid.query.Select;
+
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
@@ -46,7 +48,12 @@ import org.openmrs.mobile.listeners.watcher.NumericValidatorWatcher;
 import org.openmrs.mobile.models.Answer;
 import org.openmrs.mobile.models.Condition;
 import org.openmrs.mobile.models.Control;
+import org.openmrs.mobile.models.EncounterType;
+import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.Facility;
+import org.openmrs.mobile.models.Lga;
 import org.openmrs.mobile.models.Question;
+import org.openmrs.mobile.models.States;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.InputField;
@@ -82,6 +89,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     private static final String CONTROL_TYPE_CHECK = "check";
     private static final String CONTROL_TYPE_RADIO = "radio";
     private static final String CONTROL_TYPE_SECTION = "section";
+    List<String> facilityLgasValues = new ArrayList<>();
+
 
     public static FormDisplayPageFragment newInstance() {
         return new FormDisplayPageFragment();
@@ -787,6 +796,252 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
         }
     }
+
+    // For Custom creation of field
+    @Override
+    public void createAndAttachSelectQuestionDropdownStateReferredFacility(List<States> states, LinearLayout sectionLinearLayout) {
+        TextView textView = new TextView(getActivity());
+        textView.setPadding(10, 20, 0, 0);
+        textView.setText("State of Facility Referred");
+        textView.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efone" + LABEL_ID_SALT));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
+        LinearLayout questionLinearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams questionLinearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        questionLinearLayoutParams.gravity = Gravity.START;
+        questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
+        List<String> answerValues= new ArrayList<>();
+        List<String> answerLabels = new ArrayList<>();
+        answerLabels.add("");
+        answerValues.add("");
+        for (States facilityState : states) {
+            answerLabels.add(facilityState.getStateName());
+            answerValues.add(facilityState.getStateCode());
+        }
+
+        spinner.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efone"));
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                return view;
+            }
+        };
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        questionLinearLayout.addView(textView);
+        questionLinearLayout.addView(spinner);
+        FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+        sectionLinearLayout.setLayoutParams(linearLayoutParams);
+        sectionLinearLayout.addView(questionLinearLayout);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+//                String selection = (String)parent.getItemAtPosition(position);
+                String selection = answerValues.get(position);
+                List<Lga> lgas = new Select()
+                        .from(Lga.class)
+                        .where("stateCode = ?",selection)
+                        .execute();
+                List<String> facilityLgas = new ArrayList<>();
+                if (!lgas.isEmpty()){
+                    facilityLgas.add("");
+                }
+                facilityLgasValues.clear();
+                facilityLgasValues.add("");
+                for (Lga lga : lgas) {
+                    facilityLgas.add(lga.getLgaName());
+                    facilityLgasValues.add(lga.getLgaCode());
+                }
+                if (!facilityLgas.isEmpty()) {
+                    ArrayAdapter<String> lga_adapter = new ArrayAdapter(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, facilityLgas) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView text = (TextView) view.findViewById(android.R.id.text1);
+                            FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                            return view;
+                        }
+                    };
+                    Spinner spinners = (Spinner)getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efeyr"));
+                    spinners.setAdapter(lga_adapter);
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+   }
+
+    @Override
+    public void createAndAttachSelectQuestionDropdownLgaReferredFacility(LinearLayout sectionLinearLayout) {
+        TextView textView = new TextView(getActivity());
+        textView.setPadding(10, 20, 0, 0);
+        textView.setText("LGA of facility referred");
+        textView.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efeyr" + LABEL_ID_SALT));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
+        LinearLayout questionLinearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams questionLinearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        questionLinearLayoutParams.gravity = Gravity.START;
+        questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
+
+        List<String> answerLabels = new ArrayList<>();
+        answerLabels.add("");
+
+        spinner.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efeyr"));
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                return view;
+            }
+        };
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        questionLinearLayout.addView(textView);
+        questionLinearLayout.addView(spinner);
+        FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+        sectionLinearLayout.setLayoutParams(linearLayoutParams);
+        sectionLinearLayout.addView(questionLinearLayout);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+//                String selection = (String)parent.getItemAtPosition(position);
+                String selection = facilityLgasValues.get(position);
+                List<Facility> facilities = new Select()
+                        .from(Facility.class)
+                        .where("lgaCode = ?",selection)
+                        .execute();
+                List<String> facilityNames = new ArrayList<>();
+                if (!facilities.isEmpty()){
+                    facilityNames.add("");
+                }
+                for (Facility facility : facilities) {
+                    facilityNames.add(facility.getFacilityName());
+                }
+                if (!facilityNames.isEmpty()) {
+                    ArrayAdapter<String> facility_names = new ArrayAdapter(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, facilityNames) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getView(position, convertView, parent);
+                            TextView text = (TextView) view.findViewById(android.R.id.text1);
+                            FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                            return view;
+                        }
+                    };
+                    Spinner spinners = (Spinner)getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
+                    spinners.setAdapter(facility_names);
+                }
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void createAndAttachSelectQuestionDropdownReferredFacility(LinearLayout sectionLinearLayout) {
+        TextView textView = new TextView(getActivity());
+        textView.setPadding(10, 20, 0, 0);
+        textView.setText("Name of receiving organization");
+        textView.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey" + LABEL_ID_SALT));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
+        LinearLayout questionLinearLayout = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams questionLinearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        questionLinearLayoutParams.gravity = Gravity.START;
+        questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
+
+        List<String> answerLabels = new ArrayList<>();
+        answerLabels.add("");
+
+        spinner.setId(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, answerLabels) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = (TextView) view.findViewById(android.R.id.text1);
+                FontsUtil.setFont(text, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
+                return view;
+            }
+        };
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+        questionLinearLayout.addView(textView);
+        questionLinearLayout.addView(spinner);
+        FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
+        sectionLinearLayout.setLayoutParams(linearLayoutParams);
+        sectionLinearLayout.addView(questionLinearLayout);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                String selection = (String)parent.getItemAtPosition(position);
+                Facility facility = new Select()
+                        .from(Facility.class)
+                        .where("facilityName = ?", selection)
+                        .executeSingle();
+
+                RangeEditText referredFacilityEditText = (RangeEditText) mParent.findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878ef"));
+                if (facility == null) {
+                    referredFacilityEditText.setText("");
+                }else{
+                    referredFacilityEditText.setText(facility.getFacilityCode());
+                }
+
+
+            } // to close the onItemSelected
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+
+    }
+
+
 
     @Override
     public void createAndAttachSelectQuestionCheckBox(Question question, LinearLayout sectionLinearLayout) {

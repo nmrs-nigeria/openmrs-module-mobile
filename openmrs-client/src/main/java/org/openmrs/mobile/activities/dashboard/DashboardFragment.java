@@ -233,7 +233,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
     }
 
     private void hideVisitAndFormEntry(){
-        mCaptureVitalsView.setVisibility(View.GONE);
+        mCaptureVitalsView.setVisibility(View.VISIBLE);
 //        mActiveVisitsView.setVisibility(View.GONE);
     }
 

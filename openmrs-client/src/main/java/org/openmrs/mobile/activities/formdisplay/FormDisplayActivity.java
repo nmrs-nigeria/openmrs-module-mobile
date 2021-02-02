@@ -55,7 +55,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private Long personID = null;
     private int mStep = 1;
     private boolean isEligible = false;
-    private boolean isValid = true;
+    private boolean isValid = false;
     private String mMessage;
     private String formName;
 

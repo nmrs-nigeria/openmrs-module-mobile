@@ -152,7 +152,11 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
             for (InputField input : inputFields) {
                 if (input.getObs().equals("encounterDate")) {
-                    this.mEncounterDate = DateUtils.convertTime(DateUtils.convertTime(input.getValueAll()), DateUtils.OPEN_MRS_REQUEST_FORMAT);
+                    if (input.getValueAll().isEmpty()) {
+                        return;
+                    } else {
+                        this.mEncounterDate = DateUtils.convertTime(DateUtils.convertTime(input.getValueAll()), DateUtils.OPEN_MRS_REQUEST_FORMAT);
+                    }
                 }
                 if (input.getObs().equals("patientIdentifier")) {
                     this.mPatientIdentifier = input.getValueAll();
