@@ -15,6 +15,7 @@ import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -205,16 +206,21 @@ public class FingerPrintSyncService extends Application {
                         //update
                         dto.setSyncStatus(1);
                         dao.updatePatientFingerPrintSyncStatus((long) dto.getPatienId(), dto);
+                        ToastUtil.success("fingerprint saved online");
                         syncCount[0] += 1;
                     }
                 }
 
                 @Override
                 public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
+                    if(errorMessage !=null){
+                        ToastUtil.error(errorMessage.getErrorMessage());
+                    }
                 }
 
                 @Override
                 public void onErrorResponse(String errorMessage) {
+                    ToastUtil.error(errorMessage);
                 }
             });
         }

@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +42,8 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
 import org.openmrs.mobile.activities.login.LoginActivity;
 import org.openmrs.mobile.activities.settings.SettingsActivity;
+import org.openmrs.mobile.api.EncounterService;
+import org.openmrs.mobile.api.PatientService;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.bundle.CustomDialogBundle;
@@ -180,8 +183,21 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                 } else if (NetworkUtils.hasNetwork()) {
                     OpenMRS.getInstance().setSyncState(true);
                     setSyncButtonState(true);
-                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
-                    getApplicationContext().sendBroadcast(intent);
+
+//                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
+//                    getApplicationContext().sendBroadcast(intent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Intent ii = new Intent(getApplicationContext(), PatientService.class);
+                        getApplicationContext().startService(ii);
+
+                        //This is to handle android sync version 10
+                        Intent i1=new Intent(getApplicationContext(), EncounterService.class);
+                        getApplicationContext().startService(i1);
+                    }else{
+                        Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
+                        getApplicationContext().sendBroadcast(intent);
+                    }
+
                     ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.NOTICE, R.string.reconn_server);
                     if (snackbar != null)
                         snackbar.dismiss();

@@ -122,8 +122,8 @@ repositories {
 }
 
 dependencies {
-    implementation files('C:\\Users\\Arinze\\openmrs-module-mobile\\openmrs-client\\libs\\AlCamera.jar')
-    implementation files('C:\\Users\\Arinze\\openmrs-module-mobile\\openmrs-client\\libs\\FDxSDKProAndroid.jar')
+    implementation files('libs\\FDxSDKProAndroid.jar')
+    implementation files('libs\\AlCamera.jar')
     def support_version = '1.0.0-beta01'
     def room_version = "2.1.0-alpha04"
 

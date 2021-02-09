@@ -272,7 +272,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
                                     syncEncounter(encountercreate);
 
                                 } else {
-                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                   // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
                                     startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
                                 }
 //                                if (visit != null) {

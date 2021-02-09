@@ -31,6 +31,7 @@ public class FingerPrintDAO {
     }
 
     public long saveFingerPrint(PatientBiometricContract pbs) {
+        deletePrintPosition((long) pbs.getPatienId(), pbs.getFingerPositions());
         long id =  new FingerPrintTable().insert(pbs);
         Log.e(TAG, "return id: " +id);
         return id;

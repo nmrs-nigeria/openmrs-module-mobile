@@ -14,6 +14,7 @@
 
 package org.openmrs.mobile.utilities;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import org.openmrs.mobile.dao.PatientDAO;
@@ -53,49 +54,42 @@ public class FilterUtil {
         List<Patient> filteredList = new ArrayList<>();
 
         for (Patient patient : patientList) {
-            filteredList.add(patient);
-            List<Encountercreate> encountersPatientNotEligibleSynced = new Select()
-                        .from(Encountercreate.class)
-                        .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Risk Assessment Pediatric'",patient.getId(),"No")
-                        .execute();
-            if (!encountersPatientNotEligibleSynced.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                for (Encountercreate encountercreate:encountersPatientNotEligibleSynced ){
-                    Encountercreate.delete(Encountercreate.class,encountercreate.getId());
-                }
-            }
 
+            List<Encountercreate> encountersPatientNotEligibleSynced = new Select()
+                    .from(Encountercreate.class)
+                    .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Risk Assessment Pediatric'",patient.getId(),"No")
+                    .execute();
             List<Encountercreate> encountersPatientNegativeSynced = new Select()
                     .from(Encountercreate.class)
                     .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Client intake form'",patient.getId(),"No")
                     .execute();
-            if (!encountersPatientNegativeSynced.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                for (Encountercreate encountercreate:encountersPatientNegativeSynced ){
-                    Encountercreate.delete(Encountercreate.class,encountercreate.getId());
-                }
-            }
-
             List<Encountercreate> encountersReferred = new Select()
                     .from(Encountercreate.class)
                     .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'",patient.getId())
                     .execute();
-            if (!encountersReferred.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                for (Encountercreate encountercreate:encountersReferred ){
-                    Encountercreate.delete(Encountercreate.class,encountercreate.getId());
-                }
-            }
-
             List<Encountercreate> encCreateListPharm= new Select()
                     .from(Encountercreate.class)
                     .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'",patient.getId())
                     .execute();
-            if (!encCreateListPharm.isEmpty()){
+
+            if (!encountersPatientNotEligibleSynced.isEmpty()){
                 new PatientDAO().deletePatient(patient.getId());
-                for (Encountercreate encountercreate:encCreateListPharm ){
-                    Encountercreate.delete(Encountercreate.class,encountercreate.getId());
-                }
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encountersPatientNegativeSynced.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encountersReferred.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encCreateListPharm.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else{
+                filteredList.add(patient);
             }
 
         }

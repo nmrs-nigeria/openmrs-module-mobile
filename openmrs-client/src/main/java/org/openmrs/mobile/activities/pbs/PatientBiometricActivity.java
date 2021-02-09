@@ -268,17 +268,22 @@ public class PatientBiometricActivity extends AppCompatActivity
         }
     }
 
-    public void CheckIfAlreadyCapturedOnLocalDB(String patientId){
+    public void CheckIfAlreadyCapturedOnLocalDB(String patientId) {
         FingerPrintDAO dao = new FingerPrintDAO();
-        if(dao.checkFingerPrintExist(patientId)){
+        if (dao.checkFingerPrintExist(patientId)) {
             //fingerPrintCaptureCount = 6;
             CustomDebug("Finger Print already exit this patient.", true);
+        } else {
+            List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+            for (PatientBiometricContract item : pbs) {
+                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light);
+            }
         }
     }
 
     private boolean checkForQuality(int imageQuality) {
         if(imageQuality < IMAGE_CAPTURE_QUALITY){
-            CustomDebug("Please re-capture this finger. The quality is low.", false);
+            CustomDebug("Please re-capture this finger. The quality is low ("+imageQuality+" %).", false);
             return false;
         }
         return true;
