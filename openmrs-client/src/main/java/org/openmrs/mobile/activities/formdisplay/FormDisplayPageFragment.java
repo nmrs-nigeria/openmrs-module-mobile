@@ -792,8 +792,6 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             }
 
 
-
-
         }
     }
 
@@ -812,7 +810,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         questionLinearLayout.setOrientation(LinearLayout.VERTICAL);
         questionLinearLayoutParams.gravity = Gravity.START;
         questionLinearLayout.setLayoutParams(questionLinearLayoutParams);
-        List<String> answerValues= new ArrayList<>();
+        List<String> answerValues = new ArrayList<>();
         List<String> answerLabels = new ArrayList<>();
         answerLabels.add("");
         answerValues.add("");
@@ -845,18 +843,16 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         sectionLinearLayout.setLayoutParams(linearLayoutParams);
         sectionLinearLayout.addView(questionLinearLayout);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                String selection = (String)parent.getItemAtPosition(position);
                 String selection = answerValues.get(position);
                 List<Lga> lgas = new Select()
                         .from(Lga.class)
-                        .where("stateCode = ?",selection)
+                        .where("stateCode = ?", selection)
                         .execute();
                 List<String> facilityLgas = new ArrayList<>();
-                if (!lgas.isEmpty()){
+                if (!lgas.isEmpty()) {
                     facilityLgas.add("");
                 }
                 facilityLgasValues.clear();
@@ -876,18 +872,18 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                             return view;
                         }
                     };
-                    Spinner spinners = (Spinner)getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efeyr"));
+                    Spinner spinners = (Spinner) getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efeyr"));
                     spinners.setAdapter(lga_adapter);
                 }
             } // to close the onItemSelected
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
 
-   }
+    }
 
     @Override
     public void createAndAttachSelectQuestionDropdownLgaReferredFacility(LinearLayout sectionLinearLayout) {
@@ -931,18 +927,16 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         sectionLinearLayout.setLayoutParams(linearLayoutParams);
         sectionLinearLayout.addView(questionLinearLayout);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                String selection = (String)parent.getItemAtPosition(position);
                 String selection = facilityLgasValues.get(position);
                 List<Facility> facilities = new Select()
                         .from(Facility.class)
-                        .where("lgaCode = ?",selection)
+                        .where("lgaCode = ?", selection)
                         .execute();
                 List<String> facilityNames = new ArrayList<>();
-                if (!facilities.isEmpty()){
+                if (!facilities.isEmpty()) {
                     facilityNames.add("");
                 }
                 for (Facility facility : facilities) {
@@ -959,12 +953,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                             return view;
                         }
                     };
-                    Spinner spinners = (Spinner)getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
+                    Spinner spinners = (Spinner) getActivity().findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878efey"));
                     spinners.setAdapter(facility_names);
                 }
             } // to close the onItemSelected
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -1013,11 +1007,9 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         FontsUtil.setFont(questionLinearLayout, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
         sectionLinearLayout.setLayoutParams(linearLayoutParams);
         sectionLinearLayout.addView(questionLinearLayout);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                String selection = (String)parent.getItemAtPosition(position);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selection = (String) parent.getItemAtPosition(position);
                 Facility facility = new Select()
                         .from(Facility.class)
                         .where("facilityName = ?", selection)
@@ -1026,21 +1018,20 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 RangeEditText referredFacilityEditText = (RangeEditText) mParent.findViewById(customHashCode("de06184b-cc63-47bf-917c-b985a3a878ef"));
                 if (facility == null) {
                     referredFacilityEditText.setText("");
-                }else{
+                } else {
                     referredFacilityEditText.setText(facility.getFacilityCode());
                 }
 
 
             } // to close the onItemSelected
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
 
     }
-
 
 
     @Override
@@ -1127,9 +1118,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i > 0) {
-                    spinnerField.setAnswer(i - 1);
-                }
+//                if (i > 0) {
+//                    spinnerField.setAnswer(i - 1);
+//                }
+                spinnerField.setAnswer(i - 1);
 
                 if (StringUtils.notEmpty(question.getChildControl())) {
                     triggerDependantControl(spinnerField.getChosenAnswer(), question.getChildControl());
@@ -1138,10 +1130,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
                 // Check if the test result is positive or negative in client intake form
                 if (spinnerField.getConcept().equals("1fb46619-abcd-405a-81c9-3c9018473729")) {
-                    if (spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
+                    if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
                         fdActivity.setmStep(1);
                         fdActivity.setEligible(true);
-                    }else if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Negative")){
+                    } else if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Negative")) {
                         fdActivity.setmStep(6);
                         fdActivity.setEligible(false);
 
@@ -1150,90 +1142,92 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 }
                 // Check if the test result is positive or negative in PMTCT HTS
                 if (spinnerField.getConcept().equals("159427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")) {
-                    if (spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
+                    if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Positive")) {
                         fdActivity.setEligible(true);
-                    }else if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Negative")){
+                    } else if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Negative")) {
                         fdActivity.setEligible(false);
                     }
                 }
                 // Check if the pharmacy order form regimen line is adult or child
-                if (spinnerField.getConcept().equals("91bf2c14-1677-4c7f-be1b-99a2b64231b4") && spinnerField.getChosenAnswer()!= null) {
+                if (spinnerField.getConcept().equals("91bf2c14-1677-4c7f-be1b-99a2b64231b4") && spinnerField.getChosenAnswer() != null) {
                     Spinner spinner = (Spinner) mParent.findViewById(customHashCode("718864d2-dd9b-4210-80fe-21e6f8dcbb14"));
-                    String text = spinner.getSelectedItem().toString();
-                    Spinner spinnerFirstLineAdult= mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-                    TextView textView =  mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
-                    Spinner spinnerSecondLineAdult= mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-                    TextView textViewSecond =  mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
-                    Spinner spinnerThirdLineAdult= mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7"));
-                    TextView textViewThird =  mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7" + LABEL_ID_SALT ));
+                    if (spinner != null) {
+                        String text = spinner.getSelectedItem().toString();
+                        Spinner spinnerFirstLineAdult = mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                        TextView textView = mParent.findViewById(customHashCode("164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT));
+                        Spinner spinnerSecondLineAdult = mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                        TextView textViewSecond = mParent.findViewById(customHashCode("164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT));
+                        Spinner spinnerThirdLineAdult = mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7"));
+                        TextView textViewThird = mParent.findViewById(customHashCode("73fbac92-4663-43c1-ad89-5fe0bc2e52c7" + LABEL_ID_SALT));
 
-                    Spinner spinnerFirstLineChild= mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-                    TextView textViewChild =  mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
-                    Spinner spinnerSecondLineChild= mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-                    TextView textViewSecondChild =  mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT ));
-                    Spinner spinnerThirdLineChild= mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae"));
-                    TextView textViewThirdChild =  mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae" + LABEL_ID_SALT ));
-                    if (text.equals("Adult")){
-                        spinnerFirstLineChild.setVisibility(View.GONE);
-                        textViewChild.setVisibility(View.GONE);
-                        spinnerSecondLineChild.setVisibility(View.GONE);
-                        textViewSecondChild.setVisibility(View.GONE);
-                        spinnerThirdLineChild.setVisibility(View.GONE);
-                        textViewThirdChild.setVisibility(View.GONE);
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
-                            spinnerFirstLineAdult.setVisibility(View.VISIBLE);
-                            textView.setVisibility(View.VISIBLE);
-                            spinnerSecondLineAdult.setVisibility(View.GONE);
-                            textViewSecond.setVisibility(View.GONE);
-                            spinnerThirdLineAdult.setVisibility(View.GONE);
-                            textViewThird.setVisibility(View.GONE);
-                        }
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
-                            spinnerSecondLineAdult.setVisibility(View.VISIBLE);
-                            textViewSecond.setVisibility(View.VISIBLE);
-                            spinnerFirstLineAdult.setVisibility(View.GONE);
-                            textView.setVisibility(View.GONE);
-                            spinnerThirdLineAdult.setVisibility(View.GONE);
-                            textViewThird.setVisibility(View.GONE);
-                        }
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
-                            spinnerThirdLineAdult.setVisibility(View.VISIBLE);
-                            textViewThird.setVisibility(View.VISIBLE);
-                            spinnerFirstLineAdult.setVisibility(View.GONE);
-                            textView.setVisibility(View.GONE);
-                            spinnerSecondLineAdult.setVisibility(View.GONE);
-                            textViewSecond.setVisibility(View.GONE);
-                        }
-                    } else if(text.equals("Child")){
-                        spinnerFirstLineAdult.setVisibility(View.GONE);
-                        textView.setVisibility(View.GONE);
-                        spinnerSecondLineAdult.setVisibility(View.GONE);
-                        textViewSecond.setVisibility(View.GONE);
-                        spinnerThirdLineAdult.setVisibility(View.GONE);
-                        textViewThird.setVisibility(View.GONE);
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
-                            spinnerFirstLineChild.setVisibility(View.VISIBLE);
-                            textViewChild.setVisibility(View.VISIBLE);
-                            spinnerSecondLineChild.setVisibility(View.GONE);
-                            textViewSecondChild.setVisibility(View.GONE);
-                            spinnerThirdLineChild.setVisibility(View.GONE);
-                            textViewThirdChild.setVisibility(View.GONE);
-                        }
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
-                            spinnerSecondLineChild.setVisibility(View.VISIBLE);
-                            textViewSecondChild.setVisibility(View.VISIBLE);
-                            spinnerFirstLineChild.setVisibility(View.GONE);
-                            textViewChild.setVisibility(View.GONE);
-                            spinnerThirdLineChild.setVisibility(View.GONE);
-                            textViewThirdChild.setVisibility(View.GONE);
-                        }
-                        if(spinnerField.getChosenAnswer()!= null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
-                            spinnerThirdLineChild.setVisibility(View.VISIBLE);
-                            textViewThirdChild.setVisibility(View.VISIBLE);
+                        Spinner spinnerFirstLineChild = mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                        TextView textViewChild = mParent.findViewById(customHashCode("164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT));
+                        Spinner spinnerSecondLineChild = mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                        TextView textViewSecondChild = mParent.findViewById(customHashCode("164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + LABEL_ID_SALT));
+                        Spinner spinnerThirdLineChild = mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae"));
+                        TextView textViewThirdChild = mParent.findViewById(customHashCode("032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae" + LABEL_ID_SALT));
+                        if (text.equals("Adult")) {
                             spinnerFirstLineChild.setVisibility(View.GONE);
                             textViewChild.setVisibility(View.GONE);
                             spinnerSecondLineChild.setVisibility(View.GONE);
                             textViewSecondChild.setVisibility(View.GONE);
+                            spinnerThirdLineChild.setVisibility(View.GONE);
+                            textViewThirdChild.setVisibility(View.GONE);
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
+                                spinnerFirstLineAdult.setVisibility(View.VISIBLE);
+                                textView.setVisibility(View.VISIBLE);
+                                spinnerSecondLineAdult.setVisibility(View.GONE);
+                                textViewSecond.setVisibility(View.GONE);
+                                spinnerThirdLineAdult.setVisibility(View.GONE);
+                                textViewThird.setVisibility(View.GONE);
+                            }
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
+                                spinnerSecondLineAdult.setVisibility(View.VISIBLE);
+                                textViewSecond.setVisibility(View.VISIBLE);
+                                spinnerFirstLineAdult.setVisibility(View.GONE);
+                                textView.setVisibility(View.GONE);
+                                spinnerThirdLineAdult.setVisibility(View.GONE);
+                                textViewThird.setVisibility(View.GONE);
+                            }
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
+                                spinnerThirdLineAdult.setVisibility(View.VISIBLE);
+                                textViewThird.setVisibility(View.VISIBLE);
+                                spinnerFirstLineAdult.setVisibility(View.GONE);
+                                textView.setVisibility(View.GONE);
+                                spinnerSecondLineAdult.setVisibility(View.GONE);
+                                textViewSecond.setVisibility(View.GONE);
+                            }
+                        } else if (text.equals("Child")) {
+                            spinnerFirstLineAdult.setVisibility(View.GONE);
+                            textView.setVisibility(View.GONE);
+                            spinnerSecondLineAdult.setVisibility(View.GONE);
+                            textViewSecond.setVisibility(View.GONE);
+                            spinnerThirdLineAdult.setVisibility(View.GONE);
+                            textViewThird.setVisibility(View.GONE);
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("First Line")) {
+                                spinnerFirstLineChild.setVisibility(View.VISIBLE);
+                                textViewChild.setVisibility(View.VISIBLE);
+                                spinnerSecondLineChild.setVisibility(View.GONE);
+                                textViewSecondChild.setVisibility(View.GONE);
+                                spinnerThirdLineChild.setVisibility(View.GONE);
+                                textViewThirdChild.setVisibility(View.GONE);
+                            }
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Second Line")) {
+                                spinnerSecondLineChild.setVisibility(View.VISIBLE);
+                                textViewSecondChild.setVisibility(View.VISIBLE);
+                                spinnerFirstLineChild.setVisibility(View.GONE);
+                                textViewChild.setVisibility(View.GONE);
+                                spinnerThirdLineChild.setVisibility(View.GONE);
+                                textViewThirdChild.setVisibility(View.GONE);
+                            }
+                            if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Salvage")) {
+                                spinnerThirdLineChild.setVisibility(View.VISIBLE);
+                                textViewThirdChild.setVisibility(View.VISIBLE);
+                                spinnerFirstLineChild.setVisibility(View.GONE);
+                                textViewChild.setVisibility(View.GONE);
+                                spinnerSecondLineChild.setVisibility(View.GONE);
+                                textViewSecondChild.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }
@@ -1246,7 +1240,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                         spinnerField.getConcept().equals("023fb1ae-c41e-4fc3-b512-7a47e29f77b1") ||
                         spinnerField.getConcept().equals("ea49fa12-cfea-4178-863c-eefe97051cb1") ||
                         spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26") ||
-                        spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")){
+                        spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")) {
 
                     if (spinnerField.getChosenAnswer() != null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
                         shouldMoveOne = true;
@@ -1259,27 +1253,27 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                         spinnerField.getConcept().equals("1c733781-71e5-4d3b-99d6-0cfdddc3281c") ||
                         spinnerField.getConcept().equals("3b027b15-1b39-41e3-8341-2f2f1f747fc5") ||
                         spinnerField.getConcept().equals("30909867-d0cd-47f7-9cca-14896c92fd4d") ||
-                        spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")){
+                        spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")) {
 
                     if (spinnerField.getChosenAnswer() != null && (spinnerField.getChosenAnswer().getLabel().equals("Positive") || spinnerField.getChosenAnswer().getLabel().equals("Yes"))) {
                         shouldMoveOne = true;
                     }
                 }
-                if (spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")){
+                if (spinnerField.getConcept().equals("26605b5d-127d-4e1f-98af-1f537c6a3b48")) {
                     Spinner spinner = (Spinner) mParent.findViewById(customHashCode("26605b5d-127d-4e1f-98af-1f537c6a3b48"));
                     String text = spinner.getSelectedItem().toString();
-                    if (StringUtils.notEmpty(text)){
+                    if (StringUtils.notEmpty(text)) {
                         fdActivity.setValid(true);
-                    }else{
+                    } else {
                         fdActivity.setValid(false);
                     }
                 }
-                if (spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")){
+                if (spinnerField.getConcept().equals("8dda2a65-c030-4e35-8ad1-942543047e26")) {
                     Spinner spinner = (Spinner) mParent.findViewById(customHashCode("8dda2a65-c030-4e35-8ad1-942543047e26"));
                     String text = spinner.getSelectedItem().toString();
-                    if (StringUtils.notEmpty(text)){
+                    if (StringUtils.notEmpty(text)) {
                         fdActivity.setValid(true);
-                    }else{
+                    } else {
                         fdActivity.setValid(false);
                     }
                 }

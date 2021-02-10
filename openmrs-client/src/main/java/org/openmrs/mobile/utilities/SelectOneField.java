@@ -59,7 +59,7 @@ public class SelectOneField implements Serializable, Parcelable {
 
 
     public void setAnswer(int answerPosition) {
-        if (answerPosition < answerList.size()) {
+        if (answerPosition != -1 && answerPosition < answerList.size()) {
             chosenAnswer = answerList.get(answerPosition);
         }
         if (answerPosition == -1) {
