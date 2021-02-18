@@ -186,7 +186,7 @@ public abstract class ACBaseActivity extends AppCompatActivity {
 
 //                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
 //                    getApplicationContext().sendBroadcast(intent);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         Intent ii = new Intent(getApplicationContext(), PatientService.class);
                         getApplicationContext().startService(ii);
 

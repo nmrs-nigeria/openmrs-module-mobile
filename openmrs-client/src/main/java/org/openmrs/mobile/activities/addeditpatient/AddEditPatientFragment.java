@@ -800,6 +800,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                 }
             }
         });
+        eddob.setClickable(true);
         eddob.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -819,7 +820,10 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                     edyr.getText().clear();
                 }
             }
+
         });
+
+        datePicker.setBackgroundColor(Color.GRAY);
 
         datePicker.setOnClickListener(v -> {
             int cYear;
@@ -849,6 +853,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
             mDatePicker.getDatePicker().setMaxDate(System.currentTimeMillis());
             mDatePicker.setTitle(getString(R.string.date_picker_title));
             mDatePicker.show();
+
         });
 
         capturePhotoBtn.setOnClickListener(view -> {
