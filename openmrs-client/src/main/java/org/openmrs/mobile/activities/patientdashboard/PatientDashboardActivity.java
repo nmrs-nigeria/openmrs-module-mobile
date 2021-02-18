@@ -47,10 +47,12 @@ import org.openmrs.mobile.activities.patientdashboard.vitals.PatientDashboardVit
 import org.openmrs.mobile.activities.patientdashboard.vitals.PatientVitalsFragment;
 import org.openmrs.mobile.activities.patientprogram.PatientProgramActivity;
 import org.openmrs.mobile.activities.pbs.PatientBiometricActivity;
+import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
 import org.openmrs.mobile.utilities.TabUtil;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -213,6 +215,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
                 String.valueOf(patientId));
         startActivity(pbsProgram);
     }
+
 
     /**
      * This method is called from other Fragments only when they are visible to the user.

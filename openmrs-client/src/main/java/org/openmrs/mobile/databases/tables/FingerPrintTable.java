@@ -93,9 +93,9 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
     }
 
     @Override
-    public void delete(long tableObjectID) {
+    public void delete(long patient_id) {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        openHelper.getWritableDatabase().delete(TABLE_NAME, Column.patient_id + Table.MasterColumn.EQUALS + tableObjectID, null);
+        openHelper.getWritableDatabase().delete(TABLE_NAME, Column.patient_id + Table.MasterColumn.EQUALS + patient_id, null);
     }
 
     public void deleteFingerPrintCapture(long tableObjectID, FingerPositions fingerPosition) {

@@ -451,6 +451,7 @@
     <string name="toggle_led">Toggle LED</string>
     <string name="match">Verify</string>
     <string name="SaveFingerPrint">Save</string>
+    <string name="DeleteFingerPrint">Clear Prints</string>
     <string name="register">Register</string>
     <string name="welcome">Welcome!</string>
     <string name="cb_matched">Match</string>
