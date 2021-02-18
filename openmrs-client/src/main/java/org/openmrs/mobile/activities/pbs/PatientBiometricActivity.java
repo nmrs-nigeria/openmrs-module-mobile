@@ -31,6 +31,7 @@ import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class PatientBiometricActivity extends AppCompatActivity
 
     private Button mButtonRegister;
     private Button mButtonSaveCapture;
+    private Button mButtonClearUnsyncFingerPrint;
 
     private PendingIntent mPermissionIntent;
     private ImageView mImageViewFingerprint;
@@ -118,7 +120,10 @@ public class PatientBiometricActivity extends AppCompatActivity
             saveFingerPrints();
         } else if (v == this.mButtonRegister) {
             CapturePrint();
-        } else {
+        } else if (v == this.mButtonClearUnsyncFingerPrint){
+            deleteUnsyncedFingerPrint(Long.parseLong(patientId));
+        }
+        else {
             setViewItem(v);
         }
     }
@@ -214,9 +219,9 @@ public class PatientBiometricActivity extends AppCompatActivity
                         debugMessage(String.valueOf(db_id));
                         fingerPrintCaptureCount += 1;
                         //patientFingerPrints.put(fingerPosition, theFinger);
-                        colorCapturedButton(fingerPosition, android.R.color.holo_green_light);
+                        colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD);
                     } else {
-                        colorCapturedButton(fingerPosition, android.R.color.holo_orange_light);
+                        colorCapturedButton(fingerPosition, android.R.color.holo_orange_light, Typeface.NORMAL);
                     }
 
                     //enable the save button when 6 fingers has been captured
@@ -268,17 +273,46 @@ public class PatientBiometricActivity extends AppCompatActivity
         }
     }
 
+    public void deleteUnsyncedFingerPrint(long patientId) {
+        FingerPrintDAO dao = new FingerPrintDAO();
+        dao.deletePrint(patientId);
+
+        colorCapturedButton(FingerPositions.RightSmall, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.RightWedding, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.RightMiddle, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.RightIndex, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.RightThumb, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.LeftMiddle, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.LeftIndex, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.LeftSmall, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.LeftWedding, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.LeftThumb, android.R.color.black, Typeface.NORMAL);
+
+
+        CustomDebug("Fingerprints successfully cleared", false);
+    }
+
     public void CheckIfAlreadyCapturedOnLocalDB(String patientId) {
         FingerPrintDAO dao = new FingerPrintDAO();
-        if (dao.checkFingerPrintExist(patientId)) {
-            //fingerPrintCaptureCount = 6;
-            CustomDebug("Finger Print already exit this patient.", true);
-        } else {
-            List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+        List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+        if(pbs !=null && pbs.size() > 0){
+            CustomDebug("Some Finger Print already exit for this patient. You can capture more or clear the existing ones to start afresh", false);
             for (PatientBiometricContract item : pbs) {
-                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light);
+                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light, Typeface.NORMAL);
             }
         }
+
+
+
+//        if (dao.checkIfFingerPrintUptoSixFingers(patientId)) {
+//            //fingerPrintCaptureCount = 6;
+//            CustomDebug("Finger Print already exit for this patient.", true);
+//        } else {
+//            List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+//            for (PatientBiometricContract item : pbs) {
+//                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light);
+//            }
+//        }
     }
 
     private boolean checkForQuality(int imageQuality) {
@@ -380,6 +414,7 @@ public class PatientBiometricActivity extends AppCompatActivity
             patientId = savedInstanceState.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
         }
 
+        createViewObject();
         Patient patient = new PatientDAO().findPatientByID(patientId);
         //fingerPrintDAO.deletePrint(Long.valueOf(patientId));
         patientUUID = patient.getUuid();
@@ -391,11 +426,7 @@ public class PatientBiometricActivity extends AppCompatActivity
         }
         CheckIfAlreadyCapturedOnLocalDB(patientId);
 
-
-
         mMaxTemplateSize = new int[1];
-
-        createViewObject();
 
         //USB Permissions
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
@@ -440,7 +471,6 @@ public class PatientBiometricActivity extends AppCompatActivity
         if(patientUUID !=null){
             CheckIfAlreadyCapturedOnServer(patientUUID);
         }
-
         CheckIfAlreadyCapturedOnLocalDB(patientId);
 
         Log.d(TAG, "Enter onResume()");
@@ -606,31 +636,38 @@ public class PatientBiometricActivity extends AppCompatActivity
     }
 
 
-    public void colorCapturedButton(FingerPositions fingerPosition, int color){
+    public void colorCapturedButton(FingerPositions fingerPosition, int color, int typeface){
 //
         if (fingerPosition == FingerPositions.LeftThumb) {
             this.fingerLeftThumb.setTextColor(getResources().getColor(color));
-            this.fingerLeftThumb.setTypeface(this.fingerLeftThumb.getTypeface(), Typeface.BOLD);
+            this.fingerLeftThumb.setTypeface(this.fingerLeftThumb.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.LeftIndex) {
             this.fingerLeftIndex.setTextColor(getResources().getColor(color));
-            this.fingerLeftIndex.setTypeface(this.fingerLeftThumb.getTypeface(), Typeface.BOLD);
+            this.fingerLeftIndex.setTypeface(this.fingerLeftIndex.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.LeftMiddle) {
             this.fingerLeftMiddle.setTextColor(getResources().getColor(color));
-            this.fingerLeftIndex.setTypeface(this.fingerLeftThumb.getTypeface(), Typeface.BOLD);
+            this.fingerLeftMiddle.setTypeface(this.fingerLeftMiddle.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.LeftWedding) {
             this.fingerLeftRing.setTextColor(getResources().getColor(color));
+            this.fingerLeftRing.setTypeface(this.fingerLeftRing.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.LeftSmall) {
             this.fingerLeftPinky.setTextColor(getResources().getColor(color));
+            this.fingerLeftPinky.setTypeface(this.fingerLeftPinky.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.RightThumb) {
             this.fingerRightThumb.setTextColor(getResources().getColor(color));
+            this.fingerRightThumb.setTypeface(this.fingerRightThumb.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.RightIndex) {
             this.fingerRightIndex.setTextColor(getResources().getColor(color));
+            this.fingerRightIndex.setTypeface(this.fingerRightIndex.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.RightMiddle) {
             this.fingerRightMiddle.setTextColor(getResources().getColor(color));
+            this.fingerRightMiddle.setTypeface(this.fingerRightMiddle.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.RightWedding) {
             this.fingerRightRing.setTextColor(getResources().getColor(color));
+            this.fingerRightRing.setTypeface(this.fingerRightRing.getTypeface(), typeface);
         } else if (fingerPosition == FingerPositions.RightSmall) {
             this.fingerRightPinky.setTextColor(getResources().getColor(color));
+            this.fingerRightPinky.setTypeface(this.fingerRightPinky.getTypeface(), typeface);
         }
     }
 
@@ -702,6 +739,10 @@ public class PatientBiometricActivity extends AppCompatActivity
         mButtonRegister.setOnClickListener(this);
         mButtonSaveCapture = (Button) findViewById(R.id.btnSavePrints);
         mButtonSaveCapture.setOnClickListener(this);
+
+       mButtonClearUnsyncFingerPrint = (Button) findViewById(R.id.buttonClearUnsyncFingerPrint);
+        mButtonClearUnsyncFingerPrint.setOnClickListener(this);
+        //mButtonClearUnsyncFingerPrint.setVisibility(View.GONE);
 
         mImageViewFingerprint = (ImageView) findViewById(R.id.imageViewFingerprint);
 

@@ -137,7 +137,7 @@ public class FingerPrintDAO {
         return pbsList;
     }
 
-    public boolean checkFingerPrintExist(String patientId) {
+    public boolean checkIfFingerPrintUptoSixFingers(String patientId) {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         String where = FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patientId;
