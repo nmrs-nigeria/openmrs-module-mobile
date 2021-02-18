@@ -301,6 +301,12 @@ public class PatientBiometricActivity extends AppCompatActivity
                 colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light, Typeface.NORMAL);
             }
         }
+        else{ //check if already sync
+            pbs = dao.getAll(true, patientId);
+            if(pbs !=null && pbs.size() > 0){
+                CustomDebug("Finger print has been captured for this patient", true);
+            }
+        }
 
 
 
