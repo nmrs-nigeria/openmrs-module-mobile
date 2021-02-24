@@ -28,9 +28,12 @@ import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
+import org.openmrs.mobile.models.FingerPrintMatchInputModel;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.FingerPrintUtility;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.Partition;
 import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.nio.ByteBuffer;
@@ -39,10 +42,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import SecuGen.FDxSDKPro.JSGFPLib;
 import SecuGen.FDxSDKPro.SGFDxDeviceName;
 import SecuGen.FDxSDKPro.SGFDxErrorCode;
+import SecuGen.FDxSDKPro.SGFDxSecurityLevel;
 import SecuGen.FDxSDKPro.SGFDxTemplateFormat;
 import SecuGen.FDxSDKPro.SGFingerInfo;
 import SecuGen.FDxSDKPro.SGImpressionType;
@@ -76,41 +84,16 @@ public class PatientBiometricActivity extends AppCompatActivity
     private FingerPositions fingerPosition = null;
     private ImageView fingerPrintImageDisplay;
     private Button fingerLeftThumb, fingerLeftIndex, fingerLeftMiddle, fingerLeftRing, fingerLeftPinky, fingerRightThumb, fingerRightIndex, fingerRightMiddle, fingerRightRing, fingerRightPinky;
-    //private final Map<FingerPositions, PatientBiometricContract> patientFingerPrints = new HashMap<>();
-    private final Map<Long, String> deviceErrors = new HashMap<Long, String>(){{
-        put(1L, "CREATION FAILED");
-        put(2L, "FUNCTION FAILED");
-        put(3L, "INVALID PARAM");
-        put(4L, "NOT USED");
-        put(5L, "DLL LOAD FAILED");
-        put(6L, "DLL LOAD FAILED DRV");
-        put(7L, "DLL LOAD FAILED ALGO");
-        put(8L, "No LONGER SUPPORTED");
-        put(51L, "SYS LOAD FAILED");
-        put(52L, "INITIALIZE FAILED");
-        put(53L, "LINE DROPPED");
-        put(54L, "TIME OUT");
-        put(55L, "DEVICE NOT FOUND");
-        put(56L, "Driver LOAD FAILED");
-        put(57L, "WRONG IMAGE");
-        put(58L, "LACK OF BANDWIDTH");
-        put(59L, "DEV ALREADY OPEN");
-        put(60L, "GET Serial Number FAILED");
-        put(61L, "UNSUPPORTED DEV");
-        put(101L, "FEAT NUMBER");
-        put(102L, "INVALID TEMPLATE TYPE");
-        put(103L, "INVALID TEMPLATE1");
-        put(104L, "INVALID TEMPLATE2");
-        put(105L, "EXTRACT FAIL");
-        put(106L, "MATCH FAIL");
-    }};
+    private List<PatientBiometricContract> patientFingerPrints;
 
     String patientId = "";
     String patientUUID = "";
     FingerPrintDAO fingerPrintDAO;
+    FingerPrintUtility fingerPrintUtility;
 
     public PatientBiometricActivity(){
         fingerPrintDAO = new FingerPrintDAO();
+        patientFingerPrints = new ArrayList<>();
     }
 
 
@@ -130,7 +113,7 @@ public class PatientBiometricActivity extends AppCompatActivity
 
 
     int fingerPrintCaptureCount = 0;
-    public void CapturePrint(){
+    public void CapturePrint() {
 
         if (fingerPosition == null) {
             CustomDebug("Please select the finger position before capturing", false);
@@ -145,8 +128,8 @@ public class PatientBiometricActivity extends AppCompatActivity
             long result = sgfplib.GetImage(mRegisterImage);
             debugMessage("GetImage() returned:" + result);
 
-            if(result != 0){
-                String errorMsg =  deviceErrors.get(result);
+            if (result != 0) {
+                String errorMsg = fingerPrintUtility.getDeviceErrors((int) result);
                 CustomDebug(errorMsg, false);
                 return;
             }
@@ -177,80 +160,54 @@ public class PatientBiometricActivity extends AppCompatActivity
             result = sgfplib.GetTemplateSize(mRegisterTemplate, size);
             debugMessage("GetTemplateSize() ret:" + result + " size [" + size[0] + "]\n");
 
+            String template = Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT);
+            if (template != null && isGoodQuality) {
 
-            String template = Base64.encodeToString(mRegisterTemplate,Base64.DEFAULT);
-            //debugMessage("template: " +template);
-            if(template != null){
+                //add to dictionary
+                PatientBiometricContract theFinger = new PatientBiometricContract();
+
+                theFinger.setImageHeight(mImageHeight);
+                theFinger.setImageWidth(mImageWidth);
+                theFinger.setFingerPositions(fingerPosition);
+                theFinger.setCreator(1);
+                theFinger.setImageQuality(fpInfo.ImageQuality);
+                theFinger.setPatienId(Integer.parseInt(patientId));
+
+                theFinger.setTemplate(Base64.encodeToString(mRegisterTemplate, Base64.NO_WRAP));
+                theFinger.setImageDPI(mImageDPI);
+                theFinger.setSerialNumber(mDeviceSN);
+                theFinger.setImageByte(mRegisterTemplate);
+                theFinger.setSyncStatus(0);
+
 
                 //reject finger print if already capture for another finger. Accept and replace if this is the same finger
-//                PatientBiometricContract oldCapture =    patientFingerPrints.get(fingerPosition);
-//                if(CheckIfAlreadyCaptured(mRegisterTemplate, fingerPosition) && oldCapture !=null){
-//                    CustomDebug("This finger has been captured before for "+ oldCapture.getFingerPositions(), false);
-//                }
-//                else{
+                String previousCapture = fingerPrintUtility.CheckIfFingerAlreadyCaptured(theFinger.getTemplate(), patientFingerPrints);
+                if (previousCapture !=null && !previousCapture.isEmpty()) {
+                    CustomDebug("This finger has been captured before for "+ previousCapture, false);
+                } else {
+                    //save to temp list to be discard later
+                    patientFingerPrints.add(theFinger);
 
-                    //replace old captured value in case it has been captured before
-                    //fingerPrintDAO.deletePrintPosition(Long.valueOf(patientId), fingerPosition);
+                    //save to the database directly
+                    Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
+                    debugMessage(String.valueOf(db_id));
+                    fingerPrintCaptureCount += 1;
 
-                    //color the button
-                    if(isGoodQuality) {
-
-                        //add to dictionary
-                        PatientBiometricContract theFinger = new PatientBiometricContract();
-                        theFinger.setImage(Base64.encodeToString(mRegisterTemplate, Base64.DEFAULT));
-                        theFinger.setImageHeight(mImageHeight);
-                        theFinger.setImageWidth(mImageWidth);
-                        theFinger.setFingerPositions(fingerPosition);
-                        theFinger.setCreator(1);
-                        theFinger.setImageQuality(fpInfo.ImageQuality);
-                        theFinger.setPatienId(Integer.parseInt(patientId));
-
-                        //String base64Template =  java.util.Base64.getEncoder().encodeToString(mRegisterTemplate);
-                        //theFinger.setTemplate(base64Template);
-
-                        theFinger.setTemplate(Base64.encodeToString(mRegisterTemplate, Base64.NO_WRAP));
-                        theFinger.setImageDPI(mImageDPI);
-                        theFinger.setSerialNumber(mDeviceSN);
-                        theFinger.setImageByte(mRegisterTemplate);
-                        theFinger.setSyncStatus(0);
-
-                        //save to the database directly
-                        Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
-                        debugMessage(String.valueOf(db_id));
-                        fingerPrintCaptureCount += 1;
-                        //patientFingerPrints.put(fingerPosition, theFinger);
-                        colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD);
-                    } else {
-                        colorCapturedButton(fingerPosition, android.R.color.holo_orange_light, Typeface.NORMAL);
-                    }
-
-                    //enable the save button when 6 fingers has been captured
-                    if(fingerPrintCaptureCount >= 6){
-                        this.mButtonSaveCapture.setClickable(true);
-                        this.mButtonSaveCapture.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
-                    }
-                //}
+                    //color the button and save locally
+                    colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD);
+                }
+            } else {
+                //color warning. this capture is not counted
+                colorCapturedButton(fingerPosition, android.R.color.holo_orange_light, Typeface.NORMAL);
             }
-            mRegisterImage = null;
+            //enable the save button when 6 fingers has been captured
+            if (fingerPrintCaptureCount >= 6) {
+                this.mButtonSaveCapture.setClickable(true);
+                this.mButtonSaveCapture.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            }
         }
+        mRegisterImage = null;
     }
-
-
-//    public boolean CheckIfAlreadyCaptured(byte[] mTemplateToMatch, FingerPositions fingerPosition){
-//
-//        boolean[] matched = new boolean[1];
-//        for(PatientBiometricContract contract: patientFingerPrints.values()) {
-//
-//           sgfplib.MatchTemplate(mTemplateToMatch, contract.getImageByte(), SGFDxSecurityLevel.SL_NORMAL, matched);
-//            if (matched[0]) {
-//                if(contract.getFingerPositions() != fingerPosition) {
-//                    //reject if already captured for another finger
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
 
     public void CheckIfAlreadyCapturedOnServer(String patientUUID){
 
@@ -288,7 +245,7 @@ public class PatientBiometricActivity extends AppCompatActivity
         colorCapturedButton(FingerPositions.LeftWedding, android.R.color.black, Typeface.NORMAL);
         colorCapturedButton(FingerPositions.LeftThumb, android.R.color.black, Typeface.NORMAL);
 
-
+        patientFingerPrints = new ArrayList<>();
         CustomDebug("Fingerprints successfully cleared", false);
     }
 
@@ -297,6 +254,10 @@ public class PatientBiometricActivity extends AppCompatActivity
         List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
         if(pbs !=null && pbs.size() > 0){
             CustomDebug("Some Finger Print already exit for this patient. You can capture more or clear the existing ones to start afresh", false);
+
+            //load in temp list
+            patientFingerPrints.addAll(pbs);
+
             for (PatientBiometricContract item : pbs) {
                 colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light, Typeface.NORMAL);
             }
@@ -307,18 +268,6 @@ public class PatientBiometricActivity extends AppCompatActivity
                 CustomDebug("Finger print has been captured for this patient", true);
             }
         }
-
-
-
-//        if (dao.checkIfFingerPrintUptoSixFingers(patientId)) {
-//            //fingerPrintCaptureCount = 6;
-//            CustomDebug("Finger Print already exit for this patient.", true);
-//        } else {
-//            List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
-//            for (PatientBiometricContract item : pbs) {
-//                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light);
-//            }
-//        }
     }
 
     private boolean checkForQuality(int imageQuality) {
@@ -438,6 +387,7 @@ public class PatientBiometricActivity extends AppCompatActivity
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
         filter = new IntentFilter(ACTION_USB_PERMISSION);
         sgfplib = new JSGFPLib((UsbManager) getSystemService(Context.USB_SERVICE));
+        fingerPrintUtility = new FingerPrintUtility(sgfplib);
 
         bSecuGenDeviceOpened = false;
         usbPermissionRequested = false;
