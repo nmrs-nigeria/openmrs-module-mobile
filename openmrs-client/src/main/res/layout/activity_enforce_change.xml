@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10px">
+
+    <EditText
+        android:id="@+id/urlAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enforce_ip_change_url"
+        android:layout_marginBottom="10px"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:focusable="true"
+        android:inputType="text"
+        android:maxLines="1"/>
+
+
+    <Button
+        android:id="@+id/saveDetails"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical|center_horizontal|center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_apply"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Save"
+        style="@style/loginButtonStyle"/>
+
+    <TextView
+        android:id="@+id/showCurrentURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:hint="Current URL set"/>
+
+</LinearLayout>
