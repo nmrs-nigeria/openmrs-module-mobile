@@ -44,6 +44,8 @@ public class SyncService extends Service {
             this.startService(i);
             Intent i1 = new Intent(this, EncounterService.class);
             this.startService(i1);
+
+
         }
         return START_STICKY;
 

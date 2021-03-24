@@ -14,8 +14,11 @@
 
 package org.openmrs.mobile.utilities;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
+import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Visit;
@@ -51,76 +54,43 @@ public class FilterUtil {
         List<Patient> filteredList = new ArrayList<>();
 
         for (Patient patient : patientList) {
-            List<Encountercreate> encCreateList = new Select()
+
+            List<Encountercreate> encountersPatientNotEligibleSynced = new Select()
                     .from(Encountercreate.class)
-                    .where("patientid = ?",patient.getId())
+                    .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Risk Assessment Pediatric'",patient.getId(),"No")
                     .execute();
-            if (encCreateList.isEmpty() ){
-                filteredList.add(patient);
+            List<Encountercreate> encountersPatientNegativeSynced = new Select()
+                    .from(Encountercreate.class)
+                    .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Client intake form'",patient.getId(),"No")
+                    .execute();
+            List<Encountercreate> encountersReferred = new Select()
+                    .from(Encountercreate.class)
+                    .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'",patient.getId())
+                    .execute();
+            List<Encountercreate> encCreateListPharm= new Select()
+                    .from(Encountercreate.class)
+                    .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'",patient.getId())
+                    .execute();
+
+            if (!encountersPatientNotEligibleSynced.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encountersPatientNegativeSynced.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encountersReferred.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+            }
+            else if (!encCreateListPharm.isEmpty()){
+                new PatientDAO().deletePatient(patient.getId());
+                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
             }
             else{
-                List<Encountercreate> encCreateListSynced = new Select()
-                        .from(Encountercreate.class)
-                        .where("patientid = ? AND synced = 0",patient.getId())
-                        .execute();
-                if(!encCreateListSynced.isEmpty()){
-                    filteredList.add(patient);
-                }else{
-                    List<Encountercreate> encCreateListEligible = new Select()
-                            .from(Encountercreate.class)
-                            .where("patientid = ? AND synced = 1 AND eligble = ?",patient.getId(),"Yes")
-                            .execute();
-                    if (!encCreateListEligible.isEmpty()){
-                        if (encCreateListEligible.size() == 1) {
-                            List<Encountercreate> encCreateListPositive = new Select()
-                                    .from(Encountercreate.class)
-                                    .where("patientid = ? AND synced = 1 AND formname = 'Client intake form' AND eligble = 'No'",patient.getId())
-                                    .execute();
-                            if (encCreateListPositive.isEmpty()) {
-                                filteredList.add(patient);
-                            }
-                        }
-                        if(encCreateListEligible.size() == 2){
-                            List<Encountercreate> encCreateListPositive = new Select()
-                                    .from(Encountercreate.class)
-                                    .where("patientid = ? AND synced = 1 AND formname = 'Client intake form' AND eligble = 'Yes'",patient.getId())
-                                    .execute();
-                            if (!encCreateListPositive.isEmpty()){
-                                List<Encountercreate> encCreateListEnrolled = new Select()
-                                        .from(Encountercreate.class)
-                                        .where("patientid = ? AND synced = 1 AND formname = 'HIV Enrollment'",patient.getId())
-                                        .execute();
-                                List<Encountercreate> encCreateListReferred = new Select()
-                                        .from(Encountercreate.class)
-                                        .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'",patient.getId())
-                                        .execute();
-                                List<Encountercreate> encCreateListPharm= new Select()
-                                        .from(Encountercreate.class)
-                                        .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'",patient.getId())
-                                        .execute();
-                                if (!encCreateListEnrolled.isEmpty() &&  encCreateListPharm.isEmpty() ){
-                                    filteredList.add(patient);
-                                }
-                                if(encCreateListEnrolled.isEmpty() && encCreateListReferred.isEmpty()) {
-                                    filteredList.add(patient);
-                                }
-                            }
-
-                        }
-                    }
-
-                    List<Encountercreate> encCreateListANC = new Select()
-                            .from(Encountercreate.class)
-                            .where("patientid = ? AND formname = 'General Antenatal Care'",patient.getId())
-                            .execute();
-                    if (!encCreateListANC.isEmpty()) {
-                        filteredList.add(patient);
-                    }
-                }
+                filteredList.add(patient);
             }
-
-
-
 
         }
         return filteredList;

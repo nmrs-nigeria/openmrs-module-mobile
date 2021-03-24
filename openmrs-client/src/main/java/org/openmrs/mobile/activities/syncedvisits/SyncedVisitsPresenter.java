@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.openmrs.mobile.activities.BasePresenter;
-import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsContract;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.models.Patient;

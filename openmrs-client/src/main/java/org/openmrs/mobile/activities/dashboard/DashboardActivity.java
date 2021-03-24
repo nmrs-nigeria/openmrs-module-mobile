@@ -66,15 +66,15 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
             getSupportActionBar().setIcon(R.drawable.openmrs_action_logo);
         }
 
-        new AppUpdater(this)
-                .setUpdateFrom(UpdateFrom.JSON)
-                .setDisplay(Display.DIALOG)
-                .setTitleOnUpdateAvailable("Update available")
-                .showEvery(5)
-                .setCancelable(false)
-                .showAppUpdated(true)
-                .setUpdateJSON("http://nmrs.savannahinnovations.com/update.json")
-                .start();
+//        new AppUpdater(this)
+//                .setUpdateFrom(UpdateFrom.JSON)
+//                .setDisplay(Display.DIALOG)
+//                .setTitleOnUpdateAvailable("Update available")
+//                .showEvery(5)
+//                .setCancelable(false)
+//                .showAppUpdated(true)
+//                .setUpdateJSON("http://nmrs.savannahinnovations.com/update.json")
+//                .start();
 
 
         // Create fragment

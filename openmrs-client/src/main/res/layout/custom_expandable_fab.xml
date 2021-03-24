@@ -66,6 +66,20 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/activity_patient_pbs_action_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/activity_patient_dashboard_action_fab"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="100dp"
+        android:hapticFeedbackEnabled="true"
+        android:src="@drawable/pbs_fingerprint_black"
+        app:elevation="0dp"
+        app:rippleColor="@color/grey" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/activity_patient_dashboard_action_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

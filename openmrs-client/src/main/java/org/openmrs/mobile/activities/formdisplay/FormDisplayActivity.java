@@ -55,7 +55,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private Long personID = null;
     private int mStep = 1;
     private boolean isEligible = false;
-    private boolean isValid = true;
+    private boolean isValid = false;
     private String mMessage;
     private String formName;
 
@@ -204,8 +204,6 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
                 }
 
-
-
                 if (position + 1 == mDotsCount) {
                     mBtnNext.setVisibility(View.GONE);
                     mBtnPrevious.setVisibility(View.VISIBLE);
@@ -235,6 +233,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.GONE);
                 }
+
             }
 
             @Override
