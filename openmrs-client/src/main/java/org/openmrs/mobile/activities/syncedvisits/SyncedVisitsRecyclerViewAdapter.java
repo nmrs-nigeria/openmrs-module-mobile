@@ -104,9 +104,14 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
         if (null != patient.getGender()) {
             holder.mGender.setText(patient.getGender());
         }
+        if (patient.getDisplay().equalsIgnoreCase("Incomplete")){
+            holder.mSyncedStatus.setText("Incomplete");
+            holder.mSyncedStatus.setTextColor(Color.BLUE);
+        }else{
+            holder.mSyncedStatus.setText("Pending");
+            holder.mSyncedStatus.setTextColor(Color.RED);
+        }
 
-        holder.mSyncedStatus.setText("Pending");
-        holder.mSyncedStatus.setTextColor(Color.RED);
 
         try{
             holder.mBirthDate.setText(DateUtils.convertTime(DateUtils.convertTime(patient.getBirthdate())));

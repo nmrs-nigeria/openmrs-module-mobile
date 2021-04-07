@@ -105,10 +105,14 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     }
 
     @Override
-    public void createEncounter(boolean isEligible, boolean isValid, String mMessage) {
+    public void createEncounter(boolean isEligible, boolean isValid, boolean isValidPatientIdentifier, String mMessage) {
 
         if (!isValid){
             ToastUtil.error("Please ensure you enter the visit date or other compulsory fields. ");
+            return;
+        }
+        if (!isValidPatientIdentifier){
+            ToastUtil.error("Please ensure you enter the patient identifier or other compulsory fields. ");
             return;
         }
         List<InputField> inputFields = new ArrayList<>();
@@ -160,6 +164,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 }
                 if (input.getObs().equals("patientIdentifier")) {
                     this.mPatientIdentifier = input.getValueAll();
+
                 }
                 if(input.getGroupConcept() != null && !obsGroupList.contains(input.getGroupConcept())){
                     obsGroupList.add(input.getGroupConcept());
@@ -321,14 +326,14 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     }
                 }
             }
-            if (mFormname.equals("Risk Stratification Adult")){
-                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
-                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
-            }
-            if (mFormname.equals("Risk Assessment Pediatric")){
-                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
-                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
-            }
+//            if (mFormname.equals("Risk Stratification Adult")){
+//                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+//                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
+//            }
+//            if (mFormname.equals("Risk Assessment Pediatric")){
+//                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+//                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
+//            }
             if(mFormname.equals("HIV Enrollment")){
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("ART Number");
@@ -336,6 +341,10 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             if(mFormname.equals("General Antenatal Care")){
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("ANC Number");
+            }
+            if(mFormname.equals("Client intake form")){
+                encountercreate.setIdentifier(mPatientIdentifier);
+                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
             }
             encountercreate.setObservations(observations);
             encountercreate.setObservationsLocal(observationsLocal);
@@ -396,7 +405,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 identifiers.add(identifier);
                 if (mFormname.equals("Client intake form")) {
                     PatientIdentifier patientIdentifier = new PatientIdentifier();
-                    patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                    patientIdentifier.setIdentifier(mPatientIdentifier);
                     IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
                     patientIdentifier.setDisplay("HIV testing Id (Client Code)");
                     patientIdentifier.setIdentifierType(identifierType);

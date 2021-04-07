@@ -56,6 +56,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private int mStep = 1;
     private boolean isEligible = false;
     private boolean isValid = false;
+    private boolean isValidPatientIdentifier = true;
     private String mMessage;
     private String formName;
 
@@ -156,7 +157,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
         mBtnNext.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem() + getmStep()));
         mBtnPrevious.setOnClickListener(view -> mViewPager.setCurrentItem(mViewPager.getCurrentItem() - getmStep()));
 
-        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter(isEligible,isValid,mMessage));
+        mBtnFinish.setOnClickListener(view -> mPresenter.createEncounter(isEligible, isValid, isValidPatientIdentifier, mMessage));
         mViewPager = findViewById(R.id.container);
 
 
@@ -209,9 +210,29 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.VISIBLE);
                     RangeEditText visitDateEditText = findViewById(customHashCode("6bcaf85b-8504-4c7f-b510-a50436236b80"));
-                    if (visitDateEditText != null && !ViewUtils.isEmpty(visitDateEditText)){
+
+                    if (visitDateEditText != null) {
+                        if (!ViewUtils.isEmpty(visitDateEditText)) {
+                            isValid = true;
+                        } else {
+                            ToastUtil.error("Please ensure you enter the visit date.");
+                        }
+                    } else {
                         isValid = true;
                     }
+
+                    RangeEditText patientIdentifierEditText = findViewById(customHashCode("162576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    if (patientIdentifierEditText != null) {
+                        if (!ViewUtils.isEmpty(patientIdentifierEditText)) {
+                            isValidPatientIdentifier = true;
+                        } else {
+                            isValidPatientIdentifier = false;
+                            ToastUtil.error("Please ensure you enter the patient identifier");
+                        }
+                    } else {
+                        isValidPatientIdentifier = true;
+                    }
+
                 } else if (position == 0) {
                     mBtnNext.setVisibility(View.VISIBLE);
                     mBtnPrevious.setVisibility(View.GONE);
@@ -219,16 +240,45 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     if (formName.equals("Client intake form")) {
                         setmStep(1);
                     }
+                    RangeEditText patientIdentifierEditText = findViewById(customHashCode("162576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    if (patientIdentifierEditText != null) {
+                        if (!ViewUtils.isEmpty(patientIdentifierEditText)) {
+                            isValidPatientIdentifier = true;
+                        } else {
+                            isValidPatientIdentifier = false;
+                            ToastUtil.error("Please ensure you enter the patient identifier");
+                        }
+                    } else {
+                        isValidPatientIdentifier = true;
+                    }
 
-                }else if (position == 1){
+
+                } else if (position == 1) {
                     setmStep(1);
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     RangeEditText visitDateEditText = findViewById(customHashCode("6bcaf85b-8504-4c7f-b510-a50436236b80"));
-                    if (visitDateEditText != null && !ViewUtils.isEmpty(visitDateEditText)){
+                    if (visitDateEditText != null) {
+                        if (!ViewUtils.isEmpty(visitDateEditText)) {
+                            isValid = true;
+                        } else {
+                            ToastUtil.error("Please ensure you enter the visit date");
+                        }
+                    } else {
                         isValid = true;
                     }
-                }
-                else {
+
+                    RangeEditText patientIdentifierEditText = findViewById(customHashCode("162576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+                    if (patientIdentifierEditText != null) {
+                        if (!ViewUtils.isEmpty(patientIdentifierEditText)) {
+                            isValidPatientIdentifier = true;
+                        } else {
+                            isValidPatientIdentifier = false;
+                            ToastUtil.error("Please ensure you enter the patient identifier");
+                        }
+                    } else {
+                        isValidPatientIdentifier = true;
+                    }
+                } else {
                     mBtnNext.setVisibility(View.VISIBLE);
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.GONE);
@@ -327,5 +377,13 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
     public void setmMessage(String mMessage) {
         this.mMessage = mMessage;
+    }
+
+    public boolean isValidPatientIdentifier() {
+        return isValidPatientIdentifier;
+    }
+
+    public void setValidPatientIdentifier(boolean validPatientIdentifier) {
+        isValidPatientIdentifier = validPatientIdentifier;
     }
 }

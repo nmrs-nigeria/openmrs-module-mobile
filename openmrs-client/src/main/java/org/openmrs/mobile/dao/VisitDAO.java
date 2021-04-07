@@ -276,7 +276,7 @@ public class VisitDAO {
             String where = String.format("%s = ? AND (%s is null OR %s = '')",
                     VisitTable.Column.UUID, VisitTable.Column.STOP_DATE,
                     VisitTable.Column.STOP_DATE);
-            String[] whereArgs = new String[]{visitUUID.toString()};
+            String[] whereArgs = new String[]{visitUUID};
             String orderBy = VisitTable.Column.START_DATE + " DESC";
             final Cursor cursor = helper.getReadableDatabase().query(VisitTable.TABLE_NAME, null, where, whereArgs, null, null, orderBy);
             DatabaseUtils.dumpCursorToString(cursor);

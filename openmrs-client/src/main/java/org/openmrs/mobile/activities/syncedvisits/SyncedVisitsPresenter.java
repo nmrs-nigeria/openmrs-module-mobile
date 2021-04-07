@@ -17,12 +17,18 @@ package org.openmrs.mobile.activities.syncedvisits;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.activeandroid.query.Select;
+
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.FilterUtil;
 import org.openmrs.mobile.utilities.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -105,8 +111,20 @@ public class SyncedVisitsPresenter extends BasePresenter implements SyncedVisits
                             syncedVisitsView.updateListVisibility(true);
                         }
                     }
+                    List<Patient> filteredList = new ArrayList<>();
                     patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
-                    syncedVisitsView.updateAdapter(patientList);
+                    for (Patient patient : patientList) {
+                        List<Encountercreate> encountersSynced = new Select()
+                                .from(Encountercreate.class)
+                                .where("patientid = ? AND synced = 0", patient.getId())
+                                .execute();
+                        if (!encountersSynced.isEmpty() || !patient.isSynced()){
+                            patient.setDisplay("Pending");
+                            filteredList.add(patient);
+                        }
+                    }
+
+                    syncedVisitsView.updateAdapter(filteredList);
                 }));
 
     }
