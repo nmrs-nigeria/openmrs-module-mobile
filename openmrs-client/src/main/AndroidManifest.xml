@@ -283,6 +283,11 @@
             android:name=".activities.providerdashboard.ProviderDashboardActivity"
             android:parentActivityName=".activities.providermanagerdashboard.ProviderManagerDashboardActivity"
             android:theme="@style/AppThemeOrig" />
+        <activity
+            android:name=".activities.ip.EnforceChangeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/enforce_ip_change_title"
+            android:theme="@style/AppThemeOrig" />
     </application>
 
 </manifest>
