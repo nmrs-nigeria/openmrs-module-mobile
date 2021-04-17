@@ -76,7 +76,7 @@ public class VisitRepository {
     }
 
     public void syncVisitsData(@NonNull final Patient patient, @Nullable final DefaultResponseCallbackListener callbackListener) {
-        Call<Results<Visit>> call = restApi.findVisitsByPatientUUID(patient.getUuid(), "custom:(uuid,location:ref,visitType:ref,startDatetime,stopDatetime,encounters:full)");
+        Call<Results<Visit>> call = restApi.findVisitsByPatientUUID(patient.getUuid(), "custom:(uuid,location:ref,visitType:ref,startDatetime,stopDatetime:full)");
         call.enqueue(new Callback<Results<Visit>>() {
             @Override
             public void onResponse(@NonNull Call<Results<Visit>> call, @NonNull Response<Results<Visit>> response) {

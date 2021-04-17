@@ -105,6 +105,7 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
             mPatientInfoView.setProgressBarVisibility(true);
             mPatientInfoView.hideSoftKeys();
             registeringPatient = true;
+            new PatientDAO().updatePatient(patient.getId(), patient);
             updatePatient(patient);
         } else {
             mPatientInfoView.scrollToTop();

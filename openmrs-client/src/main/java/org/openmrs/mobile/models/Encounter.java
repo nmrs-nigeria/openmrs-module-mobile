@@ -52,7 +52,7 @@ public class Encounter extends Resource implements Serializable{
     private Visit visit;
     @SerializedName("encounterProviders")
     @Expose
-    private List<Resource> encounterProviders = new ArrayList<>();
+    private List<EncounterProvider> encounterProviders = new ArrayList<>();
     @SerializedName("resourceVersion")
     @Expose
     private String resourceVersion;
@@ -284,7 +284,7 @@ public class Encounter extends Resource implements Serializable{
      * @return
      *     The encounterProviders
      */
-    public List<Resource> getEncounterProviders() {
+    public List<EncounterProvider> getEncounterProviders() {
         return encounterProviders;
     }
 
@@ -293,7 +293,7 @@ public class Encounter extends Resource implements Serializable{
      * @param encounterProviders
      *     The encounterProviders
      */
-    public void setEncounterProviders(List<Resource> encounterProviders) {
+    public void setEncounterProviders(List<EncounterProvider> encounterProviders) {
         this.encounterProviders = encounterProviders;
     }
 

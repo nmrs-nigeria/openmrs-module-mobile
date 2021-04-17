@@ -22,6 +22,7 @@ import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
 import org.openmrs.mobile.models.Encounter;
+import org.openmrs.mobile.models.EncounterProvider;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
@@ -30,6 +31,7 @@ import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -46,6 +48,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
 
     private final RestApi apiService = RestServiceBuilder.createService(RestApi.class);
     private RestApi restApi;
+
     public EncounterService() {
         super("Save Encounter");
         restApi = RestServiceBuilder.createService(RestApi.class);
@@ -120,12 +123,12 @@ public class EncounterService extends IntentService implements CustomApiCallback
 //        }
 //    }
 
-    public void addEncounter(final Encountercreate encountercreate,final String encounterDate) {
-        addEncounter(encountercreate, encounterDate,null);
+    public void addEncounter(final Encountercreate encountercreate, final String encounterDate) {
+        addEncounter(encountercreate, encounterDate, null);
     }
 
-    private void startNewVisitForEncounter(final Encountercreate encountercreate,String encounterDate, @Nullable final DefaultResponseCallbackListener callbackListener) {
-        new VisitRepository().startVisit(new PatientDAO().findPatientByUUID(encountercreate.getPatient()),encounterDate,
+    private void startNewVisitForEncounter(final Encountercreate encountercreate, String encounterDate, @Nullable final DefaultResponseCallbackListener callbackListener) {
+        new VisitRepository().startVisit(new PatientDAO().findPatientByUUID(encountercreate.getPatient()), encounterDate,
                 new StartVisitResponseListenerCallback() {
                     @Override
                     public void onStartVisitResponse(long id) {
@@ -205,23 +208,23 @@ public class EncounterService extends IntentService implements CustomApiCallback
     private void linkvisit(Long patientid, String formname, Encounter encounter, Encountercreate encountercreate) {
         VisitDAO visitDAO = new VisitDAO();
 
-            visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(visit -> {
-                        encounter.setEncounterType(new EncounterType(formname));
-                        for (int i = 0; i < encountercreate.getObservations().size(); i++) {
-                            encounter.getObservations().get(i).setDisplayValue
-                                    (encountercreate.getObservations().get(i).getValue());
-                        }
-                        if (visit != null) {
-                            List<Encounter> encounterList = visit.getEncounters();
-                            encounterList.add(encounter);
-                            visitDAO.saveOrUpdate(visit, patientid)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(id ->
-                                            ToastUtil.success(formname + " data saved successfully"));
-                        }
-                    });
+        visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(visit -> {
+                    encounter.setEncounterType(new EncounterType(formname));
+                    for (int i = 0; i < encountercreate.getObservations().size(); i++) {
+                        encounter.getObservations().get(i).setDisplayValue
+                                (encountercreate.getObservations().get(i).getValue());
+                    }
+                    if (visit != null) {
+                        List<Encounter> encounterList = visit.getEncounters();
+                        encounterList.add(encounter);
+                        visitDAO.saveOrUpdate(visit, patientid)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(id ->
+                                        ToastUtil.success(formname + " data saved successfully"));
+                    }
+                });
 
     }
 
@@ -235,6 +238,12 @@ public class EncounterService extends IntentService implements CustomApiCallback
                 Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
                 if (!encountercreate.getSynced() &&
                         patient.isSynced()) {
+                    List<EncounterProvider> encounterProviders = new ArrayList<>();
+                    EncounterProvider encounterProvider = new EncounterProvider();
+                    encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");
+                    encounterProvider.setEncounterRole("a0b03050-c99b-11e0-9572-0800200c9a66");
+                    encounterProviders.add(encounterProvider);
+                    encountercreate.setEncounterProviders(encounterProviders);
                     if (encountercreate.getFormname().equals("Client intake form")) {
                         ProgramEnrollment programEnrollment = new ProgramEnrollment();
                         programEnrollment.setPatient(encountercreate.getPatient());
@@ -260,44 +269,27 @@ public class EncounterService extends IntentService implements CustomApiCallback
                         ProgramRepository programRepository = new ProgramRepository();
                         programRepository.addProgram(restApi, programEnrollment, this);
                     }
-                    new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(visit -> {
-                                if (visit != null) {
-                                    new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-                                    encountercreate.setVisit(visit.getUuid());
-                                    visit.setStopDatetime(null);
-                                    new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
+                    if (null != encountercreate.getVisit() ) {
+                        new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(visit -> {
+                                    if (visit != null) {
+                                        new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                        encountercreate.setVisit(visit.getUuid());
+                                        visit.setStopDatetime(null);
+                                        new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
 
-                                    syncEncounter(encountercreate);
+                                        syncEncounter(encountercreate);
 
-                                } else {
-                                   // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
-                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
-                                }
-//                                if (visit != null) {
-//                                    Long visitId = new VisitDAO().getVisitsIDByDate(encountercreate.getPatientId(), encountercreate.getEncounterDatetime());
-//
-//                                    new VisitRepository().syncVisit(patient,visit,encountercreate, new DefaultResponseCallbackListener() {
-//                                        @Override
-//                                        public void onResponse() {
-////                                            encountercreate.setVisit(visit.getUuid());
-////                                            syncEncounter(encountercreate);
-//                                        }
-//
-//                                        @Override
-//                                        public void onErrorResponse(String errorMessage) {
-//                                            ToastUtil.error(errorMessage);
-//                                        }
-//                                    });
-//
-////
-//                                    // Uncomment if needed
-//                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-//                                } else {
-//                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
-//                                }
-                            });
+                                    } else {
+                                        // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                        startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime());
+                                    }
+
+                                });
+                    }else {
+                        startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime());
+                    }
                 }
             }
 
@@ -309,8 +301,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
     }
 
 
-
-//    @Override
+    //    @Override
 //    protected void onHandleIntent(Intent intent) {
 //        if (NetworkUtils.isOnline()) {
 //

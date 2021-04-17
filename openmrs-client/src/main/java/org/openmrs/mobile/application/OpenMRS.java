@@ -93,7 +93,7 @@ public class OpenMRS extends Application {
 
         ActiveAndroid.initialize(configurationBuilder.create());
 
-
+    try {
         List<States> states = new Select()
                 .from(States.class)
                 .execute();
@@ -102,7 +102,9 @@ public class OpenMRS extends Application {
             populateLga();
             populateState();
         }
-
+    }catch (Exception e){
+        mLogger.i(e.toString());
+    }
 
     }
 
