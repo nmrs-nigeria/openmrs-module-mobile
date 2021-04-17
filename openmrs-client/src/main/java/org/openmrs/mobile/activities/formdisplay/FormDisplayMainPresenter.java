@@ -31,6 +31,7 @@ import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
 import org.openmrs.mobile.models.Answer;
+import org.openmrs.mobile.models.EncounterProvider;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Location;
@@ -41,12 +42,14 @@ import org.openmrs.mobile.models.ObsgroupLocal;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.ProgramEnrollment;
+import org.openmrs.mobile.models.Resource;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.IdGeneratorUtil;
 import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.RangeEditText;
 import org.openmrs.mobile.utilities.SelectManyFields;
 import org.openmrs.mobile.utilities.SelectOneField;
 import org.openmrs.mobile.utilities.ToastUtil;
@@ -80,6 +83,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     private LocationDAO locationDAO;
     private VisitRepository visitRepository;
     private long mEntryID = 0;
+    private boolean isNegative = true;
 
     public FormDisplayMainPresenter(FormDisplayContract.View.MainView mFormDisplayView, Bundle bundle, FormPageAdapter mPageAdapter) {
         this.mFormDisplayView = mFormDisplayView;
@@ -135,6 +139,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
         List<Obscreate> observations = new ArrayList<>();
         List<ObscreateLocal> observationsLocal = new ArrayList<>();
+        List<EncounterProvider> encounterProviders = new ArrayList<>();
+
 
         SparseArray<Fragment> activefrag = mPageAdapter.getRegisteredFragments();
         boolean valid = true;
@@ -345,7 +351,30 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             if(mFormname.equals("Client intake form")){
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("HIV testing Id (Client Code)");
+                if (isNegative) {
+                    Obscreate obscreate = new Obscreate();
+                    obscreate.setConcept("c26ab267-c014-4bc8-97b1-c6c5b08a2e93");
+                    obscreate.setValue(mEncounterDate);
+                    obscreate.setObsDatetime(mEncounterDate);
+                    obscreate.setPerson(mPatient.getUuid());
+//                        observations.add(obscreate);
+                    observations.add(obscreate);
+
+                    ObscreateLocal obscreateLocal = new ObscreateLocal();
+                    obscreateLocal.setConcept("c26ab267-c014-4bc8-97b1-c6c5b08a2e93");
+                    obscreateLocal.setQuestionLabel("Signature Date");
+                    obscreateLocal.setValue(String.valueOf(mEncounterDate));
+                    obscreateLocal.setAnswerLabel(String.valueOf(mEncounterDate));
+                    obscreateLocal.setObsDatetime(mEncounterDate);
+                    obscreateLocal.setPerson(mPatient.getUuid());
+                    observationsLocal.add(obscreateLocal);
+                }
             }
+            EncounterProvider encounterProvider = new EncounterProvider();
+            encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");
+            encounterProvider.setEncounterRole("a0b03050-c99b-11e0-9572-0800200c9a66");
+            encounterProviders.add(encounterProvider);
+            encountercreate.setEncounterProviders(encounterProviders);
             encountercreate.setObservations(observations);
             encountercreate.setObservationsLocal(observationsLocal);
             encountercreate.setFormname(mFormname);

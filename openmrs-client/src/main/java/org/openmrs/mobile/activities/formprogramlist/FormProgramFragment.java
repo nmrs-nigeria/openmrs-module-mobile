@@ -635,7 +635,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         final int greenColorResId = R.color.green;
         final int redColorResId = R.color.light_red;
         final int purpleColorResId = R.color.dark_purple;
-        final int blueColorResId = R.color.snooper_blue;
+//        final int blueColorResId = R.color.snooper_blue;
         ImageUtils.changeImageViewTint(getContext(), mdeliveryButton, purpleColorResId);
         ImageUtils.changeImageViewTint(getContext(), mclientinteakeButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mmaternalButton, purpleColorResId);

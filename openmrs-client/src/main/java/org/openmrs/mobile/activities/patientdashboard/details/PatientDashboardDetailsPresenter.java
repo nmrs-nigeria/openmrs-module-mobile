@@ -96,7 +96,9 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
         mPatientDetailsView.resolvePatientDataDisplay(patientDAO.findPatientByID(mPatient.getId().toString()));
         mPatientDetailsView.setMenuTitle(mPatient.getName().getNameString(), mPatient.getIdentifier().getIdentifier());
         if (!NetworkUtils.isOnline()) {
-            mPatientDetailsView.attachSnackbarToActivity();
+//            mPatientDetailsView.attachSnackbarToActivity();
+            mPatientDetailsView.showToast(R.string.no_internet_connection_message, true);
+            mPatientDetailsView.dismissDialog();
         }
 
     }
