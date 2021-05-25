@@ -36,11 +36,7 @@
     <item
         android:id="@+id/actionEnforce"
         android:orderInCategory="100"
-<<<<<<< Updated upstream
-        android:title="Enforce Change"
-=======
         android:title="@string/enforce_ip_change_action"
->>>>>>> Stashed changes
         app:showAsAction="never" />
     <item
         android:id="@+id/actionLogout"
