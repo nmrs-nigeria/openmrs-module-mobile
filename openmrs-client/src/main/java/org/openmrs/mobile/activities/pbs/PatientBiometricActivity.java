@@ -244,7 +244,7 @@ public class PatientBiometricActivity extends AppCompatActivity
         List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
         if(pbs !=null && pbs.size() > 0){
             CustomDebug("Some Finger Print already exit for this patient. You can capture more or clear the existing ones to start afresh", false);
-
+            fingerPrintCaptureCount = pbs.size();
             //load in temp list
             patientFingerPrints.addAll(pbs);
 
@@ -313,7 +313,7 @@ public class PatientBiometricActivity extends AppCompatActivity
                 }
                 //already saved
                 //dao.saveFingerPrint(dto.getFingerPrintList());
-                CustomDebug("Finger Prints saved offline", true);
+                CustomDebug("An error occurred while saving prints on the server.", true);
             }
 
             @Override

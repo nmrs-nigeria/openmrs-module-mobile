@@ -47,7 +47,11 @@ public class PatientService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
+        ToastUtil.notify("checking device if online");
         if(NetworkUtils.isOnline()) {
+            ToastUtil.notify("device is online");
+
             PatientAndMatchesWrapper patientAndMatchesWrapper = new PatientAndMatchesWrapper();
             List<Patient> patientList = new PatientDAO().getUnsyncedPatients();
             final ListIterator<Patient> it = patientList.listIterator();
@@ -64,6 +68,7 @@ public class PatientService extends IntentService {
             }
 
             //sync finger print
+            ToastUtil.notify("about to call auto Sync for FingerPrint");
            int syncCount = new FingerPrintSyncService().autoSyncFingerPrint();
             if(syncCount > 0){
                 ToastUtil.notify(syncCount + " patients finger print synced");
