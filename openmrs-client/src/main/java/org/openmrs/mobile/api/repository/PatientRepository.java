@@ -50,6 +50,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -119,11 +121,54 @@ public class PatientRepository extends RetrofitRepository {
                         identifiers.add(identifier);
 
                         patient.setIdentifiers(identifiers);
-                        patient.setUuid(null);
+                        Call<PatientDto> call = new Call<PatientDto>() {
+                            @Override
+                            public Response<PatientDto> execute() throws IOException {
+                                return null;
+                            }
 
-                        PatientDto patientDto = patient.getPatientDto();
+                            @Override
+                            public void enqueue(Callback<PatientDto> callback) {
 
-                        Call<PatientDto> call = restApi.createPatient(patientDto);
+                            }
+
+                            @Override
+                            public boolean isExecuted() {
+                                return false;
+                            }
+
+                            @Override
+                            public void cancel() {
+
+                            }
+
+                            @Override
+                            public boolean isCanceled() {
+                                return false;
+                            }
+
+                            @Override
+                            public Call<PatientDto> clone() {
+                                return null;
+                            }
+
+                            @Override
+                            public Request request() {
+                                return null;
+                            }
+                        };
+                        if (null != patient.getUuid() && !patient.getUuid().isEmpty() && !patient.getUuid().equals(" ")){
+                            patient.setUuid(null);
+                            PatientDto patientDto = patient.getPatientDto();
+                            call = restApi.createPatient(patientDto);
+                        }else {
+                            PatientDto patientDto = patient.getPatientDto();
+                            call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+                        }
+
+
+
+
                         call.enqueue(new Callback<PatientDto>() {
                             @Override
                             public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
@@ -258,7 +303,7 @@ public class PatientRepository extends RetrofitRepository {
                                     PatientDto patientDto = response.body();
                                     patient.setBirthdate(patientDto.getPerson().getBirthdate());
 
-                                    patient.setUuid(patient.getUuid());
+                                    patient.setUuid(patientDto.getUuid());
                                     if (patient.getPhoto() != null)
                                         uploadPatientPhoto(patient);
 

@@ -78,6 +78,7 @@ public class FilterUtil {
 
                 if (!encountersPatientNotEligibleSynced.isEmpty()) {
                     new PatientDAO().deletePatient(patient.getId());
+
                     new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
                 } else if (!encountersPatientNegativeSynced.isEmpty()) {
                     new PatientDAO().deletePatient(patient.getId());
