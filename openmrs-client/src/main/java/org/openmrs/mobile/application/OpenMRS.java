@@ -1238,6 +1238,7 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('CRYSTAL SPECIALIST HOSPITAL','U4PYh3OVqQf','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Egan Primary Health Center ','hQ808SWIPV2','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Hamkad Hospital','ya5aVehGJhU','NIE LAS KTU')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Obioha Model Primary Health Centre','aNkNOQjVs3o','NIE RVS BER')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('HelAderonke (Egbe Idimu) Primary Health Center','bAeQxzIqls2','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ikola Primary Health Center','Y5kAcxYCJtJ','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ikotun Primary Health Center ','R3X9MttmeAb','NIE LAS KTU')");
@@ -1678,6 +1679,8 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Jerab Hospitals','b1FhDo7xSWO','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Joefag Alheri Clinic & Maternity','JjiCVLEjZ1p','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Living Rock Hospital & Maternity','NUcA8XMsSMI','NIE FCT GWA')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Anawim OSS','NF1AxpCGCKk','NIE FCT GWA')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gwagwalada KP One Stop Shop','IEE3UZcwPu3','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Minat Clinic','ZvwAJoKvg8Y','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Dagiri Primary Health Center','WRIX0OX3q6e','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Primary Health Centre Yimi','Vje0kITuxn5','NIE FCT GWA')");
@@ -1767,6 +1770,8 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Na-Kowa Clinic','D1T4Yg07e0C','NIE NAS KRV')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('New Karu Primary Health Centre','sB8cWMd8QyO','NIE NAS KRV')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nisi Hospital','MYgtY8vQtdn','NIE NAS KRV')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('KPIF_Karu OSS','vzy7MBuPWQ0','NIE NAS KRV')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Karu KP one stop shop','KLx83uYKVcC','NIE NAS KRV')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Pijag Maternity Home','ql5itoWziK0','NIE NAS KRV')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Rafin Kwara Primary Health Care','lPVMyTCU5Yy','NIE NAS KRV')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ruga Juli Primary Health Center','StYXuxPkRmu','NIE NAS KRV')");
@@ -1901,7 +1906,6 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Mbagen Community Hospital - Abwa','JVUE6hcwdYf','NIE BNS BKB')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nongu u Kristu ke Sudan hen Tiv (NKST) Comprehensive Health Center - Garagbohol','Rf1yYN2IDWc','NIE BNS BKB')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nongu u Kristu ke Sudan hen Tiv (NKST) Primary Health Center - Biliji','dOnbIETcQXX','NIE BNS BKB')");
-
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Tyowanye Primary Health Center','kPGQXJlsGON','NIE BNS BKB')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gboko East Comprehensive Health Center','NKBX6MV18q7','NIE BNS GBK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nongu u Kristu ke Sudan hen Tiv (NKST) Hospital - Mkar','LQY80730nX8','NIE BNS GBK')");
@@ -2054,6 +2058,11 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Abejukolo General Hospital','PRHYgNR5CUO','NIE KGS BJK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bismol Hospital & Maternity','QWpkml91U0m','NIE FCT ABC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Cream Medics','APriVNdVSRc','NIE FCT ABC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('MABUSHI One Stop Shop','APriVNdVSRc','NIE FCT ABC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gwarinpa One Stop Shop','FjX5IC6wJ1m','NIE FCT ABC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('KPIF_Gwarinpa OSS','GGVeC4Mwjk5','NIE FCT ABC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nyanya One Stop Shop','SHF865XzjPJ','NIE FCT ABC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('YOUTHRISE One Stop Shop','qhdQUxH2m2P','NIE FCT ABC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Queens clinic and maternity','gPzTgphPpvP','NIE FCT ABC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gwagwalada Clinic & Maternity','xBjuRJxxetO','NIE FCT GWA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gwagwalada Township Clinic','ZkdXdTHpcXN','NIE FCT GWA')");
@@ -2219,6 +2228,7 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Isiokpo General Hospital','XFDJkiGqk2X','NIE RVS SKP')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Pope John Paul Clinic','cZejFgfeC75','NIE RVS BRR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Terrebor General Hospital','nTOggT8y4RW','NIE RVS KPR')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Okomoko General Hospital','XwODacI3oni','NIE RVS KHE')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Umuebule Cottage Hospital','rSvimK96wuu','NIE RVS KHE')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('University of Portharcourt Teaching Hospital','Ke1y8vsmeC4','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Michika General Hospital','Nx613mKHzsk','NIE ADS MCH')");
@@ -2295,6 +2305,7 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nchia Health Centre','OxwWC4ptpOq','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Meridian Hospital','RmDJfQHGtay','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Lengro Medical Centre','aM2ElZuLpx2','NIE RVS KNM')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Joinkrama General Hospital','fCnLZTsv0O9','NIE RVS KNM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Eteo Model Primary Health Centre','WGgn9RuaG6V','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Eliozu Model Primary Health Centre','fUNUMu5BYHG','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('College of Health Technical Clinic','hfyt7OwScuM','NIE RVS RUM')");
@@ -3052,6 +3063,7 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bonny Health Centre','tCN3TSuXyOc','NIE RVS BNY')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('St. Charles Surgery','Hfn0KaTBQmf','NIE RVS BNY')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('St. Peters Clinic','lw44OGucUJT','NIE RVS BNY')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bonny KP One Stop Shop','pNzfxjpSiDy','NIE RVS BNY')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Degema General Hospital','uTSKSwmTe3i','NIE RVS DEG')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Agbonchia Model Primary Health Centre','u4nsK8x6P0T','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Dorkson Medical Clinic','fIwVIJYge6w','NIE RVS NCH')");
@@ -3064,16 +3076,23 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Sonabel Hospital (HQ)','TZ0Zsf2KLYV','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('St Matthews Clinic','yqcmwat3bJs','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Vinkas Clinic','ZNqpzwElUB7','NIE RVS NCH')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Eleme General Hospital','VI7swW6DIGB','NIE RVS NCH')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Akpajo Model Primary Health Centre','Zn2wY00xAAe','NIE RVS NCH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ndele Model Primary Health Centre','O3aP7XpQF7p','NIE RVS MHA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Rumuji Model Primary Health Centre','tuynia9m3nq','NIE RVS MHA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Dumkil Medical Centre','yqVkTJjtwUh','NIE RVS KPR')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Kpor Model Primary Health Centre','MA9oxYM6KtP','NIE RVS KPR')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bodo General Hospital','l03CW5zFRnV','NIE RVS KPR')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bomu Model Primary Health Centre','Yq0F3u7p7fX','NIE RVS KPR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Adanta Model Primary Health Centre','ELeCbnLLp5I','NIE RVS SKP')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Aluu Model Primary Health Centre','Bp386GWe6cG','NIE RVS SKP')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Mbodo Aluu Primary Health Centre','l79OCqShrlD','NIE RVS SKP')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Igwuruta Model Health Center','pDLerWiHQ0t','NIE RVS SKP')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Beeri Model Primary Health Centre','m5JBYmg2y9O','NIE RVS BRR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bori Inadum Medical Centre','jbjCB91Bild','NIE RVS BRR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Kpean Model Primary Health Centre','iKjS8IqEgfA','NIE RVS BRR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Opuoko Model Primary Health Centre','hgyAkSpLcLo','NIE RVS BRR')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bori General Hospital','QsChxCxPcqL','NIE RVS BRR')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Alphonso Hospital','qII33eHwDcJ','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Amazing Grace Hospital','jWkhQrwjwyS','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('April Clinic','wxmE6Yka5fx','NIE RVS RUM')");
@@ -3097,6 +3116,8 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Holy Child Hospital','PzoW3ax1kED','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Immanuel Hospital','EKO4jkufo30','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Iriebe Primary Health Centre','qIjWndeKXZq','NIE RVS RUM')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('KPIF Obio-Akpor KP OSS','KFbRZKvXpb3','NIE RVS RUM')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Initiative for Advancement of Humanity (IAH)','Y3VlUBi4kD9','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Jose Vital Clinic Rumuokoro','XhqFPDF5Lgo','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Karpearl Hospital','eGAsiJ1wRoQ','NIE RVS RUM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Kendox Medical Services','tU6NlKR1Brm','NIE RVS RUM')");
@@ -3146,11 +3167,13 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ibaka Model Primary Health Centre','UlDC8p3klui','NIE RVS KRK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ogoloma Model Primary Health Centre','WKfFn4czH1v','NIE RVS KRK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Okrika Mainland Clinic','Oog0FhA3YKy','NIE RVS KRK')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Okrika General Hospital','hlKqAEwWVbh','NIE RVS KRK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Okujagu Health Centre','jnW49W3CHrE','NIE RVS KRK')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Divine Wisdom Hospital','ZrOJJd1WFi2','NIE RVS AFM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Heritage Medicare Hospital','JUwsTI1Eo4h','NIE RVS AFM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Living Water Hospital','x7jYYtMtfdY','NIE RVS AFM')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Salem Hospital','ILOsKCJlOUz','NIE RVS AFM')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Obioha Model Primary Health Centre','aNkNOQjVs3o','NIE RVS AFM')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Oyigbo Comprehensive Health Centre','UlX4JORbkIa','NIE RVS AFM')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Abuloma Model Primary Health Centre','h3uZkfZ92ak','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Aggrey Clinic','n4t7PsApNCN','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Amadiama Model Primary Health Centre','Me5vpAhKOHJ','NIE RVS PHC')");
@@ -3165,6 +3188,8 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Franka Memorial Hospital','sUH3dovi6bv','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Harryland Hospital','IOmTjPk6GhA','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Hearth Health Hospital','Hwv1DzJ2pKj','NIE RVS PHC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Resource Centre','mml1V9rYVbf','NIE RVS PHC')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Health of the Sick','s0SI9pIe68w','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Megacare Hospital','p0oA1VEoN12','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Meryl Hospital','l2AFp90Yrj8','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Mgbundukwu (Okija) Model Primary Health Centre','Vp53teY94db','NIE RVS PHC')");
@@ -3198,6 +3223,7 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Zion Maternity','xWzL4RSE1kU','NIE RVS PHC')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bangoi Primary Health Centre','AC85PHrGLPq','NIE RVS SKN')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Bunu Model Primary Health Centre','orysJSDUuqU','NIE RVS SKN')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nonwa Model Primary Health Centre','BdGiK6cRTho','NIE RVS SKN')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Kpite Model Primary Health Centre','cdGf7E0iVWK','NIE RVS SKN')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gashua General Hospital','VUQpWeYseot','NIE YBS GSH')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Fika General Hospital','OQYeCajbh5G','NIE YBS FKA')");
@@ -3214,10 +3240,15 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Akwanga Primary Health Centre ','Jj4IO088cM3','NIE NAS AKW')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Andaha PHC ','JqudjV9JqmP','NIE NAS AKW')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Angwan Jatau Primary Health Centre ','io6LHdLaH4v','NIE NAS AKW')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gudi Primary Health Center ','CfgHRysxMXP','NIE NAS AKW')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Moroa Primary Health Centre ','Jr8X5lIzm3h','NIE NAS AKW')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ninga Primary Health Centre ','AS4Fo6AN4F1','NIE NAS AKW')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nunku Primary Health Centre ','R48oGDJNgnv','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Gudi Primary Health Center','CfgHRysxMXP','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Moroa Primary Health Centre','Jr8X5lIzm3h','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Ninga Primary Health Centre','AS4Fo6AN4F1','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nunku Primary Health Centre','R48oGDJNgnv','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Mochu Clinic','LGx7o765SJ4','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Orient Hospital','LGx7o765SJ4','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('KPIF_Akwanga OSS','PRLTfziBO1L','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Rinze Primary Health Care Center','qZmwoo3H62F','NIE NAS AKW')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Royal Hospital','DOWX4SxIJkP','NIE NAS AKW')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Burum-Burum Primary Health Center','f9EYpOJXnW2','NIE NAS DMA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Effugobrinbo Model Primary Health Center','p7HvPJCASMX','NIE NAS DMA')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Okpatte Primary Health Center','tIs747BlDIu','NIE NAS DMA')");
