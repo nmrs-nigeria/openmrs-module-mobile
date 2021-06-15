@@ -70,6 +70,14 @@ public class Person extends Resource implements Serializable {
         this.names = names;
     }
 
+    public void setName(PersonName personName) {
+        names = names != null ? names : new ArrayList<>();
+        if (names.isEmpty())
+            names.add(personName);
+        else
+            names.set(0, personName);
+    }
+
     /**
      * 
      * @return
@@ -157,6 +165,14 @@ public class Person extends Resource implements Serializable {
      */
     public void setAddresses(List<PersonAddress> addresses) {
         this.addresses = addresses;
+    }
+
+    public void setAddress(PersonAddress personAddress) {
+        addresses = addresses != null ? addresses : new ArrayList<>();
+        if (addresses.isEmpty())
+            addresses.add(personAddress);
+        else
+            addresses.set(0, personAddress);
     }
 
     /**

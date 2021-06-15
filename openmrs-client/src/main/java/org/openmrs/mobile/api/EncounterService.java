@@ -12,6 +12,7 @@ package org.openmrs.mobile.api;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Debug;
 
 import com.activeandroid.query.Select;
 
@@ -205,23 +206,33 @@ public class EncounterService extends IntentService implements CustomApiCallback
     private void linkvisit(Long patientid, String formname, Encounter encounter, Encountercreate encountercreate) {
         VisitDAO visitDAO = new VisitDAO();
 
-            visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(visit -> {
-                        encounter.setEncounterType(new EncounterType(formname));
-                        for (int i = 0; i < encountercreate.getObservations().size(); i++) {
-                            encounter.getObservations().get(i).setDisplayValue
-                                    (encountercreate.getObservations().get(i).getValue());
-                        }
-                        if (visit != null) {
-                            List<Encounter> encounterList = visit.getEncounters();
-                            encounterList.add(encounter);
-                            visitDAO.saveOrUpdate(visit, patientid)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(id ->
-                                            ToastUtil.success(formname + " data saved successfully"));
-                        }
-                    });
+        String uuid = "";
+
+        try {
+            if (encounter != null)
+                uuid = encounter.getVisit().getUuid();
+        } catch (Exception e) {
+            if (encountercreate != null)
+                uuid = encountercreate.getVisit();
+        }
+
+        visitDAO.getVisitByUuid(uuid)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(visit -> {
+                    encounter.setEncounterType(new EncounterType(formname));
+                    for (int i = 0; i < encountercreate.getObservations().size(); i++) {
+                        encounter.getObservations().get(i).setDisplayValue
+                                (encountercreate.getObservations().get(i).getValue());
+                    }
+                    if (visit != null) {
+                        List<Encounter> encounterList = visit.getEncounters();
+                        encounterList.add(encounter);
+                        visitDAO.saveOrUpdate(visit, patientid)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(id ->
+                                        ToastUtil.success(formname + " data saved successfully"));
+                    }
+                });
 
     }
 
@@ -233,7 +244,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
                     .execute();
             for (final Encountercreate encountercreate : encountercreatelist) {
                 Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
-                if (!encountercreate.getSynced() &&
+                if (patient != null && !encountercreate.getSynced() &&
                         patient.isSynced()) {
                     if (encountercreate.getFormname().equals("Client intake form")) {
                         ProgramEnrollment programEnrollment = new ProgramEnrollment();

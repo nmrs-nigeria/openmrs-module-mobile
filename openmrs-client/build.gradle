@@ -22,7 +22,7 @@ plugins {
 def version = "2.8.0"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
     def buildNumber = (travisBuildNumber) ? (travisBuildNumber as int) : 1

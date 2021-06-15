@@ -16,6 +16,7 @@ package org.openmrs.mobile.api.repository;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
 
@@ -270,6 +271,12 @@ public class PatientRepository extends RetrofitRepository {
                                         callbackListener.onResponse();
                                     }
                                 } else {
+                                    try{
+                                        Log.e("PatientRepository", response.errorBody().string());
+                                    }catch (Exception ignored) {
+
+                                    }
+
                                     ToastUtil.error("Patient " + patient.getPerson().getName().getNameString()
                                             + " cannot be updated due to server error" + response.message());
                                     if (callbackListener != null) {
@@ -403,9 +410,11 @@ public class PatientRepository extends RetrofitRepository {
                     .from(Encountercreate.class)
                     .where("id = ?",id)
                     .executeSingle();
-            encountercreate.setPatient(patient.getUuid());
-            encountercreate.save();
-            new EncounterService().addEncounter(encountercreate,DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+            if (encountercreate != null) {
+                encountercreate.setPatient(patient.getUuid());
+                encountercreate.save();
+                new EncounterService().addEncounter(encountercreate,DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+            }
         }
     }
 
