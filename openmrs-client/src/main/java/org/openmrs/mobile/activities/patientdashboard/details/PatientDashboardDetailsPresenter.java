@@ -24,6 +24,7 @@ import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.DownloadPatientCallbackListener;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.PatientAndMatchesWrapper;
 
 public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresenterImpl implements PatientDashboardContract.PatientDetailsPresenter {
 
@@ -96,7 +97,9 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
         mPatientDetailsView.resolvePatientDataDisplay(patientDAO.findPatientByID(mPatient.getId().toString()));
         mPatientDetailsView.setMenuTitle(mPatient.getName().getNameString(), mPatient.getIdentifier().getIdentifier());
         if (!NetworkUtils.isOnline()) {
-            mPatientDetailsView.attachSnackbarToActivity();
+//            mPatientDetailsView.attachSnackbarToActivity();
+            mPatientDetailsView.showToast(R.string.no_internet_connection_message, true);
+            mPatientDetailsView.dismissDialog();
         }
 
     }
@@ -131,26 +134,30 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
     * Download Patient
     */
     private void syncDetailsData() {
-        patientRepository.downloadPatientByUuid(mPatient.getUuid(), new DownloadPatientCallbackListener() {
-            @Override
-            public void onPatientDownloaded(Patient patient) {
-                updatePatientData(patient);
-            }
+        if (null != mPatient.getUuid() && !mPatient.getUuid().isEmpty() && !mPatient.getUuid().equals(" ")) {
+            patientRepository.downloadPatientByUuid(mPatient.getUuid(), new DownloadPatientCallbackListener() {
+                @Override
+                public void onPatientDownloaded(Patient patient) {
+                    updatePatientData(patient);
+                }
 
-            @Override
-            public void onPatientPhotoDownloaded(Patient patient) {
-                updatePatientData(patient);
-            }
+                @Override
+                public void onPatientPhotoDownloaded(Patient patient) {
+                    updatePatientData(patient);
+                }
 
-            @Override
-            public void onResponse() {
-                // This method is intentionally empty
-            }
-            @Override
-            public void onErrorResponse(String errorMessage) {
-                mPatientDetailsView.showToast(R.string.synchronize_patient_error, true);
-            }
-        });
+                @Override
+                public void onResponse() {
+                    // This method is intentionally empty
+                }
+
+                @Override
+                public void onErrorResponse(String errorMessage) {
+                    mPatientDetailsView.showToast(R.string.synchronize_patient_error, true);
+                }
+            });
+        }
+
     }
 
 }

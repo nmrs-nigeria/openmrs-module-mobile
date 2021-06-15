@@ -377,13 +377,41 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                 case "HTS":
                     switch (form){
                         case "Client intake form":
-                            if (fPActivity.isFirstTime() && !isElig) {
-                                    mclientinteakeView.setVisibility(View.GONE);
-                            }else{
-                                if (fPActivity.isClientExist() || isClient ) {
-                                    mclientinteakeView.setVisibility(View.GONE);
-                                }else{
+//                            if (fPActivity.isFirstTime() && !isElig ) {
+//                                    mclientinteakeView.setVisibility(View.GONE);
+//                            }else{
+//                                if (fPActivity.isClientExist() || isClient ) {
+//                                    mclientinteakeView.setVisibility(View.GONE);
+//                                }else{
+//                                    if (!fPActivity.isEligible()){
+//                                        mclientinteakeView.setVisibility(View.GONE);
+//                                    }
+//                                    mclientinteakeView.setVisibility(View.VISIBLE);
+//                                }
+//                            }
+                            if (fPActivity.isFirstTime()){
+                                if(isElig) {
                                     mclientinteakeView.setVisibility(View.VISIBLE);
+                                }else{
+                                    mclientinteakeView.setVisibility(View.GONE);
+                                }
+                            }else{
+                                if (isElig){
+                                    if (fPActivity.isClientExist() || isClient ) {
+                                        mclientinteakeView.setVisibility(View.GONE);
+                                    }else{
+                                        mclientinteakeView.setVisibility(View.VISIBLE);
+                                    }
+                                }else{
+                                    if (fPActivity.isEligible()){
+                                        if (fPActivity.isClientExist() || isClient ) {
+                                            mclientinteakeView.setVisibility(View.GONE);
+                                        }else{
+                                            mclientinteakeView.setVisibility(View.VISIBLE);
+                                        }
+                                    }else{
+                                        mclientinteakeView.setVisibility(View.GONE);
+                                    }
                                 }
                             }
                             break;
@@ -607,7 +635,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         final int greenColorResId = R.color.green;
         final int redColorResId = R.color.light_red;
         final int purpleColorResId = R.color.dark_purple;
-        final int blueColorResId = R.color.snooper_blue;
+//        final int blueColorResId = R.color.snooper_blue;
         ImageUtils.changeImageViewTint(getContext(), mdeliveryButton, purpleColorResId);
         ImageUtils.changeImageViewTint(getContext(), mclientinteakeButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mmaternalButton, purpleColorResId);

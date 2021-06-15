@@ -478,6 +478,11 @@
     <string name="log">Log</string>
     <string name="action_patient_pbs">Patient Biometrics</string>
 
+    <!-- Enforce IP Change -->
+    <string name="enforce_ip_change_title">Enforce IP Change</string>
+    <string name="enforce_ip_change_url">Enter URL Address Here</string>
+    <string name="enforce_ip_change_action">Enforce Change</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

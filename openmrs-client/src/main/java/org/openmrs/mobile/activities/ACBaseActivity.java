@@ -40,6 +40,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
+import org.openmrs.mobile.activities.ip.EnforceChangeActivity;
 import org.openmrs.mobile.activities.login.LoginActivity;
 import org.openmrs.mobile.activities.settings.SettingsActivity;
 import org.openmrs.mobile.api.EncounterService;
@@ -207,7 +208,10 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                     showNoInternetConnectionSnackbar();
                 }
                 return true;
-
+            case R.id.actionEnforce:
+                Intent ip = new Intent(this, EnforceChangeActivity.class);
+                startActivity(ip);
+                return true;
             case R.id.actionLocation:
                 if (!locationList.isEmpty()) {
                     locationList.clear();

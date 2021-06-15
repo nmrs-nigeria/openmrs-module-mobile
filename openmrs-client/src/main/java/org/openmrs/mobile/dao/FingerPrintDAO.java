@@ -22,12 +22,17 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FingerPrintDAO {
 
-    public long saveFingerPrint(List<PatientBiometricContract> pbs) {
+    public void saveFingerPrint(List<PatientBiometricContract> pbs) {
         for (int i = 0; i < pbs.size(); i++) {
-            long id = new FingerPrintTable().insert(pbs.get(i));
-            Log.e(TAG, "return id: " + id);
+
+            if (pbs.get(i).getFingerPositions() != null) {
+                long id = new FingerPrintTable().insert(pbs.get(i));
+                Log.e(TAG, "return id: " + id);
+            }
+            else{
+                Log.e(TAG, "skipping empty finger print: ");
+            }
         }
-        return 0;
     }
 
     public long saveFingerPrint(PatientBiometricContract pbs) {

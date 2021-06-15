@@ -94,6 +94,10 @@ public class Encountercreate extends Model implements Serializable{
     @Column(name = "obsLocal")
     private String obslistLocal;
 
+    @SerializedName("encounterProviders")
+    @Expose
+    private List<EncounterProvider> encounterProviders = new ArrayList<>();
+
     public String getLocation() {
         return location;
     }
@@ -239,5 +243,18 @@ public class Encountercreate extends Model implements Serializable{
 
     public void setIdentifierType(String identifierType) {
         this.identifierType = identifierType;
+    }
+
+    public List<EncounterProvider> getEncounterProviders() {
+        return encounterProviders;
+    }
+
+    /**
+     *
+     * @param encounterProviders
+     *     The encounterProviders
+     */
+    public void setEncounterProviders(List<EncounterProvider> encounterProviders) {
+        this.encounterProviders = encounterProviders;
     }
 }

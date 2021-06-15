@@ -48,25 +48,29 @@ public class PatientService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if(NetworkUtils.isOnline()) {
-            PatientAndMatchesWrapper patientAndMatchesWrapper = new PatientAndMatchesWrapper();
-            List<Patient> patientList = new PatientDAO().getUnsyncedPatients();
-            final ListIterator<Patient> it = patientList.listIterator();
-            while (it.hasNext()) {
-                final Patient patient=it.next();
-                fetchSimilarPatients(patient, patientAndMatchesWrapper);
-            }
-            if (!patientAndMatchesWrapper.getMatchingPatients().isEmpty()) {
-                Intent intent1 = new Intent(getApplicationContext(), MatchingPatientsActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent1.putExtra(ApplicationConstants.BundleKeys.CALCULATED_LOCALLY, calculatedLocally);
-                intent1.putExtra(ApplicationConstants.BundleKeys.PATIENTS_AND_MATCHES, patientAndMatchesWrapper);
-                startActivity(intent1);
-            }
+            try {
+                PatientAndMatchesWrapper patientAndMatchesWrapper = new PatientAndMatchesWrapper();
+                List<Patient> patientList = new PatientDAO().getUnsyncedPatients();
+                final ListIterator<Patient> it = patientList.listIterator();
+                while (it.hasNext()) {
+                    final Patient patient = it.next();
+                    fetchSimilarPatients(patient, patientAndMatchesWrapper);
+                }
+                if (!patientAndMatchesWrapper.getMatchingPatients().isEmpty()) {
+                    Intent intent1 = new Intent(getApplicationContext(), MatchingPatientsActivity.class);
+                    intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent1.putExtra(ApplicationConstants.BundleKeys.CALCULATED_LOCALLY, calculatedLocally);
+                    intent1.putExtra(ApplicationConstants.BundleKeys.PATIENTS_AND_MATCHES, patientAndMatchesWrapper);
+                    startActivity(intent1);
+                }
 
-            //sync finger print
-           int syncCount = new FingerPrintSyncService().autoSyncFingerPrint();
-            if(syncCount > 0){
-                ToastUtil.notify(syncCount + " patients finger print synced");
+                //sync finger print
+                int syncCount = new FingerPrintSyncService().autoSyncFingerPrint();
+                if (syncCount > 0) {
+                    ToastUtil.notify(syncCount + " patients finger print synced");
+                }
+            }catch (Exception e){
+                ToastUtil.error(e.toString());
             }
 
         } else {

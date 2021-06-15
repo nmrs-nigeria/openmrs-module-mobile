@@ -12,7 +12,6 @@ package org.openmrs.mobile.api;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Debug;
 
 import com.activeandroid.query.Select;
 
@@ -23,6 +22,7 @@ import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
 import org.openmrs.mobile.models.Encounter;
+import org.openmrs.mobile.models.EncounterProvider;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
@@ -243,18 +243,25 @@ public class EncounterService extends IntentService implements CustomApiCallback
                     .from(Encountercreate.class)
                     .execute();
             for (final Encountercreate encountercreate : encountercreatelist) {
-                Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
-                if (patient != null && !encountercreate.getSynced() &&
-                        patient.isSynced()) {
-                    if (encountercreate.getFormname().equals("Client intake form")) {
-                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
-                        programEnrollment.setPatient(encountercreate.getPatient());
-                        programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
-                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
-                        ProgramRepository programRepository = new ProgramRepository();
-                        programRepository.addProgram(restApi, programEnrollment, this);
-                    }
-                    if (encountercreate.getFormname().equals("HIV Enrollment")) {
+                try {
+                    Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
+                    if (!encountercreate.getSynced() && null !=patient &&
+                            patient.isSynced()) {
+                        List<EncounterProvider> encounterProviders = new ArrayList<>();
+                        EncounterProvider encounterProvider = new EncounterProvider();
+                        encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");
+                        encounterProvider.setEncounterRole("a0b03050-c99b-11e0-9572-0800200c9a66");
+                        encounterProviders.add(encounterProvider);
+                        encountercreate.setEncounterProviders(encounterProviders);
+                        if (encountercreate.getFormname().equals("Client intake form")) {
+                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                            programEnrollment.setPatient(encountercreate.getPatient());
+                            programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
+                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                            ProgramRepository programRepository = new ProgramRepository();
+                            programRepository.addProgram(restApi, programEnrollment, this);
+                        }
+                        if (encountercreate.getFormname().equals("HIV Enrollment")) {
 
                         ProgramEnrollment programEnrollment = new ProgramEnrollment();
                         programEnrollment.setPatient(encountercreate.getPatient());

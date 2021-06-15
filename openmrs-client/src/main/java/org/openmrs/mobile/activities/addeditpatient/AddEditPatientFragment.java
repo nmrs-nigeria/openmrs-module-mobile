@@ -678,59 +678,63 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     private void fillFields(final Patient patient) {
         if (patient != null) {
             //Change to Update Patient Form
-            String updatePatientStr = getResources().getString(R.string.action_update_patient_data);
-            this.getActivity().setTitle(updatePatientStr);
+            try {
+                String updatePatientStr = getResources().getString(R.string.action_update_patient_data);
+                this.getActivity().setTitle(updatePatientStr);
 
-            isUpdatePatient = true;
-            updatedPatient = patient;
+                isUpdatePatient = true;
+                updatedPatient = patient;
 
-            edfname.setText(patient.getName().getGivenName());
-            edmname.setText(patient.getName().getMiddleName());
-            edlname.setText(patient.getName().getFamilyName());
+                edfname.setText(patient.getName().getGivenName());
+                edmname.setText(patient.getName().getMiddleName());
+                edlname.setText(patient.getName().getFamilyName());
 
-            patientName = patient.getName().getNameString();
+                patientName = patient.getName().getNameString();
 
-            if (StringUtils.notNull(patient.getBirthdate()) || StringUtils.notEmpty(patient.getBirthdate())) {
-                bdt = DateUtils.convertTimeString(patient.getBirthdate());
-                eddob.setText(DateUtils.convertTime(DateUtils.convertTime(bdt.toString(), DateUtils.OPEN_MRS_REQUEST_FORMAT),
-                        DateUtils.DEFAULT_DATE_FORMAT));
-            }
-
-            if (("M").equals(patient.getGender())) {
-                gen.check(R.id.male);
-            } else if (("F").equals(patient.getGender())) {
-                gen.check(R.id.female);
-            }
-
-            edaddr1.setText(patient.getAddress().getAddress1());
-            edaddr2.setText(patient.getAddress().getAddress2());
-            edcity.setText(patient.getAddress().getCityVillage());
-            edstate.setText(patient.getAddress().getStateProvince());
-            edpostal.setText(patient.getAddress().getPostalCode());
-            edphonenumber.setText(patient.getAttribute().getValue());
-
-            for (PatientIdentifier patientIdentifier : patient.getIdentifiers()){
-                if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("Hospital Number")){
-                    edunique.setText(patientIdentifier.getIdentifier());
-                }else if(patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("ANC Number")){
-                    edanc.setText(patientIdentifier.getIdentifier());
-                    checkAnc.setChecked(true);
-                }else if(patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("ART Number")){
-                    edart.setText(patientIdentifier.getIdentifier());
-                    checkart.setChecked(true);
-                }else if(patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("Exposed Infant Id")){
-                    edhei.setText(patientIdentifier.getIdentifier());
-                    checkhei.setChecked(true);
-                }else if(patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("HIV testing Id (Client Code)")){
-                    edhts.setText(patientIdentifier.getIdentifier());
-                    checkhts.setChecked(true);
+                if (StringUtils.notNull(patient.getBirthdate()) || StringUtils.notEmpty(patient.getBirthdate())) {
+                    bdt = DateUtils.convertTimeString(patient.getBirthdate());
+                    eddob.setText(DateUtils.convertTime(DateUtils.convertTime(bdt.toString(), DateUtils.OPEN_MRS_REQUEST_FORMAT),
+                            DateUtils.DEFAULT_DATE_FORMAT));
                 }
-            }
 
-            if (patient.getPhoto() != null) {
-                patientPhoto = patient.getPhoto();
-                resizedPatientPhoto = patient.getResizedPhoto();
-                patientImageView.setImageBitmap(resizedPatientPhoto);
+                if (("M").equals(patient.getGender())) {
+                    gen.check(R.id.male);
+                } else if (("F").equals(patient.getGender())) {
+                    gen.check(R.id.female);
+                }
+
+                edaddr1.setText(patient.getAddress().getAddress1());
+                edaddr2.setText(patient.getAddress().getAddress2());
+                edcity.setText(patient.getAddress().getCityVillage());
+                edstate.setText(patient.getAddress().getStateProvince());
+                edpostal.setText(patient.getAddress().getPostalCode());
+                edphonenumber.setText(patient.getAttribute().getValue());
+
+                for (PatientIdentifier patientIdentifier : patient.getIdentifiers()) {
+                    if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("Hospital Number")) {
+                        edunique.setText(patientIdentifier.getIdentifier());
+                    } else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("ANC Number")) {
+                        edanc.setText(patientIdentifier.getIdentifier());
+                        checkAnc.setChecked(true);
+                    } else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("ART Number")) {
+                        edart.setText(patientIdentifier.getIdentifier());
+                        checkart.setChecked(true);
+                    } else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("Exposed Infant Id")) {
+                        edhei.setText(patientIdentifier.getIdentifier());
+                        checkhei.setChecked(true);
+                    } else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("HIV testing Id (Client Code)")) {
+                        edhts.setText(patientIdentifier.getIdentifier());
+                        checkhts.setChecked(true);
+                    }
+                }
+
+                if (patient.getPhoto() != null) {
+                    patientPhoto = patient.getPhoto();
+                    resizedPatientPhoto = patient.getResizedPhoto();
+                    patientImageView.setImageBitmap(resizedPatientPhoto);
+                }
+            } catch (Exception e){
+                ToastUtil.error(e.toString());
             }
         }
     }

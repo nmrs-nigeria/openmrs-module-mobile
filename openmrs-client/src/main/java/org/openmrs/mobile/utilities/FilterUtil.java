@@ -17,6 +17,7 @@ package org.openmrs.mobile.utilities;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
+import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.Encountercreate;
@@ -31,10 +32,13 @@ public class FilterUtil {
     /**
      * Used to filter list by specified query
      * Its possible to filter patients by: Name, Surname (Family Name) or ID.
+     *
      * @param patientList list of patients to filter
      * @param query query that needs to be contained in Name, Surname or ID.
      * @return patient list filtered by query
      */
+    static OpenMRSLogger logger = new OpenMRSLogger();
+
     public static List<Patient> getPatientsFilteredByQuery(List<Patient> patientList, String query) {
         List<Patient> filteredList = new ArrayList<>();
 
@@ -52,46 +56,45 @@ public class FilterUtil {
 
     public static List<Patient> getPatientsFilteredByQuery(List<Patient> patientList) {
         List<Patient> filteredList = new ArrayList<>();
+        try {
+            for (Patient patient : patientList) {
 
-        for (Patient patient : patientList) {
+                List<Encountercreate> encountersPatientNotEligibleSynced = new Select()
+                        .from(Encountercreate.class)
+                        .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Risk Stratification Adult'", patient.getId(), "No")
+                        .execute();
+                List<Encountercreate> encountersPatientNegativeSynced = new Select()
+                        .from(Encountercreate.class)
+                        .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Client intake form'", patient.getId(), "No")
+                        .execute();
+                List<Encountercreate> encountersReferred = new Select()
+                        .from(Encountercreate.class)
+                        .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'", patient.getId())
+                        .execute();
+                List<Encountercreate> encCreateListPharm = new Select()
+                        .from(Encountercreate.class)
+                        .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'", patient.getId())
+                        .execute();
 
-            List<Encountercreate> encountersPatientNotEligibleSynced = new Select()
-                    .from(Encountercreate.class)
-                    .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Risk Assessment Pediatric'",patient.getId(),"No")
-                    .execute();
-            List<Encountercreate> encountersPatientNegativeSynced = new Select()
-                    .from(Encountercreate.class)
-                    .where("patientid = ? AND synced = 1 AND eligble = ? AND formname = 'Client intake form'",patient.getId(),"No")
-                    .execute();
-            List<Encountercreate> encountersReferred = new Select()
-                    .from(Encountercreate.class)
-                    .where("patientid = ? AND synced = 1 AND formname = 'Client Referral Form'",patient.getId())
-                    .execute();
-            List<Encountercreate> encCreateListPharm= new Select()
-                    .from(Encountercreate.class)
-                    .where("patientid = ? AND synced = 1 AND formname = 'Pharmacy Order Form'",patient.getId())
-                    .execute();
+                if (!encountersPatientNotEligibleSynced.isEmpty()) {
+                    new PatientDAO().deletePatient(patient.getId());
 
-            if (!encountersPatientNotEligibleSynced.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+                    new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+                } else if (!encountersPatientNegativeSynced.isEmpty()) {
+                    new PatientDAO().deletePatient(patient.getId());
+                    new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+                } else if (!encountersReferred.isEmpty()) {
+                    new PatientDAO().deletePatient(patient.getId());
+                    new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+                } else if (!encCreateListPharm.isEmpty()) {
+                    new PatientDAO().deletePatient(patient.getId());
+                    new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
+                } else {
+                    filteredList.add(patient);
+                }
             }
-            else if (!encountersPatientNegativeSynced.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
-            }
-            else if (!encountersReferred.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
-            }
-            else if (!encCreateListPharm.isEmpty()){
-                new PatientDAO().deletePatient(patient.getId());
-                new Delete().from(Encountercreate.class).where("patientId = ?", patient.getId()).execute();
-            }
-            else{
-                filteredList.add(patient);
-            }
-
+        } catch (Exception e) {
+            logger.e("Error syncing: ", e);
         }
         return filteredList;
     }

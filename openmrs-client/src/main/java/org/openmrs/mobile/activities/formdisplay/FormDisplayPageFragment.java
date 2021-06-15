@@ -1136,9 +1136,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     } else if (spinnerField.getChosenAnswer() != null && spinnerField.getChosenAnswer().getLabel().equals("Negative")) {
                         fdActivity.setmStep(6);
                         fdActivity.setEligible(false);
-
                     }
-
                 }
                 // Check if the test result is positive or negative in PMTCT HTS
                 if (spinnerField.getConcept().equals("159427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")) {

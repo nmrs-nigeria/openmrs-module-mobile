@@ -34,6 +34,11 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
+        android:id="@+id/actionEnforce"
+        android:orderInCategory="100"
+        android:title="@string/enforce_ip_change_action"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/actionLogout"
         android:orderInCategory="100"
         android:title="@string/action_logout"

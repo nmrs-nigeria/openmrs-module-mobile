@@ -187,7 +187,7 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
         final int greenColorResId = R.color.green;
         final int redColorResId = R.color.light_red;
         final int purpleColorResId = R.color.dark_purple;
-        final int blueColorResId = R.color.snooper_blue;
+        final int blueColorResId = R.color.dark_purple;
         ImageUtils.changeImageViewTint(getContext(), mhtsButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), martButton, redColorResId);
         ImageUtils.changeImageViewTint(getContext(), mpmtctButton, purpleColorResId);

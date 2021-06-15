@@ -90,10 +90,15 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
     @Override
     public void confirmRegister(Patient patient) {
         if (!registeringPatient && validate(patient)) {
-            mPatientInfoView.setProgressBarVisibility(true);
-            mPatientInfoView.hideSoftKeys();
-            registeringPatient = true;
-            findSimilarPatients(patient);
+            try {
+                mPatientInfoView.setProgressBarVisibility(true);
+                mPatientInfoView.hideSoftKeys();
+                registeringPatient = true;
+                findSimilarPatients(patient);
+            } catch (Exception e){
+                ToastUtil.error(e.toString());
+            }
+
         } else {
             mPatientInfoView.scrollToTop();
         }
@@ -105,6 +110,7 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
             mPatientInfoView.setProgressBarVisibility(true);
             mPatientInfoView.hideSoftKeys();
             registeringPatient = true;
+            new PatientDAO().updatePatient(patient.getId(), patient);
             updatePatient(patient);
         } else {
             mPatientInfoView.scrollToTop();
@@ -247,28 +253,33 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
 
     public void findSimilarPatients(final Patient patient) {
         if (NetworkUtils.isOnline()) {
-            Call<Results<Module>> moduleCall = restApi.getModules(ApplicationConstants.API.FULL);
-            moduleCall.enqueue(new Callback<Results<Module>>() {
-                @Override
-                public void onResponse(@NonNull Call<Results<Module>> call, @NonNull Response<Results<Module>> response) {
-                    if (response.isSuccessful()) {
-                        if (ModuleUtils.isRegistrationCore1_7orAbove(response.body().getResults())) {
-                            fetchSimilarPatientsFromServer(patient);
+            List<Patient> similarPatient = new PatientComparator().findSimilarPatient(new PatientDAO().getAllPatients().toBlocking().first(), patient);
+            if (!similarPatient.isEmpty()) {
+                mPatientInfoView.showSimilarPatientDialog(similarPatient, patient);
+            } else {
+                Call<Results<Module>> moduleCall = restApi.getModules(ApplicationConstants.API.FULL);
+                moduleCall.enqueue(new Callback<Results<Module>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Results<Module>> call, @NonNull Response<Results<Module>> response) {
+                        if (response.isSuccessful()) {
+                            if (ModuleUtils.isRegistrationCore1_7orAbove(response.body().getResults())) {
+                                fetchSimilarPatientsFromServer(patient);
+                            } else {
+                                fetchSimilarPatientAndCalculateLocally(patient);
+                            }
                         } else {
                             fetchSimilarPatientAndCalculateLocally(patient);
                         }
-                    } else {
-                        fetchSimilarPatientAndCalculateLocally(patient);
                     }
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<Results<Module>> call, @NonNull Throwable t) {
-                    registeringPatient = false;
-                    mPatientInfoView.setProgressBarVisibility(false);
-                    ToastUtil.error(t.getMessage());
-                }
-            });
+                    @Override
+                    public void onFailure(@NonNull Call<Results<Module>> call, @NonNull Throwable t) {
+                        registeringPatient = false;
+                        mPatientInfoView.setProgressBarVisibility(false);
+                        ToastUtil.error(t.getMessage());
+                    }
+                });
+            }
         } else {
             List<Patient> similarPatient = new PatientComparator().findSimilarPatient(new PatientDAO().getAllPatients().toBlocking().first(), patient);
             if (!similarPatient.isEmpty()) {

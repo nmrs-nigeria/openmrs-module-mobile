@@ -11,17 +11,13 @@ import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
-import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Patient;
-import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +60,7 @@ public class FingerPrintSyncService extends Application {
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    System.out.print("Some errors");
+                    ToastUtil.notify("Error: " + t.getMessage());
                 }
             });
         }
@@ -99,6 +95,7 @@ public class FingerPrintSyncService extends Application {
                 }
                 @Override
                 public void onFailure(Call<List<PatientBiometricContract>> call, Throwable t) {
+                    ToastUtil.notify("Error: " + t.getMessage());
                 }
         });
     }
@@ -128,7 +125,7 @@ public class FingerPrintSyncService extends Application {
 
                 @Override
                 public void onFailure(@NonNull Call<List<PatientBiometricContract>> call, @NonNull Throwable t) {
-                    System.out.print("Some server errors occurred");
+                    ToastUtil.notify("Error: " + t.getMessage());
                 }
             });
         }
@@ -136,6 +133,9 @@ public class FingerPrintSyncService extends Application {
 
 
     public void startSync(PatientBiometricDTO PBSObj, GenericResponseCallbackListener<PatientBiometricSyncResponseModel> responseCallbackListener) {
+
+        String json = new Gson().toJson(PBSObj);
+        System.out.print(json);
 
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
         String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/SaveToDatabase";
@@ -149,6 +149,7 @@ public class FingerPrintSyncService extends Application {
                     if (response.isSuccessful()) {
                         responseCallbackListener.onResponse(response.body());
                     } else {
+                        ToastUtil.notify("Error: " + response.body());
                         responseCallbackListener.onErrorResponse(response.body());
                         System.out.print("Error occurred");
                     }
@@ -156,8 +157,8 @@ public class FingerPrintSyncService extends Application {
 
                 @Override
                 public void onFailure(@NonNull Call<PatientBiometricSyncResponseModel> call, @NonNull Throwable t) {
-                    responseCallbackListener.onErrorResponse("Some errors");
-                    System.out.print("Some errors");
+                    ToastUtil.notify("Error: " + t.getMessage());
+                    responseCallbackListener.onErrorResponse(t.getMessage());
                 }
             });
         }
@@ -166,10 +167,13 @@ public class FingerPrintSyncService extends Application {
 
     public int autoSyncFingerPrint() {
 
+        ToastUtil.notify("Searching for finger prints to sync");
+
         FingerPrintDAO dao = new FingerPrintDAO();
 
         List<PatientBiometricContract> prints = dao.getAll(false,null);
 
+        //group finger print by patient
         Map<Integer, ArrayList<PatientBiometricContract>> printsForEachPatient = new HashMap<>();
         for (PatientBiometricContract item : prints) {
             ArrayList<PatientBiometricContract> list;
@@ -195,6 +199,13 @@ public class FingerPrintSyncService extends Application {
             }
         }
 
+        if(PBS_DTO.size() == 0){
+            ToastUtil.notify("No finger print data to sync");
+            return 0;
+        }
+
+        ToastUtil.warning("about to sync " +PBS_DTO.size() +" finger prints to server");
+
         final int[] syncCount = {0};
         for (PatientBiometricDTO aPrint : PBS_DTO) {
             PatientBiometricContract dto = aPrint.getFingerPrintList().get(0);
@@ -214,13 +225,13 @@ public class FingerPrintSyncService extends Application {
                 @Override
                 public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
                     if(errorMessage !=null){
-                        ToastUtil.error(errorMessage.getErrorMessage());
+                        ToastUtil.notify(errorMessage.getErrorMessage());
                     }
                 }
 
                 @Override
                 public void onErrorResponse(String errorMessage) {
-                    ToastUtil.error(errorMessage);
+                    ToastUtil.notify(errorMessage);
                 }
             });
         }

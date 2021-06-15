@@ -19,6 +19,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.activeandroid.query.Delete;
+
 import net.sqlcipher.Cursor;
 import net.sqlcipher.DatabaseUtils;
 
@@ -26,6 +28,7 @@ import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.databases.tables.PatientTable;
+import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
@@ -59,6 +62,8 @@ public class PatientDAO {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         openHelper.getReadableDatabase().delete(PatientTable.TABLE_NAME, PatientTable.Column.ID
                 + " = " + id, null);
+        // Delete its encounter too locally
+        new Delete().from(Encountercreate.class).where("patientId = ?", id).execute();
     }
 
     public Observable<List<Patient>> getAllPatients() {
@@ -241,8 +246,8 @@ public class PatientDAO {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         final Cursor cursor = helper.getReadableDatabase().query(PatientTable.TABLE_NAME, null, where, whereArgs, null, null, null);
-//        DatabaseUtils.dumpCursorToString(cursor);
-//        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+        DatabaseUtils.dumpCursorToString(cursor);
+        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
         if (null != cursor) {
             try {
                 if (cursor.moveToFirst()) {
