@@ -295,20 +295,20 @@ public class PatientRepository extends RetrofitRepository {
                         patient.setIdentifiers(identifiers);
 
                         PatientDto patientDto = patient.getPatientDto();
+                        if (patient.getUuid() != null) {
+                            Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+                            call.enqueue(new Callback<PatientDto>() {
+                                @Override
+                                public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
+                                    if (response.isSuccessful()) {
+                                        PatientDto patientDto = response.body();
+                                        patient.setBirthdate(patientDto.getPerson().getBirthdate());
 
-                        Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
-                        call.enqueue(new Callback<PatientDto>() {
-                            @Override
-                            public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
-                                if (response.isSuccessful()) {
-                                    PatientDto patientDto = response.body();
-                                    patient.setBirthdate(patientDto.getPerson().getBirthdate());
+                                        patient.setUuid(patientDto.getUuid());
+                                        if (patient.getPhoto() != null)
+                                            uploadPatientPhoto(patient);
 
-                                    patient.setUuid(patientDto.getUuid());
-                                    if (patient.getPhoto() != null)
-                                        uploadPatientPhoto(patient);
-
-                                    patientDao.updatePatient(patient.getId(), patient);
+                                        patientDao.updatePatient(patient.getId(), patient);
 
                                     ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
                                             + " updated");
@@ -330,35 +330,6 @@ public class PatientRepository extends RetrofitRepository {
                                 }
                             }
 
-                            @Override
-                            public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
-                                ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
-                                        + " cannot be updated due to request error: " + t.toString());
-                                if (callbackListener != null) {
-                                    callbackListener.onErrorResponse(t.getMessage());
-                                }
-                            }
-                        });
-
-                        if (identifierHts != null){
-                            Call<PatientDto> callIdentifier = restApi.updatePatientIdentifier(patient.getUuid(),identifierHts, "full");
-                            callIdentifier.enqueue(new Callback<PatientDto>() {
-                                @Override
-                                public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
-                                    if (response.isSuccessful()) {
-
-                                        ToastUtil.success("Patient new identifier added successfully");
-                                        if (callbackListener != null) {
-                                            callbackListener.onResponse();
-                                        }
-                                    } else {
-                                        ToastUtil.error("Adding patient new identifier failed");
-                                        if (callbackListener != null) {
-                                            callbackListener.onErrorResponse(response.message());
-                                        }
-                                    }
-                                }
-
                                 @Override
                                 public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
                                     ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
@@ -368,6 +339,38 @@ public class PatientRepository extends RetrofitRepository {
                                     }
                                 }
                             });
+
+                            if (identifierHts != null) {
+                                Call<PatientDto> callIdentifier = restApi.updatePatientIdentifier(patient.getUuid(), identifierHts, "full");
+                                callIdentifier.enqueue(new Callback<PatientDto>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
+                                        if (response.isSuccessful()) {
+
+                                            ToastUtil.success("Patient new identifier added successfully");
+                                            if (callbackListener != null) {
+                                                callbackListener.onResponse();
+                                            }
+                                        } else {
+                                            ToastUtil.error("Adding patient new identifier failed");
+                                            if (callbackListener != null) {
+                                                callbackListener.onErrorResponse(response.message());
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
+                                        ToastUtil.notify("Patient " + patient.getPerson().getName().getNameString()
+                                                + " cannot be updated due to request error: " + t.toString());
+                                        if (callbackListener != null) {
+                                            callbackListener.onErrorResponse(t.getMessage());
+                                        }
+                                    }
+                                });
+                            }
+                        }{
+                            syncPatient(patient);
                         }
 
 
