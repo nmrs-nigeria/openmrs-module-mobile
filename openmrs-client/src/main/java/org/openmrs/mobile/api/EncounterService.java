@@ -31,6 +31,7 @@ import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -263,59 +264,45 @@ public class EncounterService extends IntentService implements CustomApiCallback
                         }
                         if (encountercreate.getFormname().equals("HIV Enrollment")) {
 
-                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
-                        programEnrollment.setPatient(encountercreate.getPatient());
-                        programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
-                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
-                        ProgramRepository programRepository = new ProgramRepository();
-                        programRepository.addProgram(restApi, programEnrollment, this);
-                    }
-                    if (encountercreate.getFormname().equals("General Antenatal Care")) {
-                        ProgramEnrollment programEnrollment = new ProgramEnrollment();
-                        programEnrollment.setPatient(encountercreate.getPatient());
-                        programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
-                        programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
-                        ProgramRepository programRepository = new ProgramRepository();
-                        programRepository.addProgram(restApi, programEnrollment, this);
-                    }
-                    new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(visit -> {
-                                if (visit != null) {
-                                    new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-                                    encountercreate.setVisit(visit.getUuid());
-                                    visit.setStopDatetime(null);
-                                    new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
+                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                            programEnrollment.setPatient(encountercreate.getPatient());
+                            programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
+                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                            ProgramRepository programRepository = new ProgramRepository();
+                            programRepository.addProgram(restApi, programEnrollment, this);
+                        }
+                        if (encountercreate.getFormname().equals("General Antenatal Care")) {
+                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+                            programEnrollment.setPatient(encountercreate.getPatient());
+                            programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
+                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+                            ProgramRepository programRepository = new ProgramRepository();
+                            programRepository.addProgram(restApi, programEnrollment, this);
+                        }
+                        if (null != encountercreate.getVisit()) {
+                            new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(visit -> {
+                                        if (visit != null) {
+                                            new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                            encountercreate.setVisit(visit.getUuid());
+                                            visit.setStopDatetime(null);
+                                            new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
 
-                                    syncEncounter(encountercreate);
+                                            syncEncounter(encountercreate);
 
-                                } else {
-                                   // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
-                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
-                                }
-//                                if (visit != null) {
-//                                    Long visitId = new VisitDAO().getVisitsIDByDate(encountercreate.getPatientId(), encountercreate.getEncounterDatetime());
-//
-//                                    new VisitRepository().syncVisit(patient,visit,encountercreate, new DefaultResponseCallbackListener() {
-//                                        @Override
-//                                        public void onResponse() {
-////                                            encountercreate.setVisit(visit.getUuid());
-////                                            syncEncounter(encountercreate);
-//                                        }
-//
-//                                        @Override
-//                                        public void onErrorResponse(String errorMessage) {
-//                                            ToastUtil.error(errorMessage);
-//                                        }
-//                                    });
-//
-////
-//                                    // Uncomment if needed
-//                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-//                                } else {
-//                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
-//                                }
-                            });
+                                        } else {
+                                            // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
+                                            startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime());
+                                        }
+
+                                    });
+                        } else {
+                            startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime());
+                        }
+                    }
+                }catch (Exception e){
+                    ToastUtil.error(e.toString());
                 }
             }
 
@@ -325,6 +312,97 @@ public class EncounterService extends IntentService implements CustomApiCallback
                     "and will sync when internet connection is restored. ");
         }
     }
+
+//    @Override
+//    protected void onHandleIntent(Intent intent) {
+//        if (NetworkUtils.isOnline()) {
+//            List<Encountercreate> encountercreatelist = new Select()
+//                    .from(Encountercreate.class)
+//                    .execute();
+//            for (final Encountercreate encountercreate : encountercreatelist) {
+//                try {
+//                    Patient patient = new PatientDAO().findPatientByID(Long.toString(encountercreate.getPatientId()));
+//                    if (!encountercreate.getSynced() && null != patient &&
+//                            patient.isSynced()) {
+//                        List<EncounterProvider> encounterProviders = new ArrayList<>();
+//                        EncounterProvider encounterProvider = new EncounterProvider();
+//                        encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");
+//                        encounterProvider.setEncounterRole("a0b03050-c99b-11e0-9572-0800200c9a66");
+//                        encounterProviders.add(encounterProvider);
+//                        encountercreate.setEncounterProviders(encounterProviders);
+//                        if (encountercreate.getFormname().equals("Client intake form")) {
+//                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+//                            programEnrollment.setPatient(encountercreate.getPatient());
+//                            programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
+//                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+//                            ProgramRepository programRepository = new ProgramRepository();
+//                            programRepository.addProgram(restApi, programEnrollment, this);
+//                        }
+//                        if (encountercreate.getFormname().equals("HIV Enrollment")) {
+//
+//                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+//                            programEnrollment.setPatient(encountercreate.getPatient());
+//                            programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
+//                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+//                            ProgramRepository programRepository = new ProgramRepository();
+//                            programRepository.addProgram(restApi, programEnrollment, this);
+//                        }
+//                        if (encountercreate.getFormname().equals("General Antenatal Care")) {
+//                            ProgramEnrollment programEnrollment = new ProgramEnrollment();
+//                            programEnrollment.setPatient(encountercreate.getPatient());
+//                            programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
+//                            programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
+//                            ProgramRepository programRepository = new ProgramRepository();
+//                            programRepository.addProgram(restApi, programEnrollment, this);
+//                        }
+//                        new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
+//                                .observeOn(AndroidSchedulers.mainThread())
+//                                .subscribe(visit -> {
+//                                    if (visit != null) {
+//                                        new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+//                                        encountercreate.setVisit(visit.getUuid());
+//                                        visit.setStopDatetime(null);
+//                                        new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
+//
+//                                        syncEncounter(encountercreate);
+//
+//                                    } else {
+//                                        // new VisitRepository().endVisitByUUID(new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())); //  new VisitDAO().getVisitByIDLocally(visit.getId()));
+//                                        startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime());
+//                                    }
+////                                if (visit != null) {
+////                                    Long visitId = new VisitDAO().getVisitsIDByDate(encountercreate.getPatientId(), encountercreate.getEncounterDatetime());
+////
+////                                    new VisitRepository().syncVisit(patient,visit,encountercreate, new DefaultResponseCallbackListener() {
+////                                        @Override
+////                                        public void onResponse() {
+//////                                            encountercreate.setVisit(visit.getUuid());
+//////                                            syncEncounter(encountercreate);
+////                                        }
+////
+////                                        @Override
+////                                        public void onErrorResponse(String errorMessage) {
+////                                            ToastUtil.error(errorMessage);
+////                                        }
+////                                    });
+////
+//////
+////                                    // Uncomment if needed
+////                                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
+////                                } else {
+////                                    startNewVisitForEncounter(encountercreate,encountercreate.getEncounterDatetime());
+////                                }
+//                                });
+//                    }
+//                }
+//
+//
+//            } else {
+//                ToastUtil.warning("No internet connection. Form data is saved locally " +
+//                        "and will sync when internet connection is restored. ");
+//            }
+//        }
+//    }
 
 
 
