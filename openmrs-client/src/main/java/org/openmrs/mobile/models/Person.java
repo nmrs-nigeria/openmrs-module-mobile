@@ -54,8 +54,8 @@ public class Person extends Resource implements Serializable {
     }
 
     public PersonName getName() {
-        if (!names.isEmpty()) {
-            return names.get(0);
+        if (!getNames().isEmpty()) {
+            return getNames().get(0);
         } else {
             return null;
         }
@@ -71,7 +71,7 @@ public class Person extends Resource implements Serializable {
     }
 
     public void setName(PersonName personName) {
-        names = names != null ? names : new ArrayList<>();
+        names = getNames() != null ? getNames() : new ArrayList<>();
         if (names.isEmpty())
             names.add(personName);
         else
@@ -143,16 +143,16 @@ public class Person extends Resource implements Serializable {
     }
 
     public PersonAddress getAddress() {
-        if (!addresses.isEmpty()) {
-            return addresses.get(0);
+        if (!getAddresses().isEmpty()) {
+            return getAddresses().get(0);
         } else {
             return null;
         }
     }
 
     public PersonAttribute getAttribute() {
-        if (!attributes.isEmpty()) {
-            return attributes.get(0);
+        if (!getAttributes().isEmpty()) {
+            return getAttributes().get(0);
         } else {
             return null;
         }
@@ -168,7 +168,7 @@ public class Person extends Resource implements Serializable {
     }
 
     public void setAddress(PersonAddress personAddress) {
-        addresses = addresses != null ? addresses : new ArrayList<>();
+        addresses = getAddresses() != null ? getAddresses() : new ArrayList<>();
         if (addresses.isEmpty())
             addresses.add(personAddress);
         else

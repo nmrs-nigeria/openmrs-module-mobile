@@ -10,6 +10,8 @@
 
 package org.openmrs.mobile.models;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -30,6 +32,10 @@ public class Patient extends Person implements Serializable{
     @Expose
     private List<PatientIdentifier> identifiers = new ArrayList<>();
 
+    @SerializedName("person")
+    @Expose(serialize = false)
+    private Person _person = null;
+
     public Long getId() {
         return id;
     }
@@ -46,6 +52,90 @@ public class Patient extends Person implements Serializable{
         person.setBirthdateEstimated(getBirthdateEstimated());
 
         return person;
+    }
+
+    @Override
+    public List<PersonName> getNames() {
+        List<PersonName> ret = super.getNames();
+
+        if (_person != null && (ret == null || ret.isEmpty())) {
+            ret = _person.getNames();
+            setNames(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public String getGender() {
+        String ret = super.getGender();
+
+        if (_person != null && (ret == null || ret.isEmpty())) {
+            ret = _person.getGender();
+            setGender(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public List<PersonAddress> getAddresses() {
+        List<PersonAddress> ret = super.getAddresses();
+
+        if (_person != null && (ret == null || ret.isEmpty())) {
+            ret = _person.getAddresses();
+            setAddresses(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public List<PersonAttribute> getAttributes() {
+        List<PersonAttribute> ret = super.getAttributes();
+
+        if (_person != null && (ret == null || ret.isEmpty())) {
+            ret = _person.getAttributes();
+            setAttributes(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public Bitmap getPhoto() {
+        Bitmap ret = super.getPhoto();
+
+        if (_person != null && ret == null) {
+            ret = _person.getPhoto();
+            setPhoto(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public String getBirthdate() {
+        String ret = super.getBirthdate();
+
+        if (_person != null && (ret == null || ret.isEmpty())) {
+            ret = _person.getBirthdate();
+            setBirthdate(ret);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public boolean getBirthdateEstimated() {
+        boolean ret = super.getBirthdateEstimated();
+
+        if (_person != null && ret != _person.getBirthdateEstimated()) {
+            ret = _person.getBirthdateEstimated();
+            setBirthdateEstimated(ret);
+        }
+
+        return ret;
     }
 
     public PatientDto getPatientDto(){
