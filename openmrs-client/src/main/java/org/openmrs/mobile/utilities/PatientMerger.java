@@ -19,44 +19,109 @@ import org.openmrs.mobile.models.Person;
 import org.openmrs.mobile.models.PersonAddress;
 import org.openmrs.mobile.models.PersonName;
 
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import androidx.collection.ArraySet;
+
 public class PatientMerger {
 
-    public Patient mergePatient(Patient oldPatient, Patient newPatient){
-        mergePatientsPerson(oldPatient, newPatient);
+    public Patient mergePatient(Patient oldPatient, Patient newPatient) {
+        oldPatient = mergePatientsPerson(oldPatient, newPatient);
         oldPatient.setId(newPatient.getId());
+        Set<Long> encList = new ArraySet<>();
+        String oldEnc = oldPatient.getEncounters();
+        if (oldEnc != null) {
+            for (String s : oldEnc.split(","))
+                if (!TextUtils.isEmpty(s))
+                    encList.add(Long.parseLong(s));
+        }
+        String newEnc = newPatient.getEncounters();
+        if (newEnc != null) {
+            for (String s : newEnc.split(","))
+                if (!TextUtils.isEmpty(s))
+                    encList.add(Long.parseLong(s));
+        }
+
+        oldPatient.setEncounters("");
+        for (Long enc : encList) {
+            oldPatient.addEncounters(enc);
+        }
         return oldPatient;
     }
 
-    private void mergePatientsPerson(Patient oldPatient, Patient newPatient) {
+    //    private void mergePatientsPerson(Patient oldPatient, Patient newPatient) {
+//        if (oldPatient != null && newPatient != null) {
+//            mergePersonNames(oldPatient.getName(), newPatient.getName());
+//            mergePersonAddress(oldPatient.getAddress(), newPatient.getAddress());
+//            oldPatient.setGender(getNewValueIfOldIsNull(oldPatient.getGender(), newPatient.getGender()));
+//            oldPatient.setBirthdate(getNewValueIfOldIsNull(oldPatient.getBirthdate(), newPatient.getBirthdate()));
+//        }
+//    }
+    private Patient mergePatientsPerson(Patient oldPatient, Patient newPatient) {
         if (oldPatient != null && newPatient != null) {
             mergePersonNames(oldPatient.getName(), newPatient.getName());
             mergePersonAddress(oldPatient.getAddress(), newPatient.getAddress());
+            oldPatient.setName(mergePersonNames(oldPatient.getName(), newPatient.getName()));
+            oldPatient.setAddress(mergePersonAddress(oldPatient.getAddress(), newPatient.getAddress()));
             oldPatient.setGender(getNewValueIfOldIsNull(oldPatient.getGender(), newPatient.getGender()));
             oldPatient.setBirthdate(getNewValueIfOldIsNull(oldPatient.getBirthdate(), newPatient.getBirthdate()));
         }
+
+        return oldPatient != null ? oldPatient : newPatient;
     }
 
-    private void mergePersonAddress(PersonAddress oldAddress, PersonAddress newAddress) {
+    //    private void mergePersonAddress(PersonAddress oldAddress, PersonAddress newAddress) {
+//        if (oldAddress != null && newAddress != null) {
+//            oldAddress.setAddress1(getNewValueIfOldIsNull(oldAddress.getAddress1(), newAddress.getAddress1()));
+//            oldAddress.setAddress2(getNewValueIfOldIsNull(oldAddress.getAddress2(), newAddress.getAddress2()));
+//            oldAddress.setCityVillage(getNewValueIfOldIsNull(oldAddress.getCityVillage(), newAddress.getCityVillage()));
+//            oldAddress.setCountry(getNewValueIfOldIsNull(oldAddress.getCountry(), newAddress.getCountry()));
+//            oldAddress.setPostalCode(getNewValueIfOldIsNull(oldAddress.getPostalCode(), newAddress.getPostalCode()));
+//            oldAddress.setStateProvince(getNewValueIfOldIsNull(oldAddress.getStateProvince(), newAddress.getStateProvince()));
+//        }
+//    }
+    private PersonAddress mergePersonAddress(PersonAddress oldAddress, PersonAddress newAddress) {
         if (oldAddress != null && newAddress != null) {
             oldAddress.setAddress1(getNewValueIfOldIsNull(oldAddress.getAddress1(), newAddress.getAddress1()));
             oldAddress.setAddress2(getNewValueIfOldIsNull(oldAddress.getAddress2(), newAddress.getAddress2()));
-            oldAddress.setCityVillage(getNewValueIfOldIsNull(oldAddress.getCityVillage(), newAddress.getCityVillage()));
-            oldAddress.setCountry(getNewValueIfOldIsNull(oldAddress.getCountry(), newAddress.getCountry()));
             oldAddress.setPostalCode(getNewValueIfOldIsNull(oldAddress.getPostalCode(), newAddress.getPostalCode()));
             oldAddress.setStateProvince(getNewValueIfOldIsNull(oldAddress.getStateProvince(), newAddress.getStateProvince()));
         }
+
+        return oldAddress != null ? oldAddress : newAddress;
     }
 
-    private void mergePersonNames(PersonName oldName, PersonName newName) {
+    //    private void mergePersonNames(PersonName oldName, PersonName newName) {
+//        if (oldName != null && newName != null) {
+//            oldName.setGivenName(getNewValueIfOldIsNull(oldName.getGivenName(), newName.getGivenName()));
+//            oldName.setMiddleName(getNewValueIfOldIsNull(oldName.getMiddleName(), newName.getMiddleName()));
+//            oldName.setFamilyName(getNewValueIfOldIsNull(oldName.getFamilyName(), newName.getFamilyName()));
+//        }
+//    }
+    private PersonName mergePersonNames(PersonName oldName, PersonName newName) {
         if (oldName != null && newName != null) {
             oldName.setGivenName(getNewValueIfOldIsNull(oldName.getGivenName(), newName.getGivenName()));
             oldName.setMiddleName(getNewValueIfOldIsNull(oldName.getMiddleName(), newName.getMiddleName()));
             oldName.setFamilyName(getNewValueIfOldIsNull(oldName.getFamilyName(), newName.getFamilyName()));
         }
+
+        return oldName != null ? oldName : newName;
     }
 
-    private String getNewValueIfOldIsNull(String oldValue, String newValue){
-        if(!StringUtils.notNull(oldValue)){
+
+    //    private String getNewValueIfOldIsNull(String oldValue, String newValue) {
+//        if (!StringUtils.notNull(oldValue)) {
+//            return newValue;
+//        }
+//        return oldValue;
+//    }
+    private String getNewValueIfOldIsNull(String oldValue, String newValue) {
+        if (!StringUtils.notNull(oldValue)
+                || (TextUtils.isEmpty(oldValue) && StringUtils.notNull(newValue))) {
             return newValue;
         }
         return oldValue;

@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -345,9 +346,10 @@ public class PatientRepository extends RetrofitRepository {
                                                 callbackListener.onResponse();
                                             }
                                         } else {
-                                            ToastUtil.error("Adding patient new identifier failed");
-                                            if (callbackListener != null) {
-                                                callbackListener.onErrorResponse(response.message());
+                                            try{
+                                                Log.e("PatientRepository", response.errorBody().string());
+                                            }catch (Exception ignored) {
+
                                             }
                                         }
                                     }
@@ -451,9 +453,11 @@ public class PatientRepository extends RetrofitRepository {
                     .from(Encountercreate.class)
                     .where("id = ?",id)
                     .executeSingle();
-            encountercreate.setPatient(patient.getUuid());
-            encountercreate.save();
-            new EncounterService().addEncounter(encountercreate,DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+            if (encountercreate != null) {
+                encountercreate.setPatient(patient.getUuid());
+                encountercreate.save();
+                new EncounterService().addEncounter(encountercreate, DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+            }
         }
     }
 
