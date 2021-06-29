@@ -167,8 +167,16 @@ public class EncounterService extends IntentService implements CustomApiCallback
 
     private void linkvisit(Long patientid, String formname, Encounter encounter, Encountercreate encountercreate) {
         VisitDAO visitDAO = new VisitDAO();
+        String uuid = "";
 
-        visitDAO.getVisitByUuid(encounter.getVisit().getUuid())
+        try {
+            if (encounter != null)
+                uuid = encounter.getVisit().getUuid();
+        } catch (Exception e) {
+            if (encountercreate != null)
+                uuid = encountercreate.getVisit();
+        }
+        visitDAO.getVisitByUuid(uuid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(visit -> {
                     encounter.setEncounterType(new EncounterType(formname));
