@@ -227,6 +227,15 @@
 
             </androidx.cardview.widget.CardView>
 
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_version"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"/>
 
 
         </TableRow>
