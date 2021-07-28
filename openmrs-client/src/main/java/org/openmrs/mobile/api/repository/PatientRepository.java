@@ -299,7 +299,6 @@ public class PatientRepository extends RetrofitRepository {
                                 if(resultIdentifiertype.getDisplay().equals("OpenMRS ID")){
                                     openmrsType = resultIdentifiertype;
                                 }
-
                             }
                         }
 

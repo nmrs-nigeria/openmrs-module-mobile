@@ -12,9 +12,12 @@ package org.openmrs.mobile.api;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
+import com.google.gson.Gson;
 
+import org.json.JSONObject;
 import org.openmrs.mobile.api.repository.VisitRepository;
 import org.openmrs.mobile.api.retrofit.ProgramRepository;
 import org.openmrs.mobile.dao.PatientDAO;
@@ -180,8 +183,19 @@ public class EncounterService extends IntentService implements CustomApiCallback
                             callbackListener.onResponse();
                         }
                     } else {
+                        String error = "An error occurred.";
+                        try {
+                            error = response.errorBody().string();
+                            Log.e("EncounterService", "onResponse: " + error);
+
+                            JSONObject jObjError = new JSONObject(error);
+                            error = jObjError.getJSONObject("error").getString("message");
+                        } catch (Exception ee) {
+                            error = response.errorBody().toString();
+                        }
+
                         if (callbackListener != null) {
-                            callbackListener.onErrorResponse(response.errorBody().toString());
+                            callbackListener.onErrorResponse(error);
                         }
                     }
                 }

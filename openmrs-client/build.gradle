@@ -24,7 +24,7 @@ android {
     compileSdkVersion 30
 
     def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-    def buildNumber = (travisBuildNumber) ? (travisBuildNumber as int) : 1
+    def buildNumber = (travisBuildNumber) ? (travisBuildNumber as int) : 100000
 
     def applicationVersion = version
     def travisTag = System.getenv("TRAVIS_TAG")
