@@ -23,16 +23,19 @@ import org.openmrs.mobile.models.Person;
 import org.openmrs.mobile.models.PersonAddress;
 import org.openmrs.mobile.models.PersonName;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import androidx.collection.ArraySet;
 
 public class PatientMerger {
 
     public Patient mergePatient(Patient oldPatient, Patient newPatient) {
         oldPatient = mergePatientsPerson(oldPatient, newPatient);
         oldPatient.setId(newPatient.getId());
-
         Set<Long> encList = new ArraySet<>();
         String oldEnc = oldPatient.getEncounters();
         if (oldEnc != null) {
@@ -51,7 +54,6 @@ public class PatientMerger {
         for (Long enc : encList) {
             oldPatient.addEncounters(enc);
         }
-
         return oldPatient;
     }
 

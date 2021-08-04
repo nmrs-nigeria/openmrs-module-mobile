@@ -299,6 +299,7 @@ public class PatientRepository extends RetrofitRepository {
                                 if(resultIdentifiertype.getDisplay().equals("OpenMRS ID")){
                                     openmrsType = resultIdentifiertype;
                                 }
+
                             }
                         }
 
@@ -368,10 +369,16 @@ public class PatientRepository extends RetrofitRepository {
                                                 callbackListener.onResponse();
                                             }
                                         } else {
-                                            ToastUtil.error("Adding patient new identifier failed");
-                                            if (callbackListener != null) {
-                                                callbackListener.onErrorResponse(response.message());
+                                            try{
+                                                Log.e("PatientRepository", response.errorBody().string());
+                                            }catch (Exception ignored) {
+
                                             }
+
+//                                            ToastUtil.error("Adding patient new identifier failed");
+//                                            if (callbackListener != null) {
+//                                                callbackListener.onErrorResponse(response.message());
+//                                            }
                                         }
                                     }
 
