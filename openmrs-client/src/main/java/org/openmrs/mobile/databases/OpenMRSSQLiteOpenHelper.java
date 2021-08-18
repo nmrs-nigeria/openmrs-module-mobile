@@ -54,6 +54,7 @@ public abstract class OpenMRSSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public synchronized SQLiteDatabase getWritableDatabase() {
         SQLiteDatabase db;
+
         try {
             db = getWritableDatabase(getSecretKey());
         } catch (SQLiteException e) {

@@ -61,7 +61,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
     private FingerPrintTable mFingerPrintTable;
 
     public DBOpenHelper(Context context) {
-        super(context, null, DATABASE_VERSION);
+        super(context,null, DATABASE_VERSION);
         this.mPatientTable = new PatientTable();
         this.mConceptTable = new ConceptTable();
         this.mVisitTable = new VisitTable();
@@ -69,6 +69,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         this.mObservationTable = new ObservationTable();
         this.mLocationTable = new LocationTable();
         this.mFingerPrintTable = new FingerPrintTable();
+
     }
 
     @Override
@@ -93,12 +94,14 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int currentVersion, int newVersion) {
+        mLogger.d( "Updating table from " + currentVersion + " to " + newVersion);
         switch (currentVersion) {
             case 8:
                 sqLiteDatabase.execSQL(new ConceptTable().createTableDefinition());
-            case 9:
+            case 15:
                 //upgrade from version 8 to 10
-                //db.execSQL("ALTER TABLE " + %tableName% + " ADD COLUMN " + %columnName + " %columnType%;");
+                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
+                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
 
                 //and so on.. do not add breaks so that switch will
                 //start at oldVersion, and run straight through to the latest
@@ -153,6 +156,8 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
                             break;
                     }
                 }
+                bindString(33, null, patientStatement);
+                bindString(34, null, patientStatement);
             }
             else
                 bindString(4, null, patientStatement);
@@ -182,7 +187,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
             if (null != patient.getAttribute()) {
                 bindString(32, patient.getAttribute().getValue(), patientStatement);
             }
-            bindString(33, null, patientStatement);
+            bindString(35, null, patientStatement);
             patientId = patientStatement.executeInsert();
             patientStatement.clearBindings();
             db.setTransactionSuccessful();
@@ -228,7 +233,12 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
                         // Do nothing
                         break;
                 }
+               if (patientIdentifier.getIdentifierType() != null && patientIdentifier.getIdentifierType().getDisplay().equals("OpenMRS ID")){
+                    newValues.put(PatientTable.Column.IDENTIFIER_OPENMRS, patientIdentifier.getIdentifier());
+                    newValues.put(PatientTable.Column.IDENTIFIER_TYPE_OPENMRS, patientIdentifier.getIdentifierType().getDisplay());
+                }
             }
+
         }
 
         newValues.put(PatientTable.Column.GIVEN_NAME, patient.getName().getGivenName());

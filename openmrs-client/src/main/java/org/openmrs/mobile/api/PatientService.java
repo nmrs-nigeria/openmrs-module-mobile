@@ -120,7 +120,12 @@ public class PatientService extends IntentService {
         if(patientsResp.isSuccessful()) {
             List<Patient> patientList = patientsResp.body().getResults();
             if (!patientList.isEmpty()) {
-                patientAndMatchesWrapper.addToList(new PatientAndMatchingPatients(patient, patientList));
+                List<Patient> similarPatient = new PatientComparator().findSimilarServePatient(patientList, patient);
+                if (!similarPatient.isEmpty()) {
+                    patientAndMatchesWrapper.addToList(new PatientAndMatchingPatients(patient, patientList));
+                }else{
+                    new PatientRepository().syncPatient(patient);
+                }
             } else {
                 new PatientRepository().syncPatient(patient);
             }

@@ -40,6 +40,7 @@ import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.ACBaseFragment;
 import org.openmrs.mobile.activities.activevisits.ActiveVisitsActivity;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
+import org.openmrs.mobile.activities.commodity.CommodityActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
@@ -57,9 +58,11 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
     private ImageView mActiveVisitsButton;
     private ImageView mCaptureVitalsButton;
     private ImageView mProviderManagementButton;
+    private ImageView mCommoditytButton;
     private RelativeLayout mFindPatientView;
     private RelativeLayout mRegistryPatientView;
     private RelativeLayout mActiveVisitsView;
+    private RelativeLayout mCommodityView;
     private RelativeLayout mCaptureVitalsView;
     private RelativeLayout mProviderManagementView;
     private TextView mRegistryLabel;
@@ -243,10 +246,12 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mActiveVisitsButton = root.findViewById(R.id.activeVisitsButton);
         mCaptureVitalsButton = root.findViewById(R.id.captureVitalsButton);
         mProviderManagementButton = root.findViewById(R.id.dashboardProviderManagementButton);
+        mCommoditytButton = root.findViewById(R.id.commodityButton);
         mFindPatientView = root.findViewById(R.id.findPatientView);
         mRegistryPatientView = root.findViewById(R.id.registryPatientView);
         mCaptureVitalsView = root.findViewById(R.id.captureVitalsView);
         mActiveVisitsView = root.findViewById(R.id.activeVisitsView);
+        mCommodityView = root.findViewById(R.id.commodityView);
         mProviderManagementView = root.findViewById(R.id.dashboardProviderManagementView);
         mRegistryLabel = root.findViewById(R.id.registryLabel);
     }
@@ -255,6 +260,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mActiveVisitsView.setOnClickListener(this);
         mRegistryPatientView.setOnClickListener(this);
         mFindPatientView.setOnClickListener(this);
+        mCommodityView.setOnClickListener(this);
         mCaptureVitalsView.setOnClickListener(this);
         mProviderManagementView.setOnClickListener(this);
 
@@ -276,6 +282,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         bindDrawableResource(mRegistryPatientButton, R.drawable.ico_registry);
         bindDrawableResource(mActiveVisitsButton, R.drawable.ico_visits);
         bindDrawableResource(mCaptureVitalsButton, R.drawable.ico_vitals);
+        bindDrawableResource(mCommoditytButton, R.drawable.products);
 
         if (ThemeUtils.isDarkModeActivated()) {
             changeColorOfDashboardIcons();
@@ -342,6 +349,9 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
             case R.id.captureVitalsView:
                 startNewActivity(FormEntryPatientListActivity.class);
                 break;
+            case R.id.commodityView:
+                startNewActivity(CommodityActivity.class);
+                break;
 //            case R.id.activeVisitsView:
 //                startNewActivity(ActiveVisitsActivity.class);
 //                break;
@@ -362,6 +372,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         ImageUtils.changeImageViewTint(getContext(), mActiveVisitsButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mCaptureVitalsButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mFindPatientButton, greenColorResId);
+        ImageUtils.changeImageViewTint(getContext(), mCommoditytButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mRegistryPatientButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mProviderManagementButton, greenColorResId);
 

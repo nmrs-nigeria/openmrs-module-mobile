@@ -333,7 +333,12 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
                 if (response.isSuccessful()) {
                     List<Patient> similarPatients = response.body().getResults();
                     if (!similarPatients.isEmpty()) {
-                        mPatientInfoView.showSimilarPatientDialog(similarPatients, patient);
+                        List<Patient> similarPatient = new PatientComparator().findSimilarServePatient(similarPatients, patient);
+                        if (!similarPatient.isEmpty()) {
+                            mPatientInfoView.showSimilarPatientDialog(similarPatients, patient);
+                        }else{
+                            registerPatient();
+                        }
                     } else {
                         registerPatient();
                     }

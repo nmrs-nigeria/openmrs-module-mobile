@@ -113,6 +113,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
@@ -158,6 +159,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     private TextInputLayout uniqueIdTIL;
     private TextInputLayout phoneTIL;
     private TextInputLayout textInputLayoutHei;
+    private TextInputLayout textInputLayoutOpenmrsCode;
     private TextInputLayout textInputLayoutHts;
     private TextInputLayout textInputLayoutArt;
     private TextInputLayout textInputLayoutAnc;
@@ -182,6 +184,8 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     private EditText edanc;
     private EditText edhts;
     private EditText edhei;
+    private EditText edopenmrs;
+
 
     private CheckBox checkart;
     private CheckBox checkAnc;
@@ -523,6 +527,14 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
             patientIdentifier.setDisplay("Hospital Number");
             identifiers.add(patientIdentifier);
         }
+        if (!ViewUtils.isEmpty(edopenmrs)){
+            final PatientIdentifier patientIdentifier = new PatientIdentifier();
+            patientIdentifier.setIdentifier(ViewUtils.getInput(edopenmrs));
+            IdentifierType identifierType = new IdentifierType("OpenMRS ID");
+            patientIdentifier.setIdentifierType(identifierType);
+            patientIdentifier.setDisplay("OpenMRS ID");
+            identifiers.add(patientIdentifier);
+        }
 //        if (!ViewUtils.isEmpty(edanc)){
 //            PatientIdentifier patientIdentifier = new PatientIdentifier();
 //            patientIdentifier.setIdentifier(ViewUtils.getInput(edanc));
@@ -585,7 +597,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         similarPatientsDialog.setLeftButtonAction(CustomFragmentDialog.OnClickAction.DISMISS);
         similarPatientsDialog.setPatientsList(patients);
         similarPatientsDialog.setNewPatient(newPatient);
-        ((AddEditPatientActivity) this.getActivity()).createAndShowDialog(similarPatientsDialog, ApplicationConstants.DialogTAG.SIMILAR_PATIENTS_TAG);
+        ((AddEditPatientActivity) Objects.requireNonNull(this.getActivity())).createAndShowDialog(similarPatientsDialog, ApplicationConstants.DialogTAG.SIMILAR_PATIENTS_TAG);
     }
 
     @Override
@@ -638,6 +650,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         edanc = v.findViewById(R.id.anc);
         edart = v.findViewById(R.id.art);
         edhei = v.findViewById(R.id.hei);
+        edopenmrs= v.findViewById(R.id.openmrsCode);
         edhts = v.findViewById(R.id.hts);
         edphonenumber = v.findViewById(R.id.phonenumber);
 
@@ -670,6 +683,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         uniqueIdTIL = v.findViewById(R.id.textInputLayoutUniqueId);
 
         textInputLayoutHei = v.findViewById(R.id.textInputLayoutHei);
+        textInputLayoutOpenmrsCode = v.findViewById(R.id.textInputLayoutOpenmrsCode);
         textInputLayoutHts = v.findViewById(R.id.textInputLayoutHts);
         textInputLayoutAnc = v.findViewById(R.id.textInputLayoutAnc);
         textInputLayoutArt = v.findViewById(R.id.textInputLayoutArt);
@@ -725,6 +739,8 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                     } else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("HIV testing Id (Client Code)")) {
                         edhts.setText(patientIdentifier.getIdentifier());
                         checkhts.setChecked(true);
+                    }else if (patientIdentifier.getDisplay() != null && patientIdentifier.getDisplay().equals("OpenMRS ID")) {
+                        edopenmrs.setText(patientIdentifier.getIdentifier());
                     }
                 }
 
@@ -744,6 +760,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         textInputLayoutArt.setVisibility(View.GONE);
         textInputLayoutHts.setVisibility(View.GONE);
         textInputLayoutHei.setVisibility(View.GONE);
+        textInputLayoutOpenmrsCode.setVisibility(View.GONE);
     }
     private void addSuggestionsToCities() {
         String country_name = mCountryCodePicker.getSelectedCountryName();

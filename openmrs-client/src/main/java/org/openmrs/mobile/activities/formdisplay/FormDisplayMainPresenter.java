@@ -471,7 +471,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 //                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
                 if (mFormname.equals("Client intake form")) {
                     PatientIdentifier patientIdentifier = new PatientIdentifier();
-                    patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+//                    patientIdentifier.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
+                    patientIdentifier.setIdentifier(this.mPatientIdentifier);
                     IdentifierType identifierType = new IdentifierType("HIV testing Id (Client Code)");
                     patientIdentifier.setDisplay("HIV testing Id (Client Code)");
                     patientIdentifier.setIdentifierType(identifierType);

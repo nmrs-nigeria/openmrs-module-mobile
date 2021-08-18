@@ -16,7 +16,9 @@ package org.openmrs.mobile.utilities;
 
 import com.google.common.base.Objects;
 
+import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.Person;
 
 import java.util.Arrays;
@@ -25,9 +27,9 @@ import java.util.List;
 
 public class PatientComparator {
 
-    private static final int MIN_SCORE = 6;
+    private static final int MIN_SCORE = 9;
     private static final List<String> PATIENT_FIELDS = Arrays.asList("name", "gender",
-            "birthdate", "addres");
+            "birthdate", "addres","hospital_number");
 
     public List<Patient> findSimilarPatient(List<Patient> patientList, Patient patient){
         List<Patient> similarPatients = new LinkedList<>();
@@ -35,6 +37,20 @@ public class PatientComparator {
             int score = comparePatients(patient1, patient);
             if(score >= MIN_SCORE){
                 similarPatients.add(patient1);
+            }
+        }
+        return similarPatients;
+    }
+
+    public List<Patient> findSimilarServePatient(List<Patient> patientList, Patient patient){
+        List<Patient> similarPatients = new LinkedList<>();
+        for(Patient patient1: patientList){
+            for (PatientIdentifier p_new : patient1.getIdentifiers()) {
+                for (PatientIdentifier p_existing : patient.getIdentifiers()) {
+                    if (p_new.getIdentifier().equals(p_existing.getIdentifier())) {
+                        similarPatients.add(patient1);
+                    }
+                }
             }
         }
         return similarPatients;
@@ -58,6 +74,9 @@ public class PatientComparator {
                     break;
                 case "addres":
                     score += compareAddress(newPatient, existingPatient);
+                    break;
+                case "hospital_number":
+                    score += compareHospitalNumber(newPatient, existingPatient);
                     break;
                 default:
                     score += 0;
@@ -89,7 +108,8 @@ public class PatientComparator {
                 score += 1;
             }
         }
-        return score == 6 ? MIN_SCORE-1:score;
+//        return score == 6 ? MIN_SCORE-1:score;
+        return score;
     }
 
     private int compareBirthdate(Patient newPatient, Patient existingPatient) {
@@ -108,6 +128,18 @@ public class PatientComparator {
         return score;
     }
 
+    private int compareHospitalNumber(Patient newPatient, Patient existingPatient) {
+        int score = 0;
+        for (PatientIdentifier p_new : newPatient.getIdentifiers()) {
+            for (PatientIdentifier p_existing : existingPatient.getIdentifiers()) {
+                if (p_new.getIdentifier().equals(p_existing.getIdentifier())) {
+                    score += 10;
+                }
+            }
+        }
+        return score;
+    }
+
     private int compareFullPersonName(Patient newPatient, Patient existingPatient) {
         int score = 0;
         if(Objects.equal(newPatient.getName().getGivenName(), existingPatient.getName().getGivenName())){
@@ -120,6 +152,7 @@ public class PatientComparator {
             score += 1;
         }
         //if the whole name is the same we return MIN_SCORE-1 so if any other field will be equal(e.g gender) this patient is marked as similar
-        return score == 3 ? MIN_SCORE-1:score;
+//        return score == 3 ? MIN_SCORE-1:score;
+        return score ;
     }
 }

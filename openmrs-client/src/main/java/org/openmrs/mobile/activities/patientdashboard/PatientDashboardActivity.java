@@ -64,7 +64,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     public PatientDashboardContract.PatientDashboardMainPresenter mPresenter;
 
     static boolean isActionFABOpen = false;
-    public static FloatingActionButton additionalActionsFAB, updateFAB, deleteFAB, visitFAB, pbsFAB;
+    public static FloatingActionButton additionalActionsFAB, updateFAB, deleteFAB, visitFAB, pbsFAB, commodityFAB;
     public static LinearLayout deleteFabLayout, updateFabLayout;
     public static Resources resources;
 
