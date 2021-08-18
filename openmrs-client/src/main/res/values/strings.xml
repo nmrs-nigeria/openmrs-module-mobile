@@ -41,6 +41,7 @@
     <string name="reg_anc_hint">ANC Number</string>
     <string name="reg_art_hint">ART Number</string>
     <string name="reg_hei_hint">Exposed Infant ID</string>
+    <string name="reg_openmrs_hint">Openmrs Code</string>
 
     <string name="emptyerror">Required</string>
     <string name="fname_empty_error">Given name required</string>
@@ -180,8 +181,10 @@
     <!-- Dashboard Activity -->
     <string name="dashboard_search_icon_label">Find Patients</string>
     <string name="dashboard_registry_icon_label">Register Patient</string>
+    <string name="receipt_icon_label">Receipt</string>
 <!--    <string name="dashboard_visits_icon_label">Synced Status</string>-->
     <string name="dashboard_visits_icon_label">Synced Status</string>
+    <string name="dashboard_Commodity_icon_label">Commodity</string>
     <string name="dashboard_forms_icon_label">Form Entry</string>
 
     <!-- ART Programs -->
@@ -211,6 +214,9 @@
     <!-- Patient Program -->
     <string name="art_program_icon_label">Treatment Services</string>
     <string name="hts_program_icon_label">Testing Services</string>
+    <string name="consumption_label">Consumption</string>
+    <string name="distribution_label">Distribution</string>
+    <string name="report_label">Report</string>
     <string name="pmtct_program_label">PMTCT</string>
     <string name="hei_program_label">HIV Exposed Infant</string>
 

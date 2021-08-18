@@ -167,9 +167,6 @@ public class PatientRepository extends RetrofitRepository {
                             call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
                         }
 
-
-
-
                         call.enqueue(new Callback<PatientDto>() {
                             @Override
                             public void onResponse(@NonNull Call<PatientDto> call, @NonNull Response<PatientDto> response) {
@@ -266,6 +263,12 @@ public class PatientRepository extends RetrofitRepository {
                         final List<PatientIdentifier> identifiers = new ArrayList<>();
                         IdentifierType openmrsType = new IdentifierType();
                         List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
+                        boolean openmrs_code_exist = false;
+                        for (PatientIdentifier pid : identifiersPatients){
+                            if (pid.getDisplay().equals("OpenMRS ID")){
+                                openmrs_code_exist = true;
+                            }
+                        }
                         Results<IdentifierType> identifierTypesResults = (Results<IdentifierType>)results.get(2).getResult();
                         for (PatientIdentifier p : identifiersPatients){
                             for (IdentifierType resultIdentifiertype : identifierTypesResults.getResults()){
@@ -277,6 +280,7 @@ public class PatientRepository extends RetrofitRepository {
                                     identifiers.add(identifier);
                                     if(resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number") || resultIdentifiertype.getDisplay().equals("ANC Number")){
                                         identifierHts = identifier;
+                                        openmrs_code_exist = true;
                                     }
                                 }
                                 if(resultIdentifiertype.getDisplay().equals("OpenMRS ID")){
@@ -289,10 +293,11 @@ public class PatientRepository extends RetrofitRepository {
                         final PatientIdentifier identifier = new PatientIdentifier();
                         identifier.setLocation((Location) results.get(0).getResult());
                         identifier.setIdentifier((String) results.get(1).getResult());
-                        identifier.setIdentifierType(openmrsType);
-                        identifiers.add(identifier);
-
-                        patient.setIdentifiers(identifiers);
+                        if (!openmrs_code_exist) {
+                            identifier.setIdentifierType(openmrsType);
+                            identifiers.add(identifier);
+                            patient.setIdentifiers(identifiers);
+                        }
 
                         PatientDto patientDto = patient.getPatientDto();
                         if (patient.getUuid() != null) {

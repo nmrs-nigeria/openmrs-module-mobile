@@ -26,7 +26,7 @@ public class PatientTable extends Table<Patient> {
      *
      * @see org.openmrs.mobile.databases.tables.Table#values(int)
      */
-    private static final int INSERT_COLUMNS_COUNT = 32;
+    private static final int INSERT_COLUMNS_COUNT = 34;
 
     @Override
     public String createTableDefinition() {
@@ -63,7 +63,9 @@ public class PatientTable extends Table<Patient> {
                 + Column.IDENTIFIER_TYPE_HTS + Column.Type.TEXT_TYPE_WITH_COMMA
                 + Column.IDENTIFIER_TYPE_HEI + Column.Type.TEXT_TYPE_WITH_COMMA
                 + Column.IDENTIFIER_TYPE_HOSPITAL + Column.Type.TEXT_TYPE_WITH_COMMA
-                + Column.PHONE_NUMBER + Column.Type.TEXT_TYPE
+                + Column.PHONE_NUMBER + Column.Type.TEXT_TYPE_WITH_COMMA
+                + Column.IDENTIFIER_OPENMRS + Column.Type.TEXT_TYPE_WITH_COMMA
+                + Column.IDENTIFIER_TYPE_OPENMRS + Column.Type.TEXT_TYPE
                 + ");";
     }
 
@@ -101,7 +103,9 @@ public class PatientTable extends Table<Patient> {
                 + Column.IDENTIFIER_TYPE_HTS + Column.COMMA
                 + Column.IDENTIFIER_TYPE_HEI + Column.COMMA
                 + Column.IDENTIFIER_TYPE_HOSPITAL + Column.COMMA
-                + Column.PHONE_NUMBER+ ")"
+                + Column.PHONE_NUMBER+ Column.COMMA
+                + Column.IDENTIFIER_OPENMRS + Column.COMMA
+                + Column.IDENTIFIER_TYPE_OPENMRS+ ")"
                 + values(INSERT_COLUMNS_COUNT);
     }
 
@@ -153,10 +157,12 @@ public class PatientTable extends Table<Patient> {
         public static final String IDENTIFIER_ANC = "identifierAnc";
         public static final String IDENTIFIER_HTS = "identifierHts";
         public static final String IDENTIFIER_HEI = "identifierHei";
+        public static final String IDENTIFIER_OPENMRS = "identifierOpenmrs";
         public static final String IDENTIFIER_TYPE_ART = "identifierTypeArt";
         public static final String IDENTIFIER_TYPE_ANC = "identifierTypeAnc";
         public static final String IDENTIFIER_TYPE_HTS = "identifierTypeHts";
         public static final String IDENTIFIER_TYPE_HEI = "identifierTypeHei";
+        public static final String IDENTIFIER_TYPE_OPENMRS = "identifierTypeOpenmrs";
         public static final String IDENTIFIER_TYPE_HOSPITAL = "identifierTypeHospital";
         public static final String PHONE_NUMBER = "phonenumber";
 

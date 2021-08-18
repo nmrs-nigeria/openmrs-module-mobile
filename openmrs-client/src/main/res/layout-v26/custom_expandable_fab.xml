@@ -73,9 +73,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginBottom="100dp"
+        android:tooltipText="Send an email"
         android:hapticFeedbackEnabled="true"
         android:src="@drawable/pbs_fingerprint_black"
+        android:tint="#040404"
+        app:backgroundTint="#DDE7EF"
         app:elevation="0dp"
         app:rippleColor="@color/grey" />
 
@@ -85,6 +91,7 @@
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_above="@id/activity_commodity_action_fab"-->
 <!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentRight="true"-->
 <!--        android:layout_alignParentBottom="true"-->
 <!--        android:layout_marginStart="100dp"-->
 <!--        android:layout_marginTop="100dp"-->
@@ -126,6 +133,8 @@
         android:layout_marginBottom="@dimen/margin_long"
         android:hapticFeedbackEnabled="true"
         android:src="@drawable/medical"
+        app:backgroundTint="#E1A3A3"
         app:elevation="0dp"
         app:rippleColor="@color/grey" />
+
 </RelativeLayout>

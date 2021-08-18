@@ -22,7 +22,6 @@
         android:stretchColumns="1">
 
         <TableRow>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -31,7 +30,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/findPatientView"
+                    android:id="@+id/consumptionView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -39,29 +38,28 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/findPatientButton"
+                        android:id="@+id/consumptionButton"
                         android:layout_width="@dimen/dashboard_icon_height_width"
                         android:layout_height="@dimen/dashboard_icon_height_width"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/dashboard_search_icon_label" />
+                        android:contentDescription="@string/consumption_label" />
 
                     <TextView
-                        android:id="@+id/findPatientLabel"
+                        android:id="@+id/consumptionLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/findPatientButton"
+                        android:layout_below="@id/consumptionButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/dashboard_search_icon_label"
+                        android:text="@string/consumption_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -70,7 +68,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/registryPatientView"
+                    android:id="@+id/receiptView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -78,24 +76,24 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/registryPatientButton"
+                        android:id="@+id/receiptButton"
                         android:layout_width="@dimen/dashboard_icon_height_width"
                         android:layout_height="@dimen/dashboard_icon_height_width"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/dashboard_registry_icon_label" />
+                        android:contentDescription="@string/receipt_icon_label"/>
 
                     <TextView
-                        android:id="@+id/registryLabel"
+                        android:id="@+id/receiptLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/registryPatientButton"
+                        android:layout_below="@id/receiptButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/action_register_patient"
+                        android:text="@string/receipt_icon_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 
@@ -111,7 +109,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/activeVisitsView"
+                    android:id="@+id/distributionView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -119,28 +117,29 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/activeVisitsButton"
+                        android:id="@+id/distributionButton"
                         android:layout_width="@dimen/dashboard_icon_height_width"
                         android:layout_height="@dimen/dashboard_icon_height_width"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/dashboard_visits_icon_label" />
+                        android:contentDescription="@string/distribution_label" />
 
                     <TextView
-                        android:id="@+id/activeVisitsLabel"
+                        android:id="@+id/distributionLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/activeVisitsButton"
+                        android:layout_below="@id/distributionButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/dashboard_visits_icon_label"
+                        android:text="@string/distribution_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -149,7 +148,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/commodityView"
+                    android:id="@+id/reportView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -157,115 +156,32 @@
                     android:focusable="true">
 
                     <ImageView
-                        android:id="@+id/commodityButton"
+                        android:id="@+id/reportButton"
                         android:layout_width="@dimen/dashboard_icon_height_width"
                         android:layout_height="@dimen/dashboard_icon_height_width"
                         android:layout_alignParentTop="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/dashboard_Commodity_icon_label" />
+                        android:contentDescription="@string/report_label" />
 
                     <TextView
-                        android:id="@+id/commodityLabel"
+                        android:id="@+id/reportLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/commodityButton"
+                        android:layout_below="@id/reportButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/dashboard_Commodity_icon_label"
+                        android:text="@string/report_label"
                         android:textSize="@dimen/dashboard_text_size" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+
 
         </TableRow>
 
-        <TableRow>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/margin_short"
-                android:visibility="gone"
-                android:layout_weight="1">
-
-                <RelativeLayout
-                    android:id="@+id/dashboardProviderManagementView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/dashboardProviderManagementButton"
-                        android:layout_width="@dimen/dashboard_icon_height_width"
-                        android:layout_height="@dimen/dashboard_icon_height_width"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:src="@mipmap/ic_provider" />
-
-                    <TextView
-                        android:id="@+id/dashboardProviderManagementLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/dashboardProviderManagementButton"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/action_provider_management"
-                        android:textSize="@dimen/dashboard_text_size" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="@dimen/margin_short"
-                android:layout_weight="1">
-
-                <RelativeLayout
-                    android:id="@+id/captureVitalsView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/captureVitalsButton"
-                        android:layout_width="@dimen/dashboard_icon_height_width"
-                        android:layout_height="@dimen/dashboard_icon_height_width"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/dashboard_registry_icon_label" />
-
-                    <TextView
-                        android:id="@+id/FormsLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/captureVitalsButton"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/dashboard_text_top_margin"
-                        android:layout_marginBottom="@dimen/dashboard_text_bottom_margin"
-                        android:text="@string/dashboard_forms_icon_label"
-                        android:textSize="@dimen/dashboard_text_size" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-
-        </TableRow>
     </TableLayout>
 
 </ScrollView>

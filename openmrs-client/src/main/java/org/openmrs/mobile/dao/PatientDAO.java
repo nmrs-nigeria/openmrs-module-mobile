@@ -142,6 +142,11 @@ public class PatientDAO {
         patientIdentifierAnc.setDisplay(cursor.getString(cursor.getColumnIndex(PatientTable.Column.IDENTIFIER_TYPE_ANC)));
         patient.getIdentifiers().add(patientIdentifierAnc);
 
+        PatientIdentifier patientIdentifierOpenmrs = new PatientIdentifier();
+        patientIdentifierOpenmrs.setIdentifier(cursor.getString(cursor.getColumnIndex(PatientTable.Column.IDENTIFIER_OPENMRS)));
+        patientIdentifierOpenmrs.setDisplay(cursor.getString(cursor.getColumnIndex(PatientTable.Column.IDENTIFIER_TYPE_OPENMRS)));
+        patient.getIdentifiers().add(patientIdentifierOpenmrs);
+
         if (cursor.getString(cursor.getColumnIndex(PatientTable.Column.PHONE_NUMBER)) != null) {
             PersonAttribute personAttribute = new PersonAttribute();
             personAttribute.setValue(cursor.getString(cursor.getColumnIndex(PatientTable.Column.PHONE_NUMBER)));
