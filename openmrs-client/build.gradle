@@ -24,7 +24,7 @@ android {
     compileSdkVersion 30
 
     def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-    def buildNumber = (travisBuildNumber) ? (travisBuildNumber as int) : 100000
+    def buildNumber = (travisBuildNumber) ? (travisBuildNumber as int) : 100001
 
     def applicationVersion = version
     def travisTag = System.getenv("TRAVIS_TAG")
@@ -126,7 +126,7 @@ dependencies {
     def support_version = '1.0.0-beta01'
     def room_version = "2.1.0-alpha04"
 
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     androidTestImplementation(
