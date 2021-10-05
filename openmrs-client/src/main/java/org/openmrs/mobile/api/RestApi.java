@@ -15,6 +15,8 @@ import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
 import org.openmrs.mobile.activities.pbs.PatientBiometricSyncResponseModel;
 import org.openmrs.mobile.models.Concept;
+import org.openmrs.mobile.models.Consumption;
+import org.openmrs.mobile.models.Distribution;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
@@ -33,6 +35,7 @@ import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PatientPhoto;
 import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Provider;
+import org.openmrs.mobile.models.Receipt;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.models.Session;
 import org.openmrs.mobile.models.SystemSetting;
@@ -120,6 +123,16 @@ public interface RestApi {
 
     @POST("visit")
     Call<Visit> startVisit(@Body Visit visit);
+
+    @POST("inventory/consumption")
+    Call<Consumption> startConsumption(@Body Consumption consumption);
+    
+    @POST("inventory/receipt")
+    Call<Receipt> startReceipt(@Body Receipt receipt);
+
+    @POST("inventory/distribution")
+    Call<Distribution> startDistribution(@Body Distribution distribution);
+
 
     @POST("programenrollment")
     Call<ProgramEnrollment> createProgram(@Body ProgramEnrollment programEnrollment);

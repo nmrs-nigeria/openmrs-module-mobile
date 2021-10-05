@@ -31,10 +31,14 @@ import net.sqlcipher.database.SQLiteDatabase;
 import org.mindrot.jbcrypt.BCrypt;
 import org.openmrs.mobile.api.FormListService;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
+import org.openmrs.mobile.models.Consumption;
+import org.openmrs.mobile.models.Department;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Facility;
 import org.openmrs.mobile.models.FormResource;
+import org.openmrs.mobile.models.Item;
+import org.openmrs.mobile.models.ItemBatch;
 import org.openmrs.mobile.models.Lga;
 import org.openmrs.mobile.models.Link;
 import org.openmrs.mobile.models.Obscreate;
@@ -89,8 +93,10 @@ public class OpenMRS extends Application {
         configurationBuilder.addModelClasses(Facility.class);
         configurationBuilder.addModelClasses(States.class);
         configurationBuilder.addModelClasses(Lga.class);
-
-
+        configurationBuilder.addModelClasses(Department.class);
+        configurationBuilder.addModelClasses(Item.class);
+        configurationBuilder.addModelClasses(ItemBatch.class);
+        configurationBuilder.addModelClasses(Consumption.class);
         ActiveAndroid.initialize(configurationBuilder.create());
 
     try {
@@ -101,6 +107,8 @@ public class OpenMRS extends Application {
             populateFacility();
             populateLga();
             populateState();
+            populateItem();
+            populateDepartment();
         }
     }catch (Exception e){
         mLogger.i(e.toString());
@@ -3310,5 +3318,45 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Nongu u Kristu ke Sudan hen Tiv (NKST) Primary Health Center - Ahobee','vhponVEgOwi','NIE BNS WDP')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Hope Child Maternity','oFdx57tGvjs','NIE ENS UDD')");
 
+    }
+
+    public void populateDepartment() {
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Voluntary Counseling and Testing','1f2ac9f2-d2db-4933-b04d-0b85455a141b')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Mobile-Facility','57c54916-668c-41bf-a089-5257fdb358a3')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Community','63dfb487-4410-43fa-9ef5-1d98937b0828')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Emergency','bc5efa90-30f6-4e2c-89c1-d0fdae4cddea')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Outpatient','a5e899da-27c8-47a3-9ea6-5c0df9dee87d')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Inpatient','e0add9d4-24c5-447d-b9b5-39c30f3f93f2')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Malnutrition','e2b1f92a-5af3-411a-b114-c9b310cb9f8c')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Paediatrics Clinic','759f4329-6420-4cf6-b65c-ee8ea0cd5e37')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Antenatal Clinic','9a0a3f68-d3cc-4319-8b11-2f0af9a13493')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Labour and Delivery Ward','3816323a-bbfa-4cbf-ae29-1397ad0f6c62')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Post Partum Clinic','53dcc49a-89ca-4076-8507-3f43a345cf1e')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Sexually Transmitted Infecion Clinic','1952ff56-a3dc-40cb-954a-c05810259b03')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Family Planning','bc22078e-c5be-4cdb-ad9f-17376a6fe9f4')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Tuberculosis/DOT Unit','7d4b8a26-9cf8-4d7a-8767-aaac21aca521')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Key Population One Stop Shop','34b14c5c-2824-4d70-9637-9d5792dd700e')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Laboratory','8eb2330d-7970-41b7-8240-b07d4534c923')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Others','43dd09f9-2773-4f67-b694-0b37d66db406')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Early infant diagnosis','36ccbd54-ab90-4bab-88b9-eb7bd7e1df1a')");
+
+
+    }
+    public void populateItem() {
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Determine(100)','06d5326c-b994-4d2f-a57a-4fe8755dc1a3')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Uni-Gold(20)','7559842c-0599-429d-90b5-e5935d0cd720')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Stat-Pak(20)','db9484ff-a255-4e19-aee2-1b29fb69153b')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Insti HIV 1/2(24)','cc97ad9f-efae-4fc3-81d6-a7813a2ec8fa')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Oraquick HIV Self Test(50)','ac0226fa-6752-4fe5-8a27-3da7ec78012d')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Omega Visitect CD4 RTK(25)','41e9f6dd-5286-4961-8fcc-edf9a78e1467')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('DBS Kits(20)','e6a0df24-ca6c-47e6-a237-6c18482d1d50')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('DBS Kits(50)','925d818a-3e3a-4c72-b566-1b94cc12a888')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Asante(100)','742aa79f-46bb-4bf3-8326-c27484379810')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Asante(20)','4ab7f97d-fbf8-40a3-82bd-30e84d5a30c9')");
+
+    }
+    public void populateItemBatch() {
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item_batch (name,uuid)  VALUES('M251012','c3KK4dr0ApCl')");
+        SQLiteUtils.execSql("INSERT OR REPLACE INTO item_batch (name,uuid)  VALUES('06205K200R','c3KK4r0ApCl')");
     }
 }

@@ -1,8 +1,10 @@
 package org.openmrs.mobile.models;
 
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Table(name = "consumption")
 public class Condition {
     @SerializedName("when")
     @Expose

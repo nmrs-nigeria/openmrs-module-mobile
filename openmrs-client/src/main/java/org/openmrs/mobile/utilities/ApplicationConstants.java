@@ -48,6 +48,7 @@ public abstract class ApplicationConstants {
 
     public abstract static class API {
         public static final String REST_ENDPOINT = "/ws/rest/v1/";
+        public static final String REST_ENDPOINT_2 = "/ws/rest/v2/";
         public static final String FULL = "full";
     }
 
