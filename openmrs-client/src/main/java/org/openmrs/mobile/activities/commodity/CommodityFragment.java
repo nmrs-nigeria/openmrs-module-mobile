@@ -13,7 +13,10 @@ import android.widget.RelativeLayout;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.ACBaseFragment;
+import org.openmrs.mobile.activities.addeditconsumption.AddEditConsumptionActivity;
+import org.openmrs.mobile.activities.addeditdistribution.AddEditDistributionActivity;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
+import org.openmrs.mobile.activities.addeditreceipt.AddEditReceiptActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
 import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
@@ -93,17 +96,17 @@ public class CommodityFragment extends ACBaseFragment<CommodityContract.Presente
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.receiptView:
-//                startNewActivity(AddEditPatientActivity.class);
+                startNewActivity(AddEditReceiptActivity.class);
 
                 break;
             case R.id.reportView:
 //                startNewActivity(AddEditPatientActivity.class);
                 break;
             case R.id.distributionView:
-//                startNewActivity(AddEditPatientActivity.class);
+                startNewActivity(AddEditDistributionActivity.class);
                 break;
             case R.id.consumptionView:
-                startNewActivity(SyncedPatientsActivity.class);
+                startNewActivity(AddEditConsumptionActivity.class);
                 break;
             default:
                 // Do nothing

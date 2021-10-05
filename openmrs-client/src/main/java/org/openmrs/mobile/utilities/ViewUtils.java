@@ -15,6 +15,7 @@
 package org.openmrs.mobile.utilities;
 
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.hbb20.CountryCodePicker;
 
@@ -43,6 +44,12 @@ public class ViewUtils {
     public static boolean isCountryCodePickerEmpty(CountryCodePicker countryCodePicker) {
         return countryCodePicker.getSelectedCountryName() == null;
     }
+
+    public static boolean isSpinnerEmpty(Spinner spinner) {
+        return spinner.getCount() == 0;
+
+    }
+
 
     /**
      * Validate a String for invalid characters

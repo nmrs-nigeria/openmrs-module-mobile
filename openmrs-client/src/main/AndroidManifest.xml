@@ -51,7 +51,7 @@
             android:value="@integer/aadbversion" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="org.openmrs.mobile.models.Link, org.openmrs.mobile.models.FormResource, org.openmrs.mobile.models.EncounterType, org.openmrs.mobile.models.Encountercreate, org.openmrs.mobile.models.Obscreate, org.openmrs.mobile.models.ObscreateLocal, org.openmrs.mobile.models.Facility, org.openmrs.mobile.models.States, org.openmrs.mobile.models.Lga" />
+            android:value="org.openmrs.mobile.models.Link, org.openmrs.mobile.models.FormResource, org.openmrs.mobile.models.EncounterType, org.openmrs.mobile.models.Encountercreate, org.openmrs.mobile.models.Obscreate, org.openmrs.mobile.models.ObscreateLocal, org.openmrs.mobile.models.Facility, org.openmrs.mobile.models.States, org.openmrs.mobile.models.Lga, org.openmrs.mobile.models.Department, org.openmrs.mobile.models.Item, org.openmrs.mobile.models.ItemBatch, org.openmrs.mobile.models.Consumption" />
         <meta-data
             android:name="buildVersion"
             android:value="0" />
@@ -142,6 +142,25 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+<!--        <activity-->
+<!--            android:name=".activities.syncedconsumption.SyncedConsumptionActivity"-->
+<!--            android:configChanges="keyboardHidden|screenSize"-->
+<!--            android:label="@string/action_active_commodities"-->
+<!--            android:launchMode="singleTop"-->
+<!--            android:theme="@style/AppThemeOrig">-->
+
+<!--            &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;-->
+<!--            <meta-data-->
+<!--                android:name="android.support.PARENT_ACTIVITY"-->
+<!--                android:value=".activities.commodity.CommodityActivity" />-->
+<!--            <meta-data-->
+<!--                android:name="android.app.searchable"-->
+<!--                android:resource="@xml/searchable" />-->
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.SEARCH" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
         <activity
             android:name=".activities.visitdashboard.VisitDashboardActivity"
             android:label="@string/visit_dashboard_label"
@@ -182,6 +201,36 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.dashboard.DashboardActivity" />
+        </activity>
+        <activity
+            android:name=".activities.addeditconsumption.AddEditConsumptionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/add_edit_commodity_icon_label"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.addeditreceipt.AddEditReceiptActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/add_edit_receipt_icon_label"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.addeditdistribution.AddEditDistributionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/add_edit_distribution_icon_label"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
         </activity>
         <activity
             android:name=".activities.syncedvisits.SyncedVisitsActivity"

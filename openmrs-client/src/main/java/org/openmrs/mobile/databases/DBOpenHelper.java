@@ -59,6 +59,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
     private ObservationTable mObservationTable;
     private LocationTable mLocationTable;
     private FingerPrintTable mFingerPrintTable;
+    private OpenMRS mOpenMRS;
 
     public DBOpenHelper(Context context) {
         super(context,null, DATABASE_VERSION);
@@ -120,11 +121,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
             case 16:
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 17:
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
+
             case 18:
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");

@@ -61,12 +61,31 @@
     <string name="reg_ids_name">Other IDs?</string>
     <string name="reg_ques_gender">What\'s the patient\'s sex?</string>
     <string name="reg_ques_dob">What\'s the patient\'s birth date?</string>
+    <string name="consumption_date">Consumption Date</string>
+    <string name="operation_date">Operation Date</string>
+    <string name="department">Department</string>
+    <string name="destination">Destination</string>
+    <string name="source">Source</string>
+    <string name="item">Item</string>
+    <string name="instance_type">Instance Type</string>
+    <string name="item_batch">Item Batch</string>
+    <string name="status">Status</string>
+    <string name="quantity">Quantity</string>
+    <string name="operationNumber">Operation Number</string>
+    <string name="wastage">Wastage</string>
+    <string name="test_purpose">Test purpose</string>
+    <string name="commodity_source">Commodity Source</string>
+    <string name="data_system">Data system</string>
+    <string name="commodity_type">Commodity Type</string>
     <string name="label_or">Or</string>
     <string name="reg_ques_address">Address</string>
     <string name="addr1_hint">Address</string>
     <string name="addr2_hint">Address 2</string>
     <string name="addr_invalid_error">Address cannot contain invalid characters</string>
     <string name="atleastone">Fill at least one address field</string>
+    <string name="consumption_is_required">Consumption date is required</string>
+    <string name="department_is_required">Department is required</string>
+    <string name="item_is_required">Item is required</string>
     <string name="incorrect_country">Country name incorrect</string>
     <string name="req_state">State name required</string>
     <string name="req_country">Country name required</string>
@@ -76,6 +95,8 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="dob_hint">Date of Birth (format: dd/MM/yyyy)</string>
+    <string name="consumption_date_hint">Consumption date (format: dd/MM/yyyy)</string>
+    <string name="operation_date_hint">Operation date (format: dd/MM/yyyy)</string>
     <string name="estyr">Estimated Years</string>
     <string name="estmonth">Estimated Months</string>
     <string name="capture_photo">Capture photo</string>
@@ -168,9 +189,11 @@
 
     <!-- FindPatients activity -->
     <string name="action_find_patients">Find Patients</string>
+    <string name="action_find_commodities">Find Commodities</string>
     <string name="action_synced_patients">Patients</string>
     <string name="action_download_patients">Download Patients</string>
     <string name="action_add_patients">Add Patients</string>
+    <string name="action_add_commodity">Add Commodity</string>
     <string name="search_patient_hint">Patient name</string>
     <string name="search_patient_no_results">No patients exist in database</string>
     <string name="search_patient_no_result_for_query">No results found for query \"%1$s\"</string>
@@ -185,6 +208,9 @@
 <!--    <string name="dashboard_visits_icon_label">Synced Status</string>-->
     <string name="dashboard_visits_icon_label">Synced Status</string>
     <string name="dashboard_Commodity_icon_label">Commodity</string>
+    <string name="add_edit_commodity_icon_label">Add/Edit Consumption</string>
+    <string name="add_edit_receipt_icon_label">Add/Edit Receipt</string>
+    <string name="add_edit_distribution_icon_label">Add/Edit Distribution</string>
     <string name="dashboard_forms_icon_label">Form Entry</string>
 
     <!-- ART Programs -->
@@ -261,6 +287,7 @@
 
     <!-- Find Active visit activity -->
     <string name="action_active_visits">Synced Status</string>
+    <string name="action_active_commodities">Commodities</string>
     <string name="action_form_entry">Form Entry</string>
     <string name="action_synced_entry">Synced Status</string>
     <string name="action_patient_program">Patient Programs</string>
@@ -327,6 +354,9 @@
     <string name="birthdate_hint">birthdate:</string>
     <string name="address_hint">address:</string>
     <string name="demographics">Demographics</string>
+    <string name="consumption">New Consumption</string>
+    <string name="receipt">New Receipt</string>
+    <string name="distribution">New Distribution</string>
     <string name="unable_to_login">Unable to login?</string>
     <string name="no_patient_selected">No patient selected</string>
 
