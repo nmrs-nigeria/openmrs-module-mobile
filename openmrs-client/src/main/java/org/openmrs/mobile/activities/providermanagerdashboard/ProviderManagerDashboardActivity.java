@@ -54,7 +54,6 @@ public class ProviderManagerDashboardActivity extends ACBaseActivity {
         }
 
         if (savedInstanceState != null) {
-
             mPresenter = new ProviderManagerDashboardPresenter(providerManagerDashboardFragment);
         } else {
             mPresenter = new ProviderManagerDashboardPresenter(providerManagerDashboardFragment);

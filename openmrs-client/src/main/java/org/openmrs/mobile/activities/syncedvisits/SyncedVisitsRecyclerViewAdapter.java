@@ -17,11 +17,13 @@ package org.openmrs.mobile.activities.syncedvisits;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -81,14 +83,14 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
 
     @NonNull
     @Override
-    public SyncedVisitsRecyclerViewAdapter.PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PatientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_find_synced_patients, parent, false);
         FontsUtil.setFont((ViewGroup) itemView);
         return new PatientViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SyncedVisitsRecyclerViewAdapter.PatientViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull PatientViewHolder holder, final int position) {
         holder.update(mItems.get(position));
 
         final Patient patient = mItems.get(position);
@@ -104,12 +106,20 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
         if (null != patient.getGender()) {
             holder.mGender.setText(patient.getGender());
         }
-        if (patient.getDisplay().equalsIgnoreCase("Incomplete")){
-            holder.mSyncedStatus.setText("Incomplete");
-            holder.mSyncedStatus.setTextColor(Color.BLUE);
-        }else{
-            holder.mSyncedStatus.setText("Pending");
-            holder.mSyncedStatus.setTextColor(Color.RED);
+         //Sync status replaced with icons
+        if ("Incomplete".equalsIgnoreCase(patient.getDisplay())){
+            holder.sync_patient.setVisibility(View.VISIBLE);
+            holder.sync_patient.setImageResource(R.drawable.sync_incomplete);
+            //holder.mSyncedStatus.setText("Incomplete");
+           // holder.mSyncedStatus.setTextColor(Color.BLUE);
+        }else if("Pending".equalsIgnoreCase(patient.getDisplay())){
+          //  holder.mSyncedStatus.setText("Pending");
+           // holder.mSyncedStatus.setTextColor(Color.RED);
+            holder.sync_patient.setVisibility(View.VISIBLE);
+
+        }
+        if("PBS".equalsIgnoreCase(patient.getDisplayPBS())){
+            holder.sync_pbs.setVisibility(View.VISIBLE);
         }
 
 
@@ -128,6 +138,8 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
     }
 
     class PatientViewHolder extends RecyclerView.ViewHolder {
+        private ImageView sync_pbs;
+        private ImageView sync_patient;
         private CardView mRowLayout;
         private TextView mIdentifier;
         private TextView mDisplayName;
@@ -139,6 +151,7 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
 
         public PatientViewHolder(View itemView) {
             super(itemView);
+
             mRowLayout = (CardView) itemView;
             mIdentifier = itemView.findViewById(R.id.syncedPatientIdentifier);
             mDisplayName = itemView.findViewById(R.id.syncedPatientDisplayName);
@@ -146,6 +159,8 @@ public class SyncedVisitsRecyclerViewAdapter extends RecyclerView.Adapter<Synced
             mAge = itemView.findViewById(R.id.syncedPatientAge);
             mBirthDate = itemView.findViewById(R.id.syncedPatientBirthDate);
             mSyncedStatus = itemView.findViewById(R.id.syncedStatus);
+            sync_pbs=  itemView.findViewById(R.id.sync_pbs);
+            sync_patient=  itemView.findViewById(R.id.sync_patient);
 
             cardBackgroundColor = mRowLayout.getCardBackgroundColor();
         }

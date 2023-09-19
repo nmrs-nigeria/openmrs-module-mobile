@@ -14,6 +14,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/addEditRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,8 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/dashboard_background2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +39,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dashboard_background2"
                     android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/deleteCommodity"
+                        style="@style/deleteButton"
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:background="@color/primary_dark"
+                        android:padding="5dp"
+                        android:text="@string/delete"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -47,8 +65,8 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="8dp"
                         android:text="@string/consumption"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="20sp"
+                        android:textColor="#2AB2A2"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
 
@@ -60,7 +78,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/consumption_date"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -86,7 +104,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
 
                             <EditText
                                 android:id="@+id/consumption"
@@ -122,7 +141,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/department"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -150,13 +169,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/department"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -173,7 +195,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/item"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -201,13 +223,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/item"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -225,7 +250,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/item_batch"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -253,13 +278,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/item_batch"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -276,7 +304,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/quantity"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -302,7 +330,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
 
                             <EditText
                                 android:id="@+id/quantity"
@@ -325,8 +354,8 @@
                         android:layout_marginLeft="12dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
-                        android:text="@string/wastage"
-                        android:textSize="18sp"
+                        android:text="@string/losses"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -353,7 +382,9 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
+
                             <EditText
                                 android:id="@+id/wastage"
                                 android:layout_width="fill_parent"
@@ -377,7 +408,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/test_purpose"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -405,13 +436,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/test_purpose"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -419,7 +453,6 @@
 
 
                     </RelativeLayout>
-
 
 
                     <TextView
@@ -430,7 +463,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/data_system"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -458,16 +491,52 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/data_system"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/addMoreButtonSystem"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp">
+
+                            <Button
+                                android:id="@+id/addMoreButton"
+                                style="@style/addMoreBuitton"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_weight="1"
+                                android:background="@color/primary_dark"
+                                android:padding="5dp"
+                                android:text="@string/add_more"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
 

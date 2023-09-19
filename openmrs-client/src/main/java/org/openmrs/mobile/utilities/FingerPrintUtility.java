@@ -2,6 +2,8 @@ package org.openmrs.mobile.utilities;
 
 import android.util.Base64;
 import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
+import org.openmrs.mobile.dao.FingerPrintDAO;
 
 import java.util.List;
 
@@ -63,75 +65,38 @@ public class FingerPrintUtility {
         }
         return null;
     }
-//        final int[] matchedRecord = {0};
-//        if (toMatch != null && toMatch.size() > 0) {
-//            ConcurrentHashMap<String, Integer> concurrentHashMap = new ConcurrentHashMap<>();
-//            try {
-//                ExecutorService taskExecutor;
-//                if (override) {
-//                    taskExecutor = Executors.newFixedThreadPool(num);
-//                } else {
-//                    taskExecutor = Executors.newFixedThreadPool(toMatch.size());
-//                }
-//
-//                int counter = 0;
-//                boolean[] matched = new boolean[1];
-//
-//                debugMessage("validating fingerprints");
-//
-//                List<List<PatientBiometricContract>> lists = Partition.ofSize(input.getFingerPrintTemplateListToMatch(), 1000);
-//
-//                for (String template : toMatch) {
-//                    Thread thread = new Thread(() -> {
-//                        try {
-//                            byte[] unknownTemplateArray = Base64.decode(template, Base64.NO_WRAP);
-//                            for (List<PatientBiometricContract> printInfos : lists) {
-//                                int id = getMatchedRecord(printInfos, matched, unknownTemplateArray);
-//                                if (id > 0) {
-//                                    concurrentHashMap.putIfAbsent("match", id);
-//                                    taskExecutor.shutdownNow();
-//                                }
-//                            }
-//
-//                        } catch (Exception ex) {
-//                            debugMessage(ex.toString());
-//                        }
-//                    });
-//                    thread.setName("Thread" + counter++);
-//                    taskExecutor.submit(thread);
-//                    taskExecutor.shutdown();
-//                    try {
-//                        taskExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-//                    } catch (InterruptedException ignored) {
-//                    }
-//                }
-//                if (concurrentHashMap.get("match") != null) return concurrentHashMap.get("match");
-//            } catch (Exception ex) {
-//                if (concurrentHashMap.get("match") != null) return concurrentHashMap.get("match");
-//            }
-//        }
-//        return matchedRecord[0];
-    //}
 
-//    private int getMatchedRecord(List<PatientBiometricContract> fingerPrintInfos, boolean[] matched, byte[] unknownTemplateArray) {
-//        for (PatientBiometricContract each : fingerPrintInfos) {
-//            int[] matchScore = new int[1];
-//            if(each.getTemplate() != null ){
-//                debugMessage("Checking against : "+each.getPatienId()+" finger: "+each.getFingerPositions().name());
-//                byte[] fingerTemplate = Base64.decode(each.getTemplate(), Base64.NO_WRAP);
-//                long iError = sgfplib.MatchIsoTemplate(fingerTemplate, 0, unknownTemplateArray, 0, SGFDxSecurityLevel.SL_ABOVE_NORMAL, matched);
-//                if (iError == SGFDxErrorCode.SGFDX_ERROR_NONE) {
-//                    if (matched[0]) {
-//                        sgfplib.GetIsoMatchingScore(fingerTemplate,0,unknownTemplateArray,0,matchScore);
-//                        debugMessage("found match : " + each.getPatienId()+" score - "+matchScore[0]);
-//                        return each.getPatienId();
-//                    }
-//                }
-//            }
-//        }
-//        debugMessage("no match found ");
-//        return 0;
-//    }
+    public String CheckIfFingerAlreadyCapturedOnDevice(String newTemplate) {
+        List<PatientBiometricContract> compare = new FingerPrintDAO().getAllFingerPrintsOnDevice();
+
+        if(compare ==null || compare.size()==0)return null;
+
+        boolean[] matched = new boolean[1];
+        try {
+            byte[] unknownTemplateArray = Base64.decode(newTemplate, Base64.NO_WRAP);
+
+            for (PatientBiometricContract each : compare) {
+                int[] matchScore = new int[1];
+                if (each.getTemplate() != null) {
+
+                    debugMessage("Checking against : " + each.getPatienId() + " finger: " + each.getFingerPositions().name());
+
+                    byte[] fingerTemplate = Base64.decode(each.getTemplate(), Base64.NO_WRAP);
+                    long iError = sgfplib.MatchIsoTemplate(fingerTemplate, 0, unknownTemplateArray, 0, SGFDxSecurityLevel.SL_ABOVE_NORMAL, matched);
+                    if (iError == SGFDxErrorCode.SGFDX_ERROR_NONE) {
+                        if (matched[0]) {
+                            sgfplib.GetIsoMatchingScore(fingerTemplate, 0, unknownTemplateArray, 0, matchScore);
+                            debugMessage("found match : " + each.getFingerPositions() + " score - " + matchScore[0]);
+                            return decodeFingerPosition(each.getFingerPositions().name());
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            debugMessage(ex.toString());
+        }
+        return null;
+    }
 
     public String decodeFingerPosition(String fingerPositionName) {
 

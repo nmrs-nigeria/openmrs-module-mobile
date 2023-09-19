@@ -14,22 +14,23 @@
       -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical">
-
-<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_vertical"
-    tools:context=".activities.formprogramlist.FormProgramActivity">
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
+    android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/formProgrameContentFrame"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        tools:context=".activities.formprogramlist.FormProgramActivity">
 
-</RelativeLayout>
+        <FrameLayout
+            android:id="@+id/formProgrameContentFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 </LinearLayout>

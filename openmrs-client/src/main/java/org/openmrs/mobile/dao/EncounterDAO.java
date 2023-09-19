@@ -24,6 +24,7 @@ import org.openmrs.mobile.databases.tables.EncounterTable;
 import org.openmrs.mobile.databases.tables.ObservationTable;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
+import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Observation;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FormService;
@@ -235,5 +236,14 @@ public class EncounterDAO {
             }
         }
         return encounterID;
+    }
+
+    public boolean safeToDelete(long patientId) {
+        List<Encountercreate> encountersPatientNotSynced = new Select()
+                .from(Encountercreate.class)
+                .where("patientid = ? AND synced = 0",
+                        patientId)
+                .execute();
+        return  encountersPatientNotSynced.size()<1;
     }
 }

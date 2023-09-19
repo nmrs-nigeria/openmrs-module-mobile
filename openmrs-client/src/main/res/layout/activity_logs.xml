@@ -19,11 +19,12 @@
     android:id="@+id/activity_logs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
     tools:context="org.openmrs.mobile.activities.logs.LogsActivity">
 
     <FrameLayout
+        android:id="@+id/logsContentFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/logsContentFragment"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -2,11 +2,13 @@ package org.openmrs.mobile.activities.formprogramlist;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
@@ -48,6 +50,8 @@ public class FormProgramActivity extends ACBaseActivity implements LogOutTimerUt
         {
             mPatientID = bundle.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
             programName = bundle.getString(ApplicationConstants.BundleKeys.PATIENT_PROGRAM);
+        }else{
+            Log.e(Util.TAG," Patient ID and Program Name not set");
         }
         List<Encountercreate> encountercreateList = new VisitDAO().getLocalEncounterByPatientIDEligible(Long.parseLong(mPatientID), "Client intake form","Yes");
         if(encountercreateList.isEmpty()){

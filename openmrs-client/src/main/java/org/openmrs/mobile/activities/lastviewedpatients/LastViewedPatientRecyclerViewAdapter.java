@@ -24,24 +24,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openmrs.mobile.R;
-import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.api.repository.VisitRepository;
-import org.openmrs.mobile.dao.FingerPrintDAO;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DownloadPatientCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.api.response.PbsServerContract;
+import org.openmrs.mobile.sync.Pbs;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.ToastUtil;
@@ -363,41 +365,73 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private void downloadPatient(final Patient patient, final Boolean showSnackBar) {
-        new PatientRepository().downloadPatientByUuid(patient.getUuid(), new DownloadPatientCallbackListener() {
+        // download only when the biometric service is online
+        new FingerPrintSyncService().CheckServiceStatus(new GenericResponseCallbackListener<PbsServerContract>() {
             @Override
-            public void onPatientDownloaded(Patient newPatient) {
-                new PatientDAO().savePatient(newPatient)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(id -> {
-                            new VisitRepository().syncVisitsData(newPatient);
-                            new VisitRepository().syncLastVitals(newPatient.getUuid());
+            public void onResponse(PbsServerContract obj) {
+               // Util.log(obj.getDatabaseServer());
+               // Util.log(obj.getAppVersion());
+            //  Util.log("Return value "+obj);
+              new PatientRepository().downloadPatientByUuid(patient.getUuid(), new DownloadPatientCallbackListener() {
+                    @Override
+                    public void onPatientDownloaded(Patient newPatient) {
+                        new PatientDAO().savePatient(newPatient)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(id -> {
+                                    new VisitRepository().syncVisitsData(newPatient);
+                                    new VisitRepository().syncLastVitals(newPatient.getUuid());
 
-                            //retrieve finger print
-                            new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), false);
+                                    //retrieve finger print
+                                    Util.log("FingerPrintSyncService().retrieveCaptureFromServer");
+                                    new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), patient.getId().toString(),
+                                            true);
 
-                            patients.remove(patient);
-                            notifyDataSetChanged();
-                            if (showSnackBar) {
-                                view.showOpenPatientSnackbar(newPatient.getId());
-                            }
-                        });
+
+                                    patients.remove(patient);
+                                    notifyDataSetChanged();
+                                    if (showSnackBar) {
+                                        view.showOpenPatientSnackbar(newPatient.getId());
+                                    }
+                                });
+
+                    }
+
+                    @Override
+                    public void onPatientPhotoDownloaded(Patient patient) {
+                        new PatientDAO().updatePatient(patient.getId(), patient);
+                    }
+
+                    @Override
+                    public void onResponse() {
+                        // This method is intentionally empty
+                    }
+
+                    @Override
+                    public void onErrorResponse(String errorMessage) {
+                        ToastUtil.error("Failed to fetch patient data");
+                    }
+                });
+
             }
 
             @Override
-            public void onPatientPhotoDownloaded(Patient patient) {
-                new PatientDAO().updatePatient(patient.getId(), patient);
-            }
+            public void onErrorResponse(PbsServerContract errorMessage) {
 
-            @Override
-            public void onResponse() {
-                // This method is intentionally empty
+
             }
 
             @Override
             public void onErrorResponse(String errorMessage) {
-                ToastUtil.error("Failed to fetch patient data");
+                if(view!=null){
+                    Toast.makeText(mContext, "Please start the PBS service:"+errorMessage, Toast.LENGTH_LONG).show() ;
+                    OpenMRSCustomHandler.writeLogToFile("Please start the PBS service ");
+                    Util.log("Please start the PBS service");
+
+                }
             }
         });
+
+
     }
 
     public void disableCheckBox(PatientViewHolder holder) {

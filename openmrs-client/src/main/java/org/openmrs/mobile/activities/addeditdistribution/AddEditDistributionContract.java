@@ -3,8 +3,13 @@ package org.openmrs.mobile.activities.addeditdistribution;
 import org.openmrs.mobile.activities.BasePresenterContract;
 import org.openmrs.mobile.activities.BaseView;
 import org.openmrs.mobile.models.Distribution;
+import org.openmrs.mobile.models.DistributionItem;
+import org.openmrs.mobile.models.ReceiptItem;
+
+import java.util.List;
 
 public class AddEditDistributionContract {
+
     interface View extends BaseView<AddEditDistributionContract.Presenter> {
 
         void finishDistributionInfoActivity();
@@ -33,15 +38,15 @@ public class AddEditDistributionContract {
 
         boolean isRegisteringDistribution();
 
-        void confirmRegister(Distribution distribution);
+        void confirmRegister(List<Distribution> distribution, DistributionItem distributionItem);
 
-        void confirmUpdate(Distribution distribution);
+        void confirmUpdate(Distribution distribution, DistributionItem distributionItem);
 
         void finishDistributionInfoActivity();
 
         void registerDistribution();
 
-        void updateDistribution(Distribution distribution);
+        void deleteCommodity();
     }
 
 }

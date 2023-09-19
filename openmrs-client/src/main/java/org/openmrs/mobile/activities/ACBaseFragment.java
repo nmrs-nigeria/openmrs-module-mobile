@@ -15,8 +15,12 @@
 package org.openmrs.mobile.activities;
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import org.openmrs.mobile.databases.Util;
 
 public abstract class ACBaseFragment<T extends BasePresenterContract> extends Fragment implements BaseView<T> {
 
@@ -34,12 +38,21 @@ public abstract class ACBaseFragment<T extends BasePresenterContract> extends Fr
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.subscribe();
+        try {
+            mPresenter.subscribe();
+        }catch (Exception e){
+            Log.e(Util.TAG,"BaseActive Resume Error:  "+  e.getMessage());
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPresenter.unsubscribe();
+        try {
+            mPresenter.unsubscribe();
+        }catch (Exception e){
+            Log.e(Util.TAG,"BaseActive Resume Error:  "+  e.getMessage());
+        }
+
     }
 }

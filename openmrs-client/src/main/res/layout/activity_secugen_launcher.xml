@@ -18,196 +18,367 @@
 
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/AbsoluteLayout1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dashboard_background2">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout3"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/fingerPrintImage"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/finger_full" />
+            android:src="@drawable/finger_full"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"  />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <ImageView
+            android:id="@+id/imageViewFingerprint"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/fingerprint_capture_image"
+            android:src="@android:drawable/picture_frame"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fingerPrintImage"  />
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/imageViewRegister"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="150dp"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:contentDescription="@string/fingerprint_register_image"-->
+        <!--                android:src="@android:drawable/picture_frame"-->
+        <!--                android:visibility="gone" />-->
+
+
+        <Button
+            android:id="@+id/buttonRegister"
+            style="@style/captureButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <ImageView
-                android:id="@+id/imageViewFingerprint"
-                android:layout_width="match_parent"
-                android:layout_height="200sp"
-                android:layout_weight="1"
-                android:contentDescription="@string/fingerprint_capture_image"
-                android:src="@android:drawable/picture_frame" />
-
-<!--            <ImageView-->
-<!--                android:id="@+id/imageViewRegister"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="150dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:contentDescription="@string/fingerprint_register_image"-->
-<!--                android:src="@android:drawable/picture_frame"-->
-<!--                android:visibility="gone" />-->
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@color/light_grey"
             android:padding="5dp"
-            android:weightSum="2">
+            android:text="@string/capture"
+            android:textAllCaps="false"
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnSavePrints"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewFingerprint"  />
 
-            <Button
-                android:id="@+id/buttonRegister"
-                style="@style/captureButton"
-                android:layout_width="145dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/light_grey"
-                android:padding="5dp"
-                android:text="@string/capture"
-                android:textAllCaps="false"
-                android:textColor="@color/green"
-                android:textSize="16sp" />
-
-            <Button
-                android:id="@+id/btnSavePrints"
-                style="@style/pbsSaveButton"
-                android:layout_width="145dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                tools:background="@color/grey"
-                android:padding="5dp"
-                android:text="@string/SaveFingerPrint"
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
-
-            <Button
-                android:id="@+id/buttonClearUnsyncFingerPrint"
-                style="@style/pbsDeleteButton"
-                android:layout_width="155dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                tools:background="@color/grey"
-                android:padding="5dp"
-                android:text="@string/DeleteFingerPrint"
-                android:textSize="16sp"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnSavePrints"
+            style="@style/pbsSaveButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:padding="5dp"
-            android:weightSum="2">
+            android:text="@string/SaveFingerPrint"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonClearUnsyncFingerPrint"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonRegister"
+            app:layout_constraintTop_toTopOf="@+id/buttonRegister"
+            tools:background="@color/grey"  />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <Button
-                    android:id="@+id/fingerLeftThumb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_x="170dp"
-                    android:layout_y="465dp"
-                    android:text="Left Thumb"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerLeftIndex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Left Index"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerLeftMiddle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Left Middle"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerLeftRing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Left Ring"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerLeftPinky"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Left Pinky"
-                    android:textAllCaps="false" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <Button
-                    android:id="@+id/fingerRightThumb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Right Thumb"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerRightIndex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Right Index"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerRightMiddle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Right Middle"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerRightRing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Right Ring"
-                    android:textAllCaps="false" />
-
-                <Button
-                    android:id="@+id/fingerRightPinky"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Right Pinky"
-                    android:textAllCaps="false" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/buttonClearUnsyncFingerPrint"
+            style="@style/pbsDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/DeleteFingerPrint"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnSavePrints"
+            app:layout_constraintTop_toTopOf="@+id/btnSavePrints"
+            tools:background="@color/grey"  />
 
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/fingerRightThumb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button_thumbprint2"
+            android:gravity="center|start"
+            android:paddingStart="8dp"
+            android:text="Right Thumb"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fingerLeftThumb"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftThumb" />
+
+        <Button
+            android:id="@+id/fingerLeftThumb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/custom_button_thumbprint"
+            android:gravity="center|end"
+            android:paddingEnd="8dp"
+            android:text="Left Thumb"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/fingerRightThumb"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
+
+        <Button
+            android:id="@+id/fingerLeftIndex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/custom_button_thumbprint"
+            android:gravity="center|end"
+            android:padding="8dp"
+            android:paddingEnd="8dp"
+            android:text="Left Index"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/fingerRightIndex"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fingerLeftThumb" />
+
+        <Button
+            android:id="@+id/fingerRightIndex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button_thumbprint2"
+            android:gravity="center|start"
+            android:paddingStart="8dp"
+            android:text="Right Index"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fingerLeftIndex"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftIndex" />
+
+        <Button
+            android:id="@+id/fingerLeftMiddle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/custom_button_thumbprint"
+            android:gravity="center|end"
+            android:paddingEnd="8dp"
+            android:text="Left Middle"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/fingerRightMiddle"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fingerLeftIndex" />
+
+        <Button
+            android:id="@+id/fingerRightMiddle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button_thumbprint2"
+            android:gravity="center|start"
+            android:paddingStart="8dp"
+            android:text="Right Middle"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fingerLeftMiddle"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftMiddle" />
+
+        <Button
+            android:id="@+id/fingerLeftRing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/custom_button_thumbprint"
+            android:gravity="center|end"
+            android:paddingEnd="8dp"
+            android:text="Left Ring"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/fingerRightRing"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fingerLeftMiddle" />
+
+
+        <Button
+            android:id="@+id/fingerRightRing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button_thumbprint2"
+            android:gravity="center|start"
+            android:paddingStart="8dp"
+            android:text="Right Ring"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fingerLeftRing"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftRing" />
+
+        <Button
+            android:id="@+id/fingerLeftPinky"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/custom_button_thumbprint"
+            android:gravity="center|end"
+            android:paddingEnd="8dp"
+            android:text="Left Pinky"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/fingerRightPinky"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fingerLeftRing" />
+
+        <Button
+            android:id="@+id/fingerRightPinky"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button_thumbprint2"
+            android:gravity="center|start"
+            android:paddingStart="8dp"
+            android:text="Right Pinky"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/fingerLeftPinky"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftPinky" />
+
+        <TextView
+            android:id="@+id/lt"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerLeftThumb"
+            app:layout_constraintStart_toStartOf="@+id/fingerLeftThumb"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftThumb" />
+
+        <TextView
+            android:id="@+id/rt"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerRightThumb"
+            app:layout_constraintEnd_toEndOf="@+id/fingerRightThumb"
+            app:layout_constraintTop_toTopOf="@+id/fingerRightThumb" />
+
+        <TextView
+            android:id="@+id/li"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerLeftIndex"
+            app:layout_constraintStart_toStartOf="@+id/fingerLeftIndex"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftIndex" />
+
+        <TextView
+            android:id="@+id/ri"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerRightIndex"
+            app:layout_constraintEnd_toEndOf="@+id/fingerRightIndex"
+            app:layout_constraintTop_toTopOf="@+id/fingerRightIndex" />
+
+        <TextView
+            android:id="@+id/lm"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerLeftMiddle"
+            app:layout_constraintStart_toStartOf="@+id/fingerLeftMiddle"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftMiddle" />
+
+        <TextView
+            android:id="@+id/rm"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerRightMiddle"
+            app:layout_constraintEnd_toEndOf="@+id/fingerRightMiddle"
+            app:layout_constraintTop_toTopOf="@+id/fingerRightMiddle" />
+
+        <TextView
+            android:id="@+id/lr"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerLeftRing"
+            app:layout_constraintStart_toStartOf="@+id/fingerLeftRing"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftRing" />
+
+        <TextView
+            android:id="@+id/rr"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerRightRing"
+            app:layout_constraintEnd_toEndOf="@+id/fingerRightRing"
+            app:layout_constraintTop_toTopOf="@+id/fingerRightRing" />
+
+        <TextView
+            android:id="@+id/lp"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/fingerLeftPinky"
+            app:layout_constraintStart_toStartOf="@+id/fingerLeftPinky"
+            app:layout_constraintTop_toTopOf="@+id/fingerLeftPinky" />
+
+        <TextView
+            android:id="@+id/rp"
+            style="@style/FingerPrintQualityDefaultTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/fingerRightPinky"
+            app:layout_constraintTop_toTopOf="@+id/fingerRightPinky" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

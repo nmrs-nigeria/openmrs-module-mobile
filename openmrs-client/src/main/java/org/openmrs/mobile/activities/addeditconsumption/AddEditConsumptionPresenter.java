@@ -1,6 +1,13 @@
 package org.openmrs.mobile.activities.addeditconsumption;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientContract;
@@ -8,9 +15,12 @@ import org.openmrs.mobile.api.RestApi;
 import org.openmrs.mobile.api.RestServiceBuilder;
 import org.openmrs.mobile.api.repository.ConsumptionRepository;
 import org.openmrs.mobile.api.repository.PatientRepository;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.models.Consumption;
+import org.openmrs.mobile.models.Distribution;
+import org.openmrs.mobile.models.DistributionItem;
 import org.openmrs.mobile.models.Module;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PersonName;
@@ -35,14 +45,18 @@ public class AddEditConsumptionPresenter  extends BasePresenter implements AddEd
     private ConsumptionRepository consumptionRepository;
     private RestApi restApi;
     private Consumption mConsumption;
+    private List<Consumption> multipleConsumptions;
     private String patientToUpdateId;
     private List<String> mCountries;
     private boolean registeringConsumption = false;
+    private long consumptionToUpdateId;
+
     public AddEditConsumptionPresenter(AddEditConsumptionContract.View mConsumptionInfoView,
-                                   String consumptionToUpdateId) {
+                                   long consumptionToUpdateId) {
         this.mConsumptionInfoView = mConsumptionInfoView;
         this.mConsumptionInfoView.setPresenter(this);
         this.consumptionRepository = new ConsumptionRepository();
+        this.consumptionToUpdateId = consumptionToUpdateId;
 //        this.mCountries = countries;
 //        this.patientToUpdateId = patientToUpdateId;
 //        this.patientRepository = new PatientRepository();
@@ -57,19 +71,19 @@ public class AddEditConsumptionPresenter  extends BasePresenter implements AddEd
 
     @Override
     public Consumption getConsumptionToUpdate() {
-//        return new PatientDAO().findPatientByID(patientToUpdateId);
-        return null;
+        return  new Select().from(Consumption.class).where("id = ?", this.consumptionToUpdateId).executeSingle();
     }
 
 
-
     @Override
-    public void confirmRegister(Consumption consumption) {
-        if (!isRegisteringConsumption() && validate(consumption)) {
+    public void confirmRegister(List<Consumption> consumption) {
+        if (!isRegisteringConsumption()) {
             try {
                 mConsumptionInfoView.setProgressBarVisibility(true);
                 mConsumptionInfoView.hideSoftKeys();
                 registeringConsumption= true;
+                //declare the variable
+                multipleConsumptions = consumption;
                 registerConsumption();
             } catch (Exception e){
                 ToastUtil.error(e.toString());
@@ -82,13 +96,14 @@ public class AddEditConsumptionPresenter  extends BasePresenter implements AddEd
 
     @Override
     public void confirmUpdate(Consumption consumption) {
-        if (!registeringConsumption&& validate(consumption)) {
+        if (!registeringConsumption && validate(consumption)) {
             mConsumptionInfoView.setProgressBarVisibility(true);
             mConsumptionInfoView.hideSoftKeys();
             registeringConsumption = true;
-
-//            new PatientDAO().updatePatient(consumption.getId(), consumption);
-//            updatePatient(consumption);
+            //Save the updated consumption in the db
+            consumption.save();
+            //Then close the Activity
+            finishConsumptionInfoActivity();
         } else {
             mConsumptionInfoView.scrollToTop();
         }
@@ -106,8 +121,7 @@ public class AddEditConsumptionPresenter  extends BasePresenter implements AddEd
         mConsumptionInfoView.setErrorsVisibility(consumptionError);
 
 
-
-        // Validate gender
+        // Validate consumption date
         if (StringUtils.isBlank(consumption.getConsumptionDate())) {
             consumptionError = true;
         }
@@ -125,147 +139,31 @@ public class AddEditConsumptionPresenter  extends BasePresenter implements AddEd
 
     @Override
     public void registerConsumption() {
-
-        consumptionRepository.syncConsumption(mConsumption, new DefaultResponseCallbackListener() {
-            @Override
-            public void onResponse() {
-                mConsumptionInfoView.startCommodityDashboardActivity();
-                mConsumptionInfoView.finishConsumptionInfoActivity();
-            }
-
-            @Override
-            public void onErrorResponse(String errorMessage) {
-                registeringConsumption = false;
-                mConsumptionInfoView.setProgressBarVisibility(false);
-            }
-        });
+        for (Consumption consumption : multipleConsumptions){
+            consumption.save();
+            //OpenMRSCustomHandler.showJson(consumption);
+        }
+        finishConsumptionInfoActivity();
     }
 
     @Override
     public void updateConsumption(Consumption consumption) {
-//        patientRepository.updatePatient(patient, new DefaultResponseCallbackListener() {
-//            @Override
-//            public void onResponse() {
-//                mPatientInfoView.finishPatientInfoActivity();
-//            }
-//
-//            @Override
-//            public void onErrorResponse(String errorMessage) {
-//                registeringPatient = false;
-//                mPatientInfoView.setProgressBarVisibility(false);
-//            }
-//        });
-    }
-//
-//    public void findSimilarPatients(final Patient patient) {
-//        if (NetworkUtils.isOnline()) {
-//            List<Patient> similarPatient = new PatientComparator().findSimilarPatient(new PatientDAO().getAllPatients().toBlocking().first(), patient);
-//            if (!similarPatient.isEmpty()) {
-//                mPatientInfoView.showSimilarPatientDialog(similarPatient, patient);
-//            } else {
-//                Call<Results<Module>> moduleCall = restApi.getModules(ApplicationConstants.API.FULL);
-//                moduleCall.enqueue(new Callback<Results<Module>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<Results<Module>> call, @NonNull Response<Results<Module>> response) {
-//                        if (response.isSuccessful()) {
-//                            if (ModuleUtils.isRegistrationCore1_7orAbove(response.body().getResults())) {
-//                                fetchSimilarPatientsFromServer(patient);
-//                            } else {
-//                                fetchSimilarPatientAndCalculateLocally(patient);
-//                            }
-//                        } else {
-//                            fetchSimilarPatientAndCalculateLocally(patient);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<Results<Module>> call, @NonNull Throwable t) {
-//                        registeringPatient = false;
-//                        mPatientInfoView.setProgressBarVisibility(false);
-//                        ToastUtil.error(t.getMessage());
-//                    }
-//                });
-//            }
-//        } else {
-//            List<Patient> similarPatient = new PatientComparator().findSimilarPatient(new PatientDAO().getAllPatients().toBlocking().first(), patient);
-//            if (!similarPatient.isEmpty()) {
-//                mPatientInfoView.showSimilarPatientDialog(similarPatient, patient);
-//            } else {
-//                registerPatient();
-//            }
-//        }
-//    }
 
-//    private void fetchSimilarPatientAndCalculateLocally(final Patient patient) {
-//        Call<Results<Patient>> call = restApi.getPatients(patient.getName().getGivenName(), ApplicationConstants.API.FULL);
-//        call.enqueue(new Callback<Results<Patient>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Results<Patient>> call, @NonNull Response<Results<Patient>> response) {
-//                registeringPatient = false;
-//                if (response.isSuccessful()) {
-//                    List<Patient> patientList = response.body().getResults();
-//                    if (!patientList.isEmpty()) {
-//                        List<Patient> similarPatient = new PatientComparator().findSimilarPatient(patientList, patient);
-//                        if (!similarPatient.isEmpty()) {
-//                            mPatientInfoView.showSimilarPatientDialog(similarPatient, patient);
-//                            mPatientInfoView.showUpgradeRegistrationModuleInfo();
-//                        } else {
-//                            registerPatient();
-//                        }
-//                    } else {
-//                        registerPatient();
-//                    }
-//                } else {
-//                    mPatientInfoView.setProgressBarVisibility(false);
-//                    ToastUtil.error(response.message());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Results<Patient>> call, @NonNull Throwable t) {
-//                registeringPatient = false;
-//                mPatientInfoView.setProgressBarVisibility(false);
-//                ToastUtil.error(t.getMessage());
-//            }
-//        });
-//    }
-//
-//    private void fetchSimilarPatientsFromServer(final Patient patient) {
-//        Call<Results<Patient>> call = restApi.getSimilarPatients(patient.toMap());
-//        call.enqueue(new Callback<Results<Patient>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<Results<Patient>> call, @NonNull Response<Results<Patient>> response) {
-//                registeringPatient = false;
-//                if (response.isSuccessful()) {
-//                    List<Patient> similarPatients = response.body().getResults();
-//                    if (!similarPatients.isEmpty()) {
-//                        List<Patient> similarPatient = new PatientComparator().findSimilarServePatient(similarPatients, patient);
-//                        if (!similarPatient.isEmpty()) {
-//                            mPatientInfoView.showSimilarPatientDialog(similarPatients, patient);
-//                        }else{
-//                            registerPatient();
-//                        }
-//                    } else {
-//                        registerPatient();
-//                    }
-//                } else {
-//                    mPatientInfoView.setProgressBarVisibility(false);
-//                    ToastUtil.error(response.message());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<Results<Patient>> call, @NonNull Throwable t) {
-//                registeringPatient = false;
-//                mPatientInfoView.setProgressBarVisibility(false);
-//                ToastUtil.error(t.getMessage());
-//            }
-//        });
-//    }
+    }
+
+    @Override
+    public void deleteCommodity() {
+        new Delete().from(Consumption.class).where("id = ?", this.consumptionToUpdateId).execute();
+        finishConsumptionInfoActivity();
+    }
 
     @Override
     public boolean isRegisteringConsumption() {
         return registeringConsumption;
+    }
+
+    public long getConsumptionToUpdateId(){
+        return this.consumptionToUpdateId;
     }
 
 }

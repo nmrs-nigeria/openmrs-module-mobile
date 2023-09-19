@@ -3,11 +3,8 @@ package org.openmrs.mobile.activities.pbs;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import org.joda.time.DateTime;
-import org.openmrs.mobile.activities.BasePresenterContract;
-import org.openmrs.mobile.activities.BaseView;
-
 import java.io.Serializable;
+
 
 public class PatientBiometricContract implements Serializable {
 
@@ -59,6 +56,9 @@ public class PatientBiometricContract implements Serializable {
     @Expose
     private int PatienId;
 
+    @SerializedName("dateCreated")
+    @Expose
+    private String dateCreated;
     @SerializedName("biometricInfo_Id")
     @Expose
     public String BiometricInfo_Id;
@@ -88,6 +88,12 @@ public class PatientBiometricContract implements Serializable {
     }
     public void setModel(String model) { this.Model = model;  }
 
+    public String getDateCreated() {
+        return dateCreated;
+    }
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated=dateCreated;
+    }
     public String getSerialNumber() {
         return SerialNumber;
     }

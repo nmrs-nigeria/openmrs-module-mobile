@@ -13,9 +13,17 @@
  */
 
 package org.openmrs.mobile.databases.tables;
+import android.util.Log;
+
+import net.sqlcipher.database.SQLiteDatabase;
+
+import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.models.Patient;
+
+import java.util.List;
 
 public class PatientTable extends Table<Patient> {
     public static final String TABLE_NAME = "patients";

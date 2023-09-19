@@ -18,7 +18,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/patientAddressDetailsLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +34,8 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 app:cardCornerRadius="40dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/patientPhoto"
@@ -53,7 +55,7 @@
                 android:layout_marginStart="@dimen/margin_short"
                 android:layout_marginLeft="@dimen/margin_short"
                 android:layout_marginTop="30dp"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textColor="#2AB2A2"
                 android:textSize="@dimen/text_size_large"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/patientPhotoCardView"
@@ -108,10 +110,10 @@
                 style="@style/TextLabel.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="64dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/patient_details_birth_date_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsName"
                 app:layout_constraintTop_toBottomOf="@+id/view2" />
@@ -151,10 +153,10 @@
                 style="@style/TextLabel.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="64dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/patient_address_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsName"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
@@ -175,6 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/patient_lga_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsAddressLabel"
                 app:layout_constraintTop_toBottomOf="@+id/addressDetailsStreet" />
@@ -197,6 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/patient_ward_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsAddressLabel"
                 app:layout_constraintTop_toBottomOf="@+id/addressDetailsCityLabel" />
@@ -219,6 +223,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/patient_state_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsAddressLabel"
                 app:layout_constraintTop_toBottomOf="@+id/addressDetailsPostalCodeLabel" />
@@ -227,7 +232,7 @@
                 android:id="@+id/addressDetailsState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/label_margin_wide"
+                android:layout_marginStart="96dp"
                 android:layout_marginLeft="@dimen/label_margin_wide"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:textSize="@dimen/text_size_large"
@@ -241,6 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/patient_country_label"
+                android:textColor="#3259E0"
                 android:textSize="@dimen/text_size_large"
                 app:layout_constraintStart_toStartOf="@+id/patientDetailsAddressLabel"
                 app:layout_constraintTop_toBottomOf="@+id/addressDetailsStateLabel" />

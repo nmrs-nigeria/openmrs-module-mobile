@@ -26,7 +26,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/providerManagementRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/dashboard_background2" />
 
     <TextView
         android:id="@+id/emptyProviderManagementList"
@@ -42,7 +43,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/margin_long"
+        android:layout_marginStart="@dimen/margin_long"
+        android:layout_marginTop="@dimen/margin_long"
+        android:layout_marginEnd="@dimen/margin_long"
+        android:layout_marginBottom="@dimen/margin_long"
         android:src="@drawable/ic_add" />
 
 </RelativeLayout>

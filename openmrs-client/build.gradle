@@ -18,8 +18,8 @@ plugins {
     id 'kotlin-android-extensions'
 }
 
-def version = "2.8.0"
-
+//def version = "2.8.0"
+def version = "23.3.1"
 android {
     compileSdkVersion 29
 
@@ -188,6 +188,16 @@ dependencies {
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.github.javiersantos:AppUpdater:2.7'
+    implementation 'com.opencsv:opencsv:4.6'
+
+    // Gif viewer dependency
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+
+    // KenBurns effect dependency
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+
+
+
 }
 
 play {

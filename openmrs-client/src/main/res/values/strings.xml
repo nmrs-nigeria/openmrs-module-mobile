@@ -13,16 +13,23 @@
   -->
 
 <resources>
-    <string name="app_name">OpenMRS Client</string>
+    <string name="app_name">NigeriaMRS</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
     <string name="action_location">Location</string>
     <string name="dbname">openmrs.db</string>
     <string name="aadbname">aaopenmrs.db</string>
 
+    <string name="app_version">Version 23.3.1</string>
+
     <string name="alphanumeric_postal_code">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 </string>
 
+
     <!-- Login view -->
+
+    <string name="alert_title">No Network Connection</string>
+    <string name="alert_message">You don\'t have an active network connection on this device. Ensure you are connected to an active network that is on the same subnet as the NMRS server you wish to connect to and try launching the app again</string>
+
     <string name="login_button">Login</string>
     <string name="login_url_hint">URL address</string>
     <string name="login_username_hint">Username</string>
@@ -51,11 +58,11 @@
     <string name="lname_invalid_error">Family name cannot contain symbols or numbers</string>
     <string name="dob_error">Date should be between %1$s and %2$s</string>
     <string name="reg_firstname_hint">Given Name</string>
-    <string name="reg_uniqueid_hint">Hospital Number</string>
+    <string name="reg_uniqueid_hint">Patient’s Hospital Number</string>
     <string name="reg_midname_hint">Middle Name</string>
     <string name="reg_phone_hint">Phone Number</string>
     <string name="reg_surname_hint">Family Name</string>
-    <string name="reg_ques_name">What\'s the patient\'s name?</string>
+    <string name="reg_ques_name"> <font color = "#ff0000">*</font> These fields are required</string>
     <string name="reg_ident_name">What\'s the patient\'s hospital number?</string>
     <string name="reg_phone_number">Phone Number?</string>
     <string name="reg_ids_name">Other IDs?</string>
@@ -66,20 +73,25 @@
     <string name="department">Department</string>
     <string name="destination">Destination</string>
     <string name="source">Source</string>
+    <string name="institution">Institution</string>
     <string name="item">Item</string>
+    <string name="itemPharmacy">Item Pharmacy</string>
+    <string name="drugType">Drug Type</string>
     <string name="instance_type">Instance Type</string>
     <string name="item_batch">Item Batch</string>
     <string name="status">Status</string>
     <string name="quantity">Quantity</string>
     <string name="operationNumber">Operation Number</string>
-    <string name="wastage">Wastage</string>
+    <string name="losses">Losses</string>
     <string name="test_purpose">Test purpose</string>
     <string name="commodity_source">Commodity Source</string>
     <string name="data_system">Data system</string>
     <string name="commodity_type">Commodity Type</string>
+    <string name="add_more">Add More</string>
+    <string name="download_report">Download Report</string>
     <string name="label_or">Or</string>
     <string name="reg_ques_address">Address</string>
-    <string name="addr1_hint">Address</string>
+    <string name="addr1_hint">Address <font color = "#ff0000"><b>*</b></font></string>
     <string name="addr2_hint">Address 2</string>
     <string name="addr_invalid_error">Address cannot contain invalid characters</string>
     <string name="atleastone">Fill at least one address field</string>
@@ -91,12 +103,20 @@
     <string name="req_country">Country name required</string>
     <string name="req_city">City name required</string>
     <string name="req_postal">Postal code required</string>
+    <string name="receiptItem">Receipt Item</string>
+    <string name="receiptQuantity">Receipt Quantity</string>
+    <string name="receiptItemBatch">Receipt Item Batch</string>
+    <string name="expirationDate">Expiration Date</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="dob_hint">Date of Birth (format: dd/MM/yyyy)</string>
-    <string name="consumption_date_hint">Consumption date (format: dd/MM/yyyy)</string>
-    <string name="operation_date_hint">Operation date (format: dd/MM/yyyy)</string>
+    <string name="dob_hint">Date of Birth (dd/MM/yyyy)</string>
+    <string name="consumption_date_hint">Consumption date (dd/MM/yyyy)</string>
+    <string name="operation_date_hint">Operation date (dd/MM/yyyy)</string>
+    <string name="receipt_expiration_date_hint">Receipt Expiration date (dd/MM/yyyy)</string>
+    <string name="distribution_expiration_date_hint">Distribution Expiration date (dd/MM/yyyy)</string>
+    <string name="transfer_expiration_date_hint">Transfer Expiration date (dd/MM/yyyy)</string>
+    <string name="adjustment_expiration_date_hint">Adjustment Expiration date (dd/MM/yyyy)</string>
     <string name="estyr">Estimated Years</string>
     <string name="estmonth">Estimated Months</string>
     <string name="capture_photo">Capture photo</string>
@@ -205,13 +225,16 @@
     <string name="dashboard_search_icon_label">Find Patients</string>
     <string name="dashboard_registry_icon_label">Register Patient</string>
     <string name="receipt_icon_label">Receipt</string>
-<!--    <string name="dashboard_visits_icon_label">Synced Status</string>-->
+    <!--    <string name="dashboard_visits_icon_label">Synced Status</string>-->
     <string name="dashboard_visits_icon_label">Synced Status</string>
     <string name="dashboard_Commodity_icon_label">Commodity</string>
     <string name="add_edit_commodity_icon_label">Add/Edit Consumption</string>
     <string name="add_edit_receipt_icon_label">Add/Edit Receipt</string>
     <string name="add_edit_distribution_icon_label">Add/Edit Distribution</string>
+    <string name="add_edit_transfer_icon_label">Add/Edit Transfer</string>
+    <string name="add_edit_adjustment_icon_label">Add/Edit Adjustment</string>
     <string name="dashboard_forms_icon_label">Form Entry</string>
+    <string name="patient_biometric_module">Patient Biometric Module</string>
 
     <!-- ART Programs -->
     <string name="hiv_enrollment_label">HIV Enrollment</string>
@@ -242,9 +265,15 @@
     <string name="hts_program_icon_label">Testing Services</string>
     <string name="consumption_label">Consumption</string>
     <string name="distribution_label">Distribution</string>
+    <string name="find_commodity_label">Find</string>
+    <string name="sync_commodity_label">Sync</string>
     <string name="report_label">Report</string>
+    <string name="transfer_commodity_label">Transfer</string>
+    <string name="report_commodity_label">Report</string>
+    <string name="adjustment_commodity_label">Adjustment</string>
     <string name="pmtct_program_label">PMTCT</string>
     <string name="hei_program_label">HIV Exposed Infant</string>
+    <string name="covidtbintegrator_program_label">Covid TB Integrator</string>
 
     <!-- row_find_synced_patients layout-->
     <string name="find_patients_row_checkbox_download_label">Download</string>
@@ -263,6 +292,8 @@
     <string name="patient_scroll_tab_visits_label">Synced Visits</string>
     <string name="patient_scroll_tab_vitals_label">Vitals</string>
     <string name="patient_scroll_tab_charts_label">Charts</string>
+    <string name="patient_scroll_tab_fingerprint_label">Finger Prints</string>
+    <string name="patient_scroll_tab_covid19tb_label">Covid-19 TB</string>
     <string name="download_started">"Downloading…"</string>
     <string name="action_starting_visit">"Starting Visit"</string>
 
@@ -273,17 +304,18 @@
     <string name="patient_details_gender_label">Gender</string>
     <string name="patient_details_birth_date_label">Birth date</string>
     <string name="patient_details_phone_label">Phone number</string>
-    <string name="patient_contact_info_label">Contact Information</string>
+    <string name="patient_contact_info_label">Patient\'s Contact Information</string>
     <string name="patient_information_label">Patient Information</string>
     <string name="patient_address_label">Address</string>
     <string name="patient_city_label">City</string>
     <string name="patient_postal_label">Postal Code</string>
-    <string name="patient_state_label">State</string>
+    <string name="patient_state_label">State of residence</string>
     <string name="patient_lga_label">LGA</string>
     <string name="patient_ward_label">Ward/Community</string>
     <string name="patient_country_label">Country</string>
     <string name="patient_photo_edit">Update photo</string>
     <string name="date_picker_title">Select Date of Birth</string>
+    <string name="date_picker_title_expiry">Select Expiry Date</string>
 
     <!-- Find Active visit activity -->
     <string name="action_active_visits">Synced Status</string>
@@ -353,9 +385,11 @@
     <string name="gender_hint">gender:</string>
     <string name="birthdate_hint">birthdate:</string>
     <string name="address_hint">address:</string>
-    <string name="demographics">Demographics</string>
+    <string name="demographics">Patient\'s Demographics</string>
     <string name="consumption">New Consumption</string>
     <string name="receipt">New Receipt</string>
+    <string name="adjustment">New Adjustment</string>
+    <string name="transfer">New Transfer</string>
     <string name="distribution">New Distribution</string>
     <string name="unable_to_login">Unable to login?</string>
     <string name="no_patient_selected">No patient selected</string>
@@ -513,13 +547,63 @@
     <string name="set_brightness_100">Set Brightness 100</string>
     <string name="log">Log</string>
     <string name="action_patient_pbs">Patient Biometrics</string>
+    <string name="export_PBS">Export PBS</string>
+    <string name="title_activity_export_p_b_s">Patient Biometric Module</string>
 
     <!-- Enforce IP Change -->
     <string name="enforce_ip_change_title">Enforce IP Change</string>
     <string name="enforce_ip_change_url">Enter URL Address Here</string>
     <string name="enforce_ip_change_action">Enforce Change</string>
 
+    <!-- Troubleshoot -->
+    <string name="action_troubleshoot">Troubleshoot</string>
+    <string name="test_pbs_connection">Test PBS Connection</string>
+    <string name="troubleshoot_title">Troubleshoot NMRS Connections</string>
+    
+    <!-- Covid TB Integrator -->
+    <string name="covid_tb_hiv_client_intake">Covid TB HIV Client Intake</string>
+    <string name="blood_transfusion_in_last_3_months">Blood transfusion in last 3 months:</string>
+    <string name="sti_in_the_last_3_months">STI in the last 3 months:</string>
+    <string name="iv_drugs_user_shares_needle_or_sharps">IV drugs user/ Shares needle or sharps:</string>
+    <string name="unprotected_sex_in_the_last_3_months">Unprotected sex in the last 3 months:</string>
+    <string name="diagnosed_for_tb_currently_on_tb_treatment">Diagnosed for TB/Currently on TB treatment:</string>
+    <string name="forced_to_have_sex_transactional_sex_for_money_gifts">Forced to have Sex/transactional sex for money/gifts:</string>
+    <string name="complaints_of_genital_sores_or_swollen_inguinal_lymph_nodes_with_or_without_pains">Complaints of genital sore(s) or swollen inguinal lymph nodes with or without pains?:</string>
+
+    <string name="clinical_tb_screening">Clinical TB Screening</string>
+    <string name="cough_2_weeks">Cough >= 2 weeks:</string>
+    <string name="weight_loss">Weight Loss:</string>
+    <string name="fever">Fever:</string>
+    <string name="night_sweats">Night Sweats:</string>
+    <string name="cough_of_any_duration_with_heamoptysis_with_out_other_symptoms">Cough of any duration with heamoptysis with/out other symptoms:</string>
+    <string name="cough_of_any_duration_with_unexplained_weightloss_fever">Cough of any duration with unexplained weightloss &amp; fever:</string>
+    <string name="cough_of_any_duration_with_unexplained_weightloss">Cough of any duration with unexplained weightloss:</string>
+    <string name="cough_of_any_duration_with_fever_2_weeks">Cough of any duration with fever > 2 weeks:</string>
+    <string name="unexplained_weight_loss_fever_2_weeks">Unexplained weight loss &amp; fever > 2 weeks:</string>
+    <string name="cough_less_than_2_weeks_with_sputum">Cough less than 2 weeks with sputum:</string>
+
+    <string name="clinical_covid_19_screening">Clinical Covid-19 Screening</string>
+    <string name="temperature_reading">Temperature Reading (enter value in degree celsius):</string>
+    <string name="health_care_worker">Health Care Worker:</string>
+    <string name="dry_cough">Dry Cough:</string>
+    <string name="shortness_of_breath_in_the_past_week">Shortness of Breath in the past week:</string>
+    <string name="history_of_fever_in_the_past_week">History of Fever in the Past Week:</string>
+    <string name="muscle_aches">Muscle Aches (myalagia):</string>
+    <string name="not_vaccinated_for_covid_19">Not Vaccinated for Covid-19:</string>
+    <string name="loss_of_taste">Loss of Taste:</string>
+    <string name="loss_of_sense_of_smell">Loss of Sense of Smell:</string>
+    <string name="sore_throat">Sore throat:</string>
+    <string name="headache">Headache:</string>
+    <string name="international_travel_or_lived_in_area_with_community_spread_covid">International travel or lived in area with community spread covid:</string>
+    <string name="close_contact_with_known_suspected_COVID_19_patient">Close contact with known/suspected COVID-19 patient:</string>
+    <string name="history_of_chronic_non_communicable_disease">History of Chronic Non Communicable Disease (e.g DM, Hypertension, Chronic Lung Disease, Liver Disease):</string>
+
+    <string name="saveCovidTBButton">Save and Send Patient to Boot</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fingerprint_no">1\n2\n3\n4\n5\n6\n7\n8\n9\n10</string>
+    <string name="fingerprint_position">Left thumb\nLeft index\nLeft middle\nLeft ring\nLeft pinky\nRight thumb\nRight index\nRight middle\nRight ring\nRight pinky</string>
 
 </resources>

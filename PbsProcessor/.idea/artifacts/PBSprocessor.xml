@@ -1,0 +1,31 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" build-on-make="true" name="PBSprocessor">
+    <output-path>$PROJECT_DIR$/out/artifacts/PBSprocessor</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="pbsprocessor.pbsprocessor" />
+        <option name="convertCss2Bin" value="true" />
+        <option name="description" value="This is a tool for importing PBS data from the PBS export JSON file into the host Nigeria Medical Record System (NMRS) instance." />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="icons">
+          <JavaFxApplicationIcons>
+            <option name="windowsIcon" value="$PROJECT_DIR$/src/pbsprocessor/asset/pbsprocessor-64.ico" />
+          </JavaFxApplicationIcons>
+        </option>
+        <option name="nativeBundle" value="msi" />
+        <option name="title" value="PBS Processor" />
+        <option name="vendor" value="Center for Integrated Health Programs" />
+        <option name="version" value="2301.02" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="PBSprocessor.jar">
+        <element id="module-output" name="PBSprocessor" />
+      </element>
+      <element id="directory" name="lib" />
+      <element id="directory" name="docs">
+        <element id="file-copy" path="$PROJECT_DIR$/docs/sop.pdf" />
+      </element>
+    </root>
+  </artifact>
+</component>

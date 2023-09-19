@@ -137,6 +137,67 @@
         <item name="android:textColor">#8affffff</item>
     </style>
 
+    <!-- Commodity Button -->
+    <style name="addMoreBuitton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawableLeft">@android:drawable/ic_input_add</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Delete Button -->
+    <style name="deleteButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawableLeft">@android:drawable/ic_delete</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Export Button -->
+    <style name="exportPBSButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:radius">20px</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:drawableLeft">@drawable/ic_export</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Clear PBS Button -->
+    <style name="deletePBSButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:radius">20px</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@color/red</item>
+        <item name="android:drawableLeft">@drawable/ic_delete_forever</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Import PBS Button -->
+    <style name="importPBSButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:radius">20px</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:drawableLeft">@drawable/ic_import_pbs</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <!-- PBS Capture Buttons -->
     <style name="captureButton">
         <item name="android:layout_width">wrap_content</item>
@@ -147,6 +208,7 @@
         <item name="android:drawableLeft">@android:drawable/ic_menu_camera</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="pbsSaveButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -166,4 +228,43 @@
         <item name="android:drawableLeft">@android:drawable/ic_menu_delete</item>
         <item name="android:background">@color/red</item>
     </style>
+
+    <style name="pbsTestButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawableLeft">@drawable/pbs_fingerprint_colored</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/spinner_styling</item>
+    </style>
+
+    <style name="allSaveButtons">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawableRight">@drawable/ic_check_circle_button</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="FingerPrintQualityDefaultTextStyle" parent="android:Widget.TextView">
+        <item name="android:background">@drawable/fingerprint_quality_bg</item>
+        <item name="android:foregroundGravity">center_vertical</item>
+        <item name="android:padding">8dp</item>
+      <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">5dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
 </resources>

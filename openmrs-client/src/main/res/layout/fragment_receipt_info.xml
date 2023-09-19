@@ -14,6 +14,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/addEditRelativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,7 +38,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/dashboard_background2"
                     android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/deleteCommodity"
+                        style="@style/deleteButton"
+                        android:layout_width="145dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:background="@color/primary_dark"
+                        android:padding="5dp"
+                        android:text="@string/delete"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -47,10 +64,63 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="8dp"
                         android:text="@string/receipt"
-                        android:textColor="?android:attr/textColorPrimary"
-                        android:textSize="20sp"
+                        android:textColor="#2AB2A2"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="12dp"
+                        android:text="@string/commodity_type"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/commoditytypeerror"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:padding="2dp"
+                        android:textColor="@color/red"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLayoutCommodityType"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
+                            <Spinner
+                                android:id="@+id/commodity_type"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </RelativeLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -60,7 +130,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/operation_date"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -86,7 +156,8 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
 
                             <EditText
                                 android:id="@+id/operation_date"
@@ -121,7 +192,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/destination"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -149,13 +220,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/destination"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -172,7 +246,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/instance_type"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -200,13 +274,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/instanceType"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -224,7 +301,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/status"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -252,13 +329,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/status"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -267,6 +347,186 @@
 
                     </RelativeLayout>
 
+                    <LinearLayout
+                        android:id="@+id/linearLayoutItemLab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="12dp"
+                            android:text="@string/item"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/receiptItemError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:padding="2dp"
+                            android:textColor="@color/red"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/textInputLayoutreceiptItem"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginRight="12dp">
+
+                                <Spinner
+                                    android:id="@+id/receiptItem"
+                                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:textSize="14sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutItemPharmacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="12dp"
+                            android:text="@string/itemPharmacy"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/receiptItemPharmacyError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:padding="2dp"
+                            android:textColor="@color/red"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/textInputLayoutreceiptItemPharmacy"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginRight="12dp">
+
+                                <Spinner
+                                    android:id="@+id/receiptItemPharmacy"
+                                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:textSize="14sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutDrugType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="12dp"
+                            android:text="@string/drugType"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/drugType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:padding="2dp"
+                            android:textColor="@color/red"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/textInputLayoutdrugType"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginRight="12dp">
+
+                                <Spinner
+                                    android:id="@+id/receiptDrugType"
+                                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:textSize="14sp" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -274,12 +534,12 @@
                         android:layout_marginLeft="12dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
-                        android:text="@string/operationNumber"
-                        android:textSize="18sp"
+                        android:text="@string/quantity"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/operationNumbererror"
+                        android:id="@+id/receiptQuantityError"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
@@ -297,14 +557,66 @@
 
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputLayoutoperationNumber"
+                            android:id="@+id/textInputLayoutreceiptQuantity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
 
                             <EditText
-                                android:id="@+id/operationNumber"
+                                android:id="@+id/receiptQuantity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:maxLines="1"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="12dp"
+                        android:text="@string/item_batch"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/receiptItemBatchError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:padding="2dp"
+                        android:textColor="@color/red"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLayoutreceiptItemBatch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
+
+                            <EditText
+                                android:id="@+id/receiptItemBatch"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:focusable="true"
@@ -317,6 +629,67 @@
 
                     </RelativeLayout>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="12dp"
+                        android:text="@string/expirationDate"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/receiptExpirationDateerror"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginLeft="12dp"
+                        android:padding="2dp"
+                        android:textColor="@color/red"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLayoutreceiptExpirationDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg">
+
+                            <EditText
+                                android:id="@+id/receiptExpirationDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/receipt_expiration_date_hint"
+                                android:imeOptions="actionNext"
+                                android:inputType="datetime"
+                                android:maxLines="1"
+                                android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/btn_receiptExpirationDatedatepicker"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginRight="24dp"
+                            android:drawableRight="@drawable/ic_date_range_24dp" />
+                    </RelativeLayout>
 
 
                     <TextView
@@ -327,7 +700,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/commodity_source"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -355,13 +728,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/commoditysource"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
@@ -370,56 +746,6 @@
 
                     </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="12dp"
-                        android:text="@string/commodity_type"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/commoditytypeerror"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
-                        android:padding="2dp"
-                        android:textColor="@color/red"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp">
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputLayoutCommodityType"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
-                            <Spinner
-                                android:id="@+id/commodity_type"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textSize="14sp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-                    </RelativeLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -429,7 +755,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="12dp"
                         android:text="@string/data_system"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -457,16 +783,52 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp">
+                            android:layout_marginRight="12dp"
+                            android:background="@drawable/custom_bg"
+                            android:padding="8dp">
+
                             <Spinner
                                 android:id="@+id/data_system"
+                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                style="@style/Widget.AppCompat.Spinner.Underlined"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:textSize="14sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/addMoreButtonSystem"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp">
+
+                            <Button
+                                android:id="@+id/addMoreButton"
+                                style="@style/addMoreBuitton"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_weight="1"
+                                android:background="@color/primary_dark"
+                                android:padding="5dp"
+                                android:text="@string/add_more"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
 

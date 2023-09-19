@@ -22,13 +22,16 @@ import com.activeandroid.query.Select;
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.dao.PatientBiometricJoinDAO;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FilterUtil;
 import org.openmrs.mobile.utilities.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -39,6 +42,7 @@ public class SyncedVisitsPresenter extends BasePresenter implements SyncedVisits
     @NonNull
     private final SyncedVisitsContract.View syncedVisitsView;
     private PatientDAO patientDAO;
+
 
     // Query for data filtering
     @Nullable
@@ -111,19 +115,47 @@ public class SyncedVisitsPresenter extends BasePresenter implements SyncedVisits
                             syncedVisitsView.updateListVisibility(true);
                         }
                     }
+
+                    // all patients with biometric as map
+                    Map<Long,Patient>  patientsWithPrints =  new  PatientBiometricJoinDAO().getPatientWithPBS_();
                     List<Patient> filteredList = new ArrayList<>();
-                    patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
+                            patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
+                            // patient list is the list of all patients in the local database when filter is not applied
                     for (Patient patient : patientList) {
+                        Patient p= patientsWithPrints.get(patient.getId());
                         List<Encountercreate> encountersSynced = new Select()
                                 .from(Encountercreate.class)
                                 .where("patientid = ? AND synced = 0", patient.getId())
                                 .execute();
-                        if (!encountersSynced.isEmpty() || !patient.isSynced()){
-                            patient.setDisplay("Pending");
-                            filteredList.add(patient);
-                        }
-                    }
 
+                        if (!encountersSynced.isEmpty() || !patient.isSynced()){
+                            if(p!=null) {
+                                // check if PBS not synced and PBS data reached minimum requirement add PBS flag
+                                if(!p.isFingerprintFullSync()&&  p.getFingerprintCount()>=ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT
+                                ) {
+                                    p.setDisplayPBS("PBS");
+                                }
+                                p.setDisplay("Pending");
+                                filteredList.add(p);
+                            }else {
+                                patient.setDisplay("Pending");
+                                filteredList.add(patient);
+                            }
+                        }else{
+                            if(p!=null) {
+                                // check if PBS not synced and PBS data reached minimum requirement
+                                if(!p.isFingerprintFullSync()&&
+                                        p.getFingerprintCount()>=ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT
+                                ) {
+                                    p.setDisplay("");
+                                    p.setDisplayPBS("PBS");
+                                    filteredList.add(p);
+                                }
+                            }
+                        }
+
+
+                    }
                     syncedVisitsView.updateAdapter(filteredList);
                 }));
 

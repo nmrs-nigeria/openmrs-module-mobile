@@ -3,8 +3,10 @@ package org.openmrs.mobile.utilities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 
 import java.io.BufferedReader;
@@ -63,6 +65,7 @@ public class ForceClose implements java.lang.Thread.UncaughtExceptionHandler{
             Intent i = myContext.getPackageManager().getLaunchIntentForPackage("org.openmrs.mobile");
             i.putExtra("flag",true);
             i.putExtra("error", errorReport.toString());
+            OpenMRSCustomHandler.writeCrashToFile(errorReport.toString());
             myContext.startActivity(i);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);

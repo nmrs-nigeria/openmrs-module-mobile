@@ -10,7 +10,10 @@ import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.addeditreceipt.AddEditReceiptContract;
 import org.openmrs.mobile.activities.addeditreceipt.AddEditReceiptFragment;
 import org.openmrs.mobile.activities.addeditreceipt.AddEditReceiptPresenter;
+import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.ForceClose;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,12 +23,13 @@ public class AddEditReceiptActivity extends ACBaseActivity {
 
     public AddEditReceiptFragment addEditReceiptFragment;
     private AlertDialog alertDialog;
+    private long consumptionID;
+    private OpenMRSLogger logger = new OpenMRSLogger();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_receipt_info);
-
         // Create fragment
         addEditReceiptFragment =
                 (AddEditReceiptFragment) getSupportFragmentManager().findFragmentById(R.id.receiptContentFrame);
@@ -50,9 +54,15 @@ public class AddEditReceiptActivity extends ACBaseActivity {
             patientID = patientBundle.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
         }
 
-        List<String> countries = Arrays.asList(getResources().getStringArray(R.array.countries_array));
+        //Get the Consumption ID if any exists
+        Bundle gotBasket = getIntent().getExtras();
+        consumptionID = gotBasket.getLong("id", 0);
+        if(consumptionID != 0){
+
+        }
+
         // Create the mPresenter
-        mPresenter = new AddEditReceiptPresenter(addEditReceiptFragment, patientID);
+        mPresenter = new AddEditReceiptPresenter(addEditReceiptFragment, consumptionID);
     }
 
     @Override

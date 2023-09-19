@@ -127,4 +127,50 @@ public class Patient extends Person implements Serializable{
             map.put(key, value);
         }
     }
+
+
+
+    /*
+    The extension of patient to accommodate  include biometric  captured and sync count
+
+     */
+    private   int fingerprintCount =0;
+    private  int syncFingerprintCount=0;
+    private   String displayPBS="";
+
+
+
+    public String getDisplayPBS() {
+        return displayPBS;
+    }
+
+    public void setDisplayPBS(String displayPBS) {
+        this.displayPBS = displayPBS;
+    }
+
+    public void setSyncFingerprintCount(int syncFingerprintCount) {
+        this.syncFingerprintCount = syncFingerprintCount;
+    }
+
+    public int getSyncFingerprintCount() {
+        return this.syncFingerprintCount;
+    }
+    public boolean isFingerprintFullSync() {
+        return this.syncFingerprintCount == this.fingerprintCount &&
+                this.fingerprintCount>0;
+    }
+    public boolean isFingerprintPartiallySync() {
+        return this.syncFingerprintCount != this.fingerprintCount& this.syncFingerprintCount>0;
+    }
+
+    public void setFingerprintCount(int fingerprintCount) {
+        this.fingerprintCount = fingerprintCount;
+    }
+
+    public int getFingerprintCount() {
+        return this.fingerprintCount;
+    }
+
+
+
 }

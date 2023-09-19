@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -30,12 +31,16 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.openmrs.mobile.api.FormListService;
+import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Consumption;
 import org.openmrs.mobile.models.Department;
+import org.openmrs.mobile.models.Destination;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Facility;
+import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.FormResource;
 import org.openmrs.mobile.models.Item;
 import org.openmrs.mobile.models.ItemBatch;
@@ -43,6 +48,7 @@ import org.openmrs.mobile.models.Lga;
 import org.openmrs.mobile.models.Link;
 import org.openmrs.mobile.models.Obscreate;
 import org.openmrs.mobile.models.ObscreateLocal;
+import org.openmrs.mobile.models.Pharmacy;
 import org.openmrs.mobile.models.States;
 import org.openmrs.mobile.services.AuthenticateCheckService;
 import org.openmrs.mobile.utilities.ApplicationConstants;
@@ -66,6 +72,7 @@ public class OpenMRS extends Application {
     public void onCreate() {
         initializeSQLCipher();
         super.onCreate();
+        Util.log("Getting instance ");
         instance = this;
         if (mExternalDirectoryPath == null) {
             mExternalDirectoryPath = this.getExternalFilesDir(null).toString();
@@ -74,11 +81,19 @@ public class OpenMRS extends Application {
         OpenMRSDBOpenHelper.init();
         initializeDB();
         AndroidSnooper.init(this);
-        Intent i = new Intent(this, FormListService.class);
-        startService(i);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            Intent intent = new Intent(this, AuthenticateCheckService.class);
-            startService(intent);
+        // catch exception when the service is already  running
+        try {
+            Intent i = new Intent(this, FormListService.class);
+            startService(i);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                Intent intent = new Intent(this, AuthenticateCheckService.class);
+                startService(intent);
+            }
+        }catch (Exception e){
+       // app is in background
+            Log.e(Util.TAG,"Loading form and encounter type Stop "+e.getMessage());
+            OpenMRSCustomHandler.writeLogToFile(e.getMessage());
+
         }
     }
 
@@ -97,22 +112,29 @@ public class OpenMRS extends Application {
         configurationBuilder.addModelClasses(Item.class);
         configurationBuilder.addModelClasses(ItemBatch.class);
         configurationBuilder.addModelClasses(Consumption.class);
+        configurationBuilder.addModelClasses(Destination.class);
+       // configurationBuilder.addModelClasses(FingerPrintLog.class);
+
         ActiveAndroid.initialize(configurationBuilder.create());
 
-    try {
-        List<States> states = new Select()
-                .from(States.class)
-                .execute();
-        if (states.isEmpty()){
-            populateFacility();
-            populateLga();
-            populateState();
-            populateItem();
-            populateDepartment();
+        populateDestination();
+        populatePharmacy();
+        try {
+            List<States> states = new Select()
+                    .from(States.class)
+                    .execute();
+            //List<Destination> destinations = new Select().from(Destination.class).execute();
+            //if(destinations.)
+            if (states.isEmpty()) {
+                populateFacility();
+                populateLga();
+                populateState();
+                populateItem();
+                populateDepartment();
+            }
+        } catch (Exception e) {
+            mLogger.i(e.toString());
         }
-    }catch (Exception e){
-        mLogger.i(e.toString());
-    }
 
     }
 
@@ -218,7 +240,7 @@ public class OpenMRS extends Application {
         editor.apply();
     }
 
-    public void setLocationParent (String location_parent_location_uuid) {
+    public void setLocationParent(String location_parent_location_uuid) {
         SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
         editor.putString(ApplicationConstants.LOCATION_PARENT_LOCATION_UUID, location_parent_location_uuid);
         editor.apply();
@@ -279,18 +301,22 @@ public class OpenMRS extends Application {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION, ApplicationConstants.EMPTY_STRING);
     }
+
     public String getLocationUUID() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION_UUID, ApplicationConstants.EMPTY_STRING);
     }
+
     public String getLocationDisplay() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION_DISPLAY, ApplicationConstants.EMPTY_STRING);
     }
+
     public String getLocationDescription() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION_DESCRIPTION, ApplicationConstants.EMPTY_STRING);
     }
+
     public String getLocationParent() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.LOCATION_PARENT_LOCATION_UUID, ApplicationConstants.EMPTY_STRING);
@@ -403,7 +429,7 @@ public class OpenMRS extends Application {
         editor.apply();
     }
 
-    public void populateState(){
+    public void populateState() {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO states (stateCode,stateName) VALUES('ABS','Abia')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO states (stateCode,stateName) VALUES('ADS','Adamawa')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO states (stateCode,stateName) VALUES('AKS','Akwa Ibom')");
@@ -444,7 +470,7 @@ public class OpenMRS extends Application {
 
     }
 
-    public void populateLga(){
+    public void populateLga() {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO lga (lgaCode,lgaName,stateCode) VALUES('NIE ABS ABA','Aba South','ABS')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO lga (lgaCode,lgaName,stateCode) VALUES('NIE ABS ACH','Arochukwu','ABS')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO lga (lgaCode,lgaName,stateCode) VALUES('NIE ABS APR','Umuahia South','ABS')");
@@ -1226,7 +1252,7 @@ public class OpenMRS extends Application {
 
     }
 
-    public void populateFacility(){
+    public void populateFacility() {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Aboru Primary Health Center','c3KK4r0ApCl','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Agape Hospital','zWL7dZOFW9z','NIE LAS KTU')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO facility (facilityName,facilityCode,lgaCode) VALUES('Agbelekale Primary Health Center','ISrqCAopMYv','NIE LAS KTU')");
@@ -3339,9 +3365,9 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Laboratory','8eb2330d-7970-41b7-8240-b07d4534c923')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Others','43dd09f9-2773-4f67-b694-0b37d66db406')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO department (name,uuid) VALUES('Early infant diagnosis','36ccbd54-ab90-4bab-88b9-eb7bd7e1df1a')");
-
-
     }
+
+
     public void populateItem() {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Determine(100)','06d5326c-b994-4d2f-a57a-4fe8755dc1a3')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Uni-Gold(20)','7559842c-0599-429d-90b5-e5935d0cd720')");
@@ -3353,10 +3379,100 @@ public class OpenMRS extends Application {
         SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('DBS Kits(50)','925d818a-3e3a-4c72-b566-1b94cc12a888')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Asante(100)','742aa79f-46bb-4bf3-8326-c27484379810')");
         SQLiteUtils.execSql("INSERT OR REPLACE INTO item (name,uuid) VALUES('Asante(20)','4ab7f97d-fbf8-40a3-82bd-30e84d5a30c9')");
-
     }
-    public void populateItemBatch() {
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO item_batch (name,uuid)  VALUES('M251012','c3KK4dr0ApCl')");
-        SQLiteUtils.execSql("INSERT OR REPLACE INTO item_batch (name,uuid)  VALUES('06205K200R','c3KK4r0ApCl')");
+
+    public void populateDestination() {
+        List<Destination> destinations = new Select().from(Destination.class).execute();
+        if (destinations.isEmpty()) {
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO destination (name,uuid)  VALUES('Lab StockRoom','2741bae2-c5de-43ef-891f-7ec2fd58f442')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO destination (name,uuid)  VALUES('Bulk Store','5452ec3e-2fe1-46de-8a6e-28c6442e4cc0')");
+        }
+    }
+
+    public void populatePharmacy() {
+        List<Pharmacy> pharmacy = new Select().from(Pharmacy.class).execute();
+        if (pharmacy.isEmpty()) {
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine/Efavirenz(30)(300/300/600mg)','b798dad9-d7d6-480d-8bd4-d2819145ea31')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine/Dolutegravir(30)(300/300/50mg)','55dfcd9b-e3b9-4164-a2fc-8faf8df25d58')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine/Dolutegravir(90)(300/300/50mg)','161937c6-c1b2-44a9-b2f3-1d7ad3da85da')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lamivudine/Zidovudine/Nevirapine(60)(150/300/200mg)','3d66d5eb-bbad-474b-9637-971f6a8e5b01')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine(30)(300/300mg)','e52a152b-1eb7-4189-8899-b91308f8b7b0')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lamivudine/Zidovudine(60)(300/150mg)','d4c09c9b-bead-4578-85d8-0802f8bf1b4a')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Abacavir/Lamivudine(30)(600/300mg)','f49501ee-637a-4115-87dc-bb2e72019a6c')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Abacavir/Lamivudine(30)(120/60mg)','c2a303db-bcd4-46d9-b6d1-5c0c4eabcd2a')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Efavirenz(30)(600mg)','91dc08f8-f7ae-4ea7-b2ea-0e483c0cb463')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Zidovudine(60)(300mg)','0b17816e-d41a-4c8f-917a-8b55e3c345cc')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Atazanavir/Ritonavir(30)(300/100mg)','1860973c-1031-489c-b650-4c3d564a9844')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lopinavir/Ritonavir(120)(200/50mg)','d7232d03-06a9-4915-9299-2fd511afb215')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lopinavir/Ritonavir(120)(40/10mg)','5e949026-a650-423e-85c5-4c760e6b201b')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Darunavir(60)(600mg)','8bdc5767-636c-4a86-be12-a4dae87bbae3')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ritonavir(30)(100mg)','6102fcba-aec7-4b55-896b-606217a8de6b')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Darunavir/Ritonavir(30)(800mg/100mg)','681b29bf-2ca0-48bb-8832-4eb701c5e070')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Dolutegravir(30)(50mg)','f85affcc-9e07-4303-aabf-a00c13bee5d1')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lamivudine/Zidovudine/Nevirapine(60)(30/60/50mg)','95800b9b-f334-4871-a383-13d663a99a2f')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Abacavir/Lamivudine(60)(60/30mg)','c837ea4c-1aa5-4289-b8ea-033a4c2c793a')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Abacavir/Lamivudine(30)(60/30mg)','68817326-9e61-4cb6-95a7-75193c377f7f')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lamivudine/Zidovudine(60)(60/30mg)','cc047f31-8b44-4ca1-bb02-a85186adfe15')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Efavirenz(90)(200mg)','291cf1a7-de8a-43a9-9c68-9c83b1c8cc4a')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Nevirapine(100ml)(50mg/5ml)','b9261d1a-ee6c-4ae0-b03e-15f93a12db20')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Zidovudine(50mg)(240ml)','7605d1cf-94de-44bf-9f6f-006d8361eab4')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Co-trimoxazole(1000)(120mg)','3e3fba6b-cdce-4b20-bae5-7b6916e691a0')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Co-trimoxazole(100)(960mg)','4c511821-236e-42d3-9272-9f12841b8e35')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Isoniazid(100)(100ml)','1fc71936-ef5f-4105-b020-2d63f6704dc6')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine/Dolutegravir(180)(300/300/50mg)','ee39626c-7678-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/Lamivudine/Efavirenz(90)(300/300/400mg)','2b88c424-775e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Darunavir/Ritonavir(400/50mg)','c0cdb086-767c-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tenofovir/emtricitabine(30)(300/200mg)','ff3d8ada-775d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Abacavir(60)(60mg)','cecd47f0-767c-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lopinavir/Ritonavir (60)(100/25mg)','dd60b338-775d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Lopinavir/Ritonavir(80/20mg/ml)','0df10d0e-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Raltegravir(60)(25mg)','3a50c164-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Zidovudine(10mg/ml)','43804d68-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Fluconazole(7)(100mg)','51524eaa-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Fluconazole(10)(100mg)','5c5bb76e-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Isoniazid(20)(300mg)','7ac77300-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Nystatin Oral Suspension(30)(100,000 IU/ml)','83aac7a6-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Co-trimoxazole/Isoniazid/Pyridoxine(960/300/25mg)','8e346146-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Fluconazole(50mg)','9729a86a-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Fluconazole Oral Suspension(35)(50mg/5ml)','a53009cc-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Fluconazole(100mg)','ae45d352-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Pyridoxine(50mg)','b8118f84-767d-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Flucytosine(500mg)','99a516e8-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Liposomal Amphotericin B(50mg)','9379181e-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Amphotericin Deoxycholate(50mg)','890bda88-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Isoniazid (INH)(300mg)','715300f6-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Isoniazid (INH)(100mg)','6a3516a6-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Acyclovir(200mg)','59494880-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Acyclovir(400mg)','522ff756-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Albendazole(200mg)','4738a0aa-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Amitryptyline (25mg)','3fbbb56a-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Amoxycillin (500mg)','324698f0-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Amoxycillin (250mg/5ml)','2a889406-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Azithromycin(500mg)','1d8ba658-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Azithromycin(250mg)','15d689a0-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Benzathine Peniciline G(2.4MIU)','06e5463e-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ceftriazone(1g Injection)','00db558a-769f-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Cefixime(200mg)','f6522990-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Cefixime(400mg)','efc9a24c-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ciprofloxacin(500mg)','e44b779c-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Clotrimazole Vaginal Pessaries(100mg)','dd6d84c4-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Clotrimazole Vaginal Pessaries(200mg)','cfe69e58-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Doxycycline(100mg)','c9385146-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Epinephrine Injection BP(1mg/ml)','bf10cd06-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Erythromycin(500mg)','b82f5c0a-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ferrous Sulphate(200mg)','a518de70-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Hydrocortisone(100mg)inj','9ea69dca-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ibuprofen(200mg)','92a49612-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Ibuprofen(400mg)','8a8abf9c-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Loperamide HCl(2mg)','78541b34-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Metronidazole (200mg)','71a7f968-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Metronidazole (400mg)','64d874a6-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Podophylin (10ml 0.5%)','5bdffaf4-769e-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Paracetamol(500mg)','57da5ab8-7698-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Tinidazole (500mg)','325c5192-7698-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Water for Injection(10ml)','1e4dd50e-7698-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Zinc Sulphate Dispersible Tabs/ORS(20.5mg)','990d766a-7697-11eb-9439-0242ac130002')");
+            SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Darunavir(DRV) 75mg (480)','8ca90610-a0f3-11eb-bcbc-0242ac130002')");
+        }
     }
 }

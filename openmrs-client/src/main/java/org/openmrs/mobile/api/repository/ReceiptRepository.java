@@ -14,15 +14,25 @@
 
 package org.openmrs.mobile.api.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.activeandroid.query.Update;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.openmrs.mobile.api.RestApi;
 import org.openmrs.mobile.api.RestServiceBuilderCommodity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.models.Receipt;
+import org.openmrs.mobile.models.ReceiptItem;
 import org.openmrs.mobile.utilities.NetworkUtils;
+
+import java.lang.reflect.Modifier;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,28 +58,38 @@ public class ReceiptRepository extends RetrofitRepository {
             call.enqueue(new Callback<Receipt>() {
                 @Override
                 public void onResponse(@NonNull Call<Receipt> call, @NonNull Response<Receipt> response) {
-                    if (response.isSuccessful()) {
-                        Receipt newReceipt = response.body();
-//                        receipt.setSynced(true);
-                        receipt.save();
-                    } else {
-                        if (callbackListener != null) {
-                            callbackListener.onErrorResponse(response.message());
+                    try{
+                        //Receipt newReceipt = response.body();
+                        if (response.isSuccessful()) {
+                            OpenMRSCustomHandler.writeLogToFile("Receipt Sync is successful");
+                            receipt.setSynced(true);
+                            long lastInsertReceipt = receipt.save();
+                            new Update(ReceiptItem.class)
+                                    .set("isSynced = 1")
+                                    .where("receiptId = ?", lastInsertReceipt)
+                                    .execute();
+                        } else {
+                            if (callbackListener != null) {
+                                callbackListener.onErrorResponse(response.message());
+                            }
+                            OpenMRSCustomHandler.writeLogToFile("Failed Receipt: " + response.code() + " / " + response.message() + " / " + response.body() + " / " + response.errorBody());
                         }
+                    }catch (Exception e){
+                        OpenMRSCustomHandler.writeLogToFile(e.getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<Receipt> call, @NonNull Throwable t) {
+                    OpenMRSCustomHandler.writeLogToFile("The response code is = " + t.getMessage());
                     if (callbackListener != null) {
-//                        callbackListener.onErrorResponse(t.getMessage());
-                        callbackListener.onResponse();
+                       callbackListener.onErrorResponse(t.getMessage());
+                       // callbackListener.onResponse();
 
                     }
                 }
             });
         }else{
-            receipt.save();
             if (callbackListener != null) {
                 callbackListener.onResponse();
             }

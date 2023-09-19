@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.patientdashboard.PatientDashboardContract;
 import org.openmrs.mobile.application.OpenMRSInflater;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.ObscreateLocal;
 import org.openmrs.mobile.models.ObsgroupLocal;
@@ -141,8 +142,12 @@ public class EntriesExpandableListAdapter extends BaseExpandableListAdapter {
         final TextView detailsSelector = (TextView) rowView.findViewById(R.id.listVisitGroupDetailsSelector);
         final Encountercreate encounter = mEncounters.get(groupPosition);
         String encdate = encounter.getEncounterDatetime();
+        // Encounter data return encdate possible rejection on NMRS
+       // Util.logEncounter(encounter);
+
         String disp = encounter.getFormname() +" (" + DateUtils.convertTime(DateUtils.convertTime(encdate), DateUtils.OPEN_MRS_REQUEST_PATIENT_FORMAT) + ")";
         encounterName.setText(disp);
+
         if (isExpanded) {
             detailsSelector.setText(mContext.getString(R.string.list_visit_selector_hide));
             bindDrawableResources(R.drawable.exp_list_hide_details, detailsSelector, RIGHT);

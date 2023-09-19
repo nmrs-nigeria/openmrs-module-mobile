@@ -10,16 +10,18 @@
 
 package org.openmrs.mobile.api;
 
-import org.intellij.lang.annotations.Identifier;
 import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
 import org.openmrs.mobile.activities.pbs.PatientBiometricSyncResponseModel;
+import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationDTO;
+import org.openmrs.mobile.models.Adjustment;
 import org.openmrs.mobile.models.Concept;
 import org.openmrs.mobile.models.Consumption;
 import org.openmrs.mobile.models.Distribution;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.FormCreate;
 import org.openmrs.mobile.models.FormData;
 import org.openmrs.mobile.models.FormResource;
@@ -33,22 +35,24 @@ import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientDto;
 import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PatientPhoto;
+import org.openmrs.mobile.api.response.PbsServerContract;
 import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Provider;
 import org.openmrs.mobile.models.Receipt;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.models.Session;
 import org.openmrs.mobile.models.SystemSetting;
+import org.openmrs.mobile.models.Transfer;
 import org.openmrs.mobile.models.User;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.models.VisitType;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -127,12 +131,20 @@ public interface RestApi {
     @POST("inventory/consumption")
     Call<Consumption> startConsumption(@Body Consumption consumption);
     
-    @POST("inventory/receipt")
+    @POST("inventory/stockOperation")
     Call<Receipt> startReceipt(@Body Receipt receipt);
 
-    @POST("inventory/distribution")
+    @POST("inventory/stockOperation")
     Call<Distribution> startDistribution(@Body Distribution distribution);
 
+    @POST("inventory/stockOperation")
+    Call<Adjustment> startAdjustment(@Body Adjustment adjustment);
+
+    @POST("inventory/stockOperation")
+    Call<Transfer> startTransfer(@Body Transfer transfer);
+
+    @GET("inventory/inventoryStockTakeSummary")
+    Call<HashMap<String, Object>> getInventoryStockSummary(@Query("limit") int limit, @Query("startIndex") int startIndex, @Query("stockroom_uuid") String stockroom_uuid);
 
     @POST("programenrollment")
     Call<ProgramEnrollment> createProgram(@Body ProgramEnrollment programEnrollment);
@@ -197,10 +209,17 @@ public interface RestApi {
 
     @GET()
     Call<String> genericRequest(@Url String url);
-
+    @GET()
+    Call<PbsServerContract> checkServerStatus(@Url String url);
     @POST()
     Call<PatientBiometricSyncResponseModel> syncPBS(@Url String url, @Body PatientBiometricDTO pbsDTO);
 
+// add post for verification syncing
+    @POST()
+    Call<PatientBiometricSyncResponseModel> syncPBS(@Url String url, @Body PatientBiometricVerificationDTO pbsDTO);
+
     @GET()
     Call<List<PatientBiometricContract>> checkForExistingPBS(@Url String url, @Query("PatientUUID") String patientUUID);
+
+    Call<FingerPrintLog> getFingerLog(@Url String url, @Query("PatientUUID")  String patientUUID);
 }

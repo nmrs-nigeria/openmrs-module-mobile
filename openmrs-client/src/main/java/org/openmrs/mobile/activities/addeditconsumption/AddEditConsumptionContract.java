@@ -37,7 +37,7 @@ public class AddEditConsumptionContract {
 
         boolean isRegisteringConsumption();
 
-        void confirmRegister(Consumption consumption);
+        void confirmRegister(List<Consumption> consumption);
 
         void confirmUpdate(Consumption consumption);
 
@@ -46,6 +46,10 @@ public class AddEditConsumptionContract {
         void registerConsumption();
 
         void updateConsumption(Consumption consumption);
+
+        long getConsumptionToUpdateId();
+
+        void deleteCommodity();
     }
 
 }

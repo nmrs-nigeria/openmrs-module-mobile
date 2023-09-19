@@ -14,11 +14,17 @@
 
 package org.openmrs.mobile.activities.dashboard;
 
+import android.Manifest;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
+import com.activeandroid.DatabaseHelper;
 import com.github.javiersantos.appupdater.AppUpdater;
 import com.github.javiersantos.appupdater.AppUpdaterUtils;
 import com.github.javiersantos.appupdater.enums.AppUpdaterError;
@@ -28,7 +34,12 @@ import com.github.javiersantos.appupdater.objects.Update;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
+import org.openmrs.mobile.utilities.Notifier;
+import org.openmrs.mobile.utilities.ToastUtil;
+
+import java.io.File;
 
 public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil.LogOutListener {
 
@@ -36,6 +47,7 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     Bundle currinstantstate;
     */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +70,14 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+
         // Create toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setIcon(R.drawable.openmrs_action_logo);
+            getSupportActionBar().setTitle("");
         }
 
 //        new AppUpdater(this)
@@ -91,7 +105,18 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
         // Create the presenter
         new DashboardPresenter(dashboardFragment);
 
+        //Ask for permission and create a folder
+        File dir = new File(Environment.getExternalStorageDirectory() + "/" + OpenMRSCustomHandler.folderName);
+
+        if (!dir.exists()) {
+            ActivityCompat.requestPermissions(DashboardActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            dir.mkdir();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            Notifier.createNotificationChannel(getSystemService(NotificationManager.class), Notifier.CHANNEL_SYNC_PBS,"Sync PBS");
+
     }
+
 
     /*TODO: Permission handling to be coded later, moving to SDK 22 for now.
     @Override
@@ -131,5 +156,7 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
     public void doLogout() {
         logout();
     }
+
+
 
 }

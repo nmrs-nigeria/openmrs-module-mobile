@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
 import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
 import org.openmrs.mobile.listeners.watcher.NumericValidatorWatcher;
 import org.openmrs.mobile.models.Answer;
@@ -1313,12 +1315,14 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
 
     private void showHideControl(Control control, Answer answer) {
         for (Condition conditionOptions : control.getConditionOptions()) {
+
             if (conditionOptions.getControlType().equals(CONTROL_TYPE_SELECT)) {
                 Spinner childSpinner = (Spinner) mParent.findViewById(customHashCode(conditionOptions.getChildControl()));
                 TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_SALT));
 
                 if (childSpinner != null) {
                     childSpinner.setSelected(false);
+
                     if (conditionOptions.getDisplayType().equals("show") && answer.getLabel().equals(conditionOptions.getWhen())) {
                         childSpinner.setVisibility(View.VISIBLE);
                         if (label != null) {
@@ -2242,14 +2246,16 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     if (!isEmpty(ed)) {
 //                        allEmpty = false;
                         empties.add(false);
-                        if (ed.getText().toString().trim().matches(regexStr)) {
-                            Double inp = Double.parseDouble(ed.getText().toString());
-                            if (ed.getUpperlimit() != -1.0 && ed.getUpperlimit() != -1.0 && (ed.getUpperlimit() > inp || ed.getLowerlimit() < inp)) {
-                                ed.setTextColor(ContextCompat.getColor(OpenMRS.getInstance(), R.color.red));
-                                valid = false;
-
-                            }
-                        }
+                        //This condition is crashing the App so i had to comment it out.
+//                        if (ed.getText().toString().trim().matches(regexStr)) {
+//                            Double inp = Double.parseDouble(ed.getText().toString());
+//                            Log.v("Baron", ed.getText().toString().trim() + " is causing all these issues with " + inp + " Upper Limit is " + ed.getUpperlimit() + " While Lower limit is " + ed.getLowerlimit());
+//                            if (ed.getUpperlimit() == 0.0 && ed.getUpperlimit() == 0.0 && (ed.getUpperlimit() > inp || ed.getLowerlimit() < inp)) {
+//                                ed.setTextColor(ContextCompat.getColor(OpenMRS.getInstance(), R.color.red));
+//                                valid = false;
+//
+//                            }
+//                        }
                     } else {
 //                        allEmpty = true;
                         empties.add(true);

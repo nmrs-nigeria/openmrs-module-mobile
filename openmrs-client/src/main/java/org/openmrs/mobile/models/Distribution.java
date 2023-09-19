@@ -24,15 +24,16 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "receipt")
+@Table(name = "distribution")
 public class Distribution extends Model implements Serializable {
     private Gson gson=new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-    private Type itemtype = new TypeToken<List<ReceiptItem>>(){}.getType();
+    private Type itemtype = new TypeToken<List<DistributionItem>>(){}.getType();
 
     @Column(name = "operationNumber")
     @SerializedName("operationNumber")
     @Expose
     private String operationNumber;
+
     @Column(name = "instanceType")
     @SerializedName("instanceType")
     @Expose
@@ -53,7 +54,7 @@ public class Distribution extends Model implements Serializable {
 
     @SerializedName("items")
     @Expose
-    private List<ReceiptItem> items = new ArrayList<>();
+    private List<DistributionItem> items = new ArrayList<>();
 
     @Column(name = "items")
     private String itemsList;
@@ -76,13 +77,41 @@ public class Distribution extends Model implements Serializable {
     @Expose
     private String dataSystem;
 
-    public Type getItemtype() {
-        return itemtype;
-    }
+    @Column(name = "isSynced")
+    private boolean isSynced;
 
-    public void setItemtype(Type itemtype) {
-        this.itemtype = itemtype;
-    }
+
+    @Column(name = "institution")
+    @SerializedName("institution")
+    @Expose
+    protected String institution;
+
+    @Column(name = "destination")
+    @SerializedName("destination")
+    @Expose
+    protected String destination;
+
+    @Column(name = "patient")
+    @SerializedName("patient")
+    @Expose
+    protected String patient;
+
+    @Column(name = "disposedType")
+    @SerializedName("disposedType")
+    @Expose
+    protected String disposedType;
+
+    @Column(name = "adjustmentKind")
+    @SerializedName("adjustmentKind")
+    @Expose
+    protected String adjustmentKind;
+
+    @SerializedName("attributes")
+    @Expose
+    protected List<String> attributes = new ArrayList<>();
+
+    @Column(name = "attributes")
+    protected String attributesList;
 
     public String getOperationNumber() {
         return operationNumber;
@@ -124,21 +153,13 @@ public class Distribution extends Model implements Serializable {
         this.department = department;
     }
 
-    public List<ReceiptItem> getItems() {
+    public List<DistributionItem> getItems() {
         return items;
     }
 
-    public void setItems(List<ReceiptItem> items) {
+    public void setItems(List<DistributionItem> items) {
         this.items = items;
 
-    }
-
-    public void pullItemsList() {
-        this.items = gson.fromJson(this.itemsList,itemtype);
-    }
-
-    public void setItemsList() {
-        this.itemsList = gson.toJson(items,itemtype);
     }
 
     public String getStatus() {
@@ -157,6 +178,14 @@ public class Distribution extends Model implements Serializable {
         this.commoditySource = commoditySource;
     }
 
+    public void pullItemsList(String item) {
+       this.items = gson.fromJson(this.itemsList, itemtype);
+    }
+
+    public void setItemsList() {
+        this.itemsList = gson.toJson(items,itemtype);
+    }
+
     public String getCommodityType() {
         return commodityType;
     }
@@ -171,5 +200,62 @@ public class Distribution extends Model implements Serializable {
 
     public void setDataSystem(String dataSystem) {
         this.dataSystem = dataSystem;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getPatient() {
+        return patient;
+    }
+
+    public void setPatient(String patient) {
+        this.patient = patient;
+    }
+
+    public String getDisposedType() {
+        return disposedType;
+    }
+
+    public void setDisposedType(String disposedType) {
+        this.disposedType = disposedType;
+    }
+
+    public String getAdjustmentKind() {
+        return adjustmentKind;
+    }
+
+    public void setAdjustmentKind(String adjustmentKind) {
+        this.adjustmentKind = adjustmentKind;
+    }
+
+    public List<String> getAttributes() {
+        List<String> attributes = new ArrayList<String>();
+        return attributes;
+    }
+
+    public void setAttributes(List<String> attribute) {
+        this.attributes = attribute;
     }
 }

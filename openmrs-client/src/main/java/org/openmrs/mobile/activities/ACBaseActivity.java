@@ -14,15 +14,16 @@
 
 package org.openmrs.mobile.activities;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,12 +41,14 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
-import org.openmrs.mobile.activities.ip.EnforceChangeActivity;
+import org.openmrs.mobile.activities.formlist.ip.EnforceChangeActivity;
 import org.openmrs.mobile.activities.login.LoginActivity;
 import org.openmrs.mobile.activities.settings.SettingsActivity;
+import org.openmrs.mobile.activities.troubleshoot.TroubleshootActivity;
 import org.openmrs.mobile.api.EncounterService;
 import org.openmrs.mobile.api.PatientService;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.bundle.CustomDialogBundle;
 import org.openmrs.mobile.dao.LocationDAO;
@@ -53,6 +56,7 @@ import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.net.AuthorizationManager;
+import org.openmrs.mobile.sync.SyncNewService;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ForceClose;
 import org.openmrs.mobile.utilities.NetworkUtils;
@@ -188,12 +192,15 @@ public abstract class ACBaseActivity extends AppCompatActivity {
 //                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
 //                    getApplicationContext().sendBroadcast(intent);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        Intent ii = new Intent(getApplicationContext(), PatientService.class);
-                        getApplicationContext().startService(ii);
+                        Intent  sy= new Intent(this, SyncNewService.class);
+                        this.startService(sy);
 
-                        //This is to handle android sync version 10
-                        Intent i1=new Intent(getApplicationContext(), EncounterService.class);
-                        getApplicationContext().startService(i1);
+//                        Intent ii = new Intent(getApplicationContext(), PatientService.class);
+//                        getApplicationContext().startService(ii);
+//
+//                        //This is to handle android sync version 10
+//                        Intent i1=new Intent(getApplicationContext(), EncounterService.class);
+//                        getApplicationContext().startService(i1);
                     }else{
                         Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
                         getApplicationContext().sendBroadcast(intent);
@@ -211,6 +218,10 @@ public abstract class ACBaseActivity extends AppCompatActivity {
             case R.id.actionEnforce:
                 Intent ip = new Intent(this, EnforceChangeActivity.class);
                 startActivity(ip);
+                return true;
+            case R.id.actionTroubleShoot:
+                Intent troubleShoot = new Intent(this, TroubleshootActivity.class);
+                startActivity(troubleShoot);
                 return true;
             case R.id.actionLocation:
                 if (!locationList.isEmpty()) {
@@ -273,8 +284,16 @@ public abstract class ACBaseActivity extends AppCompatActivity {
         mCustomFragmentDialog.setRetainInstance(true);
         mCustomFragmentDialog.show(mFragmentManager, ApplicationConstants.DialogTAG.CREDENTIAL_CHANGED_DIALOG_TAG);
     }
+    private void setSyncState(boolean b) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("Sync",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("pbs_sync", b);
+        editor.apply();
+    }
 
     private void showLogoutDialog() {
+        setSyncState(false);
         CustomDialogBundle bundle = new CustomDialogBundle();
         bundle.setTitleViewMessage(getString(R.string.logout_dialog_title));
         bundle.setTextViewMessage(getString(R.string.logout_dialog_message));
@@ -383,7 +402,8 @@ public abstract class ACBaseActivity extends AppCompatActivity {
     }
 
     public void showAppCrashDialog(String error) {
-        Log.v("Error", error);
+        //Log the error into a file on the phone
+        OpenMRSCustomHandler.writeCrashToFile(error);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
         alertDialogBuilder.setTitle(R.string.crash_dialog_title);

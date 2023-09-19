@@ -13,17 +13,17 @@
   ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
   -->
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefreshLastPatients"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/dashboard_background2">
 
     <FrameLayout
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swipe_container"
         tools:context=".activities.lastviewedpatients.LastViewedPatientsActivity">
 
         <RelativeLayout
@@ -33,36 +33,39 @@
 
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:elevation="0dp"
-                android:layout_height="wrap_content">
-            </com.google.android.material.appbar.AppBarLayout>
+                android:layout_height="wrap_content"
+                android:elevation="0dp"></com.google.android.material.appbar.AppBarLayout>
 
-            <TextView android:id="@+id/emptyLastViewedPatientList"
+            <TextView
+                android:id="@+id/emptyLastViewedPatientList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView android:id="@+id/lastViewedPatientRecyclerView"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lastViewedPatientRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@drawable/dashboard_background2" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:clickable="false"
             android:id="@+id/lastViewedTopComponents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:clickable="false">
 
-            <ProgressBar android:id="@+id/patientRecyclerViewLoading"
+            <ProgressBar
+                android:id="@+id/patientRecyclerViewLoading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone"/>
+                android:layout_marginTop="5dp"
+                android:visibility="gone" />
 
         </RelativeLayout>
     </FrameLayout>

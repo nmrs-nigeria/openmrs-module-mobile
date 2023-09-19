@@ -13,19 +13,19 @@
   ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
   -->
 
-<ScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="@drawable/dashboard_background2"
+    android:fillViewport="true"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/formMainContainer"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <!--<androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -37,46 +37,49 @@
 
         <RelativeLayout
             android:id="@+id/viewPagerIndicator"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:gravity="bottom"
             android:orientation="horizontal">
 
             <RelativeLayout
+                android:id="@+id/buttonContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:id="@+id/buttonContainer">
+                android:layout_marginTop="10dp">
+
                 <Button
                     android:id="@+id/btn_previous"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_submit_selector"
-                    android:textColor="@color/white"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:visibility="gone"
-                    android:text="@string/action_previous"/>
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/btn_submit_selector"
+                    android:text="@string/action_previous"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
                 <Button
                     android:id="@+id/btn_next"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_submit_selector"
-                    android:textColor="@color/white"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:text="@string/action_next"/>
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btn_submit_selector"
+                    android:text="@string/action_next"
+                    android:textColor="@color/white" />
+
                 <Button
                     android:id="@+id/btn_finish"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_submit_selector"
-                    android:textColor="@color/white"
-                    android:text="@string/action_submit"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:visibility="gone"/>
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/btn_submit_selector"
+                    android:text="@string/action_submit"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -91,12 +94,12 @@
 
         <LinearLayout
             android:id="@+id/pagerContainer"
-            android:layout_above="@id/viewPagerIndicator"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_above="@id/viewPagerIndicator"
             android:orientation="horizontal">
-            <org.openmrs.mobile.utilities.SwipeDisabledViewPager
-                xmlns:tools="http://schemas.android.com/tools"
+
+            <org.openmrs.mobile.utilities.SwipeDisabledViewPager xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

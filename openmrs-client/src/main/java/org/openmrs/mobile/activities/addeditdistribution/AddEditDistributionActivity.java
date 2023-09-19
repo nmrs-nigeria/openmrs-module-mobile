@@ -20,6 +20,7 @@ public class AddEditDistributionActivity extends ACBaseActivity {
 
     public AddEditDistributionFragment addEditDistributionFragment;
     private AlertDialog alertDialog;
+    private long consumptionID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,16 @@ public class AddEditDistributionActivity extends ACBaseActivity {
         }
 
         List<String> countries = Arrays.asList(getResources().getStringArray(R.array.countries_array));
+
+        //Get the Consumption ID if any exists
+        Bundle gotBasket = getIntent().getExtras();
+        consumptionID = gotBasket.getLong("id", 0);
+        if(consumptionID != 0){
+
+        }
+
         // Create the mPresenter
-        mPresenter = new AddEditDistributionPresenter(addEditDistributionFragment, patientID);
+        mPresenter = new AddEditDistributionPresenter(addEditDistributionFragment, consumptionID);
     }
 
     @Override

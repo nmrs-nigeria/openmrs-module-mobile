@@ -26,8 +26,10 @@ import org.openmrs.mobile.api.RestServiceBuilder;
 import org.openmrs.mobile.api.promise.SimpleDeferredObject;
 import org.openmrs.mobile.api.promise.SimplePromise;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.DownloadPatientCallbackListener;
 import org.openmrs.mobile.models.Encountercreate;
@@ -158,14 +160,20 @@ public class PatientRepository extends RetrofitRepository {
                                 return null;
                             }
                         };
-                        if (null != patient.getUuid() && !patient.getUuid().isEmpty() && !patient.getUuid().equals(" ")){
+                        if (null != patient.getUuid()  && !patient.getUuid().isEmpty()  && !patient.getUuid().equals(" ")){
                             patient.setUuid(null);
                             PatientDto patientDto = patient.getPatientDto();
                             call = restApi.createPatient(patientDto);
+                            Util.log(patient.getUuid()+" Creating Patient    "+patient.getId() );
                         }else {
                             PatientDto patientDto = patient.getPatientDto();
                             call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+                            Util.log(patient.getUuid()+" patient existed   "+patient.getId() );
                         }
+                        Util.log( "null != patient.getUuid():" +
+                                (null != patient.getUuid())+"    !patient.getUuid().isEmpty():"
+                                +!patient.getUuid().isEmpty()+"  !patient.getUuid().equals(\" \"):"
+                               + !patient.getUuid().equals(" "));
 
                         call.enqueue(new Callback<PatientDto>() {
                             @Override
@@ -188,6 +196,8 @@ public class PatientRepository extends RetrofitRepository {
                                     }
 
                                 } else {
+                                    OpenMRSCustomHandler.writeLogToFile("Patient cannot be synced due to server error: Body=> " + response.errorBody().toString()
+                                            +"\t Message=>"+response.message());
                                     ToastUtil.error("Patient[" + patient.getId() + "] cannot be synced due to server error" + response.message());
                                     deferred.reject(new RuntimeException("Patient cannot be synced due to server error: " + response.errorBody().toString()));
                                     if (callbackListener != null) {
@@ -198,7 +208,8 @@ public class PatientRepository extends RetrofitRepository {
 
                             @Override
                             public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
-                                ToastUtil.notify("Patient[" + patient.getId() + "] cannnot be synced due to request error: " + t.toString());
+                                OpenMRSCustomHandler.writeLogToFile("Patient[" + patient.getId() + "] cannnot be synced due to request error: " + t.toString());
+                                ToastUtil.notify("Patient[" + patient.getId() + "] can not be synced due to request error: " + t.toString());
                                 deferred.reject(t);
                                 if (callbackListener != null) {
                                     callbackListener.onErrorResponse(t.getMessage());
@@ -369,7 +380,8 @@ public class PatientRepository extends RetrofitRepository {
                                     }
                                 });
                             }
-                        }{
+                        }
+                        {
                             syncPatient(patient);
                         }
 

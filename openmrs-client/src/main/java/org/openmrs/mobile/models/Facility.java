@@ -28,9 +28,13 @@ import java.util.List;
 public class Facility extends Model implements Serializable{
 
     @Column(name = "facilityName")
+    @SerializedName("facilityName")
+    @Expose
     public String facilityName;
 
     @Column(name = "facilityCode")
+    @SerializedName("facilityCode")
+    @Expose
     public String facilityCode;
 
     @Column(name = "lgaCode")

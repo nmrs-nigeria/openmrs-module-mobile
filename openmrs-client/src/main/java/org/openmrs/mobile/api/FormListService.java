@@ -12,10 +12,12 @@ package org.openmrs.mobile.api;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.FormResource;
 import org.openmrs.mobile.models.Results;
@@ -49,6 +51,7 @@ public class FormListService extends IntentService {
                     if (response.isSuccessful()) {
                         new Delete().from(FormResource.class).execute();
                         formresourcelist=response.body().getResults();
+
                         int size=formresourcelist.size();
                         ActiveAndroid.beginTransaction();
                         try {
@@ -58,8 +61,10 @@ public class FormListService extends IntentService {
                                 formresourcelist.get(i).save();
                             }
                             ActiveAndroid.setTransactionSuccessful();
-                        }
-                        finally {
+
+                        }catch (Exception e){
+                            Util.log("Save forms error "+e.getMessage());
+                        } finally {
                             ActiveAndroid.endTransaction();
                         }
 
@@ -82,6 +87,9 @@ public class FormListService extends IntentService {
                         Results<EncounterType> encountertypelist = response.body();
                             for (EncounterType enctype : encountertypelist.getResults())
                                 enctype.save();
+
+                        Util.log("FORM_LIST_SERVICE:  Forms type loaded");
+
                     }
 
                 }

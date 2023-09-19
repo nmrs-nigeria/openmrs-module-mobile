@@ -40,4 +40,5 @@ public class Department extends Model implements Serializable{
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
 }

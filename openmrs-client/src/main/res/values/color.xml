@@ -21,6 +21,7 @@
     <color name="card_shadow_2">#dddddd</color>
     <color name="card_detailing">#eee</color>
     <color name="white">#FFF</color>
+    <color name="matched_green">#43F805</color>
     <color name="black">#000</color>
     <color name="light_teal">#009384</color>
     <color name="dark_teal">#00463f</color>
@@ -43,4 +44,7 @@
 
     <!-- neutral colors that look pleasing on both white and black background -->
     <color name="neutral_green">#249627</color>
+
+<!--    Newly Added Color Resource-->
+    <color name="login_button2">#0C480B</color>
 </resources>

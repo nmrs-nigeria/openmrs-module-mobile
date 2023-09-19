@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,10 +41,12 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
 //import org.openmrs.mobile.activities.addeditpatient.AddEditPatientFragmentPermissionsDispatcher;
 import org.openmrs.mobile.activities.commodity.CommodityActivity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.models.Consumption;
 import org.openmrs.mobile.models.Department;
 import org.openmrs.mobile.models.Facility;
+import org.openmrs.mobile.models.InventoryStockSummaryLab;
 import org.openmrs.mobile.models.Item;
 import org.openmrs.mobile.models.ItemBatch;
 import org.openmrs.mobile.models.PatientIdentifier;
@@ -96,8 +99,22 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
 
     private boolean isUpdateConsumption = false;
     private Consumption updatedConsumption;
+    //This consumption is passed for add more
+    private Consumption admConsumption;
     private int PERMISSION_ID = 44;
 
+    private Button addMoreBtn;
+    private Button deleteCommodity;
+
+    //Declare a List array where consumption objects will be saved for multiple encounters
+    private List<Consumption> consumptionMultiple;
+    private long consumptionToUpdateID;
+    List<String> test_purpose_strs = new ArrayList<String>();
+    List<String> item_strs = new ArrayList<String>();
+    List<String> item_strs_uuids = new ArrayList<String>();
+    List<String> department_strs = new ArrayList<String>();
+    List<String> department_strs_uuid = new ArrayList<String>();
+    List<String> item_batch_strs = new ArrayList<String>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,7 +124,15 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         resolveViews(root);
         addListeners();
         fillFields(mPresenter.getConsumptionToUpdate());
+
+        admConsumption = new Consumption();
+
+        consumptionMultiple = new ArrayList<Consumption>();
+
         FontsUtil.setFont((ViewGroup) root);
+
+        consumptionToUpdateID = mPresenter.getConsumptionToUpdateId();
+
         return root;
     }
 
@@ -129,8 +154,10 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         scrollView.smoothScrollTo(0, scrollView.getPaddingTop());
     }
 
-    private void updateConsumptionWithData(Consumption consumption) {
+    public void validate(Consumption consumption) {
         String consumption_date = null;
+        Boolean allCompleted = true;
+        //if the consumption date is not empty
         if (!ViewUtils.isEmpty(edconsumption)) {
             String unvalidatedDate = edconsumption.getText().toString().trim();
             dateTimeFormatter = DateTimeFormat.forPattern(DateUtils.DEFAULT_DATE_FORMAT);
@@ -149,12 +176,56 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
                 .executeSingle();
         consumption.setDepartment(department.getUuid());
         consumption.setItem(item.getUuid());
-        consumption.setBatchNumber(mItemBatchSpinner.getSelectedItem().toString());
+        consumption.setName("");
+        if(mItemBatchSpinner.getSelectedItemPosition() == 0){
+            OpenMRSCustomHandler.showDialogMessage(getContext(), "Please select Item Batch");
+            allCompleted = false;
+        }else {
+            consumption.setBatchNumber(mItemBatchSpinner.getSelectedItem().toString());
+        }
         consumption.setTestPurpose(mTestPurposeSpinner.getSelectedItem().toString());
         consumption.setDataSystem(mDataSystemSpinner.getSelectedItem().toString());
         consumption.setQuantity(ViewUtils.isEmpty(edquantity) ? 0 : Integer.parseInt(edquantity.getText().toString()));
         consumption.setWastage(ViewUtils.isEmpty(edwastage) ? 0 : Integer.parseInt(edwastage.getText().toString()));
 
+        if (edconsumption.getText().toString().trim().isEmpty()) {
+            OpenMRSCustomHandler.showDialogMessage(getContext(), "Sorry Please enter the Consumption date before saving.");
+            allCompleted = false;
+        }
+        if (edquantity.getText().toString().trim().isEmpty()) {
+            OpenMRSCustomHandler.showDialogMessage(getContext(), "The Quantity field is empty.");
+            allCompleted = false;
+        }
+
+        if (edwastage.getText().toString().trim().isEmpty()) {
+            OpenMRSCustomHandler.showDialogMessage(getContext(), "The Wastage field is empty");
+            allCompleted = false;
+        }
+
+        if (allCompleted) {
+            //If all vaidations are correct then save consumption
+            // OpenMRSCustomHandler.showDialogMessage(getContext(), "All correct");
+            consumptionMultiple.add(consumption);
+            //clear the form fields after saving
+            mDepartmentSpinner.setSelection(0);
+            mItemSpinner.setSelection(0);
+            mItemBatchSpinner.setSelection(0);
+            edquantity.getText().clear();
+            edwastage.getText().clear();
+        }
+    }
+
+
+    /**
+     * This function is called when the final save button is clicked
+     * @param consumption
+     */
+    private void updateConsumptionWithData(Consumption consumption) {
+        validate(consumption);
+        //this.setProgressBarVisibility(false);
+        //this.hideSoftKeys();
+        //this.startCommodityDashboardActivity();
+        //this.finishConsumptionInfoActivity();
     }
 
     private Consumption updateConsumption(Consumption consumption) {
@@ -163,12 +234,10 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
     }
 
 
-    private Consumption createConsumption() {
+    private List<Consumption> createConsumption() {
         Consumption consumption = new Consumption();
         updateConsumptionWithData(consumption);
-        return consumption;
-
-
+        return consumptionMultiple;
     }
 
     @Override
@@ -187,14 +256,14 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
     }
 
 
-
     @Override
     public void startCommodityDashboardActivity() {
         Intent intent = new Intent(getActivity(), CommodityActivity.class);
 //        intent.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE, patient.getId());
         startActivity(intent);
     }
-//
+
+    //
 //    @Override
 //    public void showUpgradeRegistrationModuleInfo() {
 //        ToastUtil.notifyLong(getResources().getString(R.string.registration_core_info));
@@ -214,12 +283,12 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         edconsumption = v.findViewById(R.id.consumption);
         edquantity = v.findViewById(R.id.quantity);
         edwastage = v.findViewById(R.id.wastage);
-        consumptionerror= v.findViewById(R.id.consumptionerror);
-        departmenterror= v.findViewById(R.id.departmenterror);
-        itemerror= v.findViewById(R.id.itemerror);
-        itembatcherror= v.findViewById(R.id.itembatcherror);
-        testpurposeerror= v.findViewById(R.id.testpurposeerror);
-        datasystemerror= v.findViewById(R.id.datasystemerror);
+        consumptionerror = v.findViewById(R.id.consumptionerror);
+        departmenterror = v.findViewById(R.id.departmenterror);
+        itemerror = v.findViewById(R.id.itemerror);
+        itembatcherror = v.findViewById(R.id.itembatcherror);
+        testpurposeerror = v.findViewById(R.id.testpurposeerror);
+        datasystemerror = v.findViewById(R.id.datasystemerror);
         datePicker = v.findViewById(R.id.btn_datepicker);
         textInputLayoutConsumption = v.findViewById(R.id.textInputLayoutConsumption);
         progressBar = v.findViewById(R.id.progress_bar);
@@ -228,6 +297,8 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         mItemBatchSpinner = v.findViewById(R.id.item_batch);
         mTestPurposeSpinner = v.findViewById(R.id.test_purpose);
         mDataSystemSpinner = v.findViewById(R.id.data_system);
+        addMoreBtn = v.findViewById(R.id.addMoreButton);
+        deleteCommodity = v.findViewById(R.id.deleteCommodity);
         edwastage.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         edwastage.setPadding(15, 0, 0, 15);
         FontsUtil.setFont(edwastage, FontsUtil.OpenFonts.OPEN_SANS_BOLD);
@@ -240,10 +311,36 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
     }
 
     private void fillFields(final Consumption consumption) {
-
+        OpenMRSCustomHandler.showJson(consumption);
+        //if consumption object is not null then when the form is submitted, it means you're updating it since it already contains data
         if (consumption != null) {
+            addMoreBtn.setVisibility(View.GONE);
+            deleteCommodity.setVisibility(View.VISIBLE);
+
             isUpdateConsumption = true;
             updatedConsumption = consumption;
+
+            bdt = DateUtils.convertTimeString(consumption.getConsumptionDate());
+            edconsumption.setText(DateUtils.convertTime(DateUtils.convertTime(bdt.toString(), DateUtils.OPEN_MRS_REQUEST_FORMAT),
+                    DateUtils.DEFAULT_DATE_FORMAT));
+            edquantity.setText(String.valueOf(consumption.getQuantity()));
+            edwastage.setText(String.valueOf(consumption.getWastage()));
+
+            //get the index from the test purpose string array
+            int spinner_test_Purpose_Str_Position = test_purpose_strs.indexOf(consumption.getTestPurpose());
+            mTestPurposeSpinner.setSelection(spinner_test_Purpose_Str_Position);
+
+            //get the index from the item string array
+            int spinner_Item_Position = item_strs_uuids.indexOf(consumption.getItem());
+            mItemSpinner.setSelection(spinner_Item_Position);
+
+            //get the index from the department string array department_strs_uuid
+            int spinner_department_str_Position = department_strs_uuid.indexOf(consumption.getDepartment());
+            mDepartmentSpinner.setSelection(spinner_department_str_Position);
+
+            //get the index from the item batch string array item_batch_strs
+            int spinner_item_batch_position = item_batch_strs.indexOf(consumption.getBatchNumber());
+            mItemBatchSpinner.setSelection(spinner_item_batch_position);
             //Change to Update Consumption Form
             try {
                 edwastage.setText(consumption.getWastage());
@@ -253,9 +350,9 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
                     edconsumption.setText(DateUtils.convertTime(DateUtils.convertTime(bdt.toString(), DateUtils.OPEN_MRS_REQUEST_FORMAT),
                             DateUtils.DEFAULT_DATE_FORMAT));
                 }
-                mDepartmentSpinner.setSelection( 2 );
+                mDepartmentSpinner.setSelection(2);
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 ToastUtil.error(e.toString());
             }
         }
@@ -267,9 +364,10 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
                 .from(Department.class)
                 .groupBy("name")
                 .execute();
-        List<String> department_strs = new ArrayList<String>();
+
         for (Department row : departments) {
             department_strs.add(row.getName());
+            department_strs_uuid.add(row.getUuid());
         }
 
         List<Item> items = new Select()
@@ -277,9 +375,10 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
                 .from(Item.class)
                 .groupBy("name")
                 .execute();
-        List<String> item_strs = new ArrayList<String>();
+
         for (Item row : items) {
             item_strs.add(row.getName());
+            item_strs_uuids.add(row.getUuid());
         }
 
         List<ItemBatch> item_batches = new Select()
@@ -290,12 +389,19 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
 //        List<String> item_batch_strs = new ArrayList<String>();
 //        for (ItemBatch row : item_batches) {
 //            item_batch_strs.add(row.getName());
+        //    item_batch_uuid.add(row.getUuid());
 //        }
-        List<String> item_batch_strs = new ArrayList<String>();
-        item_batch_strs.add("A045393");
-        item_batch_strs.add("B0G6839");
 
-        List<String> test_purpose_strs = new ArrayList<String>();
+        List<InventoryStockSummaryLab> inventoryStockSummaryLabList = new Select()
+                .distinct()
+                .from(InventoryStockSummaryLab.class)
+                .execute();
+
+        item_batch_strs.add("--Select Item Batch--");
+        for (InventoryStockSummaryLab row : inventoryStockSummaryLabList) {
+            item_batch_strs.add(row.getItemBatch());
+        }
+
         test_purpose_strs.add("Initial Screening");
         test_purpose_strs.add("Confirmation");
         test_purpose_strs.add("Controls");
@@ -305,14 +411,11 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         List<String> data_system_strs = new ArrayList<String>();
         data_system_strs.add("Mobile");
         data_system_strs.add("Laptop");
-        consumptionAdapter(mDepartmentSpinner,department_strs);
-        consumptionAdapter(mItemSpinner,item_strs);
-        consumptionAdapter(mItemBatchSpinner,item_batch_strs);
-        consumptionAdapter(mTestPurposeSpinner,test_purpose_strs);
-        consumptionAdapter(mDataSystemSpinner,data_system_strs);
-
-
-
+        consumptionAdapter(mDepartmentSpinner, department_strs);
+        consumptionAdapter(mItemSpinner, item_strs);
+        consumptionAdapter(mItemBatchSpinner, item_batch_strs);
+        consumptionAdapter(mTestPurposeSpinner, test_purpose_strs);
+        consumptionAdapter(mDataSystemSpinner, data_system_strs);
 
 
         edconsumption.setClickable(true);
@@ -366,9 +469,16 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
 
         });
 
+        addMoreBtn.setOnClickListener(v -> {
+            addMore();
+        });
+
+        deleteCommodity.setOnClickListener(v -> {
+            deleteCommodity();
+        });
     }
 
-    public void consumptionAdapter(Spinner spinner, List<String> records ){
+    public void consumptionAdapter(Spinner spinner, List<String> records) {
         ArrayAdapter arrayAdapter_department = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, records) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -423,10 +533,18 @@ public class AddEditConsumptionFragment extends ACBaseFragment<AddEditConsumptio
         }
     }
 
+    private void addMore() {
+        admConsumption = new Consumption();
+        updateConsumptionWithData(admConsumption);
+    }
 
+    private void deleteCommodity(){
+        mPresenter.deleteCommodity();
+        //new Delete().from(ReceiptItem.class).where("receiptId = ?", lastid).execute();
+    }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
 }

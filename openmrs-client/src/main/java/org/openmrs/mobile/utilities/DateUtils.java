@@ -37,6 +37,8 @@ public final class DateUtils {
     public static final String OPEN_MRS_REQUEST_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String OPEN_MRS_REQUEST_PATIENT_FORMAT = "yyyy-MM-dd";
 
+    public static final String OPEN_MRS_COMMODITY_FORMAT = "dd-MM-yyyy";
+    public static final String OPEN_MRS_PBS_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final Long ZERO = 0L;
 
     private DateUtils() {

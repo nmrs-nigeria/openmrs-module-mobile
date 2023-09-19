@@ -16,7 +16,7 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
      *
      * @see org.openmrs.mobile.databases.tables.Table#values(int)
      */
-    private static final int INSERT_COLUMNS_COUNT = 13;
+    private static final int INSERT_COLUMNS_COUNT = 14;
 
     public class Column extends MasterColumn {
         public static final String biometricInfo_Id = "biometricInfo_Id";
@@ -32,6 +32,8 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
         public static final String model = "model";
 
         public static final String manufacturer = "manufacturer";
+        public static final String dateCreated = "dateCreated";
+
         public static final String creator = "creator";
         public static final String SyncStatus = "syncStatus";
     }
@@ -52,6 +54,7 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
                 + Column.model + Column.Type.TEXT_TYPE_WITH_COMMA
                 + Column.manufacturer + Column.Type.TEXT_TYPE_WITH_COMMA
                 + Column.SyncStatus + Column.Type.INT_TYPE_WITH_COMMA
+                + Column.dateCreated + FingerPrintVerificationTable.Column.Type.DATE_TYPE_NOT_NULL
                 + Column.creator + Column.Type.INT_TYPE
                 + ");";
     }
@@ -71,6 +74,7 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
                 + Column.model + Column.COMMA
                 + Column.manufacturer + Column.COMMA
                 + Column.SyncStatus + Column.COMMA
+                +Column.dateCreated+ Column.COMMA
                 + Column.creator + ")"
                 + values(INSERT_COLUMNS_COUNT);
     }
@@ -83,7 +87,7 @@ public class FingerPrintTable extends Table<PatientBiometricContract> {
     @Override
     public Long insert(PatientBiometricContract tableObject) {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        return helper.insertFingerPrint(helper.getWritableDatabase(), tableObject);
+            return helper.insertFingerPrint(helper.getWritableDatabase(), tableObject);
     }
 
     @Override

@@ -14,14 +14,27 @@
 
 package org.openmrs.mobile.activities.login;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 
 public class LoginActivity extends ACBaseActivity {
+
+    Context context;
+    private String[] permissions_to_enable;
+    private static final int REQUEST_CODE_FOR_ALL_PERMISSIONS = 1;
 
     public LoginContract.Presenter mPresenter;
 
@@ -29,6 +42,16 @@ public class LoginActivity extends ACBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if(!isConnected()){
+            Toast.makeText(getApplicationContext(), "Not Connected! ", Toast.LENGTH_SHORT).show();
+            showAlert();
+        }else{
+            Toast.makeText(getApplicationContext(), "Connected! ", Toast.LENGTH_SHORT).show();
+        }
+
+
+        requestPermission();
 
         // Create fragment
         LoginFragment loginFragment =
@@ -42,6 +65,49 @@ public class LoginActivity extends ACBaseActivity {
         }
 
         mPresenter = new LoginPresenter(loginFragment, mOpenMRS);
+    }
+
+    private void requestPermission() {
+
+        permissions_to_enable = new String[]{
+                Manifest.permission.INTERNET,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.FOREGROUND_SERVICE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_NOTIFICATION_POLICY
+        };
+
+        ActivityCompat.requestPermissions(this, permissions_to_enable, REQUEST_CODE_FOR_ALL_PERMISSIONS);
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    private void showAlert() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.alert_title))
+                .setIcon(R.drawable.icon_wifi_off)
+                .setMessage(getString(R.string.alert_message))
+                .setPositiveButton("EXIT APPLICATION", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.exit(0);
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        System.exit(0);
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     @Override
@@ -61,5 +127,7 @@ public class LoginActivity extends ACBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
+
 
 }

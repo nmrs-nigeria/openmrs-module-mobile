@@ -3,6 +3,7 @@ package org.openmrs.mobile.activities.formprogramlist;
 import org.openmrs.mobile.activities.BasePresenter;
 import org.openmrs.mobile.dao.EncounterDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.FormResource;
@@ -180,6 +181,7 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
             view.startFormDisplayActivity(formName, patientId, valueRefString, encounterType);
         } else {
             view.showError("There is no encounter type called " + formName);
+            Util.log("There is no encounter type called " + formName);
         }
     }
 

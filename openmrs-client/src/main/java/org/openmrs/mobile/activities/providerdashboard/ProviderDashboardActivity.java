@@ -18,6 +18,7 @@ import org.openmrs.mobile.activities.providerdashboard.providerrelationship.Prov
 import org.openmrs.mobile.activities.providermanagerdashboard.addprovider.AddProviderActivity;
 import org.openmrs.mobile.models.Provider;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import static org.openmrs.mobile.utilities.ApplicationConstants.RequestCodes.EDIT_PROVIDER_REQ_CODE;
 
@@ -34,7 +35,6 @@ public class ProviderDashboardActivity extends ACBaseActivity implements Provide
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_provider_dashboard);
-
         if (savedInstanceState != null) {
 
             mPresenter = new ProviderDashboardPresenter(this);

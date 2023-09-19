@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
         android:dividerHeight="1dp"
         android:divider="@null"
+        android:background="@drawable/dashboard_background2"
        />
 
     <TextView android:id="@+id/vitalEmpty"

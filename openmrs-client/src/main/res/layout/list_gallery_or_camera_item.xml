@@ -13,14 +13,14 @@
   ~ Copyright (C) OpenMRS, LLC.  All Rights Reserved.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
     android:gravity="center_vertical"
-    android:padding="5dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/imageView"
@@ -28,13 +28,13 @@
         android:layout_height="50dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        tools:src="@drawable/ic_photo_camera"/>
+        tools:src="@drawable/ic_photo_camera" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        tools:text="@string/take_a_photo"/>
+        tools:text="@string/take_a_photo" />
 
 </LinearLayout>

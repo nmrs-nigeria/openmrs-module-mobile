@@ -11,6 +11,7 @@
 package org.openmrs.mobile.models;
 
 import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -21,27 +22,57 @@ import java.util.List;
 
 @Table(name = "receipt_item")
 public class ReceiptItem extends Model implements Serializable {
+
+    @Column(name = "receiptId")
+    @SerializedName("receiptId")
+    private long receiptId;
+
+    @Column(name = "calculatedExpiration")
     @SerializedName("calculatedExpiration")
     @Expose
-    private String calculatedExpiration;
+    private Boolean calculatedExpiration;
+
+    @Column(name = "item")
     @SerializedName("item")
     @Expose
     private String item;
+
+    @Column(name = "quantity")
     @SerializedName("quantity")
     @Expose
     private Integer quantity;
+
+    @Column(name = "itemBatch")
     @SerializedName("itemBatch")
     @Expose
     private String itemBatch;
+
+    @Column(name = "expiration")
     @SerializedName("expiration")
     @Expose
     private String expiration;
 
-    public String getCalculatedExpiration() {
+    @Column(name = "itemDrugType")
+    @SerializedName("itemDrugType")
+    @Expose
+    private String itemDrugType;
+
+    @Column(name = "isSynced")
+    private boolean isSynced;
+
+    public void setReceiptId(long receiptId) {
+        this.receiptId = receiptId;
+    }
+
+    public long getReceiptId() {
+        return receiptId;
+    }
+
+    public Boolean getCalculatedExpiration() {
         return calculatedExpiration;
     }
 
-    public void setCalculatedExpiration(String calculatedExpiration) {
+    public void setCalculatedExpiration(Boolean calculatedExpiration) {
         this.calculatedExpiration = calculatedExpiration;
     }
 
@@ -75,5 +106,21 @@ public class ReceiptItem extends Model implements Serializable {
 
     public void setExpiration(String expiration) {
         this.expiration = expiration;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public String getItemDrugType() {
+        return itemDrugType;
+    }
+
+    public void setItemDrugType(String itemDrugType) {
+        this.itemDrugType = itemDrugType;
     }
 }

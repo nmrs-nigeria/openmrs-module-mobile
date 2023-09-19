@@ -18,6 +18,14 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.models.EncounterType;
 
 public abstract class ApplicationConstants {
+   // Password should be change with the version number if compromise
+    public static final String PBS_PASSWORD="CIHP";
+    public static final String PATIENT_IMPORT_PASSWORD="";
+    public static final String  PBS_PASSWORD_VERSION="1";
+    public static final long MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE = 30;
+    // Model is use for PBS hash and the manufacturer is use for PBS hash version
+
+    public  static  int MINIMUM_REQUIRED_FINGERPRINT=6;
 
     public static final String EMPTY_STRING = "";
     public static final String SERVER_URL = "server_url";
@@ -34,7 +42,7 @@ public abstract class ApplicationConstants {
     public static final String VISIT_TYPE_UUID = "visit_type_uuid";
     public static final String LAST_SESSION_TOKEN = "last_session_id";
     public static final String LAST_LOGIN_SERVER_URL = "last_login_server_url";
-    public static final String DEFAULT_OPEN_MRS_URL = "https://demo.openmrs.org/openmrs";
+    public static final String DEFAULT_OPEN_MRS_URL = "http://localhost:8080/openmrs";//"https://nmrsstaging.phis3project.org.ng/openmrscustomui"; // "https://demo.openmrs.org/openmrs";
     public static final String DB_NAME ="openmrs.db";
     public static final String DB_PASSWORD_BCRYPT_PEPPER = "$2a$08$iUp3M1VapYpjcAXQBNX6uu";
     public static final String DB_PASSWORD_LITERAL_PEPPER = "Open Sesame";
@@ -83,6 +91,7 @@ public abstract class ApplicationConstants {
         public static final String PATIENT_ID_BUNDLE = "patientID";
         public static final String PATIENT_PROGRAM = "patientProgram";
         public static final String VISIT_ID = "visitID";
+        public static final String VISIT_DATE = "visitDate";
         public static final String ENCOUNTERDATETIME = "encounterDatetime";
         public static final String ENCOUNTERTYPE = "encounterType";
         public static final String ENTRIES_ID = "id";
@@ -97,6 +106,7 @@ public abstract class ApplicationConstants {
         public static final String PROVIDER_ID_BUNDLE = "providerID";
         public static final String EXISTING_PROVIDERS_BUNDLE = "existingProviders";
         public static final String NAME_LIST_BUNDLE = "nameListBundle";
+        public static final String REPLACE_BASE = "replace_base";
     }
 
     public abstract static class ServiceActions {

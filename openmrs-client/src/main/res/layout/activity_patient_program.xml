@@ -18,6 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
     android:orientation="vertical">
 
 
@@ -30,7 +31,7 @@
         <FrameLayout
             android:id="@+id/patientProgrameContentFrame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 </LinearLayout>

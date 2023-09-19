@@ -31,13 +31,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
+        android:background="@drawable/dashboard_background2"
         android:gravity="center_vertical"
         tools:context=".activities.dashboard.DashboardActivity">
 
         <FrameLayout
             android:id="@+id/dashboardContentFrame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 </LinearLayout>

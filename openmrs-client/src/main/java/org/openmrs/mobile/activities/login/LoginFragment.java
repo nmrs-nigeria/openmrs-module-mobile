@@ -316,8 +316,8 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
     private void bindDrawableResources() {
         mBitmapCache = new SparseArray<>();
         ImageView openMrsLogoImage = getActivity().findViewById(R.id.openmrsLogo);
-        createImageBitmap(R.drawable.openmrs_logo, openMrsLogoImage.getLayoutParams());
-        openMrsLogoImage.setImageBitmap(mBitmapCache.get(R.drawable.openmrs_logo));
+        createImageBitmap(R.drawable.openmrs_logo2, openMrsLogoImage.getLayoutParams());
+        openMrsLogoImage.setImageBitmap(mBitmapCache.get(R.drawable.openmrs_logo2));
     }
 
     private void createImageBitmap(Integer key, ViewGroup.LayoutParams layoutParams) {

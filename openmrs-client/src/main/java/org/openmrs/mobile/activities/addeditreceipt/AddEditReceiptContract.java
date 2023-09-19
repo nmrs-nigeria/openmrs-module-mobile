@@ -3,8 +3,12 @@ package org.openmrs.mobile.activities.addeditreceipt;
 import org.openmrs.mobile.activities.BasePresenterContract;
 import org.openmrs.mobile.activities.BaseView;
 import org.openmrs.mobile.models.Receipt;
+import org.openmrs.mobile.models.ReceiptItem;
+
+import java.util.List;
 
 public class AddEditReceiptContract {
+
     interface View extends BaseView<AddEditReceiptContract.Presenter> {
 
         void finishReceiptInfoActivity();
@@ -33,15 +37,15 @@ public class AddEditReceiptContract {
 
         boolean isRegisteringReceipt();
 
-        void confirmRegister(Receipt receipt);
+        void confirmRegister(List<Receipt> receipt, ReceiptItem receiptItem);
 
-        void confirmUpdate(Receipt receipt);
+        void confirmUpdate(Receipt receipt, ReceiptItem receiptItem);
 
         void finishReceiptInfoActivity();
 
         void registerReceipt();
 
-        void updateReceipt(Receipt receipt);
+        void deleteCommodity();
     }
 
 }

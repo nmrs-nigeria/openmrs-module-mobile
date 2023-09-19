@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
+    android:orientation="vertical"
+    tools:context=".activities.pbs.ExportPBS">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/button"
+            style="@style/exportPBSButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10px"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button_shape"
+            android:onClick="generate_PBS"
+            android:text="Export PBS Data"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/delete"
+            style="@style/deletePBSButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button_delete"
+            android:onClick="deleteFingerPrints"
+            android:text="Clear PBS Data"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Use this feature to import all the clients eligible for PBS capture from a CSV File into this device."
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/import_csc"
+            style="@style/importPBSButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/custom_button_import"
+            android:onClick="importCSVFile"
+            android:padding="20dp"
+            android:text="Import clients for PBS capture"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+
+</LinearLayout>

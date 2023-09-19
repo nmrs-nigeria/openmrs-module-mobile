@@ -212,7 +212,7 @@ public class LoginPresenterTest extends ACUnitTestBaseRx {
         mockNetworkConnection(true);
         Mockito.lenient().when(restApi.getLocations(any(), anyString(), anyString()))
                 .thenReturn(mockSuccessCall(Collections.singletonList(new Location())));
-        presenter.loadLocations("someUrl");
+        presenter.loadLocations("someUrl","");
         verify(view).initLoginForm(any(), any());
         verify(view).startFormListService();
         verify(view).setLocationErrorOccurred(false);
@@ -224,7 +224,7 @@ public class LoginPresenterTest extends ACUnitTestBaseRx {
         mockNetworkConnection(true);
         Mockito.lenient().when(restApi.getLocations(any(), anyString(), anyString()))
                 .thenReturn(mockErrorCall(401));
-        presenter.loadLocations("someUrl");
+        presenter.loadLocations("someUrl","");
         verify(view).initLoginForm(any(), any());
         verify(view).setLocationErrorOccurred(true);
         verify(view).showInvalidURLSnackbar(anyString());
@@ -236,7 +236,7 @@ public class LoginPresenterTest extends ACUnitTestBaseRx {
         mockNetworkConnection(true);
         Mockito.lenient().when(restApi.getLocations(any(), anyString(), anyString()))
                 .thenReturn(mockFailureCall());
-        presenter.loadLocations("someUrl");
+        presenter.loadLocations("someUrl","");
         verify(view).initLoginForm(any(), any());
         verify(view).setLocationErrorOccurred(true);
         verify(view).showInvalidURLSnackbar(Mockito.any());
@@ -247,7 +247,7 @@ public class LoginPresenterTest extends ACUnitTestBaseRx {
     public void shouldLoadLocationsInOfflineMode_emptyList(){
         mockNetworkConnection(false);
         Mockito.lenient().when(locationDAO.getLocations()).thenReturn(Observable.just(new ArrayList<>()));
-        presenter.loadLocations("someUrl");
+        presenter.loadLocations("someUrl","");
         verify(view).showToast(anyString(), any());
         verify(view).setLocationErrorOccurred(true);
         verify(view).hideLoadingAnimation();
@@ -257,7 +257,7 @@ public class LoginPresenterTest extends ACUnitTestBaseRx {
     public void shouldLoadLocationsInOfflineMode_nonEmptyList(){
         mockNetworkConnection(false);
         Mockito.lenient().when(locationDAO.getLocations()).thenReturn(Observable.just(Collections.singletonList(new Location())));
-        presenter.loadLocations("someUrl");
+        presenter.loadLocations("someUrl","");
         verify(view).initLoginForm(any(), any());
         verify(view).setLocationErrorOccurred(false);
         verify(view).hideLoadingAnimation();

@@ -18,7 +18,8 @@
     android:id="@+id/provider_dashboard_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/dashboard_background2">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/provider_dashboard_appbar"
@@ -30,7 +31,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/provider_dashboard_collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="10dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?android:attr/colorControlHighlight"
             app:expandedTitleMarginEnd="64dp"
@@ -91,9 +92,9 @@
             android:id="@+id/provider_dashboard_tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabGravity="fill"
             app:tabIndicatorColor="@color/white"
             app:tabMode="fixed"
-            app:tabGravity="fill"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/grey" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -112,7 +113,8 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/provider_dashboard_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>

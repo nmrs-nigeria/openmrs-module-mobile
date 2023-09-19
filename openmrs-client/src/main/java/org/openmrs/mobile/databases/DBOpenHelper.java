@@ -24,13 +24,16 @@ import net.sqlcipher.database.SQLiteStatement;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationContract;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.databases.tables.ConceptTable;
 import org.openmrs.mobile.databases.tables.EncounterTable;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
+import org.openmrs.mobile.databases.tables.FingerPrintVerificationTable;
 import org.openmrs.mobile.databases.tables.LocationTable;
 import org.openmrs.mobile.databases.tables.ObservationTable;
 import org.openmrs.mobile.databases.tables.PatientTable;
+import org.openmrs.mobile.databases.tables.ServiceLogTable;
 import org.openmrs.mobile.databases.tables.Table;
 import org.openmrs.mobile.databases.tables.VisitTable;
 import org.openmrs.mobile.models.Concept;
@@ -39,6 +42,7 @@ import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Observation;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
+import org.openmrs.mobile.models.ServiceLog;
 import org.openmrs.mobile.models.Visit;
 
 import java.io.ByteArrayOutputStream;
@@ -58,7 +62,9 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
     private EncounterTable mEncounterTable;
     private ObservationTable mObservationTable;
     private LocationTable mLocationTable;
+    private ServiceLogTable mServiceLogTable;
     private FingerPrintTable mFingerPrintTable;
+    private FingerPrintVerificationTable mFingerPrintVerificationTable;
     private OpenMRS mOpenMRS;
 
     public DBOpenHelper(Context context) {
@@ -70,7 +76,10 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         this.mObservationTable = new ObservationTable();
         this.mLocationTable = new LocationTable();
         this.mFingerPrintTable = new FingerPrintTable();
-
+        // verification table
+        mFingerPrintVerificationTable = new FingerPrintVerificationTable();
+        // service log table
+        this.mServiceLogTable = new ServiceLogTable();
     }
 
     @Override
@@ -91,6 +100,14 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
         sqLiteDatabase.execSQL(mFingerPrintTable.createTableDefinition());
         logOnCreate(mFingerPrintTable.toString());
+
+        // recapture  update
+        sqLiteDatabase.execSQL(mFingerPrintVerificationTable.createTableDefinition());
+        logOnCreate(mFingerPrintVerificationTable.toString());
+        //service log
+        sqLiteDatabase.execSQL(mServiceLogTable.createTableDefinition());
+        logOnCreate(mServiceLogTable.toString());
+
     }
 
     @Override
@@ -123,11 +140,14 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
             case 16:
 
             case 18:
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 19:
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
-                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
+
+//                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
+//                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
+//            case 19:
+//                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
+//                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
+//            case 20:
+
                 //and so on.. do not add breaks so that switch will
                 //start at oldVersion, and run straight through to the latest
         }
@@ -520,7 +540,8 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
             bindString(10, fingerPrintObj.getModel(), pbsStatement);
             bindString(11, fingerPrintObj.getManufacturer(), pbsStatement);
             bindLong(12, (long) fingerPrintObj.getSyncStatus(), pbsStatement);
-            bindLong(13, (long) fingerPrintObj.getCreator(), pbsStatement);
+            bindString(13,fingerPrintObj.getDateCreated(),pbsStatement );
+            bindLong(14, (long) fingerPrintObj.getCreator(), pbsStatement);
 
             id = pbsStatement.executeInsert();
             pbsStatement.clearBindings();
@@ -542,6 +563,133 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
        String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
         return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);
     }
+
+    public int updateBaseSync(SQLiteDatabase db,Long patientID, int value) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(FingerPrintTable.Column.SyncStatus,  value);
+        String[] whereArgs = new String[]{String.valueOf( patientID)};
+        String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
+        return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+    public int updateVerificationSync(SQLiteDatabase db,Long patientID, int value) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(FingerPrintVerificationTable.Column.SyncStatus,  value);
+        String[] whereArgs = new String[]{String.valueOf( patientID)};
+        String _where_clause = String.format("%s = ?", FingerPrintVerificationTable.Column.patient_id);
+        return db.update(FingerPrintVerificationTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+
+    // Verification transactions
+    public long insertFingerPrintVerification(SQLiteDatabase db, PatientBiometricVerificationContract fingerPrintObj) {
+        long id;
+
+        if(!TableExists(db, FingerPrintVerificationTable.TABLE_NAME)){
+            db.execSQL(mFingerPrintVerificationTable.createTableDefinition());
+            logOnCreate(mFingerPrintVerificationTable.toString());
+        }
+        SQLiteStatement pbsStatement = db.compileStatement(mFingerPrintVerificationTable.insertIntoTableDefinition());
+
+        try {
+            db.beginTransaction();
+            bindString(1, fingerPrintObj.getBiometricInfo_Id(), pbsStatement);
+            bindLong(2, (long) fingerPrintObj.getPatienId(), pbsStatement);
+            bindString(3, fingerPrintObj.getTemplate(), pbsStatement);
+            bindLong(4, (long) fingerPrintObj.getImageWidth(), pbsStatement);
+            bindLong(5, (long) fingerPrintObj.getImageHeight(), pbsStatement);
+            bindLong(6, (long) fingerPrintObj.getImageDPI(), pbsStatement);
+            bindLong(7, (long) fingerPrintObj.getImageQuality(), pbsStatement);
+            bindString(8, fingerPrintObj.getFingerPositions().toString(), pbsStatement);
+            bindString(9, fingerPrintObj.getSerialNumber(), pbsStatement);
+            bindString(10, fingerPrintObj.getModel(), pbsStatement);
+            bindString(11, fingerPrintObj.getManufacturer(), pbsStatement);
+            bindLong(12, (long) fingerPrintObj.getSyncStatus(), pbsStatement);
+            bindString(13,fingerPrintObj.getDateCreated(),pbsStatement );
+            bindLong(14, (long) fingerPrintObj.getCreator(), pbsStatement);
+
+            id = pbsStatement.executeInsert();
+            pbsStatement.clearBindings();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            pbsStatement.close();
+        }
+        return id;
+    }
+
+    public int updateFingerPrintVerification(SQLiteDatabase db, PatientBiometricVerificationContract fingerPrintObj) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(FingerPrintVerificationTable.Column.SyncStatus, fingerPrintObj.getSyncStatus());
+
+        String[] whereArgs = new String[]{String.valueOf(fingerPrintObj.getPatienId())};
+
+        String _where_clause = String.format("%s = ?", FingerPrintVerificationTable.Column.patient_id);
+        return db.update(FingerPrintVerificationTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+// End of verification
+
+
+    // service log start
+    public long insertServiceLog(SQLiteDatabase db, ServiceLog serviceLog) {
+        long id;
+
+        if(!TableExists(db, ServiceLogTable.TABLE_NAME)){
+            db.execSQL(mServiceLogTable.createTableDefinition());
+            logOnCreate(mServiceLogTable.toString());
+        }
+        SQLiteStatement logStatement = db.compileStatement(mServiceLogTable.insertIntoTableDefinition());
+
+        try {
+            db.beginTransaction();
+            bindLong(1,  serviceLog.getPatientId(), logStatement);
+            bindString(2,  serviceLog.getPatientUUID(), logStatement);
+            bindLong(3,(long) serviceLog.getVoided(), logStatement);
+            bindString(4, serviceLog.getDateCreated(), logStatement);
+            bindString(5, serviceLog.getVisitDate(), logStatement);
+            bindString(6, serviceLog.getFormName(), logStatement);
+            id = logStatement.executeInsert();
+            logStatement.clearBindings();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            logStatement.close();
+        }
+        return id;
+    }
+
+    // patientUUID and voided must also be set  in the provided service log and update
+    public int voidPatientServiceLogs(SQLiteDatabase db, String patientId, String patientUUID, long voided) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(ServiceLogTable.Column.VOIDED, voided);
+        String[] whereArgs = new String[]{String.valueOf(patientUUID), patientId};
+        String _where_clause = String.format("%s = ? OR %s = ? ",
+                ServiceLogTable.Column.PATIENT_UUID, ServiceLogTable.Column.PATIENT_ID);
+        return db.update(ServiceLogTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+
+    //service log end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public boolean TableExists(SQLiteDatabase db, String tableName) {

@@ -83,6 +83,13 @@ public interface PatientDashboardContract {
 
     }
 
+    interface ViewPatientFingerPrints extends ViewPatientMain{
+        void populateFingerPrints(Long patient_id);
+    }
+
+    interface ViewPatientCovid19TB extends ViewPatientMain{
+        void showCovid19TBEncounter();
+    }
     /*
     * Presenters
     */
@@ -112,6 +119,14 @@ public interface PatientDashboardContract {
     }
 
     interface PatientChartsPresenter extends PatientDashboardMainPresenter {
+
+    }
+
+    interface PatientFingerPrintPresenter extends PatientDashboardMainPresenter {
+
+    }
+
+    interface PatientCovid19TBPresenter extends PatientDashboardMainPresenter {
 
     }
 }

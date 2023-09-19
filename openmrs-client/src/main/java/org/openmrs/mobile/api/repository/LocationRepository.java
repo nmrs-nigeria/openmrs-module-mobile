@@ -40,9 +40,11 @@ public class LocationRepository extends RetrofitRepository {
             @Override
             public void onResponse(@NonNull Call<Results<Location>> call, @NonNull Response<Results<Location>> response) {
                 Results<Location> locationList = response.body();
-                for (Location result : locationList.getResults()) {
-                    if ((result.getDisplay().trim()).equalsIgnoreCase((openMrs.getLocation().trim()))) {
-                        deferred.resolve(result);
+                if(locationList != null) {
+                    for (Location result : locationList.getResults()) {
+                        if ((result.getDisplay().trim()).equalsIgnoreCase((openMrs.getLocation().trim()))) {
+                            deferred.resolve(result);
+                        }
                     }
                 }
             }

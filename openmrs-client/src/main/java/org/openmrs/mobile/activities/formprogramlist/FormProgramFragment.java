@@ -27,6 +27,7 @@ import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
 import org.openmrs.mobile.activities.formdisplay.FormDisplayActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.ImageUtils;
@@ -279,7 +280,6 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
             switch (programName){
                 case "PMTCT":
                     switch (form) {
-
                         case "Delivery register":
                             assert fPActivity != null;
                             if (fPActivity.isFirstTimeANC()){
@@ -374,28 +374,18 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             break;
                     }
                     break;
+                    //End of PMTCT
                 case "HTS":
                     switch (form){
                         case "Client intake form":
-//                            if (fPActivity.isFirstTime() && !isElig ) {
-//                                    mclientinteakeView.setVisibility(View.GONE);
-//                            }else{
-//                                if (fPActivity.isClientExist() || isClient ) {
-//                                    mclientinteakeView.setVisibility(View.GONE);
-//                                }else{
-//                                    if (!fPActivity.isEligible()){
-//                                        mclientinteakeView.setVisibility(View.GONE);
-//                                    }
-//                                    mclientinteakeView.setVisibility(View.VISIBLE);
-//                                }
-//                            }
                             if (fPActivity.isFirstTime()){
                                 if(isElig) {
                                     mclientinteakeView.setVisibility(View.VISIBLE);
                                 }else{
                                     mclientinteakeView.setVisibility(View.GONE);
                                 }
-                            }else{
+                            }
+                            else{
                                 if (isElig){
                                     if (fPActivity.isClientExist() || isClient ) {
                                         mclientinteakeView.setVisibility(View.GONE);
@@ -416,7 +406,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             }
                             break;
                         case "Risk Assessment Pediatric":
+
                             if (fPActivity.isFirstTime()) {
+
                                 if(isElig || !isFTime) {
                                     mchildRSTView.setVisibility(View.GONE);
                                 }else{
@@ -427,6 +419,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             }
                             break;
                         case "Risk Stratification Adult":
+
                             if (fPActivity.isFirstTime()) {
                                 if(isElig || !isFTime) {
                                     madultRSTView.setVisibility(View.GONE);
@@ -488,6 +481,10 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             break;
                     }
                     break;
+    ///end HTS form
+
+
+
                 case "HEI":
                     switch (form){
                         case "Child Birth Registration":
@@ -501,6 +498,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             break;
                     }
                     break;
+
+                    ///End HEI(highly exposed infant
                 case "ART":
                     switch (form) {
                         case "Adult Initial Clinical Evaluation":
@@ -512,9 +511,9 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                         case "Care Card":
                             mcareCardView.setVisibility(View.GONE);
                             break;
-//                        case "Client Referral Form":
-//                            mclientRefView.setVisibility(View.VISIBLE);
-//                            break;
+                        case "Client Referral Form":
+                            mclientRefView.setVisibility(View.GONE);
+                            break;
                         case "Risk Stratification Adult":
                             madultRSTView.setVisibility(View.GONE);
                             break;
@@ -538,6 +537,8 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             break;
                     }
                     break;
+                    // End of ART
+
                 default:
                     // Do nothing
                     break;

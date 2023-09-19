@@ -22,16 +22,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.api.FingerPrintSyncService;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.dao.ServiceLogDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.security.HashMethods;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FingerPrintUtility;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.w3c.dom.Text;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -45,6 +52,8 @@ import SecuGen.FDxSDKPro.SGFDxTemplateFormat;
 import SecuGen.FDxSDKPro.SGFingerInfo;
 import SecuGen.FDxSDKPro.SGImpressionType;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class PatientBiometricActivity extends AppCompatActivity
         implements View.OnClickListener, Runnable {
@@ -66,6 +75,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     private int mImageHeight;
     private int mImageDPI;
     private String mDeviceSN;
+
     private Bitmap grayBitmap;
     private IntentFilter filter;
     private boolean bSecuGenDeviceOpened;
@@ -74,12 +84,17 @@ public class PatientBiometricActivity extends AppCompatActivity
     private FingerPositions fingerPosition = null;
     private ImageView fingerPrintImageDisplay;
     private Button fingerLeftThumb, fingerLeftIndex, fingerLeftMiddle, fingerLeftRing, fingerLeftPinky, fingerRightThumb, fingerRightIndex, fingerRightMiddle, fingerRightRing, fingerRightPinky;
+    private TextView lt,li,lm,lr,lp,
+            rt,ri,rm,rr,rp;
     private List<PatientBiometricContract> patientFingerPrints;
 
     String patientId = "";
+    String visitDate = "";
     String patientUUID = "";
     FingerPrintDAO fingerPrintDAO;
     FingerPrintUtility fingerPrintUtility;
+    private final int minFingerPrintCount =6; //minFingerPrintCount is minimum count to be captured before saving to local/online db
+
 
     public PatientBiometricActivity(){
         fingerPrintDAO = new FingerPrintDAO();
@@ -125,7 +140,7 @@ public class PatientBiometricActivity extends AppCompatActivity
             }
 
             mImageViewFingerprint.setImageBitmap(this.toGrayscale(mRegisterImage));
-            result = sgfplib.SetTemplateFormat(SecuGen.FDxSDKPro.SGFDxTemplateFormat.TEMPLATE_FORMAT_ISO19794);
+            result = sgfplib.SetTemplateFormat(SGFDxTemplateFormat.TEMPLATE_FORMAT_ISO19794);
             debugMessage("SetTemplateFormat() returned:" + result + "\n");
 
             int[] quality1 = new int[1];
@@ -166,32 +181,58 @@ public class PatientBiometricActivity extends AppCompatActivity
                 theFinger.setTemplate(Base64.encodeToString(mRegisterTemplate, Base64.NO_WRAP));
                 theFinger.setImageDPI(mImageDPI);
                 theFinger.setSerialNumber(mDeviceSN);
+
+                //recapture Additional details
+
+                theFinger.setDateCreated(visitDate);
+
                 theFinger.setImageByte(mRegisterTemplate);
                 theFinger.setSyncStatus(0);
 
 
                 //reject finger print if already capture for another finger. Accept and replace if this is the same finger
                 String previousCapture = fingerPrintUtility.CheckIfFingerAlreadyCaptured(theFinger.getTemplate(), patientFingerPrints);
+
+                //OpenMRSCustomHandler.writeLogToFile("The template is " + theFinger.getTemplate());
+
+                String previousCaptureOnDevice = fingerPrintUtility.CheckIfFingerAlreadyCapturedOnDevice(theFinger.getTemplate());
                 if (previousCapture !=null && !previousCapture.isEmpty()) {
                     CustomDebug("This finger has been captured before for "+ previousCapture, false);
-                } else {
+                }else if(previousCaptureOnDevice != null && !previousCaptureOnDevice.isEmpty()) {
+                    CustomDebug("This finger has been captured before for "+ previousCaptureOnDevice + " on this device", false);
+                }else {
+
+                    //scan through list and remove finger print with same position before add the new to the list
+                    boolean printExist=false;
+                    for( PatientBiometricContract item: patientFingerPrints){
+                        if(item.getFingerPositions().equals(theFinger.getFingerPositions())) {
+                            patientFingerPrints.remove(item);
+                            printExist = true;
+                            break; // consistency with counter
+                        }
+                    }
+
                     //save to temp list to be discard later
+
                     patientFingerPrints.add(theFinger);
 
                     //save to the database directly
                     Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
                     debugMessage(String.valueOf(db_id));
-                    fingerPrintCaptureCount += 1;
+                    // print is not existing on list then add counter
+                    if(!printExist)
+                     fingerPrintCaptureCount += 1;
 
                     //color the button and save locally
-                    colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD);
+                    colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD,theFinger.getImageQuality());
+                 //   testLogs();
                 }
             } else {
                 //color warning. this capture is not counted
-                colorCapturedButton(fingerPosition, android.R.color.holo_orange_light, Typeface.NORMAL);
+                colorCapturedButton(fingerPosition, android.R.color.holo_orange_light, Typeface.NORMAL,fpInfo.ImageQuality);
             }
-            //enable the save button when 6 fingers has been captured
-            if (fingerPrintCaptureCount >= 6) {
+            //enable the save button when  fingers has been captured
+            if (fingerPrintCaptureCount >= minFingerPrintCount) {
                 this.mButtonSaveCapture.setClickable(true);
                 this.mButtonSaveCapture.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
             }
@@ -223,17 +264,18 @@ public class PatientBiometricActivity extends AppCompatActivity
     public void deleteUnsyncedFingerPrint(long patientId) {
         FingerPrintDAO dao = new FingerPrintDAO();
         dao.deletePrint(patientId);
+        fingerPrintCaptureCount=0;
 
-        colorCapturedButton(FingerPositions.RightSmall, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.RightWedding, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.RightMiddle, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.RightIndex, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.RightThumb, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.LeftMiddle, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.LeftIndex, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.LeftSmall, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.LeftWedding, android.R.color.black, Typeface.NORMAL);
-        colorCapturedButton(FingerPositions.LeftThumb, android.R.color.black, Typeface.NORMAL);
+        colorCapturedButton(FingerPositions.RightSmall, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.RightWedding, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.RightMiddle, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.RightIndex, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.RightThumb, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.LeftMiddle, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.LeftIndex, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.LeftSmall, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.LeftWedding, android.R.color.black, Typeface.NORMAL,-1);
+        colorCapturedButton(FingerPositions.LeftThumb, android.R.color.black, Typeface.NORMAL,-1);
 
         patientFingerPrints = new ArrayList<>();
         CustomDebug("Fingerprints successfully cleared", false);
@@ -242,14 +284,16 @@ public class PatientBiometricActivity extends AppCompatActivity
     public void CheckIfAlreadyCapturedOnLocalDB(String patientId) {
         FingerPrintDAO dao = new FingerPrintDAO();
         List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+
+
         if(pbs !=null && pbs.size() > 0){
             CustomDebug("Some Finger Print already exit for this patient. You can capture more or clear the existing ones to start afresh", false);
             fingerPrintCaptureCount = pbs.size();
             //load in temp list
             patientFingerPrints.addAll(pbs);
 
-            for (PatientBiometricContract item : pbs) {
-                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light, Typeface.NORMAL);
+            for (PatientBiometricContract item : pbs)  {
+                colorCapturedButton(item.getFingerPositions(), android.R.color.holo_green_light, Typeface.NORMAL, item.getImageQuality());
             }
         }
         else{ //check if already sync
@@ -268,13 +312,24 @@ public class PatientBiometricActivity extends AppCompatActivity
         return true;
     }
 
-    private void saveFingerPrints() {
+    private void testLogs(){
+        FingerPrintDAO dao = new FingerPrintDAO();
+        List<PatientBiometricContract> pbs = dao.getAll(true, patientId);
+        for (int index=0; index<pbs.size();index++){
+            Log.d(TAG, " FingerPrint position "+String.valueOf(pbs.get(index).getFingerPositions()));
+        }
+        Log.d(TAG,  "  fingerPrintCaptureCount:  "+fingerPrintCaptureCount);
+    }
 
+    private void saveFingerPrints() {
+       // testLogs();
         //FingerPrintSyncService sync = new FingerPrintSyncService();
         ////sync.autoSyncFingerPrint();
+
+
         try{
-        if (fingerPrintCaptureCount < 6) {
-            CustomDebug("Please captured a minimum of 6 print before saving", false);
+        if (fingerPrintCaptureCount < minFingerPrintCount) {
+            CustomDebug("Please captured a minimum of "+ minFingerPrintCount +" print before saving", false);
             return;
         }
 
@@ -294,15 +349,19 @@ public class PatientBiometricActivity extends AppCompatActivity
         new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
             @Override
             public void onResponse(PatientBiometricSyncResponseModel obj) {
+                
                 if(obj !=null && obj.getIsSuccessful()){
                     CustomDebug(obj.getErrorMessage(), false);
-
-                    PatientBiometricContract _temp =  pbs.get(0);
-                    _temp.setSyncStatus(1);
-                    _temp.setTemplate("");
-                    dao.updatePatientFingerPrintSyncStatus(Long.valueOf(patientId), _temp);
-
+                    dao.updateSync(Long.valueOf(patientId),1);
+                    // setting void to one for all records that matches the the UUID
+                    new ServiceLogDAO().set_patient_PBS_void(patientId,patientUUID,1);
                     CustomDebug("Successfully saved to server.", true);
+                }else{
+                    if(obj !=null){
+                        CustomDebug(obj.getErrorMessage(), false);
+                    }
+                    CustomDebug("An error occurred while saving prints on the server.", true);
+
                 }
             }
 
@@ -318,6 +377,7 @@ public class PatientBiometricActivity extends AppCompatActivity
 
             @Override
             public void onErrorResponse(String errorMessage) {
+                Log.d(TAG, "Log_C "+errorMessage);
                 CustomDebug(errorMessage, false);
 
                 //save locally
@@ -351,12 +411,16 @@ public class PatientBiometricActivity extends AppCompatActivity
 
         if (savedInstanceState != null) {
             patientId = savedInstanceState.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
+            visitDate    = savedInstanceState.getString(ApplicationConstants.BundleKeys.VISIT_DATE);
+
         } else {
             savedInstanceState = getIntent().getExtras();
         }
 
         if (savedInstanceState != null) {
             patientId = savedInstanceState.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
+            visitDate=   savedInstanceState.getString(ApplicationConstants.BundleKeys.VISIT_DATE);
+
         }
 
         createViewObject();
@@ -369,13 +433,19 @@ public class PatientBiometricActivity extends AppCompatActivity
         if(patientUUID != null) {
             CheckIfAlreadyCapturedOnServer(patientUUID);
         }
-        CheckIfAlreadyCapturedOnLocalDB(patientId);
+
 
         mMaxTemplateSize = new int[1];
 
-        //USB Permissions
+
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-        filter = new IntentFilter(ACTION_USB_PERMISSION);
+        filter = new IntentFilter();
+        // add more action to listen to connected and disconnected
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        filter.addAction(ACTION_USB_PERMISSION); //USB Permissions
+
+
         sgfplib = new JSGFPLib((UsbManager) getSystemService(Context.USB_SERVICE));
         fingerPrintUtility = new FingerPrintUtility(sgfplib);
 
@@ -414,28 +484,30 @@ public class PatientBiometricActivity extends AppCompatActivity
     @Override
     public void onResume() {
 
+      /*
+        // Not checking on server because it is recapture
         if(patientUUID !=null){
             CheckIfAlreadyCapturedOnServer(patientUUID);
         }
-        CheckIfAlreadyCapturedOnLocalDB(patientId);
+        */
+
 
         Log.d(TAG, "Enter onResume()");
         super.onResume();
         DisableControls();
         registerReceiver(mUsbReceiver, filter);
+        openUSBDevice(true);
+        Log.d(TAG, "Exit onResume()");
+    }
+    boolean loadingBiometric;
+    private void openUSBDevice(boolean isResume) {
+        Log.d(TAG, "Enter isResume  "+isResume);
+        loadingBiometric=true;
         long error = sgfplib.Init(SGFDxDeviceName.SG_DEV_AUTO);
         if (error != SGFDxErrorCode.SGFDX_ERROR_NONE) {
-            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
-            if (error == SGFDxErrorCode.SGFDX_ERROR_DEVICE_NOT_FOUND)
-                dlgAlert.setMessage("The attached fingerprint device is not supported on Android");
-            else
-                dlgAlert.setMessage("Fingerprint device initialization failed!");
-            dlgAlert.setTitle("SecuGen Fingerprint SDK");
-            dlgAlert.setPositiveButton("OK",
-                    (dialog, whichButton) -> finish()
-            );
-            dlgAlert.setCancelable(false);
-            dlgAlert.create().show();
+            Snackbar.make(mButtonClearUnsyncFingerPrint, "Plug in the SecuGen device properly", Snackbar.LENGTH_LONG).show();
+            loadingBiometric=false;
+            // Loading stop here
         } else {
             UsbDevice usbDevice = sgfplib.GetUsbDevice();
             if (usbDevice == null) {
@@ -447,63 +519,31 @@ public class PatientBiometricActivity extends AppCompatActivity
                 );
                 dlgAlert.setCancelable(false);
                 dlgAlert.create().show();
+                loadingBiometric=false;
             } else {
                 boolean hasPermission = sgfplib.GetUsbManager().hasPermission(usbDevice);
-                if (!hasPermission) {
-                    if (!usbPermissionRequested) {
-                        debugMessage("Requesting USB Permission\n");
-                        //Log.d(TAG, "Call GetUsbManager().requestPermission()");
-                        usbPermissionRequested = true;
-                        sgfplib.GetUsbManager().requestPermission(usbDevice, mPermissionIntent);
-                    } else {
-                        //wait up to 20 seconds for the system to grant USB permission
-                        hasPermission = sgfplib.GetUsbManager().hasPermission(usbDevice);
-                        debugMessage("Waiting for USB Permission\n");
-                        int i = 0;
-                        while ((!hasPermission) && (i <= 40)) {
-                            ++i;
-                            hasPermission = sgfplib.GetUsbManager().hasPermission(usbDevice);
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
                 if (hasPermission) {
-                    debugMessage("Opening SecuGen Device\n");
-                    error = sgfplib.OpenDevice(0);
-                    debugMessage("OpenDevice() ret: " + error + "\n");
-                    if (error == SGFDxErrorCode.SGFDX_ERROR_NONE) {
-                        bSecuGenDeviceOpened = true;
-                        SecuGen.FDxSDKPro.SGDeviceInfoParam deviceInfo = new SecuGen.FDxSDKPro.SGDeviceInfoParam();
-                        error = sgfplib.GetDeviceInfo(deviceInfo);
-
-                        debugMessage("GetDeviceInfo() ret: " + error + "\n");
-                        mImageWidth = deviceInfo.imageWidth;
-                        mImageHeight = deviceInfo.imageHeight;
-                        mImageDPI = deviceInfo.imageDPI;
-                        mDeviceSN = new String(deviceInfo.deviceSN());
-                        debugMessage("Image width: " + mImageWidth + "\n");
-                        debugMessage("Image height: " + mImageHeight + "\n");
-                        debugMessage("Image resolution: " + mImageDPI + "\n");
-                        debugMessage("Serial Number: " + new String(deviceInfo.deviceSN()) + "\n");
-
-                        sgfplib.SetTemplateFormat(SGFDxTemplateFormat.TEMPLATE_FORMAT_ISO19794);
-                        sgfplib.GetMaxTemplateSize(mMaxTemplateSize);
-                        debugMessage("TEMPLATE_FORMAT_SG400 SIZE: " + mMaxTemplateSize[0] + "\n");
-                        mRegisterTemplate = new byte[(int) mMaxTemplateSize[0]];
-
-                        EnableControls();
+                    Log.d(TAG,"hasPermission "+hasPermission);
+                    // check if patient print existed when your device ready to use
+                    CheckIfAlreadyCapturedOnLocalDB(patientId);
+                    openSecuGen(usbDevice);// open the device
+                } else
+                {
+                    // request permission if permission is not already requested
+                    if (usbPermissionRequested) { ;
+                        Toast.makeText(this, "Waiting for USB Permission", Toast.LENGTH_SHORT).show();
                     } else {
-                        debugMessage("Waiting for USB Permission\n");
+                        usbPermissionRequested = true;
+                        Log.d(TAG," Requesting permission  ");
+                        sgfplib.GetUsbManager().requestPermission(usbDevice, mPermissionIntent);
                     }
+                    loadingBiometric=false;
                 }
+
             }
         }
-        Log.d(TAG, "Exit onResume()");
     }
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -542,6 +582,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     public void EnableControls() {
+        this.mButtonClearUnsyncFingerPrint.setClickable(true);
 
         this.mButtonRegister.setClickable(true);
         this.mButtonRegister.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
@@ -553,6 +594,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     public void DisableControls() {
+        this.mButtonClearUnsyncFingerPrint.setClickable(false);
 
         this.mButtonRegister.setClickable(false);
         this.mButtonRegister.setTextColor(getResources().getColor(android.R.color.black));
@@ -581,41 +623,6 @@ public class PatientBiometricActivity extends AppCompatActivity
         System.out.print(message);
     }
 
-
-    public void colorCapturedButton(FingerPositions fingerPosition, int color, int typeface){
-//
-        if (fingerPosition == FingerPositions.LeftThumb) {
-            this.fingerLeftThumb.setTextColor(getResources().getColor(color));
-            this.fingerLeftThumb.setTypeface(this.fingerLeftThumb.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.LeftIndex) {
-            this.fingerLeftIndex.setTextColor(getResources().getColor(color));
-            this.fingerLeftIndex.setTypeface(this.fingerLeftIndex.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.LeftMiddle) {
-            this.fingerLeftMiddle.setTextColor(getResources().getColor(color));
-            this.fingerLeftMiddle.setTypeface(this.fingerLeftMiddle.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.LeftWedding) {
-            this.fingerLeftRing.setTextColor(getResources().getColor(color));
-            this.fingerLeftRing.setTypeface(this.fingerLeftRing.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.LeftSmall) {
-            this.fingerLeftPinky.setTextColor(getResources().getColor(color));
-            this.fingerLeftPinky.setTypeface(this.fingerLeftPinky.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.RightThumb) {
-            this.fingerRightThumb.setTextColor(getResources().getColor(color));
-            this.fingerRightThumb.setTypeface(this.fingerRightThumb.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.RightIndex) {
-            this.fingerRightIndex.setTextColor(getResources().getColor(color));
-            this.fingerRightIndex.setTypeface(this.fingerRightIndex.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.RightMiddle) {
-            this.fingerRightMiddle.setTextColor(getResources().getColor(color));
-            this.fingerRightMiddle.setTypeface(this.fingerRightMiddle.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.RightWedding) {
-            this.fingerRightRing.setTextColor(getResources().getColor(color));
-            this.fingerRightRing.setTypeface(this.fingerRightRing.getTypeface(), typeface);
-        } else if (fingerPosition == FingerPositions.RightSmall) {
-            this.fingerRightPinky.setTextColor(getResources().getColor(color));
-            this.fingerRightPinky.setTypeface(this.fingerRightPinky.getTypeface(), typeface);
-        }
-    }
 
     public void setViewItem(View v) {
 
@@ -665,7 +672,17 @@ public class PatientBiometricActivity extends AppCompatActivity
         fingerRightMiddle = (Button) findViewById(R.id.fingerRightMiddle);
         fingerRightRing = (Button) findViewById(R.id.fingerRightRing);
         fingerRightPinky = (Button) findViewById(R.id.fingerRightPinky);
-
+        //select overlay text
+        rt=  findViewById(R.id.rt);
+        ri=   findViewById(R.id.ri);
+        rm =  findViewById(R.id.rm);
+        rr=  findViewById(R.id.rr);
+        rp =  findViewById(R.id.rp);
+        lt=  findViewById(R.id.lt);
+        li= findViewById(R.id.li);
+        lm =   findViewById(R.id.lm);
+        lr=  findViewById(R.id.lr);
+        lp =   findViewById(R.id.lp);
         //Set onclick listener
         fingerLeftThumb.setOnClickListener(this);
         fingerLeftIndex.setOnClickListener(this);
@@ -708,31 +725,166 @@ public class PatientBiometricActivity extends AppCompatActivity
     }
 
 
+    /* use the fingerprint position and set quality flag*/
+    public void colorCapturedButton(FingerPositions fingerPosition, int color, int typeface,  int quality){
+//
+        if (fingerPosition == FingerPositions.LeftThumb) {
+            // this.fingerLeftThumb.setTextColor(getResources().getColor(color));
+            // this.fingerLeftThumb.setTypeface(this.fingerLeftThumb.getTypeface(), typeface);
+            setQualityFlag(this.lt, quality);
+        } else if (fingerPosition == FingerPositions.LeftIndex) {
+            //this.fingerLeftIndex.setTextColor(getResources().getColor(color));
+            // this.fingerLeftIndex.setTypeface(this.fingerLeftIndex.getTypeface(), typeface);
+            setQualityFlag(this.li, quality);
+        } else if (fingerPosition == FingerPositions.LeftMiddle) {
+            //this.fingerLeftMiddle.setTextColor(getResources().getColor(color));
+            //this.fingerLeftMiddle.setTypeface(this.fingerLeftMiddle.getTypeface(), typeface);
+            setQualityFlag(this.lm, quality);
+        } else if (fingerPosition == FingerPositions.LeftWedding) {
+            // this.fingerLeftRing.setTextColor(getResources().getColor(color));
+            // this.fingerLeftRing.setTypeface(this.fingerLeftRing.getTypeface(), typeface);
+            setQualityFlag(this.lr, quality);
+        } else if (fingerPosition == FingerPositions.LeftSmall) {
+            //this.fingerLeftPinky.setTextColor(getResources().getColor(color));
+            // this.fingerLeftPinky.setTypeface(this.fingerLeftPinky.getTypeface(), typeface);
+            setQualityFlag(this.lp, quality);
+        } else if (fingerPosition == FingerPositions.RightThumb) {
+            //this.fingerRightThumb.setTextColor(getResources().getColor(color));
+            //this.fingerRightThumb.setTypeface(this.fingerRightThumb.getTypeface(), typeface);
+            setQualityFlag(this.rt, quality);
+        } else if (fingerPosition == FingerPositions.RightIndex) {
+            // this.fingerRightIndex.setTextColor(getResources().getColor(color));
+            // this.fingerRightIndex.setTypeface(this.fingerRightIndex.getTypeface(), typeface);
+            setQualityFlag(this.ri, quality);
+        } else if (fingerPosition == FingerPositions.RightMiddle) {
+            //this.fingerRightMiddle.setTextColor(getResources().getColor(color));
+            //this.fingerRightMiddle.setTypeface(this.fingerRightMiddle.getTypeface(), typeface);
+            setQualityFlag(this.rm, quality);
+        } else if (fingerPosition == FingerPositions.RightWedding) {
+            // this.fingerRightRing.setTextColor(getResources().getColor(color));
+            // this.fingerRightRing.setTypeface(this.fingerRightRing.getTypeface(), typeface);
+            setQualityFlag(this.rr, quality);
+        } else if (fingerPosition == FingerPositions.RightSmall) {
+            // this.fingerRightPinky.setTextColor(getResources().getColor(color));
+            // this.fingerRightPinky.setTypeface(this.fingerRightPinky.getTypeface(), typeface);
+            setQualityFlag(this.rp, quality);
+        }
+    }
+    /* Set quality flag  int to the TextView  and change background  it background based on */
+    private  void  setQualityFlag(TextView textView,int quality ){
+        if (quality < 0) {
+            textView.setBackground(getDrawable(R.drawable.fingerprint_quality_bg));
+            textView.setText("");// set to empty for when prints are cleared using clear btn
+            return;
+        }else
+        if(quality<60){
+            textView.setBackground(getDrawable(R.drawable.fingerprint_quality_bg_red));
+        }else if(quality<75){
+            textView.setBackground(getDrawable(R.drawable.fingerprint_quality_bg_orange));
+        } else{
+            textView.setBackground(getDrawable(R.drawable.fingerprint_quality_bg_green));
+        }
+
+        textView.setText(String.valueOf(quality)+"%");
+
+    }
+
+    /*
+ openSecuGen(UsbDevice device) open a secu gen device only  when permission is granted
+ */
+    private  void  openSecuGen(UsbDevice device){
+        boolean hasPermission = sgfplib.GetUsbManager().hasPermission(device);
+        if (hasPermission) {
+            debugMessage("Opening SecuGen Device\n");
+            long        error = sgfplib.OpenDevice(0);
+            debugMessage("OpenDevice() ret: " + error + "\n");
+            if (error == SGFDxErrorCode.SGFDX_ERROR_NONE) {
+                bSecuGenDeviceOpened = true;
+                SecuGen.FDxSDKPro.SGDeviceInfoParam deviceInfo = new SecuGen.FDxSDKPro.SGDeviceInfoParam();
+                error = sgfplib.GetDeviceInfo(deviceInfo);
+
+                debugMessage("GetDeviceInfo() ret: " + error + "\n");
+                mImageWidth = deviceInfo.imageWidth;
+                mImageHeight = deviceInfo.imageHeight;
+                mImageDPI = deviceInfo.imageDPI;
+                mDeviceSN = new String(deviceInfo.deviceSN());
+
+
+                //
+                debugMessage("Image width: " + mImageWidth + "\n");
+                debugMessage("Image height: " + mImageHeight + "\n");
+                debugMessage("Image resolution: " + mImageDPI + "\n");
+                debugMessage("Serial Number: " + new String(deviceInfo.deviceSN()) + "\n");
+
+                sgfplib.SetTemplateFormat(SGFDxTemplateFormat.TEMPLATE_FORMAT_ISO19794);
+                sgfplib.GetMaxTemplateSize(mMaxTemplateSize);
+                debugMessage("TEMPLATE_FORMAT_SG400 SIZE: " + mMaxTemplateSize[0] + "\n");
+                mRegisterTemplate = new byte[(int) mMaxTemplateSize[0]];
+                loadingBiometric=false;
+                EnableControls();
+            } else {
+                debugMessage("Waiting for USB Permission\n");
+            }
+
+
+
+        }
+
+        loadingBiometric=false;
+
+    }
+
     //////////////THESE AREA CONTAIN SECUGEN STANDARD CONFIGURATION CODE/////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     //This broadcast receiver is necessary to get user permissions to access the attached USB device
-    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+
+    private static final String ACTION_USB_PERMISSION = "org.openmrs.mobile.activities.USB_PERMISSION";//broadcast const listen to if permission is sent
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
+            String action = intent.getAction(); //retrieve action constant passed in the filter.
             if (ACTION_USB_PERMISSION.equals(action)) {
+                /* This is not return here and the activity paused  during permission request and resume at onResume()
+                          Hence   openSecuGen(device); will not called here...
+                          code not comment for device indifference
+                             */
                 synchronized (this) {
                     UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
                     if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                         if (device != null) {
-                            debugMessage("Vendor ID : " + device.getVendorId() + "\n");
-                            debugMessage("Product ID: " + device.getProductId() + "\n");
-                            debugMessage("USB BroadcastReceiver VID : " + device.getVendorId() + "\n");
-                            debugMessage("USB BroadcastReceiver PID: " + device.getProductId() + "\n");
-                        } else
+
+                            openSecuGen(device);
+
+                            /*
+                           Util.log("Vendor ID : " + device.getVendorId() + "\n");
+                            Util.log("Product ID: " + device.getProductId() + "\n");
+                            Util.log("USB BroadcastReceiver VID : " + device.getVendorId() + "\n");
+                            Util.log("USB BroadcastReceiver PID: " + device.getProductId() + "\n"); */
+                            Log.d(TAG, "Opening SecuGen device");
+
+                        } else {
                             Log.e(TAG, "mUsbReceiver.onReceive() Device is null");
+                        }
                     } else
                         Log.e(TAG, "mUsbReceiver.onReceive() permission denied for device " + device);
                 }
+            } else if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                Util.log( "USB device connected");
+                if(!loadingBiometric ) {
+                    Toast.makeText(context, "USB device connected: Opening", Toast.LENGTH_LONG).show();
+                    // if biometric is not in process of opening open it or if it is not already opened
+                    openUSBDevice(false);
+                } else Toast.makeText(context, "USB device connected: Please wait and reconnect", Toast.LENGTH_LONG).show();
+            } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+                bSecuGenDeviceOpened = false;// turn off device connection flag
+                usbPermissionRequested = false;// turn off permission requested
+                DisableControls();// disable capture  button
+                Toast.makeText(context, "USB device disconnected", Toast.LENGTH_SHORT).show();// notify the user
+                Util.log("USB device disconnected");
             }
         }
     };
+
+
 
 //    //////////////////////////////////////////////////////////////////////////////////////////////
 //    //////////////////////////////////////////////////////////////////////////////////////////////

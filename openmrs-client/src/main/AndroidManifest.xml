@@ -6,9 +6,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.USB_PERMISSION" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,28 +23,39 @@
     <application
         android:name=".application.OpenMRS"
         android:allowBackup="true"
-        android:icon="@drawable/ic_openmrs"
+        android:icon="@mipmap/ic_openmrs19"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Openmrs">
-        <activity android:name=".activities.formprogramlist.FormProgramActivity"
-            android:theme="@style/AppThemeOrig"
+        android:theme="@style/Theme.Openmrs"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.formprogramlist.FormProgramActivity"
             android:label="@string/action_patient_program_forms"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.patientprogram.PatientProgramActivity"
-            android:launchMode="singleTop">
+            android:theme="@style/AppThemeOrig">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.patientprogram.PatientProgramActivity" /></activity>
-
-        <activity android:name=".activities.patientprogram.PatientProgramActivity"
-            android:theme="@style/AppThemeOrig"
+                android:value=".activities.patientprogram.PatientProgramActivity" />
+        </activity>
+        <activity
+            android:name=".activities.patientprogram.PatientProgramActivity"
             android:label="@string/action_patient_program"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeOrig">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
-           </activity>
+        </activity>
+
+        <activity
+            android:name=".activities.covidtbintegrator.CovidTBIntegratorActivity"
+            android:label="@string/covidtbintegrator_program_label"
+            android:theme="@style/AppThemeOrig">
+        </activity>
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -51,7 +65,7 @@
             android:value="@integer/aadbversion" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="org.openmrs.mobile.models.Link, org.openmrs.mobile.models.FormResource, org.openmrs.mobile.models.EncounterType, org.openmrs.mobile.models.Encountercreate, org.openmrs.mobile.models.Obscreate, org.openmrs.mobile.models.ObscreateLocal, org.openmrs.mobile.models.Facility, org.openmrs.mobile.models.States, org.openmrs.mobile.models.Lga, org.openmrs.mobile.models.Department, org.openmrs.mobile.models.Item, org.openmrs.mobile.models.ItemBatch, org.openmrs.mobile.models.Consumption" />
+            android:value="org.openmrs.mobile.models.Link, org.openmrs.mobile.models.FormResource, org.openmrs.mobile.models.EncounterType, org.openmrs.mobile.models.Encountercreate, org.openmrs.mobile.models.Obscreate, org.openmrs.mobile.models.ObscreateLocal, org.openmrs.mobile.models.Facility, org.openmrs.mobile.models.States, org.openmrs.mobile.models.Lga, org.openmrs.mobile.models.Department, org.openmrs.mobile.models.Item, org.openmrs.mobile.models.ItemBatch, org.openmrs.mobile.models.Consumption, org.openmrs.mobile.models.Receipt, org.openmrs.mobile.models.ReceiptItem, org.openmrs.mobile.models.Destination, org.openmrs.mobile.models.Distribution, org.openmrs.mobile.models.DistributionItem, org.openmrs.mobile.models.Transfer, org.openmrs.mobile.models.TransferItem, org.openmrs.mobile.models.Adjustment, org.openmrs.mobile.models.AdjustmentItem, org.openmrs.mobile.models.Pharmacy, org.openmrs.mobile.models.InventoryStockSummaryLab, org.openmrs.mobile.models.InventoryStockSummaryPharmacy, org.openmrs.mobile.models.CovidTBIntegrator, org.openmrs.mobile.models.FingerPrintLog" />
         <meta-data
             android:name="buildVersion"
             android:value="0" />
@@ -68,26 +82,26 @@
         </receiver>
 
         <service android:name=".services.ConceptDownloadService" />
-
         <service android:name=".services.SyncService" />
 
         <activity
             android:name=".activities.dashboard.DashboardActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.syncedpatients.SyncedPatientsActivity"
             android:configChanges="keyboardHidden|screenSize"
             android:label="@string/action_synced_patients"
             android:launchMode="singleTop"
-            android:theme="@style/AppThemeOrig">
+            android:theme="@style/AppThemeOrig"
+            android:exported="true">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -128,7 +142,8 @@
             android:configChanges="keyboardHidden|screenSize"
             android:label="@string/action_active_visits"
             android:launchMode="singleTop"
-            android:theme="@style/AppThemeOrig">
+            android:theme="@style/AppThemeOrig"
+            android:exported="true">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -141,26 +156,23 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-        </activity>
-<!--        <activity-->
-<!--            android:name=".activities.syncedconsumption.SyncedConsumptionActivity"-->
-<!--            android:configChanges="keyboardHidden|screenSize"-->
-<!--            android:label="@string/action_active_commodities"-->
-<!--            android:launchMode="singleTop"-->
-<!--            android:theme="@style/AppThemeOrig">-->
-
-<!--            &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;-->
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value=".activities.commodity.CommodityActivity" />-->
-<!--            <meta-data-->
-<!--                android:name="android.app.searchable"-->
-<!--                android:resource="@xml/searchable" />-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.SEARCH" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        </activity> <!-- <activity -->
+        <!-- android:name=".activities.syncedconsumption.SyncedConsumptionActivity" -->
+        <!-- android:configChanges="keyboardHidden|screenSize" -->
+        <!-- android:label="@string/action_active_commodities" -->
+        <!-- android:launchMode="singleTop" -->
+        <!-- android:theme="@style/AppThemeOrig"> -->
+        <!-- &lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt; -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value=".activities.commodity.CommodityActivity" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.app.searchable" -->
+        <!-- android:resource="@xml/searchable" /> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.SEARCH" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".activities.visitdashboard.VisitDashboardActivity"
             android:label="@string/visit_dashboard_label"
@@ -232,6 +244,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.commodity.CommodityActivity" />
         </activity>
+        <activity android:name=".activities.addedittransfer.AddEditTransferActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/add_edit_transfer_icon_label"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
+        <activity android:name=".activities.addeditadjustment.AddEditAdjustmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/add_edit_adjustment_icon_label"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
         <activity
             android:name=".activities.syncedvisits.SyncedVisitsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -254,16 +284,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.addeditpatient.AddEditPatientActivity" />
         </activity>
-
         <activity
             android:name=".activities.pbs.PatientBiometricActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/action_patient_pbs"
             android:theme="@style/AppThemeOrig" />
 
+        <activity
+            android:name=".activities.pbsverification.PatientBiometricVerificationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="Patient Recapture"
+            android:theme="@style/AppThemeOrig" />
+
         <service
             android:name=".api.PatientService"
             android:enabled="true" />
+        <service
+            android:name=".sync.SyncNewService"
+            android:enabled="true" />
+
         <service
             android:name=".api.EncounterService"
             android:enabled="true" />
@@ -289,7 +328,8 @@
             android:configChanges="keyboardHidden|screenSize"
             android:label="@string/action_download_patients"
             android:launchMode="singleTop"
-            android:theme="@style/AppThemeOrig">
+            android:theme="@style/AppThemeOrig"
+            android:exported="true">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -343,10 +383,80 @@
             android:parentActivityName=".activities.providermanagerdashboard.ProviderManagerDashboardActivity"
             android:theme="@style/AppThemeOrig" />
         <activity
-            android:name=".activities.ip.EnforceChangeActivity"
+            android:name=".activities.formlist.ip.EnforceChangeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/enforce_ip_change_title"
             android:theme="@style/AppThemeOrig" />
+        <activity
+            android:name=".activities.troubleshoot.TroubleshootActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/troubleshoot_title"
+            android:theme="@style/AppThemeOrig" />
+        <activity
+            android:name=".activities.viewconsumption.ViewConsumptionActivity"
+            android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.findcommodity.FindCommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.findcommodity.FindCommodityActivity"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.viewreceipt.ViewReceiptActivity"
+            android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.findcommodity.FindCommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.viewdistribution.ViewDistributionActivity"
+            android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.findcommodity.FindCommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.viewtransfer.ViewTransferActivity"
+            android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.findcommodity.FindCommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.viewadjustment.ViewAdjustmentActivity"
+            android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.findcommodity.FindCommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.reportcommodity.ReportCommodityActivity"
+            android:parentActivityName=".activities.commodity.CommodityActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.commodity.CommodityActivity" />
+        </activity>
+        <activity
+            android:name=".activities.pbs.ExportPBS"
+            android:label="@string/title_activity_export_p_b_s"
+            android:parentActivityName=".activities.dashboard.DashboardActivity"
+            android:theme="@style/AppThemeOrig">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.dashboard.DashboardActivity" />
+        </activity>
     </application>
 
 </manifest>

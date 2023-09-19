@@ -42,6 +42,7 @@ import org.openmrs.mobile.activities.activevisits.ActiveVisitsActivity;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
 import org.openmrs.mobile.activities.commodity.CommodityActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
+import org.openmrs.mobile.activities.pbs.ExportPBS;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
 import org.openmrs.mobile.activities.syncedvisits.SyncedVisitsActivity;
@@ -59,12 +60,14 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
     private ImageView mCaptureVitalsButton;
     private ImageView mProviderManagementButton;
     private ImageView mCommoditytButton;
+    private ImageView mPatientBiometricButton;
     private RelativeLayout mFindPatientView;
     private RelativeLayout mRegistryPatientView;
     private RelativeLayout mActiveVisitsView;
     private RelativeLayout mCommodityView;
     private RelativeLayout mCaptureVitalsView;
     private RelativeLayout mProviderManagementView;
+    private RelativeLayout mPatientBiometricView;
     private TextView mRegistryLabel;
     private SparseArray<Bitmap> mBitmapCache;
 
@@ -247,12 +250,14 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mCaptureVitalsButton = root.findViewById(R.id.captureVitalsButton);
         mProviderManagementButton = root.findViewById(R.id.dashboardProviderManagementButton);
         mCommoditytButton = root.findViewById(R.id.commodityButton);
+        mPatientBiometricButton = root.findViewById(R.id.patientBiometricButton);
         mFindPatientView = root.findViewById(R.id.findPatientView);
         mRegistryPatientView = root.findViewById(R.id.registryPatientView);
         mCaptureVitalsView = root.findViewById(R.id.captureVitalsView);
         mActiveVisitsView = root.findViewById(R.id.activeVisitsView);
         mCommodityView = root.findViewById(R.id.commodityView);
         mProviderManagementView = root.findViewById(R.id.dashboardProviderManagementView);
+        mPatientBiometricView = root.findViewById(R.id.patientBiometricView);
         mRegistryLabel = root.findViewById(R.id.registryLabel);
     }
 
@@ -263,7 +268,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mCommodityView.setOnClickListener(this);
         mCaptureVitalsView.setOnClickListener(this);
         mProviderManagementView.setOnClickListener(this);
-
+        mPatientBiometricView.setOnClickListener(this);
     }
 
     @Override
@@ -278,11 +283,12 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
      */
     @Override
     public void bindDrawableResources() {
-        bindDrawableResource(mFindPatientButton, R.drawable.ico_search);
-        bindDrawableResource(mRegistryPatientButton, R.drawable.ico_registry);
-        bindDrawableResource(mActiveVisitsButton, R.drawable.ico_visits);
+        bindDrawableResource(mFindPatientButton, R.drawable.ico_search1);
+        bindDrawableResource(mRegistryPatientButton, R.drawable.ico_registry1);
+        bindDrawableResource(mActiveVisitsButton, R.drawable.ico_visits1);
         bindDrawableResource(mCaptureVitalsButton, R.drawable.ico_vitals);
-        bindDrawableResource(mCommoditytButton, R.drawable.products);
+        bindDrawableResource(mCommoditytButton, R.drawable.products1);
+        bindDrawableResource(mPatientBiometricButton, R.drawable.pbs_fingerprint_black1);
 
         if (ThemeUtils.isDarkModeActivated()) {
             changeColorOfDashboardIcons();
@@ -352,6 +358,9 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
             case R.id.commodityView:
                 startNewActivity(CommodityActivity.class);
                 break;
+            case R.id.patientBiometricView:
+                startNewActivity(ExportPBS.class);
+                break;
 //            case R.id.activeVisitsView:
 //                startNewActivity(ActiveVisitsActivity.class);
 //                break;
@@ -375,6 +384,6 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         ImageUtils.changeImageViewTint(getContext(), mCommoditytButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mRegistryPatientButton, greenColorResId);
         ImageUtils.changeImageViewTint(getContext(), mProviderManagementButton, greenColorResId);
-
+        ImageUtils.changeImageViewTint(getContext(), mPatientBiometricButton, greenColorResId);
     }
 }

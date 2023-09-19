@@ -31,6 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.models.Form;
@@ -64,6 +65,7 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_display);
 

@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2"
+    android:orientation="vertical"
     android:padding="10px">
 
     <EditText
         android:id="@+id/urlAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/enforce_ip_change_url"
-        android:layout_marginBottom="10px"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="10px"
         android:focusable="true"
+        android:hint="@string/enforce_ip_change_url"
         android:inputType="text"
-        android:maxLines="1"/>
+        android:background="@drawable/custom_bg"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:maxLines="1" />
 
 
     <Button
         android:id="@+id/saveDetails"
+        style="@style/loginButtonStyle"
         android:layout_width="130dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical|center_horizontal|center"
-        android:layout_marginBottom="30dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/button_apply"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/custom_button_click"
         android:gravity="center_vertical|center_horizontal"
         android:text="Save"
-        style="@style/loginButtonStyle"/>
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/showCurrentURL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:hint="Current URL set"/>
+        android:hint="Current URL set"
+        android:textSize="18sp" />
 
 </LinearLayout>

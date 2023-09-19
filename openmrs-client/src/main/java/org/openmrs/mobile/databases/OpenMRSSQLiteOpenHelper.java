@@ -68,7 +68,7 @@ public abstract class OpenMRSSQLiteOpenHelper extends SQLiteOpenHelper {
         try {
             db = getReadableDatabase(getSecretKey());
         } catch (SQLiteException e) {
-            db = openDatabaseWithoutSecretKey(false);
+            db = openDatabaseWithoutSecretKey(true);
         }
         return db;
     }

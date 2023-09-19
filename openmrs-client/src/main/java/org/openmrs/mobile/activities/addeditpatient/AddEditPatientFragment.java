@@ -54,6 +54,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -85,9 +86,12 @@ import org.openmrs.mobile.activities.dialog.CameraOrGalleryPickerDialog;
 import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
 import org.openmrs.mobile.activities.patientdashboard.PatientDashboardActivity;
 import org.openmrs.mobile.activities.patientdashboard.details.PatientPhotoActivity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.bundle.CustomDialogBundle;
+import org.openmrs.mobile.dao.ServiceLogDAO;
 import org.openmrs.mobile.listeners.watcher.PatientBirthdateValidatorWatcher;
+import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
@@ -95,6 +99,7 @@ import org.openmrs.mobile.models.PersonAddress;
 import org.openmrs.mobile.models.PersonAttribute;
 import org.openmrs.mobile.models.PersonAttributeType;
 import org.openmrs.mobile.models.PersonName;
+import org.openmrs.mobile.models.ServiceLog;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FontsUtil;
@@ -193,6 +198,8 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     private CheckBox checkhei;
 
     private RadioGroup gen;
+    private RadioButton gen_male;
+    private RadioButton gen_female;
     private ProgressBar progressBar;
 
     private TextView fnameerror;
@@ -291,7 +298,6 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
 
     private Patient updatePatientWithData(Patient patient) {
         String emptyError = getString(R.string.emptyerror);
-
         // Validate address
         if (ViewUtils.isEmpty(edaddr1)
                 && ViewUtils.isEmpty(edaddr2)
@@ -604,6 +610,31 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
     public void startPatientDashbordActivity(Patient patient) {
         Intent intent = new Intent(getActivity(), PatientDashboardActivity.class);
         intent.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE, patient.getId());
+        // add service log before  starting the activity and only to new patient
+        if(!isUpdatePatient) {
+            ServiceLog log = new ServiceLog();
+            String todayDate = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()), DateUtils.OPEN_MRS_PBS_DATE_FORMAT);
+            String todayDateNMRS = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()),DateUtils.OPEN_MRS_REQUEST_FORMAT);
+
+            log.setPatientId(patient.getId());
+            log.setVoided(0);
+            log.setDateCreated(todayDate);
+            log.setVisitDate(todayDateNMRS);
+            log.setPatientUUID("");
+            log.setFormName("Register");
+            new ServiceLogDAO().saveServiceLog(log);
+
+            // Finger print log
+         /*
+            FingerPrintLog fingerPrintLog = new FingerPrintLog();
+            fingerPrintLog.setPid(patient.getId().toString());
+            fingerPrintLog.setReplaceCount(0);
+            fingerPrintLog.setRecapturedCount(-1);
+            fingerPrintLog.save();
+            */
+
+
+        }
         startActivity(intent);
     }
 
@@ -660,6 +691,8 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
         checkhei=v.findViewById(R.id.checkHei);
 
         gen = v.findViewById(R.id.gender);
+        gen_male = v.findViewById(R.id.male);
+        gen_female = v.findViewById(R.id.female);
         progressBar = v.findViewById(R.id.progress_bar);
 
         fnameerror = v.findViewById(R.id.fnameerror);
@@ -705,6 +738,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
 
                 patientName = patient.getName().getNameString();
 
+
                 if (StringUtils.notNull(patient.getBirthdate()) || StringUtils.notEmpty(patient.getBirthdate())) {
                     bdt = DateUtils.convertTimeString(patient.getBirthdate());
                     eddob.setText(DateUtils.convertTime(DateUtils.convertTime(bdt.toString(), DateUtils.OPEN_MRS_REQUEST_FORMAT),
@@ -715,6 +749,7 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                     gen.check(R.id.male);
                 } else if (("F").equals(patient.getGender())) {
                     gen.check(R.id.female);
+
                 }
 
                 edaddr1.setText(patient.getAddress().getAddress1());
@@ -743,12 +778,12 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                         edopenmrs.setText(patientIdentifier.getIdentifier());
                     }
                 }
-
                 if (patient.getPhoto() != null) {
                     patientPhoto = patient.getPhoto();
                     resizedPatientPhoto = patient.getResizedPhoto();
                     patientImageView.setImageBitmap(resizedPatientPhoto);
                 }
+
             } catch (Exception e){
                 ToastUtil.error(e.toString());
             }

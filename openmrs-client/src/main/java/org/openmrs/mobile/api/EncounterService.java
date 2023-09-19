@@ -17,6 +17,7 @@ import com.activeandroid.query.Select;
 
 import org.openmrs.mobile.api.repository.VisitRepository;
 import org.openmrs.mobile.api.retrofit.ProgramRepository;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
@@ -137,8 +138,10 @@ public class EncounterService extends IntentService implements CustomApiCallback
                             if (callbackListener != null) {
                                 callbackListener.onResponse();
                             }
+                            OpenMRSCustomHandler.writeLogToFile(response.message());
                         } else {
                             if (callbackListener != null) {
+                                OpenMRSCustomHandler.writeLogToFile(response.errorBody().toString() + "\n Code:" + response.code());
                                 callbackListener.onErrorResponse(response.errorBody().toString());
                             }
                         }
@@ -147,6 +150,7 @@ public class EncounterService extends IntentService implements CustomApiCallback
                     @Override
                     public void onFailure(@NonNull Call<Encounter> call, @NonNull Throwable t) {
                         if (callbackListener != null) {
+                            OpenMRSCustomHandler.writeLogToFile(t.getLocalizedMessage());
                             callbackListener.onErrorResponse(t.getLocalizedMessage());
                         }
                     }

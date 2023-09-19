@@ -11,6 +11,7 @@
 package org.openmrs.mobile.activities.formdisplay;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Spinner;
 
@@ -25,9 +26,12 @@ import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.api.repository.VisitRepository;
 import org.openmrs.mobile.api.retrofit.ProgramRepository;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.dao.ServiceLogDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
 import org.openmrs.mobile.models.Answer;
@@ -43,6 +47,7 @@ import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Resource;
+import org.openmrs.mobile.models.ServiceLog;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.DateUtils;
@@ -111,11 +116,11 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     @Override
     public void createEncounter(boolean isEligible, boolean isValid, boolean isValidPatientIdentifier, String mMessage) {
 
-        if (!isValid){
+        if (!isValid) {
             ToastUtil.error("Please ensure you enter the visit date or other compulsory fields. ");
             return;
         }
-        if (!isValidPatientIdentifier){
+        if (!isValidPatientIdentifier) {
             ToastUtil.error("Please ensure you enter the patient identifier or other compulsory fields. ");
             return;
         }
@@ -131,8 +136,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
         Encountercreate encountercreate = new Encountercreate();
 
-        if (mEntryID != 0){
-            Encountercreate.delete(Encountercreate.class,mEntryID);
+        if (mEntryID != 0) {
+            Encountercreate.delete(Encountercreate.class, mEntryID);
         }
         encountercreate.setPatient(mPatient.getUuid());
         encountercreate.setEncounterType(mEncountertype);
@@ -159,7 +164,6 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
         }
 
         if (valid) {
-
             for (InputField input : inputFields) {
                 if (input.getObs().equals("encounterDate")) {
                     if (input.getValueAll().isEmpty()) {
@@ -172,7 +176,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     this.mPatientIdentifier = input.getValueAll();
 
                 }
-                if(input.getGroupConcept() != null && !obsGroupList.contains(input.getGroupConcept())){
+                if (input.getGroupConcept() != null && !obsGroupList.contains(input.getGroupConcept())) {
                     obsGroupList.add(input.getGroupConcept());
                 }
                 if (!input.getValueAll().isEmpty() && !input.getValueAll().equals("")) {
@@ -198,7 +202,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
             }
             for (SelectOneField radioGroupField : radioGroupFields) {
-                if(radioGroupField.getGroupConcept() != null && radioGroupField.getChosenAnswer() != null && !obsGroupList.contains(radioGroupField.getGroupConcept())){
+                if (radioGroupField.getGroupConcept() != null && radioGroupField.getChosenAnswer() != null && !obsGroupList.contains(radioGroupField.getGroupConcept())) {
                     obsGroupList.add(radioGroupField.getGroupConcept());
                 }
                 if (radioGroupField.getChosenAnswer() != null && radioGroupField.getChosenAnswer().getConcept() != null) {
@@ -222,7 +226,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 }
             }
             for (SelectManyFields selectManyField : selectManyFields) {
-                if(selectManyField.getGroupConcept() != null && !obsGroupList.contains(selectManyField.getGroupConcept())){
+                if (selectManyField.getGroupConcept() != null && !obsGroupList.contains(selectManyField.getGroupConcept())) {
                     obsGroupList.add(selectManyField.getGroupConcept());
                 }
                 if (selectManyField.getChosenAnswerList().size() > 0 && selectManyField.getObs().equals("obs")) {
@@ -233,6 +237,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                             obscreate.setConcept(selectManyField.getConcept());
                             obscreateLocal.setConcept(selectManyField.getConcept());
                             obscreateLocal.setQuestionLabel(selectManyField.getQuestionLabel());
+                            // select many id is concept id
                             obscreate.setValue(answer.getConcept());
                             obscreateLocal.setValue(answer.getConcept());
                             obscreateLocal.setAnswerLabel(answer.getLabel());
@@ -248,8 +253,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 }
             }
 
-            if (!obsGroupList.isEmpty()){
-                for(int i = 1; i <= obsGroupList.size(); i++){
+            if (!obsGroupList.isEmpty()) {
+                for (int i = 1; i <= obsGroupList.size(); i++) {
                     List<Obsgroup> tempList = new ArrayList<Obsgroup>();
                     List<ObsgroupLocal> tempListLocal = new ArrayList<ObsgroupLocal>();
                     dataList.add(tempList);
@@ -273,7 +278,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     }
                 }
                 for (SelectOneField radioGroupField : radioGroupFields) {
-                    if (radioGroupField.getChosenAnswer() != null && radioGroupField.getChosenAnswer().getConcept() != null){
+                    if (radioGroupField.getChosenAnswer() != null && radioGroupField.getChosenAnswer().getConcept() != null) {
                         if (radioGroupField.getGroupConcept() != null) {
                             Obsgroup obsgroup = new Obsgroup();
                             ObsgroupLocal obsgroupLocal = new ObsgroupLocal();
@@ -283,7 +288,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                             obsgroupLocal.setValue(radioGroupField.getChosenAnswer().getConcept());
                             obsgroupLocal.setQuestionLabel(radioGroupField.getQuestionLabel());
                             obsgroupLocal.setAnswerLabel(radioGroupField.getChosenAnswer().getLabel());
-                            if(radioGroupField.getRepeatConcept() != null) {
+                            if (radioGroupField.getRepeatConcept() != null) {
                                 obsgroupLocal.setRepeatConcept(radioGroupField.getRepeatConcept());
                             }
                             dataList.get(obsGroupList.indexOf(radioGroupField.getGroupConcept())).add(obsgroup);
@@ -311,7 +316,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 }
 
                 // Form the observations
-                for(int i = 0; i < obsGroupList.size(); i++){
+                for (int i = 0; i < obsGroupList.size(); i++) {
                     if (!dataList.get(i).isEmpty()) {
                         Obscreate obscreate = new Obscreate();
                         obscreate.setConcept(obsGroupList.get(i));
@@ -340,15 +345,15 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 //                encountercreate.setIdentifier(IdGeneratorUtil.getIdentifierGenerated()+mPatientID);
 //                encountercreate.setIdentifierType("HIV testing Id (Client Code)");
 //            }
-            if(mFormname.equals("HIV Enrollment")){
+            if (mFormname.equals("HIV Enrollment")) {
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("ART Number");
             }
-            if(mFormname.equals("General Antenatal Care")){
+            if (mFormname.equals("General Antenatal Care")) {
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("ANC Number");
             }
-            if(mFormname.equals("Client intake form")){
+            if (mFormname.equals("Client intake form")) {
                 encountercreate.setIdentifier(mPatientIdentifier);
                 encountercreate.setIdentifierType("HIV testing Id (Client Code)");
                 if (isNegative) {
@@ -383,32 +388,59 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             encountercreate.setObslist();
             encountercreate.setObslistLocal();
 
-            if (isEligible){
+            if (isEligible) {
                 encountercreate.setEligible("Yes");
-            }else{
+            } else {
                 encountercreate.setEligible("No");
             }
             if (mEncounterDate != null) {
                 encountercreate.setEncounterDatetime(mEncounterDate);
             }
             encountercreate.setLocation((locationDAO.findLocationByName(OpenMRS.getInstance().getLocation())).getUuid());
+            //Util.logEncounter(encountercreate);
+           /*OpenMRSCustomHandler.writeLogToFile(OpenMRSCustomHandler.showJson(encountercreate,""));
+             Util.log("UUID " +encountercreate.getFormUuid());
+            Util.log("name " +mFormname);*/
+            //Testing to to be removed the if
+            //if(true)return;
             encountercreate.save();
-            Long visitId = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);
-            if (!NetworkUtils.isOnline()) {
-                if (visitId == 0) {
-                    visitRepository.startVisitLocally(mPatient, mEncounterDate);
-                    Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);
-                    Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);
-                    encountercreate.setVisit(visit.getUuid());
-                    encountercreate.save();
-                } else {
-                    Visit visit = new VisitDAO().getVisitByIDLocally(visitId);
-                    encountercreate.setVisit(visit.getUuid());
-                    encountercreate.save();
-                }
+
+            // if the form is lab or pharmacy order form  for PBS recapture to pick date log the
+            if (mFormname.equals("Laboratory Order and Result form") || mFormname.equals("Pharmacy Order Form")) {
+                ServiceLog _servicelog = new ServiceLog();
+                String patientUUID = new PatientDAO().getPatientUUID(String.valueOf(mPatientID));
+                    String todayDate = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()), DateUtils.OPEN_MRS_PBS_DATE_FORMAT);
+                    _servicelog.setPatientId(mPatientID);
+                    _servicelog.setVoided(0);
+                    _servicelog.setDateCreated(todayDate);
+                    _servicelog.setVisitDate(mEncounterDate);
+                    _servicelog.setPatientUUID(patientUUID==null?"":patientUUID);
+                    _servicelog.setFormName(mFormname);
+                    new ServiceLogDAO().saveServiceLog(_servicelog);
 
             } else {
-                if (visitId != 0) {
+                Util.log("Not supported form");
+            }
+
+
+            // get if this patient has a visit locally on this date
+            Long visitId = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);
+            if (!NetworkUtils.isOnline()) { // offline case
+                if (visitId == 0) { // visit not found  offline case
+                    visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
+                    Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
+                    Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);  // get the new Visit by ID
+                    encountercreate.setVisit(visit.getUuid()); // set visit UUID
+                    encountercreate.save();  //  save to update the encounter
+
+                } else {  // visit found offline
+                    Visit visit = new VisitDAO().getVisitByIDLocally(visitId); // get the visit
+                    encountercreate.setVisit(visit.getUuid());//  set visit UUID
+                    encountercreate.save(); // update the  encounter
+                }
+
+            } else {  // online case
+                if (visitId != 0) {  // visit found locally and server is online
                     Visit visit = new VisitDAO().getVisitByIDLocally(visitId);
                     visitRepository.reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                     encountercreate.setVisit(visit.getUuid());
@@ -429,7 +461,9 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
             if (!mPatient.isSynced()) {
                 PatientIdentifier identifier = mPatient.getIdentifier();
-                identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
+                //I commented this out. It appends the patient id to the patient identifier while syncing
+                //identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
+                identifier.setIdentifier(identifier.getIdentifier());
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
                 identifiers.add(identifier);
                 if (mFormname.equals("Client intake form")) {
@@ -465,7 +499,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 mFormDisplayView.quitFormEntry();
             } else {
                 PatientIdentifier identifier = mPatient.getIdentifier();
-                identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
+                identifier.setIdentifier(identifier.getIdentifier() + mPatientID);
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
                 identifiers.add(identifier);
 //                if (mFormname.equals("Risk Stratification Adult") || mFormname.equals("Risk Assessment Pediatric")) {
@@ -563,6 +597,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     @Override
                     public void onErrorResponse(String errorMessage) {
                         mFormDisplayView.showToast(errorMessage);
+                        Util.log(errorMessage);
                         mFormDisplayView.enableSubmitButton(true);
                     }
                 });
@@ -573,6 +608,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             mFormDisplayView.enableSubmitButton(true);
         }
     }
+
     @Override
     public void onSuccess() {
 

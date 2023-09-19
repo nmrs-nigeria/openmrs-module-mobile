@@ -17,12 +17,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Since;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 @Table(name = "receipt")
 public class Receipt extends Model implements Serializable {
@@ -45,6 +48,38 @@ public class Receipt extends Model implements Serializable {
     @SerializedName("destination")
     @Expose
     private String destination;
+
+    @Column(name = "institution")
+    @SerializedName("institution")
+    @Expose
+    protected String institution;
+
+    @Column(name = "department")
+    @SerializedName("department")
+    @Expose
+    protected String department;
+
+    @Column(name = "patient")
+    @SerializedName("patient")
+    @Expose
+    protected String patient;
+
+    @Column(name = "disposedType")
+    @SerializedName("disposedType")
+    @Expose
+    protected String disposedType;
+
+    @Column(name = "adjustmentKind")
+    @SerializedName("adjustmentKind")
+    @Expose
+    protected String adjustmentKind;
+
+    @SerializedName("attributes")
+    @Expose
+    protected List<String> attributes = new ArrayList<>();
+
+    @Column(name = "attributes")
+    protected String attributesList;
 
     @SerializedName("items")
     @Expose
@@ -70,6 +105,9 @@ public class Receipt extends Model implements Serializable {
     @SerializedName("dataSystem")
     @Expose
     private String dataSystem;
+
+    @Column(name = "isSynced")
+    private boolean isSynced;
 
     public Type getItemtype() {
         return itemtype;
@@ -117,7 +155,6 @@ public class Receipt extends Model implements Serializable {
 
     public void setItems(List<ReceiptItem> items) {
         this.items = items;
-
     }
 
     public void pullItemsList() {
@@ -158,5 +195,62 @@ public class Receipt extends Model implements Serializable {
 
     public void setDataSystem(String dataSystem) {
         this.dataSystem = dataSystem;
+    }
+
+    public boolean isSynced() {
+        return isSynced;
+    }
+
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPatient() {
+        return patient;
+    }
+
+    public void setPatient(String patient) {
+        this.patient = patient;
+    }
+
+    public String getDisposedType() {
+        return disposedType;
+    }
+
+    public void setDisposedType(String disposedType) {
+        this.disposedType = disposedType;
+    }
+
+    public String getAdjustmentKind() {
+        return adjustmentKind;
+    }
+
+    public void setAdjustmentKind(String adjustmentKind) {
+        this.adjustmentKind = adjustmentKind;
+    }
+
+    public List<String> getAttributes() {
+        List<String> attributes = new ArrayList<String>();
+        return attributes;
+    }
+
+    public void setAttributes(List<String> attribute) {
+        this.attributes = attribute;
     }
 }

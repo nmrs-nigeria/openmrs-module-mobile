@@ -18,6 +18,7 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.matchingpatients.MatchingPatientsActivity;
 import org.openmrs.mobile.api.repository.PatientRepository;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Module;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Results;
@@ -27,6 +28,7 @@ import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.PatientAndMatchesWrapper;
 import org.openmrs.mobile.utilities.PatientAndMatchingPatients;
 import org.openmrs.mobile.utilities.PatientComparator;
+import org.openmrs.mobile.utilities.SyncPBS;
 import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.io.IOException;
@@ -37,10 +39,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class PatientService extends IntentService {
-
     public static final String PATIENT_SERVICE_TAG = "PATIENT_SERVICE";
     private boolean calculatedLocally = false;
-
     public PatientService() {
         super("Register Patients");
     }
@@ -55,6 +55,7 @@ public class PatientService extends IntentService {
                 while (it.hasNext()) {
                     final Patient patient = it.next();
                     fetchSimilarPatients(patient, patientAndMatchesWrapper);
+
                 }
                 if (!patientAndMatchesWrapper.getMatchingPatients().isEmpty()) {
                     Intent intent1 = new Intent(getApplicationContext(), MatchingPatientsActivity.class);
@@ -65,10 +66,15 @@ public class PatientService extends IntentService {
                 }
 
                 //sync finger print
+
+                //sync finger prints data
+                Util.log("Sync status "+ new SyncPBS(this).startSync());
+                /*
                 int syncCount = new FingerPrintSyncService().autoSyncFingerPrint();
                 if (syncCount > 0) {
                     ToastUtil.notify(syncCount + " patients finger print synced");
                 }
+                 */
             }catch (Exception e){
                 ToastUtil.error(e.toString());
             }
@@ -117,6 +123,7 @@ public class PatientService extends IntentService {
         RestApi restApi = RestServiceBuilder.createService(RestApi.class);
         Call<Results<Patient>> patientCall = restApi.getSimilarPatients(patient.toMap());
         Response<Results<Patient>> patientsResp = patientCall.execute();
+
         if(patientsResp.isSuccessful()) {
             List<Patient> patientList = patientsResp.body().getResults();
             if (!patientList.isEmpty()) {

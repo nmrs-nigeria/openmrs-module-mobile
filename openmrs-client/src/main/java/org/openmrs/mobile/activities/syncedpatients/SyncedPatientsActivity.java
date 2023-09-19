@@ -15,26 +15,19 @@
 package org.openmrs.mobile.activities.syncedpatients;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.openmrs.mobile.R;
-import org.openmrs.mobile.activities.ACBaseActivity;
-import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivity;
-import org.openmrs.mobile.api.EncounterService;
-import org.openmrs.mobile.api.PatientService;
-import org.openmrs.mobile.application.OpenMRS;
-import org.openmrs.mobile.services.SyncService;
-import org.openmrs.mobile.utilities.ApplicationConstants;
-import org.openmrs.mobile.utilities.StringUtils;
-import org.openmrs.mobile.utilities.ToastUtil;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 
-import java.util.Objects;
+import org.openmrs.mobile.R;
+import org.openmrs.mobile.activities.ACBaseActivity;
+import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivity;
+import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.StringUtils;
 
 public class SyncedPatientsActivity extends ACBaseActivity {
 

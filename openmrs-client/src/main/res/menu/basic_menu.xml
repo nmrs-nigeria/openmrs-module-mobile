@@ -39,6 +39,11 @@
         android:title="@string/enforce_ip_change_action"
         app:showAsAction="never" />
     <item
+        android:id="@+id/actionTroubleShoot"
+        android:orderInCategory="100"
+        android:title="@string/action_troubleshoot"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/actionLogout"
         android:orderInCategory="100"
         android:title="@string/action_logout"

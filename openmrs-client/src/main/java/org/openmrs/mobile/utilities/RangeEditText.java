@@ -31,6 +31,9 @@ public class RangeEditText extends AppCompatEditText {
 
     public double getUpperlimit()
     {
+        if(upperlimit == null){
+            return 0;
+        }
         return upperlimit;
     }
 
@@ -41,6 +44,9 @@ public class RangeEditText extends AppCompatEditText {
 
     public double getLowerlimit()
     {
+        if(lowerlimit == null){
+            return 0;
+        }
         return lowerlimit;
     }
 

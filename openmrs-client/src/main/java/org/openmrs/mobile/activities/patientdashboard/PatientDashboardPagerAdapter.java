@@ -21,12 +21,16 @@ import android.view.ViewGroup;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.patientdashboard.charts.PatientChartsFragment;
 import org.openmrs.mobile.activities.patientdashboard.charts.PatientDashboardChartsPresenter;
+import org.openmrs.mobile.activities.patientdashboard.covid19tb.PatientCovid19TBFragment;
+import org.openmrs.mobile.activities.patientdashboard.covid19tb.PatientDashboardCovid19TBPresenter;
 import org.openmrs.mobile.activities.patientdashboard.details.PatientDashboardDetailsPresenter;
 import org.openmrs.mobile.activities.patientdashboard.details.PatientDetailsFragment;
 import org.openmrs.mobile.activities.patientdashboard.diagnosis.PatientDashboardDiagnosisPresenter;
 import org.openmrs.mobile.activities.patientdashboard.diagnosis.PatientDiagnosisFragment;
 import org.openmrs.mobile.activities.patientdashboard.entries.PatientDashboardEntriesPresenter;
 import org.openmrs.mobile.activities.patientdashboard.entries.PatientEntriesFragment;
+import org.openmrs.mobile.activities.patientdashboard.fingerprint.PatientDashboardFingerPrintPresenter;
+import org.openmrs.mobile.activities.patientdashboard.fingerprint.PatientFingerPrintFragment;
 import org.openmrs.mobile.activities.patientdashboard.visits.PatientDashboardVisitsPresenter;
 import org.openmrs.mobile.activities.patientdashboard.visits.PatientVisitsFragment;
 import org.openmrs.mobile.activities.patientdashboard.vitals.PatientDashboardVitalsPresenter;
@@ -40,13 +44,15 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 class PatientDashboardPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int TAB_COUNT = 5;
+    private static final int TAB_COUNT = 7;
 
     private static final int DETAILS_TAB_POS = 0;
     private static final int DIAGNOSIS_TAB_POS = 1;
     private static final int VISITS_TAB_POS = 2;
     private static final int VITALS_TAB_POS = 3;
     private static final int CHARTS_TAB_POS = 4;
+    private static final int FINGERPRINT_TAB_POS = 5;
+    private static final int COVID19TB_TAB_POS = 6;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
@@ -87,6 +93,14 @@ class PatientDashboardPagerAdapter extends FragmentPagerAdapter {
                 PatientChartsFragment patientChartsFragment = PatientChartsFragment.newInstance();
                 new PatientDashboardChartsPresenter(mPatientId, patientChartsFragment);
                 return patientChartsFragment;
+            case FINGERPRINT_TAB_POS:
+                PatientFingerPrintFragment patientFingerPrintFragment = PatientFingerPrintFragment.newInstance();
+                new PatientDashboardFingerPrintPresenter(mPatientId, patientFingerPrintFragment);
+                return patientFingerPrintFragment;
+            case COVID19TB_TAB_POS:
+                PatientCovid19TBFragment patientCovid19TBFragment = PatientCovid19TBFragment.newInstance();
+                new PatientDashboardCovid19TBPresenter(mPatientId, patientCovid19TBFragment);
+                return patientCovid19TBFragment;
             default:
                 return null;
         }
@@ -106,6 +120,10 @@ class PatientDashboardPagerAdapter extends FragmentPagerAdapter {
                 return context.getString(R.string.patient_scroll_tab_vitals_label);
             case CHARTS_TAB_POS:
                 return context.getString(R.string.patient_scroll_tab_charts_label);
+            case FINGERPRINT_TAB_POS:
+                return context.getString(R.string.patient_scroll_tab_fingerprint_label);
+            case COVID19TB_TAB_POS:
+                return context.getString(R.string.patient_scroll_tab_covid19tb_label);
             default:
                 return super.getPageTitle(position);
         }

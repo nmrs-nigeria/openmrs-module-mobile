@@ -14,6 +14,7 @@
 
 package org.openmrs.mobile.api.repository;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -31,6 +32,7 @@ import org.openmrs.mobile.api.RestServiceBuilderCommodity;
 import org.openmrs.mobile.api.promise.SimpleDeferredObject;
 import org.openmrs.mobile.api.promise.SimplePromise;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
@@ -76,9 +78,6 @@ public class ConsumptionRepository extends RetrofitRepository {
     }
 
 
-
-
-
     public void syncConsumption(final Consumption consumption, @Nullable final DefaultResponseCallbackListener callbackListener) {
         if (NetworkUtils.isOnline()) {
             Call<Consumption> call = restApi.startConsumption(consumption);
@@ -93,6 +92,7 @@ public class ConsumptionRepository extends RetrofitRepository {
                         if (callbackListener != null) {
                             callbackListener.onErrorResponse(response.message());
                         }
+                        OpenMRSCustomHandler.writeLogToFile("Failed Consumption: " + response.code() + " / " + response.raw() + " / " + response.body() + " / " + response.errorBody());
                     }
                 }
 

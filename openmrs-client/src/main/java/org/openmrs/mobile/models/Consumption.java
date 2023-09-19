@@ -69,6 +69,7 @@ public class Consumption extends Model implements Serializable {
     @SerializedName("wastage")
     @Expose
     private Integer wastage;
+
     @Column(name = "isSynced")
     private boolean isSynced;
 
@@ -168,4 +169,5 @@ public class Consumption extends Model implements Serializable {
     public void setSynced(boolean synced) {
         isSynced = synced;
     }
+
 }

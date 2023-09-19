@@ -14,7 +14,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background2">
 
     <LinearLayout
         android:id="@+id/newPatientHint"
@@ -36,11 +37,13 @@
         android:id="@+id/container_patient_info_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/patientInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/newPatientHint"
+            android:background="@color/transparent"
             android:orientation="vertical">
 
             <LinearLayout

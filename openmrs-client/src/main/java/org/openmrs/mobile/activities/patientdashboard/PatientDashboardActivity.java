@@ -16,6 +16,7 @@ package org.openmrs.mobile.activities.patientdashboard;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -26,7 +27,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -37,8 +40,6 @@ import org.openmrs.mobile.activities.patientdashboard.charts.PatientChartsFragme
 import org.openmrs.mobile.activities.patientdashboard.charts.PatientDashboardChartsPresenter;
 import org.openmrs.mobile.activities.patientdashboard.details.PatientDashboardDetailsPresenter;
 import org.openmrs.mobile.activities.patientdashboard.details.PatientDetailsFragment;
-import org.openmrs.mobile.activities.patientdashboard.diagnosis.PatientDashboardDiagnosisPresenter;
-import org.openmrs.mobile.activities.patientdashboard.diagnosis.PatientDiagnosisFragment;
 import org.openmrs.mobile.activities.patientdashboard.entries.PatientDashboardEntriesPresenter;
 import org.openmrs.mobile.activities.patientdashboard.entries.PatientEntriesFragment;
 import org.openmrs.mobile.activities.patientdashboard.visits.PatientDashboardVisitsPresenter;
@@ -47,17 +48,28 @@ import org.openmrs.mobile.activities.patientdashboard.vitals.PatientDashboardVit
 import org.openmrs.mobile.activities.patientdashboard.vitals.PatientVitalsFragment;
 import org.openmrs.mobile.activities.patientprogram.PatientProgramActivity;
 import org.openmrs.mobile.activities.pbs.PatientBiometricActivity;
+import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
+import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationActivity;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
+import org.openmrs.mobile.dao.ServiceLogDAO;
+import org.openmrs.mobile.models.FingerPrintLog;
+import org.openmrs.mobile.sync.LogResponse;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
 import org.openmrs.mobile.utilities.TabUtil;
-import org.openmrs.mobile.utilities.ToastUtil;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class PatientDashboardActivity extends ACBaseActivity implements LogOutTimerUtil.LogOutListener{
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+
+public class PatientDashboardActivity extends ACBaseActivity implements LogOutTimerUtil.LogOutListener {
 
     private String mId;
 
@@ -174,8 +186,141 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         deleteFAB.setOnClickListener(v -> showDeletePatientDialog());
         updateFAB.setOnClickListener(v -> startPatientUpdateActivity(mPresenter.getPatientId()));
         visitFAB.setOnClickListener(v -> startPatientProgramActivity(mPresenter.getPatientId()));
-        pbsFAB.setOnClickListener(v -> startPatientPBSActivity(mPresenter.getPatientId()));
+        pbsFAB.setOnClickListener(v -> autoSelectPBSActivity(mPresenter.getPatientId()));
 
+    }
+
+    // select the patient PBS base on available PBS base finger prints
+    private void autoSelectPBSActivity(long patientId) {
+        //Util.logTable("service_logs");
+        List<PatientBiometricContract> dao = new FingerPrintDAO().getSinglePatientPBS(patientId);
+        String visitDate = new ServiceLogDAO().getVisitDate(patientId);
+        if (visitDate == null) {
+            registerARTServiceDialog("PBS activity info","PBS Capture/Recapture activity MUST be tied to an ART service.\nKindly ensure you document any of the ART service for this patient and try again." );
+            return;
+        }
+
+        if (dao.size() >= ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT) {
+            if (dao.get(0).getSyncStatus() > 0) {
+                // print have sync to the server
+                startPatientPBSVerificationActivity(patientId, visitDate, true);
+/*
+                FingerPrintLog  fingerPrintLog = new Select().from(FingerPrintLog.class).where(
+                        "pid = ?",patientId
+                ).executeSingle();
+                 if(fingerPrintLog!=null) {
+                   //   check the capture date is not frequent .. for now allow for 30 days
+                       if(isNotFrequent(String.valueOf(patientId), fingerPrintLog.getLastCapturedDate())) {
+                          startPatientPBSVerificationActivity(patientId, visitDate, fingerPrintLog.getReplaceCount() < 1);
+/*
+                       }
+                 } else {
+                   registerARTServiceDialog("PBS activity info", "patient is lock for pbs activities," +
+                           " Re-download the patient for  pbs activity");
+                     //", replacement of base for patient[ "+patientId+"] patient is lock"
+                     OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
+                             "patient is lock for pbs activities","Re-download the patient for  pbs activity","Start recapture").getFullMessage());
+                 }
+                 */
+
+
+            } else {
+                //print not sync to the the server yet
+                startPatientPBSActivity(patientId, visitDate);
+            }
+        } else {
+            //no print found base available
+            startPatientPBSActivity(patientId, visitDate);
+        }
+    }
+
+    // check if the capture is not too frequent.
+    private boolean isNotFrequent(String patientId, String lastCapturedDate) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            try {
+                LocalDateTime recentCaptureDate = LocalDateTime.parse(lastCapturedDate);
+                long daysDifference = ChronoUnit.DAYS.between(recentCaptureDate, currentDateTime);
+                if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE){
+                    return  true;
+                } else {
+                    registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
+                            ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
+                            " days. Recent-capture date is "+ lastCapturedDate);
+                }
+            }catch (Exception e){
+                OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
+                        e.getMessage(),"1-Report this bugThe date is "+lastCapturedDate,"recentCaptureIsAbove30").getFullMessage());
+                registerARTServiceDialog("PBS activity info", "Patient recent capture  date failed to decoded. Report the log file " +
+                                              "\nRecent-capture date is "+ lastCapturedDate);
+
+            }
+
+        }else{
+            try {
+            Date  currentDate= new Date();
+            Long  recentCaptureDate  =Date.parse( lastCapturedDate);
+            long timeDifference = recentCaptureDate//.getTime()4
+             - currentDate.getTime();
+            // Calculate the number of days in the time difference
+            long daysDifference = timeDifference / (24L * 60L * 60L * 1000L);
+            if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
+                return true;
+            }else {
+                registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
+                        ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
+                        " days. Recent-capture date is "+ lastCapturedDate);
+            }
+            }catch (Exception e){
+                OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
+                        e.getMessage(),"Report this bug.The date is "+lastCapturedDate,"2-recentCaptureIsAbove30").getFullMessage());
+                registerARTServiceDialog("PBS activity info", "Patient recent capture  date failed to decoded. Report the log file " +
+                        "\nRecent-capture date is "+ lastCapturedDate);
+            }
+        }
+
+        return  false;
+    }
+
+
+    private void selectPBS(long patientId) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Patient Biometric Data Selection");
+        builder.setMessage("Select 'Recapture' for patients who already have biometric data. Otherwise, select 'Capture' for new patients.");
+
+        // Add the buttons
+        builder.setPositiveButton("Recapture", (dialog, id) -> {
+            Toast.makeText(PatientDashboardActivity.this, "Recapture selected", Toast.LENGTH_SHORT).show();
+            //startPatientPBSVerificationActivity(patientId);
+
+        });
+        builder.setNegativeButton("Capture", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(PatientDashboardActivity.this, "Tx new capture selected", Toast.LENGTH_SHORT).show();
+                //  startPatientPBSActivity(patientId, visitDate);
+            }
+        });
+        builder.setNeutralButton("Cancel", (dialog, id) -> dialog.cancel());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void registerARTServiceDialog( String title, String body) {
+
+//        Util.log("Date: "+DateUtils.convertTime( DateUtils.convertTime("2023-05-20T00:00:00.000+0100")
+//                , DateUtils.OPEN_MRS_PBS_DATE_FORMAT));
+//        String todayDate = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()), DateUtils.OPEN_MRS_PBS_DATE_FORMAT);
+//        Util.log("TDate: " + todayDate);
+
+        //Util.logTable("service_logs");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(body);
+        builder.setPositiveButton("Okay", (dialog, id) -> dialog.cancel());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public static void showFABMenu() {
@@ -209,10 +354,23 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         startActivity(patientProgram);
     }
 
-    public void startPatientPBSActivity(long patientId) {
+    public void startPatientPBSActivity(long patientId, String visitDate) {
         Intent pbsProgram = new Intent(this, PatientBiometricActivity.class);
         pbsProgram.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE,
                 String.valueOf(patientId));
+        pbsProgram.putExtra(ApplicationConstants.BundleKeys.VISIT_DATE, visitDate);
+        startActivity(pbsProgram);
+    }
+
+
+    public void startPatientPBSVerificationActivity(long patientId, String visitDate, boolean replaceBase) {
+        Intent pbsProgram = new Intent(this, PatientBiometricVerificationActivity.class);
+        pbsProgram.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE,
+                String.valueOf(patientId));
+        pbsProgram.putExtra(ApplicationConstants.BundleKeys.VISIT_DATE,
+                visitDate);
+        pbsProgram.putExtra(ApplicationConstants.BundleKeys.REPLACE_BASE,
+                replaceBase);
         startActivity(pbsProgram);
     }
 
@@ -262,6 +420,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         }
 
     }
+
     @Override
     protected void onStart() {
         super.onStart();

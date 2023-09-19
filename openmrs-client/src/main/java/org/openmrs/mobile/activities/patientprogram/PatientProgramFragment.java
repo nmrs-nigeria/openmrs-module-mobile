@@ -24,6 +24,7 @@ import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.ACBaseFragment;
 import org.openmrs.mobile.activities.activevisits.ActiveVisitsActivity;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
+import org.openmrs.mobile.activities.covidtbintegrator.CovidTBIntegratorActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
 import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
@@ -41,10 +42,12 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
     private ImageView mhtsButton;
     private ImageView mpmtctButton;
     private ImageView martButton;
+    private ImageView mcovidTBHIVButton;
     private RelativeLayout martView;
     private RelativeLayout mpmtctView;
     private RelativeLayout mhtsView;
     private RelativeLayout mheiView;
+    private RelativeLayout mcovidTB;
     private SparseArray<Bitmap> mBitmapCache;
     private String patientID;
 
@@ -60,10 +63,12 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
             setListeners();
         }
 
+
         // Font config
         FontsUtil.setFont(this.getActivity().findViewById(android.R.id.content));
         FontsUtil.setFont((ViewGroup) root);
         return root;
+
     }
 
 
@@ -72,10 +77,12 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
         mpmtctButton = root.findViewById(R.id.pmtctButton);
         martButton = root.findViewById(R.id.artButton);
         mheiButton = root.findViewById(R.id.heiButton);
+        mcovidTBHIVButton = root.findViewById(R.id.covidTBHIVButton);
         mhtsView = root.findViewById(R.id.htsView);
         mpmtctView = root.findViewById(R.id.pmtctView);
         martView = root.findViewById(R.id.artView);
         mheiView = root.findViewById(R.id.heiView);
+        mcovidTB = root.findViewById(R.id.covidTBIntegratorView);
     }
 
     private void setListeners() {
@@ -83,7 +90,7 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
         mpmtctView.setOnClickListener(this);
         martView.setOnClickListener(this);
         mheiView.setOnClickListener(this);
-
+        mcovidTB.setOnClickListener(this);
     }
 
     /**
@@ -110,7 +117,7 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
                 startNewActivity(FormProgramActivity.class,"HTS");
                 break;
             case R.id.heiView:
-//                startNewActivity(FormProgramActivity.class,"HEI");
+                startNewActivity(FormProgramActivity.class,"HEI");
                 break;
             case R.id.pmtctView:
                 Patient patient = new PatientDAO().findPatientByID(patientID);
@@ -120,6 +127,10 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
                 else{
                     mpmtctView.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.covidTBIntegratorView:
+                Intent intentCovidTB = new Intent(getActivity(), CovidTBIntegratorActivity.class);
+                startActivity(intentCovidTB);
                 break;
             default:
                 // Do nothing
@@ -173,10 +184,11 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
      */
     @Override
     public void bindDrawableResources() {
-        bindDrawableResource(mhtsButton, R.drawable.healthcare);
-        bindDrawableResource(martButton, R.drawable.medical_art);
-        bindDrawableResource(mpmtctButton, R.drawable.holidays);
-        bindDrawableResource(mheiButton, R.drawable.healthcare_and_medical);
+        bindDrawableResource(mhtsButton, R.drawable.healthcare2);
+        bindDrawableResource(martButton, R.drawable.medical_art2);
+        bindDrawableResource(mpmtctButton, R.drawable.holiday2);
+        bindDrawableResource(mheiButton, R.drawable.healthcare_and_medical2);
+        bindDrawableResource(mcovidTBHIVButton,R.drawable.integrator2);
         changeColorOfDashboardIcons();
         if (ThemeUtils.isDarkModeActivated()) {
             changeColorOfDashboardIcons();
@@ -188,10 +200,10 @@ public class PatientProgramFragment extends ACBaseFragment<PatientProgramContrac
         final int redColorResId = R.color.light_red;
         final int purpleColorResId = R.color.dark_purple;
         final int blueColorResId = R.color.dark_purple;
-        ImageUtils.changeImageViewTint(getContext(), mhtsButton, greenColorResId);
-        ImageUtils.changeImageViewTint(getContext(), martButton, redColorResId);
-        ImageUtils.changeImageViewTint(getContext(), mpmtctButton, purpleColorResId);
-        ImageUtils.changeImageViewTint(getContext(), mheiButton, blueColorResId);
+//        ImageUtils.changeImageViewTint(getContext(), mhtsButton, greenColorResId);
+//        ImageUtils.changeImageViewTint(getContext(), martButton, redColorResId);
+//        ImageUtils.changeImageViewTint(getContext(), mpmtctButton, purpleColorResId);
+//        ImageUtils.changeImageViewTint(getContext(), mheiButton, blueColorResId);
 
     }
 
