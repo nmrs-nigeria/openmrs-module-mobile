@@ -81,7 +81,6 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         }
         mId = String.valueOf(patientBundle.get(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE));
         initViewPager(new PatientDashboardPagerAdapter(getSupportFragmentManager(), this, mId));
-
         resources = getResources();
         setupUpdateDeleteActionFAB();
     }
