@@ -242,7 +242,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
 
         //save to temp list to be discard later
         boolean recaptureMatchBase = compareWithBasePrint(theFinger, true);
-        theFinger.setSyncStatus(recaptureMatchBase ? 0 : -1);//  sync to -1 for the one that doest not match the base to disable immediate syncing
+        theFinger.setSyncStatus(0);// recaptureMatchBase ? 0 : -1   sync to -1 for the one that doest not match the base to disable immediate syncing
         patientFingerPrints.add(theFinger);
 
 

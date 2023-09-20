@@ -203,7 +203,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
         if (dao.size() >= ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT) {
             if (dao.get(0).getSyncStatus() > 0) {
                 // print have sync to the server
-                startPatientPBSVerificationActivity(patientId, visitDate, true);
+                startPatientPBSVerificationActivity(patientId, visitDate, false);
 /*
                 FingerPrintLog  fingerPrintLog = new Select().from(FingerPrintLog.class).where(
                         "pid = ?",patientId
