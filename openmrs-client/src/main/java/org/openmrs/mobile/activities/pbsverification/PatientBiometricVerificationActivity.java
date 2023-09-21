@@ -241,7 +241,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         }
 
         //save to temp list to be discard later
-        boolean recaptureMatchBase = compareWithBasePrint(theFinger, true);
+        boolean recaptureMatchBase = compareWithBasePrint(theFinger, false);
         theFinger.setSyncStatus(0);// recaptureMatchBase ? 0 : -1   sync to -1 for the one that doest not match the base to disable immediate syncing
         patientFingerPrints.add(theFinger);
 
@@ -259,6 +259,9 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     }
 
     private boolean compareWithBasePrint(PatientBiometricVerificationContract captureFinger, boolean showDialog) {
+      // todo remove this line next
+       if(true) return  true;
+
         String res = fingerPrinVerificationUtility.checkAlready(captureFinger, patientId);
         if (fingerPrinVerificationUtility.MATCH.equals(res)) {
             return true;
@@ -357,8 +360,10 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     boolean existAllow = false;
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         //   add  control to check if user save before leaving activity
         //  activity in case of not replace and not match
+        /*
           if( patientFingerPrints.size()<minFingerPrintCount) {
               CustomDebug("You recaptured  " + patientFingerPrints.size() +
                               " out of 10 fingers",
@@ -384,6 +389,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                         true);
             }
         }
+        */
 
     }
 
@@ -952,7 +958,9 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     private void setQualityFlag(TextView textViewQuality, int quality,
                                 TextView textViewLabel,
                                 boolean matchBase, boolean matchDone) {
+       // textViewLabel.setTextColor(getResources().getColor(R.color.white));
         //match check
+        /*
         if (matchBase) {
             if (matchBase) {
                 textViewLabel.setTextColor(getResources().getColor(R.color.matched_green));
@@ -966,6 +974,9 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         } else {
             textViewLabel.setTextColor(getResources().getColor(R.color.white));
         }
+
+         */
+
         // quality check
         if (quality < 0) {
             textViewQuality.setBackground(getDrawable(R.drawable.fingerprint_quality_bg));

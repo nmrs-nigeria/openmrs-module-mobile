@@ -50,7 +50,7 @@ public class OpenMRS {
     }
 
 
-   private String baseIP="172.19.2.123";
+   private String baseIP="127.0.0.1";
   private String pbsPort = "2018";
 
  private    String user="admin";

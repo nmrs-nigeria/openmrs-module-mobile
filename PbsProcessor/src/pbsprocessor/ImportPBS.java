@@ -18,9 +18,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ImportPBS {
-    public static void mainP(String[] a) {
-     /*   final int[] patientSize = new int[1];
-        startUpload("C:/Users/AGBENGE\\Downloads/PBS-NMRS-22-8-2023-1692703169.txt",
+  /*  public static void main(String[] a) {
+      final int[] patientSize = new int[1];
+        startUpload("C:\\Users\\AGBENGE\\Documents\\project_code\\openmrs-module-mobile\\PbsProcessor\\test_file\\PBS-NMRS-19-9-2023-1695133827.txt",
                 new ProgressListener() {
                     @Override
                     public void onError(String errorMessage) {
@@ -28,9 +28,11 @@ public class ImportPBS {
                     }
 
                     @Override
-                    public void onProgress(int progress, String displayMessage, String errorMessage) {
+                    public void onProgress(int progress, int size, String displayMessage, String errorMessage) {
                         System.out.println("P "+progress+" M "+displayMessage+" E "+errorMessage);
                     }
+
+
 
                     @Override
                     public void stop() {
@@ -48,10 +50,10 @@ public class ImportPBS {
                         System.out.println("Server is running  "+isRunning);
                     }
                 }
-        );*/
+        );
     }
-
-    public void startUpload(String path, ProgressListener progressListerner) {
+*/
+    public   void startUpload(String path, ProgressListener progressListerner) {
         JSONParser jsonParser = new JSONParser();
         try {
             JSONArray patientListJson = (JSONArray) jsonParser.parse(new FileReader(path));
@@ -91,7 +93,8 @@ Perform sending of data
                                     PatientBiometricDTO.class
                             );
                     //System.out.println(dto.getFingerPrintList().size());
-                    Response<PatientBiometricSyncResponseModel> res = syncService.startSync(dto, OpenMRS.getInstance().getUrlCapture());
+                    Response<PatientBiometricSyncResponseModel> res =
+                            syncService.startSync(dto, OpenMRS.getInstance().getUrlCapture());
 
                     if (res.isSuccessful()) {
                         // System.out.println("Capture sync successfull");

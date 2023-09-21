@@ -28,12 +28,9 @@ public class pbsprocessor extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("PrimaryStage.fxml"));
 
         // Implement methods to allow press and drag the window
-        root.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
+        root.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
         });
         root.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override

@@ -93,7 +93,7 @@ public class EnforceChangeActivity extends AppCompatActivity implements View.OnC
             } else {
                 OpenMRS.getInstance().setServerUrl(newUrl);
                 closeDialog = true;
-                message = "Url Address Changed Successfully. Kindly close the App then logout to effect changes.";
+                message = "Url Address Changed Successfully. Kindly logout to effect then the App close  changes.";
             }
         }
     }

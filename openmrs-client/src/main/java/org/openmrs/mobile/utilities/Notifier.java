@@ -18,7 +18,8 @@ A channel have been create in Dashboard  using static function
 Notification have been sent in SyncPBS class
  */
 public class Notifier {
- public  static  String  CHANNEL_SYNC_PBS="sync";
+    public static final String CHANNEL_EXPORT = "export";
+    public  static  String  CHANNEL_SYNC_PBS="sync";
     public  static void notify(Context context ,int notificationId,  String channelId,
                                 @NonNull String title, @NonNull String content, String largeContent ){
         NotificationCompat.Builder builder = largeContent==null?

@@ -376,7 +376,7 @@ public class ExportPBS extends ACBaseActivity {
 
     public void updateSyncStatus() {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id  FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0";
+        String query = "SELECT patient_id  FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
         final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
 
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
@@ -441,7 +441,7 @@ public class ExportPBS extends ACBaseActivity {
 
     private int countTemplateData() {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0";
+        String query = "SELECT patient_id FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
         final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
         return cursor.getCount();
     }

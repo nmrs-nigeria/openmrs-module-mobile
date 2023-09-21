@@ -18,7 +18,7 @@ public class ExportPatient {
 
 
     public static void main(String[] a) {
-        exportWithPatientId("3632");
+        exportWithPatientId("1010,1011,1012,1013,1014, 1015, 1016,1017, 1018,1019,1020");
     }
 
     public static void exportWithPatientId(String commaSeparatedPatientId) {
@@ -111,6 +111,7 @@ public class ExportPatient {
                     }
 */
                     //others network
+                    /*
                     try {
                         RestApi restApi = RestServiceBuilder.createService(RestApi.class);
 
@@ -152,6 +153,7 @@ public class ExportPatient {
                     } catch (Exception e) {
                         System.out.println(e);
                     }
+                    */
                     //  System.out.println(mainJson);
                     outputJSON.add(mainJson);
 
