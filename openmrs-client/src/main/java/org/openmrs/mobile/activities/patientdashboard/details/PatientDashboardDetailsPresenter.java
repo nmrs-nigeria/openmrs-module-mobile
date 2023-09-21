@@ -57,10 +57,10 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
     @Override
     public void synchronizePatient() {
         if(NetworkUtils.isOnline()) {
-            mPatientDetailsView.showDialog(R.string.action_synchronize_patients);
-            syncDetailsData();
-            syncVisitsData();
-            syncVitalsData();
+            //mPatientDetailsView.showDialog(R.string.action_synchronize_patients);
+            //syncDetailsData();
+            //syncVisitsData();
+            //syncVitalsData();
         }
         else {
             reloadPatientData(mPatient);
@@ -92,7 +92,7 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
 
     @Override
     public void subscribe() {
-        updatePatientDataFromServer();
+        /*updatePatientDataFromServer();
         mPatient = patientDAO.findPatientByID(mPatient.getId().toString());
         mPatientDetailsView.resolvePatientDataDisplay(patientDAO.findPatientByID(mPatient.getId().toString()));
         mPatientDetailsView.setMenuTitle(mPatient.getName().getNameString(), mPatient.getIdentifier().getIdentifier());
@@ -100,7 +100,7 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
 //            mPatientDetailsView.attachSnackbarToActivity();
             mPatientDetailsView.showToast(R.string.no_internet_connection_message, true);
             mPatientDetailsView.dismissDialog();
-        }
+        }*/
 
     }
 

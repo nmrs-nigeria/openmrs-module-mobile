@@ -17,9 +17,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.openmrs.mobile.activities.ACBaseActivity">
-    <item
+    <!--<item
         android:id="@+id/syncbutton"
         android:icon="@drawable/ic_sync_off"
+        android:title="@string/sync"
+        app:showAsAction="ifRoom" />-->
+
+    <item
+        android:id="@+id/uploadbutton"
+        android:icon="@drawable/upload_icon"
         android:title="@string/sync"
         app:showAsAction="ifRoom" />
 

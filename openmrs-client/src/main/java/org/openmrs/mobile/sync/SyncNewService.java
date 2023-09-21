@@ -14,7 +14,8 @@ public class SyncNewService  extends IntentService {
     }
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        new StartNewSync(getApplicationContext()).runSyncAwait();
+        //new StartNewSync(getApplicationContext()).runSyncAwait();
+        //new SyncData(getApplicationContext()).runSyncAwait();
     }
 
 }

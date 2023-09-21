@@ -1,6 +1,9 @@
 package org.openmrs.mobile.sync;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.activeandroid.query.Select;
 
@@ -51,7 +54,7 @@ public class PatientSync {
 
     private boolean calculatedLocally = false;
 
-    protected  boolean syncPatient(@NonNull String identifier,@NonNull Patient patient,
+    public  boolean syncPatient(@NonNull String identifier,@NonNull Patient patient,
                   PatientAndMatchesWrapper patientAndMatchesWrapper) {
        logResponse =  new LogResponse( identifier);
         try {
@@ -152,6 +155,7 @@ public class PatientSync {
          */
 
 
+        @Nullable
         private LogResponse syncPatient(final Patient patient, LogResponse logResponse) {
             try {
                     /*

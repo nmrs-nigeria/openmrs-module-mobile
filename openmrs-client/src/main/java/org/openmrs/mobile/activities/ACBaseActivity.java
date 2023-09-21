@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -50,6 +51,7 @@ import org.openmrs.mobile.api.PatientService;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
+import org.openmrs.mobile.bulksync.SyncData;
 import org.openmrs.mobile.bundle.CustomDialogBundle;
 import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
@@ -142,15 +144,15 @@ public abstract class ACBaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        mSyncbutton = menu.findItem(R.id.syncbutton);
+        //mSyncbutton = menu.findItem(R.id.syncbutton);
         MenuItem logoutMenuItem = menu.findItem(R.id.actionLogout);
         if (logoutMenuItem != null) {
             logoutMenuItem.setTitle(getString(R.string.action_logout) + " " + mOpenMRS.getUsername());
         }
-        if (mSyncbutton != null) {
+        /*if (mSyncbutton != null) {
             final Boolean syncState = NetworkUtils.isOnline();
             setSyncButtonState(syncState);
-        }
+        }*/
         return true;
     }
 
@@ -162,6 +164,11 @@ public abstract class ACBaseActivity extends AppCompatActivity {
         }
     }
 
+    private void startSyncing()
+    {
+        new SyncData(getApplicationContext()).runSyncAwait();
+        //Toast.makeText(getApplicationContext(), "Uplaoding", Toast.LENGTH_LONG).show();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -173,12 +180,15 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.uploadbutton:
+                startSyncing();
+                return true;
             case R.id.actionSearchLocal:
                 return true;
             case R.id.actionLogout:
                 this.showLogoutDialog();
                 return true;
-            case R.id.syncbutton:
+            /*case R.id.syncbutton:
                 boolean syncState = OpenMRS.getInstance().getSyncState();
                 if (syncState) {
                     OpenMRS.getInstance().setSyncState(false);
@@ -215,6 +225,8 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                     showNoInternetConnectionSnackbar();
                 }
                 return true;
+
+             */
             case R.id.actionEnforce:
                 Intent ip = new Intent(this, EnforceChangeActivity.class);
                 startActivity(ip);

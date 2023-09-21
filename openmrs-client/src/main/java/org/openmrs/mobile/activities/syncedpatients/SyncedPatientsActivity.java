@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -79,8 +80,11 @@ public class SyncedPatientsActivity extends ACBaseActivity {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
         switch (id) {
-            case R.id.syncbutton:
+            /*case R.id.syncbutton:
                 enableAddPatient(OpenMRS.getInstance().getSyncState());
+                break;*/
+            case R.id.uploadbutton:
+                startSyncing();
                 break;
             case R.id.actionAddPatients:
                 Intent intent = new Intent(this, LastViewedPatientsActivity.class);
@@ -96,6 +100,11 @@ public class SyncedPatientsActivity extends ACBaseActivity {
         return true;
     }
 
+
+    private void startSyncing()
+    {
+        Toast.makeText(getApplicationContext(), "Uplaoding", Toast.LENGTH_LONG).show();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
