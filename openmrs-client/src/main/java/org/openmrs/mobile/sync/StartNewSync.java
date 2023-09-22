@@ -133,7 +133,7 @@ public class StartNewSync {
         Pbs pbs = new Pbs(restApi);
         setSyncState(true);
         int i= 0;
-        int sucess =0;
+        int success =0;
         int fail=0;
         size=patientList.size();
         for (Patient patient : patientList) {
@@ -144,13 +144,13 @@ public class StartNewSync {
                 calculatedLocally = patientSync.syncPatient("BIO_" + patient.getUuid() + " id" + patient.getId(), patient, patientAndMatchesWrapper);
                 LogResponse pLogResponse = patientSync.getSyncResponse();
 
-                updateNotification(i, "bio",sucess, fail, pLogResponse);
+                updateNotification(i, "bio",success, fail, pLogResponse);
                 if(!pLogResponse.isSuccess()) {
                     OpenMRSCustomHandler.writeLogToFile(pLogResponse.getFullMessage());
                 }
                 // Encounter sync
                 LogResponse eLogResponse = new EncounterSync().startSync(patient, "ENC_" + patient.getUuid() + " id" + patient.getId());
-                updateNotification(i, "eco",sucess, fail, eLogResponse);
+                updateNotification(i, "eco",success, fail, eLogResponse);
                 if(!eLogResponse.isSuccess()) {
                     OpenMRSCustomHandler.writeLogToFile(eLogResponse.getFullMessage());
                 }
@@ -159,29 +159,30 @@ public class StartNewSync {
                 LogResponse pbsLogResponse;
                 if (patient.getUuid().trim().isEmpty()) {
                     Patient newPatient = patientDAO.findPatientByID(String.valueOf(patient.getId()));
-                     pbsLogResponse = pbs.syncPBSAwait(patient.getUuid(), Long.valueOf(newPatient.getId()), "PBS_" + newPatient.getUuid() + " id" + patient.getId());
+                     pbsLogResponse = pbs.syncPBSAwait(newPatient.getUuid(),  newPatient.getId(), "PBS_" + newPatient.getUuid() + " id" + patient.getId());
 
-                    updateNotification(i, "pbs",sucess, fail, pbsLogResponse);
+                    updateNotification(i, "pbs",success, fail, pbsLogResponse);
                     if(!pbsLogResponse.isSuccess()) {
                         OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
                     }
                 } else {
-                    pbsLogResponse = pbs.syncPBSAwait(patient.getUuid(), Long.valueOf(patient.getId()), "PBS_" + patient.getUuid() + " id" + patient.getId());
-                    updateNotification(i, "pbs",sucess, fail, pbsLogResponse);
+                    pbsLogResponse = pbs.syncPBSAwait(patient.getUuid(),  patient.getId(), "PBS_" + patient.getUuid() + " id" + patient.getId());
+                    updateNotification(i, "pbs",success, fail, pbsLogResponse);
                     if(!pbsLogResponse.isSuccess()) {
                         OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
                     }
 
                 }
                 //
-                 if(pbsLogResponse.isSuccess()&& eLogResponse.isSuccess()
-                        && pLogResponse.isSuccess()){
-                    sucess++;
+                 if(pbsLogResponse.isSuccess() && eLogResponse.isSuccess()
+                      //  && pLogResponse.isSuccess()
+                 ){
+                    success++;
 
                 }else{
                     fail++;
                 }
-                updateNotification(i, "",sucess, fail,new LogResponse(true,
+                updateNotification(i, "",success, fail,new LogResponse(true,
                         "","","",""));
             } else {
                 OpenMRSCustomHandler.writeLogToFile("No Network");
@@ -190,11 +191,11 @@ public class StartNewSync {
             }
         }
         setSyncState(false);
-        updateNotification(i, "",sucess, fail,new LogResponse(true,
+        updateNotification(i, "",success, fail,new LogResponse(true,
                 "","","",""));
 
         OpenMRSCustomHandler.writeLogToFile(new LogResponse(
-                fail < 1, "Summary", "Synced:"+sucess+"\t Failed:"+fail+"\tTotal"+size,
+                fail < 1, "Summary", "Synced:"+success+"\t Failed:"+fail+"\tTotal"+size,
                 "If failed grater than one check the upper log for the reason", "Export").getFullMessage());
         // Start activity to Preview all similar patients
         if (!patientAndMatchesWrapper.getMatchingPatients().isEmpty()) {

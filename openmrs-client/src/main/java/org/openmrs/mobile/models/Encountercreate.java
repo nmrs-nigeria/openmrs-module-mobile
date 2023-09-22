@@ -69,6 +69,22 @@ public class Encountercreate extends Model implements Serializable{
 
     private List<ObscreateLocal> observationsLocal = new ArrayList<>();
 
+    public Type getObscreatetype() {
+        return obscreatetype;
+    }
+
+    public Type getObscreateLocaltype() {
+        return obscreateLocaltype;
+    }
+
+    public String getObslist() {
+        return obslist;
+    }
+
+    public String getObslistLocal() {
+        return obslistLocal;
+    }
+
     @Column(name = "obs")
     private String obslist;
 
