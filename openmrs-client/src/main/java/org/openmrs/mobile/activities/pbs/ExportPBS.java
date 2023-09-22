@@ -630,7 +630,10 @@ public class ExportPBS extends ACBaseActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 PatientBiometricContract patientBiometric =
                         createPatientBiometricContractFromJson(jsonObject, logResponse);
-                result.add(patientBiometric);
+
+                if(patientBiometric!=null) {
+                    result.add(patientBiometric);
+                }
             }
             return result;
         } catch (Exception r) {
