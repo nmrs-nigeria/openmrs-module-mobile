@@ -6,6 +6,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
@@ -22,6 +24,7 @@ import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +65,7 @@ import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
+import org.openmrs.mobile.export.FullExport;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.IdentifierType;
@@ -154,6 +158,9 @@ public class ExportPBS extends ACBaseActivity {
             alert.show();
         } else {
 
+            new FullExport(getApplicationContext(), openMRSFolder).starExportingPatients();
+
+            if(true)  return;
 
             //for all unsync patients
 
@@ -376,7 +383,7 @@ public class ExportPBS extends ACBaseActivity {
 
     public void updateSyncStatus() {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id  FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0";
+        String query = "SELECT patient_id  FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
         final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
 
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
@@ -441,7 +448,7 @@ public class ExportPBS extends ACBaseActivity {
 
     private int countTemplateData() {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0";
+        String query = "SELECT patient_id FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
         final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
         return cursor.getCount();
     }
@@ -471,105 +478,8 @@ public class ExportPBS extends ACBaseActivity {
             }
             Uri uri = data.getData();
             String csvFileSelected = FileExportUtil.getPath(this, uri);
+            new MyTask().execute(csvFileSelected);
 
-
-            try {
-                JsonParser jsonParser = new JsonParser();
-                JsonReader reader = new JsonReader((new FileReader(csvFileSelected)));
-                JsonArray jsonArray = jsonParser.parse(reader).getAsJsonArray();
-                // Read elements from the JSON array
-                for (int index = 0; index < jsonArray.size(); index++) {
-                    JsonObject jsonPatientData = jsonArray.get(index).getAsJsonObject();
-                    LogResponse logResponse = new LogResponse("Import Patient[" + index + "]");
-                    Patient patient = getPatientElement(jsonPatientData.get("patient"), logResponse);
-                    List<PatientBiometricContract> pbs = getPatientPrintsFromJson(jsonPatientData.get("pbs"), logResponse);
-                    //  FingerPrintLog fingerPrintLog = getPBSLogFromJsonElement(jsonPatientData.get("pbsLog"), logResponse);
-                    String hash = jsonPatientData.get("hash").getAsString();
-
-                    //process the data
-//                    if ( confirmHash(hash, patient, fingerPrintLog, logResponse)) {
-//                        Util.log("Comfirm ");
-                    // save data
-                    if (patient != null && !patient.getUuid().isEmpty() &&
-                            !patient.getName().getFamilyName().isEmpty() &&
-                            !patient.getName().getGivenName().isEmpty() &&
-                            !patient.getGender().isEmpty() &&
-                            !patient.getBirthdate().isEmpty()
-                    ) {
-                        PatientDAO patientDAO = new PatientDAO();
-                        Patient checkPatientExists = patientDAO.findPatientByUUID(patient.getUuid());
-                        if (checkPatientExists.getUuid() == null) {
-                            if (pbs != null) {
-                                // change save template to true when the matcher is to me implemented
-                                Long pid = new PatientDAO().insertPatientFully(patient, pbs, true);
-                                if (pid > -1) {
-                                    logResponse.setSuccess(true);
-                                    // save the log
-                                    //  fingerPrintLog.setPid(String.valueOf(pid));
-                                    //  fingerPrintLog.save();
-                               /*
-                                    try {
-
-                                        VisitDAO visitDAO = new VisitDAO();
-                                        EncounterDAO encounterDAO = new EncounterDAO();
-                                        // visit
-                                        List<Visit> visits = getPatientVisitsFromJsonElemment(jsonPatientData.get("visit"), logResponse);
-                                        if (visits != null) {
-                                            Observable.just(visits)
-                                                    .flatMap(Observable::from)
-                                                    .forEach(visit ->
-                                                                    visitDAO.saveOrUpdate(visit, pid)
-                                                                            .observeOn(Schedulers.io())
-                                                                            .subscribe(),
-                                                            error -> error.printStackTrace()
-                                                    );
-
-                                        }
-                                        //Encounters
-                                        List<Encounter> encounters = getPatientEncountersFromJsonElement(jsonPatientData.get("encounter")
-                                                , logResponse);
-                                        if (encounters != null) {
-                                            if (encounters.size() > 0)
-                                                encounterDAO.saveLastVitalsEncounter(encounters.get(0), patient.getUuid());
-                                        }
-
-                                    } catch (Exception e) {
-                                        logResponse.appendLogs(e.getMessage(), "", "Import Validation");
-
-                                    }
-                                    */
-                                }
-                            } else {
-                                // erorr failled to insert this patient
-                                logResponse.appendLogs(false, "Patient with UUID " + patient.getUuid() + " Failed to insert due to pbs json form not correct ", "", "Import Validation");
-
-
-                            }
-
-                            //Modifield Import  end
-                        } else {
-                            logResponse.appendLogs(false, "Patient with UUID (" + checkPatientExists.getUuid() + ") already exists on this device", "", "Import Validation");
-
-                        }
-                        Intent i = new Intent(this, SyncedPatientsActivity.class);
-                        startActivity(i);
-                        //OpenMRSCustomHandler.showJson(patient);
-                    } else {
-                        logResponse.appendLogs(false, "Patient Not Valid ", "", "Import Validation");
-
-                    }
-                    //   }
-//                    else {
-//                        Util.log("fail" + fingerPrintLog.getRecapturedCount());
-//                    }
-                    OpenMRSCustomHandler.writeLogToFile(logResponse.getFullMessage());
-                    // end of a patient data ----- loop next
-                }
-
-            } catch (Exception e) {
-                OpenMRSCustomHandler.writeLogToFile(new LogResponse(false, "All", e.getMessage(), "Report", "Main Import").getFullMessage());
-
-            }
 
         }
     }
@@ -586,6 +496,7 @@ public class ExportPBS extends ACBaseActivity {
 //                 "patient_Id"))
 //                    reader.skipValue();
             print.setDateCreated(p.getString("date_created"));
+            print.setDateCreated(p.getString("dateCreated"));
             print.setFingerPositions(Enum.valueOf(FingerPositions.class, p.getString("fingerPosition")));
             print.setModel(p.getString("model"));
             print.setImageQuality(p.getInt("imageQuality"));
@@ -594,6 +505,8 @@ public class ExportPBS extends ACBaseActivity {
             return print;
         } catch (Exception e) {
             logResponse.appendLogs(false, e.getMessage(), "Extraction Key tempered", "createPatientBiometricContractFromReader");
+            logResponse.appendLogs(false, "Error: "+e.getMessage(),
+                    "Extraction Key tempered", "createPatientBiometricContractFromReader");
         }
 
         return null;
@@ -720,7 +633,10 @@ public class ExportPBS extends ACBaseActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 PatientBiometricContract patientBiometric =
                         createPatientBiometricContractFromJson(jsonObject, logResponse);
-                result.add(patientBiometric);
+
+                if(patientBiometric!=null) {
+                    result.add(patientBiometric);
+                }
             }
             return result;
         } catch (Exception r) {
@@ -820,6 +736,7 @@ public class ExportPBS extends ACBaseActivity {
             patientIdentifier.setDisplay("Hospital Number");
             patientIdentifier.setIdentifierType(identifierType);
             patientIdentifier.setUuid("fd0df06c-fcd4-4625-89b2-6b72ca44b8ed");
+
 
             identifiers.add(patientIdentifier);
 
@@ -942,5 +859,152 @@ public class ExportPBS extends ACBaseActivity {
         }
         return telephone;
     }
+    private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
+    private class MyTask extends AsyncTask<String, Integer, Void> {
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // Create and show the progress dialog
+            progressDialog = new ProgressDialog(ExportPBS.this);
+            progressDialog.setMessage("Processing...");
+            progressDialog.setCancelable(false);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            // Simulate a time-consuming task
+
+
+            try {
+                JsonParser jsonParser = new JsonParser();
+                JsonReader reader = new JsonReader((new FileReader(params[0])));
+                JsonArray jsonArray = jsonParser.parse(reader).getAsJsonArray();
+                // Read elements from the JSON array
+                progressDialog.setMax(jsonArray.size());
+                for (int index = 0; index < jsonArray.size(); index++) {
+                    publishProgress(index);
+                    JsonObject jsonPatientData = jsonArray.get(index).getAsJsonObject();
+                    LogResponse logResponse = new LogResponse("Import Patient[" + index + "]");
+                    Patient patient = getPatientElement(jsonPatientData.get("patient"), logResponse);
+                    List<PatientBiometricContract> pbs = getPatientPrintsFromJson(jsonPatientData.get("pbs"), logResponse);
+                    //  FingerPrintLog fingerPrintLog = getPBSLogFromJsonElement(jsonPatientData.get("pbsLog"), logResponse);
+                    // String hash = jsonPatientData.get("hash").getAsString();
+
+                    //process the data
+//                    if ( confirmHash(hash, patient, fingerPrintLog, logResponse)) {
+//                        Util.log("Comfirm ");
+                    // save data
+                    if (patient != null && !patient.getUuid().isEmpty() &&
+                            !patient.getName().getFamilyName().isEmpty() &&
+                            !patient.getName().getGivenName().isEmpty() &&
+                            !patient.getGender().isEmpty() &&
+                            !patient.getBirthdate().isEmpty()
+                    ) {
+                        PatientDAO patientDAO = new PatientDAO();
+                        Patient checkPatientExists = patientDAO.findPatientByUUID(patient.getUuid());
+                        if (checkPatientExists.getUuid() == null) {
+                            if (pbs != null) {
+                                // change save template to true when the matcher is to me implemented
+                                Long pid = new PatientDAO().insertPatientFully(patient, pbs, true);
+                                if (pid > -1) {
+                                    logResponse.setSuccess(true);
+                                    // save the log
+                                    //  fingerPrintLog.setPid(String.valueOf(pid));
+                                    //  fingerPrintLog.save();
+                               /*
+                                    try {
+
+                                        VisitDAO visitDAO = new VisitDAO();
+                                        EncounterDAO encounterDAO = new EncounterDAO();
+                                        // visit
+                                        List<Visit> visits = getPatientVisitsFromJsonElemment(jsonPatientData.get("visit"), logResponse);
+                                        if (visits != null) {
+                                            Observable.just(visits)
+                                                    .flatMap(Observable::from)
+                                                    .forEach(visit ->
+                                                                    visitDAO.saveOrUpdate(visit, pid)
+                                                                            .observeOn(Schedulers.io())
+                                                                            .subscribe(),
+                                                            error -> error.printStackTrace()
+                                                    );
+
+                                        }
+                                        //Encounters
+                                        List<Encounter> encounters = getPatientEncountersFromJsonElement(jsonPatientData.get("encounter")
+                                                , logResponse);
+                                        if (encounters != null) {
+                                            if (encounters.size() > 0)
+                                                encounterDAO.saveLastVitalsEncounter(encounters.get(0), patient.getUuid());
+                                        }
+
+                                    } catch (Exception e) {
+                                        logResponse.appendLogs(e.getMessage(), "", "Import Validation");
+
+                                    }
+                                    */
+                                }
+                            } else {
+                                // erorr failled to insert this patient
+                                logResponse.appendLogs(false, "Patient with UUID " + patient.getUuid() + " Failed to insert due to pbs json form not correct ", "", "Import Validation");
+
+
+                            }
+
+                            //Modifield Import  end
+                        } else {
+                            logResponse.appendLogs(false, "Patient with UUID (" + checkPatientExists.getUuid() + ") already exists on this device", "", "Import Validation");
+
+                        }
+
+                        //OpenMRSCustomHandler.showJson(patient);
+                    } else {
+                        logResponse.appendLogs(false, "Patient Not Valid ", "", "Import Validation");
+
+                    }
+                    //   }
+//                    else {
+//                        Util.log("fail" + fingerPrintLog.getRecapturedCount());
+//                    }
+                    OpenMRSCustomHandler.writeLogToFile(logResponse.getFullMessage());
+                    // end of a patient data ----- loop next
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                OpenMRSCustomHandler.writeLogToFile(new LogResponse(false, "All", e.getMessage(),
+                        "Report", "Main Import").getFullMessage());
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            // Update the progress bar
+            progressDialog.setProgress(values[0]);
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            // Dismiss the progress dialog
+            progressDialog.dismiss();
+
+            Intent i = new Intent(getApplicationContext(), SyncedPatientsActivity.class);
+            startActivity(i);
+        }
+    }
 }
+
