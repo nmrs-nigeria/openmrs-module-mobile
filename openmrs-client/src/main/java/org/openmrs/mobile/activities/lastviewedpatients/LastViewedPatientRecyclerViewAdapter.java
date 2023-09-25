@@ -382,11 +382,9 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     new VisitRepository().syncLastVitals(newPatient.getUuid());
 
                                     //retrieve finger print
-                                    Util.log("FingerPrintSyncService().retrieveCaptureFromServer");
-                                    new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), patient.getId().toString(),
+                                  //  Util.log("FingerPrintSyncService().retrieveCaptureFromServer");
+                                    new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), newPatient.getId().toString(),
                                             true);
-
-
                                     patients.remove(patient);
                                     notifyDataSetChanged();
                                     if (showSnackBar) {

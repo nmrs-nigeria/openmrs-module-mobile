@@ -58,6 +58,7 @@ import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
+import org.openmrs.mobile.dao.PatientBiometricJoinDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
@@ -379,33 +380,15 @@ public class ExportPBS extends ACBaseActivity {
     }
 
     public void updateSyncStatus() {
-        DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id  FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
-        final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
 
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         SQLiteDatabase db = openHelper.getWritableDatabase();
-
-        cursor.moveToFirst();
-        while (cursor.isAfterLast() == false) {
-
-            int totalColumn = cursor.getColumnCount();
-            JSONObject rowObject = new JSONObject();
-
-            for (int i = 0; i < totalColumn; i++) {
-                if (cursor.getColumnName(i) != null) {
-                    try {
-                        if (cursor.getString(i) != null) {
-                            this.updateFingerPrint(db, String.valueOf(cursor.getString(i)));
-                        }
-                    } catch (Exception e) {
-                        Log.d("TAG_NAME", e.getMessage());
-                    }
-                }
-            }
-            cursor.moveToNext();
+        List<Patient>  patients = new PatientDAO().getAllPatientsLocal();
+        for(Patient patient :patients) {
+            //update sync only for patient who have valid UUID
+           if(patient.getUuid().trim().length()>2)
+               this.updateFingerPrint(db, String.valueOf(patient.getId()));
         }
-        cursor.close();
     }
 
 
@@ -418,8 +401,8 @@ public class ExportPBS extends ACBaseActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Do you want to delete and clear all the FingerPrints on this Device?").setCancelable(false).setPositiveButton("Yes", (dialog, id) -> {
                 updateSyncStatus();
-                Toast.makeText(getBaseContext(), "Fingerprint Templates cleared successfully from the device.", Toast.LENGTH_LONG).show();
                 new FingerPrintVerificationDAO().deleteAllPrints();
+                Toast.makeText(getBaseContext(), "Fingerprint Templates cleared successfully from the device.", Toast.LENGTH_LONG).show();
                 finish();
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -444,10 +427,11 @@ public class ExportPBS extends ACBaseActivity {
     }
 
     private int countTemplateData() {
-        DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        String query = "SELECT patient_id FROM " + FingerPrintTable.TABLE_NAME + " WHERE syncStatus = 0 ";
-        final Cursor cursor = helper.getReadableDatabase().rawQuery(query, null);
-        return cursor.getCount();
+        // this returns all the patient with base pbs and verification pbs.
+        List<Patient>  patients = new PatientBiometricJoinDAO().getPatientWithPBS();
+        if(patients!=null)
+            return patients.size();
+        return 0;
     }
 
     /*
