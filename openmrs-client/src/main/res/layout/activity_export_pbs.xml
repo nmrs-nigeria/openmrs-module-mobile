@@ -24,7 +24,7 @@
             android:layout_marginRight="10px"
             android:layout_weight="1"
             android:background="@drawable/custom_button_shape"
-            android:onClick="generate_PBS"
+            android:onClick="generatePBS"
             android:text="Export Data"
             android:textAllCaps="false" />
 

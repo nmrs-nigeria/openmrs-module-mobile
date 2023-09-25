@@ -302,6 +302,9 @@
         <service
             android:name=".sync.SyncNewService"
             android:enabled="true" />
+        <service
+            android:name=".export.ExportService"
+            android:enabled="true" />
 
         <service
             android:name=".api.EncounterService"

@@ -259,25 +259,6 @@ public class FullExport {
                                          @NonNull String identifier    ) {
         LogResponse logResponse = new LogResponse(identifier);
         try {
-/*
-"patient": {
-      "birthdate": "2006-01-01",
-      "gender": "M",
-      "address2": "LANGBASA",
-      "address1": null,
-      "givenName": "LAWAL",
-      "postalCode": null,
-      "artNumber": null,
-      "telephone": "0",
-      "cityVillage": "ETI-OSA",
-      "hospitalNumber": "63/4/21",
-      "patientUuid": "93fb5e64-d9bf-43f4-b13f-042fc2362691",
-      "familyName": "IFADAYO",
-      "middleName": null,
-      "state": "LAGOS"
-    }
- */
-
             Gson gson = new Gson();
            JSONObject jsonObject = new JSONObject();
            jsonObject.put("id",patient.getId());

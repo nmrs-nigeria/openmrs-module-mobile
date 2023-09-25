@@ -56,15 +56,13 @@ import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificatio
 import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationDTO;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
-import org.openmrs.mobile.dao.EncounterDAO;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
-import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
-import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
+import org.openmrs.mobile.export.ExportService;
 import org.openmrs.mobile.export.FullExport;
 import org.openmrs.mobile.models.Encounter;
 import org.openmrs.mobile.models.FingerPrintLog;
@@ -90,9 +88,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public class ExportPBS extends ACBaseActivity {
 
@@ -146,7 +141,7 @@ public class ExportPBS extends ACBaseActivity {
     @generate_PBS
     the entry point of export. call from the UI
      */
-    public void generate_PBS(View v) {
+    public void generatePBS(View v) {
         if (!openMRSFolder.exists()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("PBS Folder not found. Create the Folder before you proceed?").setCancelable(false).setPositiveButton("Yes create the folder", (dialog, id) -> {
@@ -158,8 +153,9 @@ public class ExportPBS extends ACBaseActivity {
             alert.show();
         } else {
 
-            new FullExport(getApplicationContext(), openMRSFolder).starExportingPatients();
-
+            startService(new Intent(this, ExportService.class));
+          //  new FullExport(getApplicationContext(), openMRSFolder).starExportingPatients();
+/*
             if(true)  return;
 
             //for all unsync patients
@@ -226,13 +222,14 @@ public class ExportPBS extends ACBaseActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-
+*/
 
         }
     }
 
 
     // Sync a patient whom ID and UUID are available. Return true for non network error
+    /*
     private LogResponse exportPatient(Long patientId, String patientUUID, JSONArray dataJson, String identifier) {
         LogResponse logResponse = new LogResponse(identifier);
 
@@ -367,7 +364,7 @@ public class ExportPBS extends ACBaseActivity {
 
         return logResponse;
     }
-
+*/
     /*
     This method set the prints as sync prints
      */
