@@ -13,6 +13,9 @@ package org.openmrs.mobile.sync;
 
 import static org.openmrs.mobile.utilities.FormService.getFormResourceByName;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.activeandroid.query.Select;
@@ -51,8 +54,9 @@ public class EncounterSync {
 
     private final RestApi apiService = RestServiceBuilder.createService(RestApi.class);
     private RestApi restApi;
-
+    private Context context;
     public EncounterSync() {
+        //this.context = ctx;
         restApi = RestServiceBuilder.createService(RestApi.class);
     }
 
@@ -168,12 +172,17 @@ public class EncounterSync {
 
             Visit mVisit = null;
             if (encountercreatelist.size() < 1) {
+                //Toast.makeText(null, "All Encounters synced", Toast.LENGTH_LONG);
                 logResponse.appendLogs(true, "Already sync or not entered", "Check web", "Sync Encounter ");
                 return logResponse;
             }
             for (final Encountercreate encountercreate : encountercreatelist) {
                 try {
                     if (!encountercreate.getSynced() && patient.isSynced()) {
+                        //get the encounter from the server. We are doing this to check
+                        restApi.getEncounter(patient.getUuid(), encountercreate.getFormUuid(), encountercreate.getEncounterDatetime(), encountercreate.getEncounterDatetime(), "full");
+
+
                         List<EncounterProvider> encounterProviders = new ArrayList<>();
                         EncounterProvider encounterProvider = new EncounterProvider();
                         encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");

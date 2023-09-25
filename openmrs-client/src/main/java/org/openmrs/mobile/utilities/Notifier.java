@@ -21,21 +21,21 @@ public class Notifier {
     public static final String CHANNEL_EXPORT = "export";
     public  static  String  CHANNEL_SYNC_PBS="sync";
     public  static void notify(Context context ,int notificationId,  String channelId,
-                                @NonNull String title, @NonNull String content, String largeContent ){
+                               @NonNull String title, @NonNull String content, String largeContent ){
         NotificationCompat.Builder builder = largeContent==null?
                 new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.sync_icon)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)  :
-        new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.sync_icon)
-                .setContentTitle(title)
-                .setContentText(content).setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(largeContent))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .setSmallIcon(R.drawable.sync_icon)
+                        .setContentTitle(title)
+                        .setContentText(content)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)  :
+                new NotificationCompat.Builder(context, channelId)
+                        .setSmallIcon(R.drawable.sync_icon)
+                        .setContentTitle(title)
+                        .setContentText(content).setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(largeContent))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId, builder.build());

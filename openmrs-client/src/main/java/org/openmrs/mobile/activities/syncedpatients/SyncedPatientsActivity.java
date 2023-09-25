@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -26,7 +27,9 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivity;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.sync.SyncNewService;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.StringUtils;
 
 public class SyncedPatientsActivity extends ACBaseActivity {
@@ -79,8 +82,11 @@ public class SyncedPatientsActivity extends ACBaseActivity {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
         switch (id) {
-            case R.id.syncbutton:
-                enableAddPatient(OpenMRS.getInstance().getSyncState());
+//            case R.id.syncbutton:
+//                enableAddPatient(OpenMRS.getInstance().getSyncState());
+//                break;
+            case R.id.uploadbutton:
+                startSyncing();
                 break;
             case R.id.actionAddPatients:
                 Intent intent = new Intent(this, LastViewedPatientsActivity.class);
@@ -94,6 +100,24 @@ public class SyncedPatientsActivity extends ACBaseActivity {
                 break;
         }
         return true;
+    }
+    // Added Start Synching Method
+    private void startSyncing()
+    {
+        final Boolean onlineState = NetworkUtils.hasNetwork();
+        // setSyncButtonState(syncState);
+        if (onlineState){
+            OpenMRS.getInstance().setSyncState(true);
+            Toast.makeText(getApplicationContext(), "Mobile Online", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Start Uploading", Toast.LENGTH_LONG).show();
+            Intent  sy= new Intent(this, SyncNewService.class);
+            startService(sy);
+            Toast.makeText(getApplicationContext(), "Uploading", Toast.LENGTH_LONG).show();
+        }
+
+        else
+            Toast.makeText(getApplicationContext(), "Mobile Offline", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

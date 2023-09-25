@@ -83,9 +83,9 @@ public class SyncedVisitsFragment extends ACBaseFragment<SyncedVisitsContract.Pr
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.syncbutton:
+            /*case R.id.syncbutton:
                 enableAddPatient(OpenMRS.getInstance().getSyncState());
-                break;
+                break;*/
             case R.id.actionAddPatients:
                 if (NetworkUtils.hasNetwork()) {
                     Intent intent = new Intent(getActivity(), LastViewedPatientsActivity.class);

@@ -168,5 +168,5 @@ public class EnforceChangeActivity extends AppCompatActivity implements View.OnC
         thread.start();
         //return result[0];
     }
-    
+
 }

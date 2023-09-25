@@ -1,9 +1,10 @@
-package org.openmrs.mobile.sync;
+package org.openmrs.mobile.bulksync;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import org.openmrs.mobile.activities.matchingpatients.MatchingPatientsActivity;
 import org.openmrs.mobile.api.RestApi;
@@ -12,23 +13,28 @@ import org.openmrs.mobile.api.response.PbsServerContract;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.sync.EncounterSync;
+import org.openmrs.mobile.sync.LogResponse;
+import org.openmrs.mobile.sync.PatientSync;
+import org.openmrs.mobile.sync.Pbs;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.Notifier;
 import org.openmrs.mobile.utilities.PatientAndMatchesWrapper;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class StartNewSync {
-
+public class SyncData {
     private RestApi restApi;
     Context context;
 
-    public StartNewSync(Context context) {
+    public SyncData(Context context) {
         this.context = context;
         this.restApi = RestServiceBuilder.createService(RestApi.class);
     }
@@ -74,35 +80,43 @@ public class StartNewSync {
     Start of syncing. A background service with Context will initialize and call this function
      */
     public void runSyncAwait() {
-        Notifier.cancel(context, 1);
-        Notifier.notify(context, 1, Notifier.CHANNEL_SYNC_PBS, "NMRS Sync",
-                "Checking patient", null  );
+
+        Toast.makeText(context, "Starting", Toast.LENGTH_LONG ).show();
+        //Notifier.cancel(context, 1);
+        //Notifier.notify(context, 1, Notifier.CHANNEL_SYNC_PBS, "NMRS Sync",
+        //  "Checking patient", null  );
 
         //check server biometric service is on available and put to log
+
         LogResponse serverResponse = new LogResponse("SERVER STATUS");
 
         if (NetworkUtils.isOnline()) {
-            try {
-                String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
-                String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/server";
-                Call<PbsServerContract> call = restApi.checkServerStatus(url);
-                Response<PbsServerContract> response = call.execute();
-                if (response.isSuccessful()) {
-                    serverResponse.appendLogs(true, "BIOMETRIC SERVICE OKAY", "", "");
-                } else {
-                    String err = "errorBody:" + response.errorBody().string() +
-                            "  Message:" + response.message() + "  Code:" + response.code() + "  Body:" + response.body();
-                    serverResponse.appendLogs(err, "BIOMETRIC SERVICE Fail 2, try again ", "syn patients->  check status");
-                }
-            } catch (Exception e) {
-                serverResponse.appendLogs(e.getMessage(), "Check connection, and biometric services and the port number is open for external connection", "syn patients-> check status ");
-            } finally {
-                OpenMRSCustomHandler.writeLogToFile(serverResponse.getFullMessage());
-            }
+            Toast.makeText(context, "We are online", Toast.LENGTH_LONG ).show();
+            //if (!getSyncState()) {
+            if(true){
+                setSyncState(true);
 
-            // this method is called even if the biometric service is not running the other detailed to sync
-            if (!getSyncState()) {
-                starSyncingPatients();
+                //updateNotification(i, "bio",sucess, fail, pLogResponse);
+                try {
+                    String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
+                    String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/server";
+                    Call<PbsServerContract> call = restApi.checkServerStatus(url);
+                    Response<PbsServerContract> response = call.execute();
+                    if (response.isSuccessful()) {
+                        serverResponse.appendLogs(true, "BIOMETRIC SERVICE OKAY", "", "");
+                    } else {
+                        String err = "errorBody:" + response.errorBody().string() +
+                                "  Message:" + response.message() + "  Code:" + response.code() + "  Body:" + response.body();
+                        serverResponse.appendLogs(err, "BIOMETRIC SERVICE Fail 2, try again ", "syn patients->  check status");
+                    }
+                } catch (Exception e) {
+                    serverResponse.appendLogs(e.getMessage(), "Check connection, and biometric services and the port number is open for external connection", "syn patients-> check status ");
+                } finally {
+                    OpenMRSCustomHandler.writeLogToFile(serverResponse.getFullMessage());
+                }
+
+                // this method is called even if the biometric service is not running. We still need to sync other patient data
+                startSyncingPatients();
             } else {
                 updateNotification(0,"",0,0,
                         new LogResponse(false,
@@ -117,6 +131,8 @@ public class StartNewSync {
                         "SYNC ").getFullMessage());
             }
         } else {
+            Toast.makeText(context.getApplicationContext(), "Were are offline", Toast.LENGTH_LONG).show();
+
             OpenMRSCustomHandler.writeLogToFile("No Network, syncing stopped");
             //
             setSyncState(false);
@@ -125,64 +141,79 @@ public class StartNewSync {
 
 
     // methode to syn all patient  sync all the patient available
-    private void starSyncingPatients() {
+    private void startSyncingPatients() {
+
+        Toast.makeText(context.getApplicationContext(), "We got here", Toast.LENGTH_LONG ).show();
         PatientDAO patientDAO = new PatientDAO();
         List<Patient> patientList = patientDAO.getAllPatientsLocal();
         // hold patient that should not sync base on it already existing
         PatientAndMatchesWrapper patientAndMatchesWrapper = new PatientAndMatchesWrapper();
         Pbs pbs = new Pbs(restApi);
-        setSyncState(true);
         int i= 0;
-        int success =0;
+        int sucess =0;
         int fail=0;
         size=patientList.size();
         for (Patient patient : patientList) {
             if (NetworkUtils.isOnline()) {
+
+
                 i++;
                 // sync patient
                 PatientSync patientSync = new PatientSync(restApi);
                 calculatedLocally = patientSync.syncPatient("BIO_" + patient.getUuid() + " id" + patient.getId(), patient, patientAndMatchesWrapper);
                 LogResponse pLogResponse = patientSync.getSyncResponse();
 
-                updateNotification(i, "bio",success, fail, pLogResponse);
+                updateNotification(i, "bio",sucess, fail, pLogResponse);
                 if(!pLogResponse.isSuccess()) {
                     OpenMRSCustomHandler.writeLogToFile(pLogResponse.getFullMessage());
-                }
-                // Encounter sync
+                }else {
+                    ToastUtil.notify(size + " Patient: Patient " + i + " Demographic Data Synced Succesful");
+                    Util.log(size + " Patient: Patient " + i + " Demographic Data Synced Succesful");
+                    Toast.makeText(context.getApplicationContext(), size + " Patient: Patient " + i + " Demographic Data Synced Succesful", Toast.LENGTH_LONG).show();
+                }   // Encounter sync
                 LogResponse eLogResponse = new EncounterSync().startSync(patient, "ENC_" + patient.getUuid() + " id" + patient.getId());
-                updateNotification(i, "eco",success, fail, eLogResponse);
+                updateNotification(i, "eco",sucess, fail, eLogResponse);
                 if(!eLogResponse.isSuccess()) {
+
                     OpenMRSCustomHandler.writeLogToFile(eLogResponse.getFullMessage());
                 }
+                else
+                    Toast.makeText(context.getApplicationContext(), size+" Patient: Patient "+i+" Encounter Data Synced Succesful", Toast.LENGTH_LONG).show();
                 // check if already sync recapture or base
                 // if UUID is null get the patient again
                 LogResponse pbsLogResponse;
                 if (patient.getUuid().trim().isEmpty()) {
                     Patient newPatient = patientDAO.findPatientByID(String.valueOf(patient.getId()));
-                    pbsLogResponse = pbs.syncPBSAwait(newPatient.getUuid(),  newPatient.getId(), "PBS_" + newPatient.getUuid() + " id" + patient.getId());
+                    pbsLogResponse = pbs.syncPBSAwait(newPatient.getUuid(), Long.valueOf(newPatient.getId()), "PBS_" + newPatient.getUuid() + " id" + patient.getId());
 
-                    updateNotification(i, "pbs",success, fail, pbsLogResponse);
+                    updateNotification(i, "pbs",sucess, fail, pbsLogResponse);
                     if(!pbsLogResponse.isSuccess()) {
                         OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
                     }
+                    else
+                        Toast.makeText(context.getApplicationContext(), size+" Patient: Patient "+i+" PBS Data Synced Succesful", Toast.LENGTH_LONG).show();
+
                 } else {
-                    pbsLogResponse = pbs.syncPBSAwait(patient.getUuid(),  patient.getId(), "PBS_" + patient.getUuid() + " id" + patient.getId());
-                    updateNotification(i, "pbs",success, fail, pbsLogResponse);
+                    pbsLogResponse = pbs.syncPBSAwait(patient.getUuid(), Long.valueOf(patient.getId()), "PBS_" + patient.getUuid() + " id" + patient.getId());
+                    updateNotification(i, "pbs",sucess, fail, pbsLogResponse);
                     if(!pbsLogResponse.isSuccess()) {
                         OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
                     }
+                    else
+                        Toast.makeText(context.getApplicationContext(), size+" Patient: Patient "+i+" PBS Data Synced Succesful", Toast.LENGTH_LONG).show();
+
 
                 }
                 //
-                if(pbsLogResponse.isSuccess() && eLogResponse.isSuccess()
-                    //  && pLogResponse.isSuccess()
-                ){
-                    success++;
+                if(pbsLogResponse.isSuccess()&& eLogResponse.isSuccess()
+                        && pLogResponse.isSuccess()){
+                    Toast.makeText(context, size+" Patient: Patient "+i+" Succesfully Synced", Toast.LENGTH_LONG).show();
+                    sucess++;
 
                 }else{
                     fail++;
                 }
-                updateNotification(i, "",success, fail,new LogResponse(true,
+                updateNotification(i, "",sucess, fail,new LogResponse(true,
                         "","","",""));
             } else {
                 OpenMRSCustomHandler.writeLogToFile("No Network");
@@ -190,12 +221,13 @@ public class StartNewSync {
                 break;
             }
         }
+        Toast.makeText(context, "Completed", Toast.LENGTH_LONG ).show();
         setSyncState(false);
-        updateNotification(i, "",success, fail,new LogResponse(true,
+        updateNotification(i, "",sucess, fail,new LogResponse(true,
                 "","","",""));
 
         OpenMRSCustomHandler.writeLogToFile(new LogResponse(
-                fail < 1, "Summary", "Synced:"+success+"\t Failed:"+fail+"\tTotal"+size,
+                fail < 1, "Summary", "Synced:"+sucess+"\t Failed:"+fail+"\tTotal"+size,
                 "If failed grater than one check the upper log for the reason", "Export").getFullMessage());
         // Start activity to Preview all similar patients
         if (!patientAndMatchesWrapper.getMatchingPatients().isEmpty()) {
@@ -206,6 +238,5 @@ public class StartNewSync {
             context.startActivity(intent1);
         }
     }
-
 
 }

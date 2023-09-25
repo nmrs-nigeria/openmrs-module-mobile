@@ -252,25 +252,25 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
                 OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
                         e.getMessage(),"1-Report this bugThe date is "+lastCapturedDate,"recentCaptureIsAbove30").getFullMessage());
                 registerARTServiceDialog("PBS activity info", "Patient recent capture  date failed to decoded. Report the log file " +
-                                              "\nRecent-capture date is "+ lastCapturedDate);
+                        "\nRecent-capture date is "+ lastCapturedDate);
 
             }
 
         }else{
             try {
-            Date  currentDate= new Date();
-            Long  recentCaptureDate  =Date.parse( lastCapturedDate);
-            long timeDifference = recentCaptureDate//.getTime()4
-             - currentDate.getTime();
-            // Calculate the number of days in the time difference
-            long daysDifference = timeDifference / (24L * 60L * 60L * 1000L);
-            if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
-                return true;
-            }else {
-                registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
-                        ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
-                        " days. Recent-capture date is "+ lastCapturedDate);
-            }
+                Date  currentDate= new Date();
+                Long  recentCaptureDate  =Date.parse( lastCapturedDate);
+                long timeDifference = recentCaptureDate//.getTime()4
+                        - currentDate.getTime();
+                // Calculate the number of days in the time difference
+                long daysDifference = timeDifference / (24L * 60L * 60L * 1000L);
+                if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
+                    return true;
+                }else {
+                    registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
+                            ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
+                            " days. Recent-capture date is "+ lastCapturedDate);
+                }
             }catch (Exception e){
                 OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
                         e.getMessage(),"Report this bug.The date is "+lastCapturedDate,"2-recentCaptureIsAbove30").getFullMessage());

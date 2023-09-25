@@ -259,8 +259,8 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     }
 
     private boolean compareWithBasePrint(PatientBiometricVerificationContract captureFinger, boolean showDialog) {
-      // todo remove this line next
-       if(true) return  true;
+        // todo remove this line next
+        if(true) return  true;
 
         String res = fingerPrinVerificationUtility.checkAlready(captureFinger, patientId);
         if (fingerPrinVerificationUtility.MATCH.equals(res)) {
@@ -343,8 +343,8 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                             android.R.color.holo_green_light, Typeface.NORMAL,
                             item.getImageQuality(), recaptureMatchBase);
                     //   the print over write the decision
-                   item.setSyncStatus(recaptureMatchBase?0:-1);
-                   dao.updatePatientFingerPrintSyncStatus(Long.valueOf(patientId), item );
+                    item.setSyncStatus(recaptureMatchBase?0:-1);
+                    dao.updatePatientFingerPrintSyncStatus(Long.valueOf(patientId), item );
                 }
             }
         }
@@ -402,10 +402,10 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     }
 
     private void testLogs() {
-     FingerPrintVerificationDAO dao = new FingerPrintVerificationDAO();
+        FingerPrintVerificationDAO dao = new FingerPrintVerificationDAO();
         List<PatientBiometricVerificationContract> pbs = patientFingerPrints; // dao.getAll(true, patientId);
         for (int index = 0; index < pbs.size(); index++) {
-           Util.log(  " FingerPrint position " +index+": "+ pbs.get(index).getFingerPositions());
+            Util.log(  " FingerPrint position " +index+": "+ pbs.get(index).getFingerPositions());
         }
         Util.log( "  fingerPrintCaptureCount:  " + fingerPrintCaptureCount);
     }
@@ -481,7 +481,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
 
 
             if (isBase) {
-           //  base syn here
+                //  base syn here
                 FingerPrintDAO dao  = new FingerPrintDAO();
                 List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
                 org.openmrs.mobile.activities.pbs.PatientBiometricDTO dto = new PatientBiometricDTO();

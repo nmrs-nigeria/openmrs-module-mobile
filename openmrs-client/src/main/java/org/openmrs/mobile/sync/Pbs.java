@@ -33,7 +33,7 @@ public class Pbs {
         this.restApi = restApi;
     }
 
-    protected LogResponse syncPBSAwait(String patientUUID, Long patientId, String identifier) {
+    public LogResponse syncPBSAwait(String patientUUID, Long patientId, String identifier) {
         if (patientUUID != null && patientUUID != "") {
             List<PatientBiometricContract> pbs = dao.getAll(false, patientId.toString());
             List<PatientBiometricVerificationContract> pbsVerification = daoVerification.getAll(false, patientId.toString());

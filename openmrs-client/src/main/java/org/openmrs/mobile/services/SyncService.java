@@ -40,13 +40,13 @@ public class SyncService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction().equals(ApplicationConstants.ServiceActions.START_SYNC_ACTION)) {
 //            showNotification(1);
-            ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
+            //ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
 //            Intent i = new Intent(this, PatientService.class);
 //            this.startService(i);
 //            Intent i1 = new Intent(this, EncounterService.class);
 //            this.startService(i1);
-            Intent  sy= new Intent(this, SyncNewService.class);
-         this.startService(sy);
+            //Intent  sy= new Intent(this, SyncNewService.class);
+         //this.startService(sy);
 
         }
         return START_STICKY;

@@ -47,6 +47,7 @@ import org.openmrs.mobile.models.User;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.models.VisitType;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,6 +168,12 @@ public interface RestApi {
     Call<PatientDto> updatePatient(@Body PatientDto patientDto, @Path("uuid") String uuid,
                                    @Query("v") String representation);
 
+    @GET("encounter")
+    Call<Results<Encounter>> getEncounter(@Query("patient") String patientUUID,
+            @Query("encounterType") String encounterType,
+            @Query("encounterDatetime") String encounterDatetime,
+            @Query("dateCreated") String dateCreated,
+            @Query("v") String representation);
     @POST("patient/{uuid}/identifier")
     Call<PatientDto> updatePatientIdentifier(@Path("uuid") String uuid, @Body PatientIdentifier identifier,
                                    @Query("v") String representation);

@@ -405,18 +405,19 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             //if(true)return;
             encountercreate.save();
 
+
             // if the form is lab or pharmacy order form  for PBS recapture to pick date log the
             if (mFormname.equals("Laboratory Order and Result form") || mFormname.equals("Pharmacy Order Form")) {
                 ServiceLog _servicelog = new ServiceLog();
                 String patientUUID = new PatientDAO().getPatientUUID(String.valueOf(mPatientID));
-                    String todayDate = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()), DateUtils.OPEN_MRS_PBS_DATE_FORMAT);
-                    _servicelog.setPatientId(mPatientID);
-                    _servicelog.setVoided(0);
-                    _servicelog.setDateCreated(todayDate);
-                    _servicelog.setVisitDate(mEncounterDate);
-                    _servicelog.setPatientUUID(patientUUID==null?"":patientUUID);
-                    _servicelog.setFormName(mFormname);
-                    new ServiceLogDAO().saveServiceLog(_servicelog);
+                String todayDate = DateUtils.convertTime(DateUtils.convertTime(DateUtils.getCurrentDateTime()), DateUtils.OPEN_MRS_PBS_DATE_FORMAT);
+                _servicelog.setPatientId(mPatientID);
+                _servicelog.setVoided(0);
+                _servicelog.setDateCreated(todayDate);
+                _servicelog.setVisitDate(mEncounterDate);
+                _servicelog.setPatientUUID(patientUUID==null?"":patientUUID);
+                _servicelog.setFormName(mFormname);
+                new ServiceLogDAO().saveServiceLog(_servicelog);
 
             } else {
                 Util.log("Not supported form");
@@ -425,21 +426,25 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
 
             // get if this patient has a visit locally on this date
             Long visitId = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);
-            if (!NetworkUtils.isOnline()) { // offline case
-                if (visitId == 0) { // visit not found  offline case
-                    visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
-                    Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
-                    Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);  // get the new Visit by ID
-                    encountercreate.setVisit(visit.getUuid()); // set visit UUID
-                    encountercreate.save();  //  save to update the encounter
+            //We do not want to do anything online automatically again
+            //if (!NetworkUtils.isOnline()) { // offline case
+            if (visitId == 0) { // visit not found  offline case
+                visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
+                Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
+                Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);  // get the new Visit by ID
+                encountercreate.setVisit(visit.getUuid()); // set visit UUID
+                encountercreate.save();  //  save to update the encounter
 
-                } else {  // visit found offline
-                    Visit visit = new VisitDAO().getVisitByIDLocally(visitId); // get the visit
-                    encountercreate.setVisit(visit.getUuid());//  set visit UUID
-                    encountercreate.save(); // update the  encounter
-                }
+            } else {  // visit found offline
+                Visit visit = new VisitDAO().getVisitByIDLocally(visitId); // get the visit
+                encountercreate.setVisit(visit.getUuid());//  set visit UUID
+                encountercreate.save(); // update the  encounter
+            }
 
-            } else {  // online case
+            mFormDisplayView.enableSubmitButton(true);
+            mFormDisplayView.quitFormEntry();
+
+            /*} else {  // online case
                 if (visitId != 0) {  // visit found locally and server is online
                     Visit visit = new VisitDAO().getVisitByIDLocally(visitId);
                     visitRepository.reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
@@ -456,10 +461,10 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     }
 
                 }
-            }
+            }*/
 
 
-            if (!mPatient.isSynced()) {
+            /*if (!mPatient.isSynced()) {
                 PatientIdentifier identifier = mPatient.getIdentifier();
                 //I commented this out. It appends the patient id to the patient identifier while syncing
                 //identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
@@ -496,8 +501,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 ToastUtil.warning("Patient not yet synced. Form data is saved locally " +
                         "and will sync when internet connection is restored. ");
                 mFormDisplayView.enableSubmitButton(true);
-                mFormDisplayView.quitFormEntry();
-            } else {
+                mFormDisplayView.quitFormEntry();*/
+            /*} else {
                 PatientIdentifier identifier = mPatient.getIdentifier();
                 identifier.setIdentifier(identifier.getIdentifier() + mPatientID);
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
@@ -512,7 +517,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     patientIdentifier.setIdentifierType(identifierType);
                     identifiers.add(patientIdentifier);
                     mPatient.setIdentifiers(identifiers);
-                    PatientRepository patientRepository = new PatientRepository();
+              /*      PatientRepository patientRepository = new PatientRepository();
                     patientRepository.updatePatient(mPatient, new DefaultResponseCallbackListener() {
                         @Override
                         public void onResponse() {
@@ -603,7 +608,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 });
 
                 mFormDisplayView.quitFormEntry();
-            }
+            }*/
         } else {
             mFormDisplayView.enableSubmitButton(true);
         }
