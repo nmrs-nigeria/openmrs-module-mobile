@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import pbsprocessor.api.SyncService;
 import pbsprocessor.listerner.PatientBiometricSyncResponseModel;
 import pbsprocessor.listerner.PbsServerContract;
@@ -13,58 +12,55 @@ import pbsprocessor.model.PatientBiometricDTO;
 import pbsprocessor.util.OpenMRSCustomHandler;
 import retrofit2.Response;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class ImportPBS {
-  /*  public static void main(String[] a) {
-      final int[] patientSize = new int[1];
-        startUpload("C:\\Users\\AGBENGE\\Documents\\project_code\\openmrs-module-mobile\\PbsProcessor\\test_file\\PBS-NMRS-19-9-2023-1695133827.txt",
-                new ProgressListener() {
-                    @Override
-                    public void onError(String errorMessage) {
-                        System.out.println(errorMessage);
-                    }
+    /*  public static void main(String[] a) {
+        final int[] patientSize = new int[1];
+          startUpload("C:\\Users\\AGBENGE\\Documents\\project_code\\openmrs-module-mobile\\PbsProcessor\\test_file\\PBS-NMRS-19-9-2023-1695133827.txt",
+                  new ProgressListener() {
+                      @Override
+                      public void onError(String errorMessage) {
+                          System.out.println(errorMessage);
+                      }
 
-                    @Override
-                    public void onProgress(int progress, int size, String displayMessage, String errorMessage) {
-                        System.out.println("P "+progress+" M "+displayMessage+" E "+errorMessage);
-                    }
+                      @Override
+                      public void onProgress(int progress, int size, String displayMessage, String errorMessage) {
+                          System.out.println("P "+progress+" M "+displayMessage+" E "+errorMessage);
+                      }
 
 
 
-                    @Override
-                    public void stop() {
-                        System.out.println("Stop");
-                    }
+                      @Override
+                      public void stop() {
+                          System.out.println("Stop");
+                      }
 
-                    @Override
-                    public void onStart(int size) {
-                        System.out.println("Size "+size);
-                        patientSize[0] =size;
-                    }
+                      @Override
+                      public void onStart(int size) {
+                          System.out.println("Size "+size);
+                          patientSize[0] =size;
+                      }
 
-                    @Override
-                    public void serverOkay(boolean isRunning) {
-                        System.out.println("Server is running  "+isRunning);
-                    }
-                }
-        );
-    }
-*/
-    public   void startUpload(String path, ProgressListener progressListerner) {
+                      @Override
+                      public void serverOkay(boolean isRunning) {
+                          System.out.println("Server is running  "+isRunning);
+                      }
+                  }
+          );
+      }
+  */
+    public void startUpload(String path, ProgressListener progressListerner) {
         System.out.println("Started ");
 
         JSONParser jsonParser = new JSONParser();
         try {
             JSONObject objectData = (JSONObject) jsonParser.parse(new FileReader(path));
             System.out.println("JSON read as object ");
-            JSONObject globalObject= (JSONObject) objectData.get("global");
+            JSONObject globalObject = (JSONObject) objectData.get("global");
             JSONArray patientListJson = (JSONArray) objectData.get("data");
             System.out.println("JSON read as data and global var ");
             // check server is running
-
             SyncService syncService = new SyncService();
             try {
                 System.out.println("Testing server ");
@@ -79,13 +75,14 @@ public class ImportPBS {
 
                     return;
                 }
-            }catch (Exception e){
-                System.out.println("Server Error "+e);
+            } catch (Exception e) {
+                System.out.println("Server Error " + e);
                 progressListerner.onError(e.getMessage());
                 progressListerner.serverOkay(false);
-                 OpenMRSCustomHandler.writeLogToFile(e.getMessage());
+                OpenMRSCustomHandler.writeLogToFile(e.getMessage());
                 return;
             }
+
 /*
 Perform sending of data
  */
@@ -94,15 +91,49 @@ Perform sending of data
             progressListerner.onStart(size);
             for (int i = 0; i < patientListJson.size(); i++) {
                 Gson gson = new Gson();
-                System.out.println("Sending "+i); 
+                System.out.println("Sending " + i);
                 JSONObject patientObject = (JSONObject) patientListJson.get(i);
                 JSONObject patientPBS = (JSONObject) patientObject.get("pbs");
+                JSONObject patientBio = (JSONObject) patientObject.get("bio_data");
+                JSONArray patientEncounters = (JSONArray) patientObject.get("bio_data");
+                JSONArray patientVisits = (JSONArray) patientObject.get("bio_data");
+                // simple key value data file with sync state foe each data will be store.
+                // the key for each file
+                // check if the file already used.
+                //create check logs if this patient already inserted (create a methodology for setting this )
+                //
+
+
+                boolean resetUUID = false;
+                if (patientBio.get("patientUuid") != null && patientBio.get("patientUuid").toString().trim() != "") {
+
+                } else {
+                    resetUUID = true;
+                    // insert new patient
+                    //  on succuse
+
+                    boolean patientInserted = false;
+                    if (!patientInserted)
+                        continue;
+                    // continue to next patient in the loop since the patient con not be inserted
+                }
+                // visit must be started and ended to appear here
+                if (resetUUID) {
+                    // alter json for pbs.  (method)
+                    // alter json for encounters (method)
+                    // alter visits (method)
+
+                }
+                // add encounters method
+                // add visits  method
+
+                // convert pbs into a method
                 if ((boolean) patientPBS.get("base")) {
-                    System.out.println("Sending base "+i);
+                    System.out.println("Sending base " + i);
                     // sending base capture prints
-                    PatientBiometricDTO dto =   gson.fromJson(patientPBS.get("templates").toString(),
-                                    PatientBiometricDTO.class
-                            );
+                    PatientBiometricDTO dto = gson.fromJson(patientPBS.get("templates").toString(),
+                            PatientBiometricDTO.class
+                    );
                     //System.out.println(dto.getFingerPrintList().size());
                     Response<PatientBiometricSyncResponseModel> res =
                             syncService.startSync(dto, OpenMRS.getInstance().getUrlCapture());
@@ -126,7 +157,7 @@ Perform sending of data
 
                 } else {
                     // send recapture prints
-                    System.out.println("recapture "+i);
+                    System.out.println("recapture " + i);
                     PatientBiometricDTO dto = gson.fromJson(patientPBS.get("templates").toString(),
                             PatientBiometricDTO.class
                     );
@@ -155,10 +186,10 @@ Perform sending of data
 
 
         } catch (Exception e) {
-            System.out.println("Error "+e.getMessage()+e);
+            System.out.println("Error " + e.getMessage() + e);
             progressListerner.onError(e.getMessage());
             OpenMRSCustomHandler.writeLogToFile(e.getMessage());
-        }finally {
+        } finally {
             progressListerner.stop();
         }
 
