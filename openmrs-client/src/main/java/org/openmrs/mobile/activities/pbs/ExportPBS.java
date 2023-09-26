@@ -399,7 +399,8 @@ public class ExportPBS extends ACBaseActivity {
         int total = countTemplateData();
         if (total > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Do you want to delete and clear all the FingerPrints on this Device?").setCancelable(false).setPositiveButton("Yes", (dialog, id) -> {
+            builder.setMessage("Do you want to delete and clear all the FingerPrints on this Device?").
+                    setCancelable(false).setPositiveButton("Yes", (dialog, id) -> {
                 updateSyncStatus();
                 new FingerPrintVerificationDAO().deleteAllPrints();
                 Toast.makeText(getBaseContext(), "Fingerprint Templates cleared successfully from the device.", Toast.LENGTH_LONG).show();

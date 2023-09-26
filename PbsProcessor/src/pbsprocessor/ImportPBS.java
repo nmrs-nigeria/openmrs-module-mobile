@@ -54,23 +54,33 @@ public class ImportPBS {
     }
 */
     public   void startUpload(String path, ProgressListener progressListerner) {
+        System.out.println("Started ");
+
         JSONParser jsonParser = new JSONParser();
         try {
-            JSONArray patientListJson = (JSONArray) jsonParser.parse(new FileReader(path));
+            JSONObject objectData = (JSONObject) jsonParser.parse(new FileReader(path));
+            System.out.println("JSON read as object ");
+            JSONObject globalObject= (JSONObject) objectData.get("global");
+            JSONArray patientListJson = (JSONArray) objectData.get("data");
+            System.out.println("JSON read as data and global var ");
             // check server is running
 
             SyncService syncService = new SyncService();
-
             try {
+                System.out.println("Testing server ");
                 Response<PbsServerContract> response = syncService.CheckServiceStatus();
                 if (response.isSuccessful()) {
                     progressListerner.serverOkay(true);
+                    System.out.println("Testing Okay ");
                 } else {
+                    System.out.println("Server fail ");
                     progressListerner.serverOkay(false);
                     progressListerner.stop();
+
                     return;
                 }
             }catch (Exception e){
+                System.out.println("Server Error "+e);
                 progressListerner.onError(e.getMessage());
                 progressListerner.serverOkay(false);
                  OpenMRSCustomHandler.writeLogToFile(e.getMessage());
@@ -84,12 +94,13 @@ Perform sending of data
             progressListerner.onStart(size);
             for (int i = 0; i < patientListJson.size(); i++) {
                 Gson gson = new Gson();
-                JSONObject patientJson = (JSONObject) patientListJson.get(i);
-                if ((boolean) patientJson.get("base")) {
+                System.out.println("Sending "+i); 
+                JSONObject patientObject = (JSONObject) patientListJson.get(i);
+                JSONObject patientPBS = (JSONObject) patientObject.get("pbs");
+                if ((boolean) patientPBS.get("base")) {
+                    System.out.println("Sending base "+i);
                     // sending base capture prints
-
-                    PatientBiometricDTO dto =
-                            gson.fromJson(patientJson.get("templates").toString(),
+                    PatientBiometricDTO dto =   gson.fromJson(patientPBS.get("templates").toString(),
                                     PatientBiometricDTO.class
                             );
                     //System.out.println(dto.getFingerPrintList().size());
@@ -101,7 +112,7 @@ Perform sending of data
                         progressListerner.onProgress(i + 1, size, "Capture Successful", "");
 
                     } else {
-                        String err = patientJson.get("uuid").toString() + " Capture  unsuccessfully " + res.errorBody().string() +
+                        String err = patientPBS.get("uuid").toString() + " Capture  unsuccessfully " + res.errorBody().string() +
                                 "  " + res.message() + "  " + res.code() + "  " + res.body();
                         OpenMRSCustomHandler.writeLogToFile(err);
 
@@ -115,7 +126,8 @@ Perform sending of data
 
                 } else {
                     // send recapture prints
-                    PatientBiometricDTO dto = gson.fromJson(patientJson.get("templates").toString(),
+                    System.out.println("recapture "+i);
+                    PatientBiometricDTO dto = gson.fromJson(patientPBS.get("templates").toString(),
                             PatientBiometricDTO.class
                     );
                     // System.out.println(dto.getFingerPrintList().size());
@@ -127,7 +139,7 @@ Perform sending of data
                         //   System.out.println("ReCapture Successfully");
 
                     } else {
-                        String err = patientJson.get("uuid").toString() + "Recapture  unsuccessfully1 " + res.errorBody().string() +
+                        String err = patientPBS.get("uuid").toString() + "Recapture  unsuccessfully1 " + res.errorBody().string() +
                                 "  " + res.message() + "  " + res.code() + "  " + res.body();
                         OpenMRSCustomHandler.writeLogToFile(err);
 
@@ -142,17 +154,14 @@ Perform sending of data
             }
 
 
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
+            System.out.println("Error "+e.getMessage()+e);
             progressListerner.onError(e.getMessage());
             OpenMRSCustomHandler.writeLogToFile(e.getMessage());
-        } catch (IOException e) {
-            progressListerner.onError(e.getMessage());
-            OpenMRSCustomHandler.writeLogToFile(e.getMessage());
-        } catch (ParseException e) {
-            progressListerner.onError(e.getMessage());
-            OpenMRSCustomHandler.writeLogToFile(e.getMessage());
+        }finally {
+            progressListerner.stop();
         }
-        progressListerner.stop();
+
     }
 
 }

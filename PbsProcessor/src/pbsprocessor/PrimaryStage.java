@@ -91,7 +91,7 @@ public class PrimaryStage extends Thread implements Initializable {
 
             btn_upload_fingerprint.setDisable(true);            // Disable the upload button when processing starts
 
-            doBackgroundProcess dWrk = new doBackgroundProcess();
+            PrimaryStage.BackgroundTask dWrk = new PrimaryStage.BackgroundTask();
             dWrk.valueProperty().addListener((observable, oldValue, newValue) -> show_fingerprint_feedback.appendText(String.valueOf(newValue)));
             progressStatusBar.progressProperty().bind(dWrk.progressProperty());
 
@@ -101,7 +101,7 @@ public class PrimaryStage extends Thread implements Initializable {
         }
     }
 
-    private class doBackgroundProcess extends Task<String> {
+    private class BackgroundTask extends Task<String> {
         @Override
         protected String call() throws Exception {
 
@@ -117,23 +117,30 @@ public class PrimaryStage extends Thread implements Initializable {
 
             int total_record_to_process = 0; // Total number of records to process from N number of file
             final int[] patientProgress = new int[1];
-
+           int fileIndex=0;
+            System.out.println("Background task started  " );
             for (File listOfFile : listOfFiles) {
+                System.out.println("Background task started file index " +fileIndex);
                 if (listOfFile.isFile()) {
                     JSONParser jsonParser = new JSONParser();
                     try (final FileReader reader = new FileReader(selectedDirectory.getAbsolutePath() + "/" + listOfFile.getName())) {
-                        Object obj = jsonParser.parse(reader);
-                        JSONArray patientList = (JSONArray) obj;
+                        JSONObject obj = (JSONObject) jsonParser.parse(reader);
+                        JSONArray patientList = (JSONArray) obj.get("data");
                         total_record_to_process += patientList.size();
                         System.out.println("patientList.size(): " + patientList.size());
                     } catch (FileNotFoundException e) {
+                        Platform.runLater(() -> {  updateValue("File Error " +e.getMessage() );  });
                         System.out.println("[CIHP-0006] Error: " + e.getMessage());
                     } catch (IOException e) {
                         System.out.println("[CIHP-0007] Error: " + e.getMessage());
-                    } catch (org.json.simple.parser.ParseException e) {
+                        Platform.runLater(() -> {  updateValue("IOk Error " +e.getMessage() );  });
+                    } catch (Exception e) {
+                        Platform.runLater(() -> {  updateValue("Error " +e.getMessage() );  });
                         System.out.println("[CIHP-0008] Error: " + e.getMessage());
                     }
                 } else if (listOfFile.isDirectory()) {
+                    Platform.runLater(() -> {  updateValue("Sub file is directory and will not be process " +listOfFile.getName());  });
+                    System.out.println("Sub file is directory and will not be process"  );
                     //Todo
                 }
             }
@@ -168,6 +175,7 @@ public class PrimaryStage extends Thread implements Initializable {
                                 public void stop() {
                                     System.out.println("Stop");
                                     Platform.runLater(() -> updateValue(listOfFile.getName() + " Done \n"));
+                                    Platform.runLater(() ->  updateProgress(patientProgress[0], finalTotal_record_to_process));
 
                                 }
 

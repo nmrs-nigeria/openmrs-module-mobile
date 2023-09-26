@@ -19,11 +19,13 @@ import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
 import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationContract;
 import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationDTO;
+import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Visit;
@@ -97,6 +99,7 @@ public class FullExport {
 
     // methode to syn all patient  EXPORT all the patient available
     public void starExportingPatients() {
+        OpenMRS openMrs = OpenMRS.getInstance();
         Notifier.cancel(context, 1);
         Notifier.notify(context, 1, Notifier.CHANNEL_EXPORT, "NMRS Export",
                 "Checking patient", null  );
@@ -129,7 +132,7 @@ public class FullExport {
                     OpenMRSCustomHandler.writeLogToFile(eLogResponse.getFullMessage());
                 }
             LogResponse vLogResponse  = addVisits(patientObject,
-                    patient, "ENC_EXPORT" + patient.getUuid() + " id" + patient.getId());
+                    patient, "VISIT_EXPORT" + patient.getUuid() + " id" + patient.getId());
                 // check if already EXPORT recapture or base
                 // if UUID is null get the patient again
                 LogResponse    pbsLogResponse = addPBS(patientObject,  patient ,
@@ -160,7 +163,17 @@ public class FullExport {
             try {
 
                 JSONObject jsonExport = new JSONObject();
-                jsonExport.put("global","");
+                JSONObject global= new JSONObject();
+                // add location base params
+                global.put("location", openMrs.getLocation());
+                global.put("locationUuid", openMrs.getLocationUUID());
+                global.put("locationDescription", openMrs.getLocationDescription());
+                global.put("locationDisplay", openMrs.getLocationDisplay());
+                global.put("locationParent", openMrs.getLocationParent());
+                global.put("exportedTime", System.currentTimeMillis());
+
+                // bind the params
+                jsonExport.put("global",global);
                 jsonExport.put("data", dataJson);
                 Date date = new Date();
                 // your date
@@ -176,7 +189,13 @@ public class FullExport {
 
                 //Generate the file name for the day
                 String fileName = "PBS-NMRS-" + day + "-" + month + "-" + year + "-" + timestamp + ".txt";
+                Util.log("Is folder "+openMRSFolder.isDirectory());
+                Util.log("  folder "+openMRSFolder.getAbsolutePath());
+                Util.log("Is file "+openMRSFolder.isFile());
                 File fileCreated = new File(openMRSFolder + "/" + fileName);
+                Util.log("Is folder fileCreated "+fileCreated.isDirectory());
+                Util.log("  folder fileCreated "+fileCreated.getAbsolutePath());
+                Util.log("Is file fileCreated "+fileCreated.isFile());
                 FileOutputStream fileout = new FileOutputStream(fileCreated);
                 OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
                 outputWriter.write(jsonExport.toString());
