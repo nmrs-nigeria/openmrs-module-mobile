@@ -26,9 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.openmrs.mobile.R;
+import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationContract;
 import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
+import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.ServiceLogDAO;
 import org.openmrs.mobile.databases.Util;
@@ -56,7 +58,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 public class PatientBiometricActivity extends AppCompatActivity
-        implements View.OnClickListener, Runnable {
+        implements View.OnClickListener, View.OnLongClickListener,  Runnable {
 
     private static final String TAG = "SecuGen USB";
     private static final int IMAGE_CAPTURE_QUALITY = 60; //The default value here is 50 so i changed it to 60
@@ -197,35 +199,16 @@ public class PatientBiometricActivity extends AppCompatActivity
 
                 String previousCaptureOnDevice = fingerPrintUtility.CheckIfFingerAlreadyCapturedOnDevice(theFinger.getTemplate());
                 if (previousCapture !=null && !previousCapture.isEmpty()) {
-                    CustomDebug("This finger has been captured before for "+ previousCapture, false);
+                    // allow replace of finger on same finger
+                    if (previousCapture.equals(fingerPrintUtility.decodeFingerPosition(theFinger.getFingerPositions().name()))) {
+                        storeFinger(theFinger);
+                    } else {
+                        CustomDebug("This finger has been captured before for "+ previousCapture, false);
+                    }
                 }else if(previousCaptureOnDevice != null && !previousCaptureOnDevice.isEmpty()) {
                     CustomDebug("This finger has been captured before for "+ previousCaptureOnDevice + " on this device", false);
                 }else {
-
-                    //scan through list and remove finger print with same position before add the new to the list
-                    boolean printExist=false;
-                    for( PatientBiometricContract item: patientFingerPrints){
-                        if(item.getFingerPositions().equals(theFinger.getFingerPositions())) {
-                            patientFingerPrints.remove(item);
-                            printExist = true;
-                            break; // consistency with counter
-                        }
-                    }
-
-                    //save to temp list to be discard later
-
-                    patientFingerPrints.add(theFinger);
-
-                    //save to the database directly
-                    Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
-                    debugMessage(String.valueOf(db_id));
-                    // print is not existing on list then add counter
-                    if(!printExist)
-                     fingerPrintCaptureCount += 1;
-
-                    //color the button and save locally
-                    colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD,theFinger.getImageQuality());
-                 //   testLogs();
+                    storeFinger(theFinger);
                 }
             } else {
                 //color warning. this capture is not counted
@@ -238,6 +221,35 @@ public class PatientBiometricActivity extends AppCompatActivity
             }
         }
         mRegisterImage = null;
+    }
+
+    private void storeFinger(PatientBiometricContract theFinger) {
+
+
+        //scan through list and remove finger print with same position before add the new to the list
+        boolean printExist=false;
+        for( PatientBiometricContract item: patientFingerPrints){
+            if(item.getFingerPositions().equals(theFinger.getFingerPositions())) {
+                patientFingerPrints.remove(item);
+                printExist = true;
+                break; // consistency with counter
+            }
+        }
+
+        //save to temp list to be discard later
+
+        patientFingerPrints.add(theFinger);
+
+        //save to the database directly
+        Long db_id = fingerPrintDAO.saveFingerPrint(theFinger);
+        debugMessage(String.valueOf(db_id));
+        // print is not existing on list then add counter
+        if(!printExist)
+            fingerPrintCaptureCount += 1;
+
+        //color the button and save locally
+        colorCapturedButton(fingerPosition, android.R.color.holo_green_light, Typeface.BOLD,theFinger.getImageQuality());
+        //   testLogs();
     }
 
     public void CheckIfAlreadyCapturedOnServer(String patientUUID){
@@ -322,79 +334,79 @@ public class PatientBiometricActivity extends AppCompatActivity
     }
 
     private void saveFingerPrints() {
-       // testLogs();
+        // testLogs();
         //FingerPrintSyncService sync = new FingerPrintSyncService();
         ////sync.autoSyncFingerPrint();
 
 
         try{
-        if (fingerPrintCaptureCount < minFingerPrintCount) {
-            CustomDebug("Please captured a minimum of "+ minFingerPrintCount +" print before saving", false);
-            return;
-        }
+            if (fingerPrintCaptureCount < minFingerPrintCount) {
+                CustomDebug("Please captured a minimum of "+ minFingerPrintCount +" print before saving", false);
+                return;
+            }
 
-        FingerPrintDAO dao = new FingerPrintDAO();
+            FingerPrintDAO dao = new FingerPrintDAO();
 
 //        PatientBiometricDTO dto = new PatientBiometricDTO();
 //        dto.setFingerPrintList(new ArrayList<>(patientFingerPrints.values()));
 
 
-    if (NetworkUtils.isOnline() && NetworkUtils.hasNetwork() && patientUUID != null) {
+            if (NetworkUtils.isOnline() && NetworkUtils.hasNetwork() && patientUUID != null) {
 
-        List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
-        PatientBiometricDTO dto = new PatientBiometricDTO();
-        dto.setFingerPrintList(new ArrayList<>(pbs));
-        dto.setPatientUUID(patientUUID);
+                List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
+                PatientBiometricDTO dto = new PatientBiometricDTO();
+                dto.setFingerPrintList(new ArrayList<>(pbs));
+                dto.setPatientUUID(patientUUID);
 
-        new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
-            @Override
-            public void onResponse(PatientBiometricSyncResponseModel obj) {
-                
-                if(obj !=null && obj.getIsSuccessful()){
-                    CustomDebug(obj.getErrorMessage(), false);
-                    dao.updateSync(Long.valueOf(patientId),1);
-                    // setting void to one for all records that matches the the UUID
-                    new ServiceLogDAO().set_patient_PBS_void(patientId,patientUUID,1);
-                    CustomDebug("Successfully saved to server.", true);
-                }else{
-                    if(obj !=null){
-                        CustomDebug(obj.getErrorMessage(), false);
+                new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
+                    @Override
+                    public void onResponse(PatientBiometricSyncResponseModel obj) {
+
+                        if(obj !=null && obj.getIsSuccessful()){
+                            CustomDebug(obj.getErrorMessage(), false);
+                            dao.updateSync(Long.valueOf(patientId),1, false);
+                            // setting void to one for all records that matches the the UUID
+                            new ServiceLogDAO().set_patient_PBS_void(patientId,patientUUID,1);
+                            CustomDebug("Successfully saved to server.", true);
+                        }else{
+                            if(obj !=null){
+                                CustomDebug(obj.getErrorMessage(), false);
+                            }
+                            CustomDebug("An error occurred while saving prints on the server.", true);
+
+                        }
                     }
-                    CustomDebug("An error occurred while saving prints on the server.", true);
 
-                }
+                    @Override
+                    public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
+                        if(errorMessage !=null){
+                            CustomDebug(errorMessage.getErrorMessage(), false);
+                        }
+                        //already saved
+                        //dao.saveFingerPrint(dto.getFingerPrintList());
+                        CustomDebug("An error occurred while saving prints on the server.", true);
+                    }
+
+                    @Override
+                    public void onErrorResponse(String errorMessage) {
+                        Log.d(TAG, "Log_C "+errorMessage);
+                        CustomDebug(errorMessage, false);
+
+                        //save locally
+                        //already saved
+                        //dao.saveFingerPrint(dto.getFingerPrintList());
+                        CustomDebug("Finger Prints saved offline", true);
+                    }
+                });
             }
-
-            @Override
-            public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
-                if(errorMessage !=null){
-                    CustomDebug(errorMessage.getErrorMessage(), false);
-                }
-                //already saved
-                //dao.saveFingerPrint(dto.getFingerPrintList());
-                CustomDebug("An error occurred while saving prints on the server.", true);
-            }
-
-            @Override
-            public void onErrorResponse(String errorMessage) {
-                Log.d(TAG, "Log_C "+errorMessage);
-                CustomDebug(errorMessage, false);
-
+            else {
                 //save locally
-                //already saved
-                //dao.saveFingerPrint(dto.getFingerPrintList());
-                CustomDebug("Finger Prints saved offline", true);
+                //dao.saveFingerPrint(dto.getFingerPrintList()); --they are already saved
+                CustomDebug("Saved offline", true);
             }
-        });
-    }
-    else {
-        //save locally
-        //dao.saveFingerPrint(dto.getFingerPrintList()); --they are already saved
-        CustomDebug("Saved offline", true);
-    }
-}catch (Exception ex) {
-    CustomDebug(ex.getMessage(), false);
-}
+        }catch (Exception ex) {
+            CustomDebug(ex.getMessage(), false);
+        }
 
 
 
@@ -582,6 +594,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     public void EnableControls() {
+        disableDelete = false;
         this.mButtonClearUnsyncFingerPrint.setClickable(true);
 
         this.mButtonRegister.setClickable(true);
@@ -594,6 +607,7 @@ public class PatientBiometricActivity extends AppCompatActivity
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     public void DisableControls() {
+        disableDelete = true;
         this.mButtonClearUnsyncFingerPrint.setClickable(false);
 
         this.mButtonRegister.setClickable(false);
@@ -695,6 +709,23 @@ public class PatientBiometricActivity extends AppCompatActivity
         fingerRightRing.setOnClickListener(this);
         fingerRightPinky.setOnClickListener(this);
 
+
+
+        // longClick
+        //Set onclick listener
+        fingerLeftThumb.setOnLongClickListener(this);
+        fingerLeftIndex.setOnLongClickListener(this);
+        fingerLeftMiddle.setOnLongClickListener(this);
+        fingerLeftRing.setOnLongClickListener(this);
+        fingerLeftPinky.setOnLongClickListener(this);
+        fingerRightThumb.setOnLongClickListener(this);
+        fingerRightIndex.setOnLongClickListener(this);
+        fingerRightMiddle.setOnLongClickListener(this);
+        fingerRightRing.setOnLongClickListener(this);
+        fingerRightPinky.setOnLongClickListener(this);
+
+
+
         //Changing selected Image View
         fingerPrintImageDisplay = (ImageView) findViewById(R.id.fingerPrintImage);
 
@@ -703,7 +734,7 @@ public class PatientBiometricActivity extends AppCompatActivity
         mButtonSaveCapture = (Button) findViewById(R.id.btnSavePrints);
         mButtonSaveCapture.setOnClickListener(this);
 
-       mButtonClearUnsyncFingerPrint = (Button) findViewById(R.id.buttonClearUnsyncFingerPrint);
+        mButtonClearUnsyncFingerPrint = (Button) findViewById(R.id.buttonClearUnsyncFingerPrint);
         mButtonClearUnsyncFingerPrint.setOnClickListener(this);
         //mButtonClearUnsyncFingerPrint.setVisibility(View.GONE);
 
@@ -883,7 +914,77 @@ public class PatientBiometricActivity extends AppCompatActivity
             }
         }
     };
+    boolean disableDelete = true;
 
+    @Override
+    public boolean onLongClick(View view) {
+        if (disableDelete) {
+            CustomDebug("Plug in device to enable the the delete functionality"
+                    , false);
+        } else if (view == fingerLeftThumb) {
+            showDialogDeletePrintAtPosition(FingerPositions.LeftThumb);
+        } else if (view == fingerLeftIndex) {
+            showDialogDeletePrintAtPosition(FingerPositions.LeftIndex);
+        } else if (view == fingerLeftMiddle) {
+            showDialogDeletePrintAtPosition(FingerPositions.LeftMiddle);
+        } else if (view == fingerLeftRing) {
+            showDialogDeletePrintAtPosition(FingerPositions.LeftWedding);
+        } else if (view == fingerLeftPinky) {
+            showDialogDeletePrintAtPosition(FingerPositions.LeftSmall);
+        } else if (view == fingerRightThumb) {
+            showDialogDeletePrintAtPosition(FingerPositions.RightThumb);
+        } else if (view == fingerRightIndex) {
+            showDialogDeletePrintAtPosition(FingerPositions.RightIndex);
+        } else if (view == fingerRightMiddle) {
+            showDialogDeletePrintAtPosition(FingerPositions.RightMiddle);
+        } else if (view == fingerRightRing) {
+            showDialogDeletePrintAtPosition(FingerPositions.RightWedding);
+        } else if (view == fingerRightPinky) {
+            showDialogDeletePrintAtPosition(FingerPositions.RightSmall);
+        }
+
+        return false;
+
+    }
+
+
+    private void showDialogDeletePrintAtPosition(final FingerPositions position) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Deleting Prints");
+        builder.setMessage("Are sure you want to remove the "
+                + fingerPrintUtility.decodeFingerPosition(position.name()) + " print");
+        // Add the buttons
+        builder.setPositiveButton("Delete", (dialog, id) -> {
+            boolean printExist = false;
+            for (PatientBiometricContract item : patientFingerPrints) {
+                if (item.getFingerPositions().equals(position)) {
+                    printExist = true;
+                    patientFingerPrints.remove(item);
+                    fingerPrintCaptureCount -= 1;
+                    Long deleteCounts = new FingerPrintVerificationDAO().deletePrintPosition(Long.valueOf(patientId), position);
+                    if (deleteCounts > 0) {
+                        colorCapturedButton(position, android.R.color.black, Typeface.NORMAL, -1);
+                        CustomDebug(fingerPrintUtility.decodeFingerPosition(position.name()) +
+                                " deleted ", false);
+                    }
+                    break;
+                }
+
+            }
+
+            if (!printExist)
+                colorCapturedButton(position, android.R.color.black, Typeface.NORMAL, -1);
+
+
+        });
+        builder.setNegativeButton("Cancel", (dialog, id) -> {
+
+
+        });
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
 
 //    //////////////////////////////////////////////////////////////////////////////////////////////

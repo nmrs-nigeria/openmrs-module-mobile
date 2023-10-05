@@ -78,7 +78,7 @@ public class Pbs {
                         Response<PatientBiometricSyncResponseModel> res = startSyncCaptureAwait(dto);
                         if (res.isSuccessful()) {
                             // change only the sync state to 1
-                            dao.updateSync(Long.valueOf(patientId),1);
+                            dao.updateSync(Long.valueOf(patientId),1, false);
                             // setting void to one for all records that matches the the UUID
                              new ServiceLogDAO().set_patient_PBS_void(String.valueOf(patientId),patientUUID,1);
                             return new LogResponse(

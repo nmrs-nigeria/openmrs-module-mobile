@@ -167,7 +167,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
             bindString(1, patient.getName().getNameString(), patientStatement);
             bindString(2, Boolean.toString(patient.isSynced()),patientStatement);
-            
+
             if (patient.getUuid() != null)
                 bindString(3, patient.getUuid(), patientStatement);
             else
@@ -278,7 +278,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
                         // Do nothing
                         break;
                 }
-               if (patientIdentifier.getIdentifierType() != null && patientIdentifier.getIdentifierType().getDisplay().equals("OpenMRS ID")){
+                if (patientIdentifier.getIdentifierType() != null && patientIdentifier.getIdentifierType().getDisplay().equals("OpenMRS ID")){
                     newValues.put(PatientTable.Column.IDENTIFIER_OPENMRS, patientIdentifier.getIdentifier());
                     newValues.put(PatientTable.Column.IDENTIFIER_TYPE_OPENMRS, patientIdentifier.getIdentifierType().getDisplay());
                 }
@@ -560,13 +560,15 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
         String[] whereArgs = new String[]{String.valueOf(fingerPrintObj.getPatienId())};
 
-       String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
+        String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
         return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);
     }
 
-    public int updateBaseSync(SQLiteDatabase db,Long patientID, int value) {
+    public int updateBaseSync(SQLiteDatabase db,Long patientID, int value,boolean saveTemplate) {
         ContentValues newValues = new ContentValues();
         newValues.put(FingerPrintTable.Column.SyncStatus,  value);
+        if(!saveTemplate)
+            newValues.put(FingerPrintTable.Column.template,  "");
         String[] whereArgs = new String[]{String.valueOf( patientID)};
         String _where_clause = String.format("%s = ?", FingerPrintTable.Column.patient_id);
         return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);

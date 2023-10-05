@@ -44,7 +44,7 @@ public class FingerPrintDAO {
 
 
 
-   private PatientBiometricContract covertPatientBiometricVerificationContractToPatientBiometricContract
+    private PatientBiometricContract covertPatientBiometricVerificationContractToPatientBiometricContract
             (PatientBiometricVerificationContract pbs){
         PatientBiometricContract p = new PatientBiometricContract();
         p.setImageHeight(pbs.getImageHeight());
@@ -64,14 +64,14 @@ public class FingerPrintDAO {
 
         p.setImageByte(pbs.getImageByte());
         p.setSyncStatus(pbs.getSyncStatus());
-    return  p;
+        return  p;
     }
     public void saveFingerPrint(List<PatientBiometricVerificationContract> pbs, int sync) {
         for (int i = 0; i < pbs.size(); i++) {
             if (pbs.get(i).getFingerPositions() != null) {
                 PatientBiometricContract baseFormat=
                         covertPatientBiometricVerificationContractToPatientBiometricContract(pbs.get(i));
-                 baseFormat.setSyncStatus(sync);
+                baseFormat.setSyncStatus(sync);
                 long id = new FingerPrintTable().insert(baseFormat);
                 Log.e(TAG, "return id: " + id);
             }
@@ -92,9 +92,9 @@ public class FingerPrintDAO {
         new FingerPrintTable().deleteFingerPrintCapture(patientId, fingerPosition);
     }
 
-    public  int updateSync(Long patientID, int syncValue){
+    public  int updateSync(Long patientID, int syncValue,boolean saveTemplate){
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-        return   openHelper.updateBaseSync(openHelper.getWritableDatabase(),patientID,syncValue);
+        return   openHelper.updateBaseSync(openHelper.getWritableDatabase(),patientID,syncValue,saveTemplate);
     }
     public void deleteAllPrints() {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
@@ -117,10 +117,10 @@ public class FingerPrintDAO {
         if(!IncludeSyncRecord && patient_Id !=null) {
             where = FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patient_Id + Table.MasterColumn.AND + FingerPrintTable.Column.SyncStatus + Table.MasterColumn.EQUALS + "0";
         }
-       else if(patient_Id !=null) {
+        else if(patient_Id !=null) {
             where += FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patient_Id;
         }
-       else if(!IncludeSyncRecord) {
+        else if(!IncludeSyncRecord) {
             where += FingerPrintTable.Column.SyncStatus + Table.MasterColumn.EQUALS + "0";
         }
         cursor = helper.getReadableDatabase().query(FingerPrintTable.TABLE_NAME, null, where, null, null, null, null);
@@ -232,18 +232,18 @@ public class FingerPrintDAO {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         String where = FingerPrintTable.Column.patient_id + Table.MasterColumn.EQUALS + patientId;
-                //String.format("%s = ?", FingerPrintTable.Column.patient_id);
+        //String.format("%s = ?", FingerPrintTable.Column.patient_id);
         String[] whereArgs = new String[]{patientId};
         String sql = "SELECT COUNT(*) as fingerprintCount FROM "+FingerPrintTable.TABLE_NAME + " where "+ where;
         final Cursor cursor = helper.getReadableDatabase().rawQuery(sql, null);
-                //.query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
+        //.query(FingerPrintTable.TABLE_NAME, null, where, whereArgs, null, null, null);
 
         if (null != cursor) {
             try {
                 if (cursor.moveToFirst()) {
                     int id_CI = cursor.getColumnIndex("fingerprintCount");
                     return cursor.getInt(id_CI) >=6;
-                   //return Objects.equals(patientId, cursor.getString(id_CI));
+                    //return Objects.equals(patientId, cursor.getString(id_CI));
                 }
             } finally {
                 cursor.close();
@@ -253,7 +253,7 @@ public class FingerPrintDAO {
     }
 
     public int updatePatientFingerPrintSyncStatus(Long patientId, PatientBiometricContract tableObject) {
-     return new FingerPrintTable().update(patientId, tableObject);
+        return new FingerPrintTable().update(patientId, tableObject);
     }
 
     public List<PatientBiometricContract> getSinglePatientPBS(Long patient_Id){

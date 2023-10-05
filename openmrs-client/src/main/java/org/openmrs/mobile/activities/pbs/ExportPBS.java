@@ -893,7 +893,7 @@ public class ExportPBS extends ACBaseActivity {
                         if (checkPatientExists.getUuid() == null) {
                             if (pbs != null) {
                                 // change save template to true when the matcher is to me implemented
-                                Long pid = new PatientDAO().insertPatientFully(patient, pbs, true);
+                                Long pid = new PatientDAO().insertPatientFully(patient, pbs, false);
                                 if (pid > -1) {
                                     logResponse.setSuccess(true);
                                     // save the log

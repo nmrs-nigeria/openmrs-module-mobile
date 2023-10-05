@@ -494,7 +494,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
 
                         if(obj !=null && obj.getIsSuccessful()){
                             CustomDebug(obj.getErrorMessage(), false);
-                            dao.updateSync(Long.valueOf(patientId),1);
+                            dao.updateSync(Long.valueOf(patientId),1, false);
                             // setting void to one for all records that matches the the UUID
                             new ServiceLogDAO().set_patient_PBS_void(patientId,patientUUID,1);
                             CustomDebug("Successfully saved to server.", true);
