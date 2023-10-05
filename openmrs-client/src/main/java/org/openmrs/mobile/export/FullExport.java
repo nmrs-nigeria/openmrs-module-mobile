@@ -58,7 +58,7 @@ public class FullExport {
         SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences("EXPORT",
                 Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("pbs_sync", b);
+        editor.putBoolean("pbs_Export", b);
         editor.apply();
     }
 
@@ -66,7 +66,7 @@ public class FullExport {
     private boolean getSyncState() {
         SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences("EXPORT",
                 Activity.MODE_PRIVATE);
-        return sharedPref.getBoolean("pbs_sync", false);
+        return sharedPref.getBoolean("pbs_Export", false);
     }
 
     // variable to determine if the patient comparison is done offline or online
@@ -204,7 +204,7 @@ public class FullExport {
                 //display file saved message
                 Toast.makeText(context, "File saved successfully! as " + fileName, Toast.LENGTH_LONG).show();
                 OpenMRSCustomHandler.writeLogToFile(new LogResponse(
-                        fail < 1, "Summary", "Synced:"+sucess+"\t Failed:"+fail+"\tTotal"+size,
+                        fail < 1, "Summary", "Exported: "+sucess+"\t Failed: "+fail+"\tTotal: "+size,
                         "If failed grater than one check the upper log for the reason", "Export").getFullMessage());
                 // Start activity to Preview all similar patients
 
