@@ -14,6 +14,9 @@
 
 package org.openmrs.mobile.activities.login;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.BasePresenter;
@@ -29,6 +32,7 @@ import org.openmrs.mobile.listeners.retrofit.GetVisitTypeCallbackListener;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.models.Session;
+import org.openmrs.mobile.models.SystemSetting;
 import org.openmrs.mobile.models.VisitType;
 import org.openmrs.mobile.net.AuthorizationManager;
 import org.openmrs.mobile.utilities.ApplicationConstants;
@@ -40,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -124,52 +129,70 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                 @Override
                 public void onResponse(@NonNull Call<Session> call, @NonNull Response<Session> response) {
                     if (response.isSuccessful()) {
+
+                        //we need to get the datim code from the server. This is a new implementation (From group 1. - Emma, Tayo, Isujeh, Williams, Dimgba). This ensures that we can check when a user is
+                        //login in we check if they are login in to the same facility
                         mLogger.d(response.body().toString());
                         Session session = response.body();
                         if (session.isAuthenticated()) {
-                            mOpenMRS.deleteSecretKey();
-                            if (wipeDatabase) {
-                                mOpenMRS.deleteDatabase(OpenMRSSQLiteOpenHelper.DATABASE_NAME);
-                                setData(session.getSessionId(), url, username, password);
-                                mWipeRequired = false;
-                            }
-                            if (authorizationManager.isUserNameOrServerEmpty()) {
-                                setData(session.getSessionId(), url, username, password);
-                            } else {
-                                mOpenMRS.setSessionToken(session.getSessionId());
-                                mOpenMRS.setPasswordAndHashedPassword(password);
-                                mOpenMRS.setSystemId(session.getUser().getSystemId());
-                            }
-                            OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
-
-                            visitRepository.getVisitType(new GetVisitTypeCallbackListener() {
+                            Call<Results<SystemSetting>> call2 = restApi.getSystemSettingByKey("facility_datim_code");
+                            call2.enqueue(new Callback<Results<SystemSetting>>() {
                                 @Override
-                                public void onGetVisitTypeResponse(VisitType visitType) {
-                                    OpenMRS.getInstance().setVisitTypeUUID(visitType.getUuid());
+                                public void onResponse(Call<Results<SystemSetting>> call, Response<Results<SystemSetting>> sysResponse) {
+                                    if (response.isSuccessful()) {
+                                        Results<SystemSetting> datimCodeData = sysResponse.body();
+                                        if (datimCodeData.getResults().size() > 0) {
+                                            String[] datimCodeArray = datimCodeData.getResults().get(0).getDisplay().split("=");
+                                            String datimCode = datimCodeArray[1].trim();
+                                            String datimCodeFromDevice = LoginPresenter.this.getDatimCodeFromShared();
+                                            if(datimCodeFromDevice != null)
+                                            {//that means that the user has used this device before. and we need to check and ensure that the dbs are the same.
+                                                if(!datimCode.equals(datimCodeFromDevice))
+                                                {
+                                                    //AlertDialog
+                                                    loginView.showWarning("Warning", "You are trying to connect to a different instance of NMRS "+"Current Instance:"+datimCodeFromDevice+". New Instance "+datimCode);
+
+                                                    loginView.hideLoadingAnimation();
+                                                }
+                                                else{
+                                                    saveDatimCodeToSharedPreference(datimCode);//save the datim code to shared pref
+                                                    continueWithNormalLogin(session, wipeDatabase, url, username, password);
+                                                }
+                                            }
+                                            else{
+                                                saveDatimCodeToSharedPreference(datimCode);//save the datim code to shared pref
+                                                continueWithNormalLogin(session, wipeDatabase, url, username, password);
+                                            }
+
+                                        }
+                                        else{
+                                            loginView.hideLoadingAnimation();
+                                            loginView.showWarning("Something went wrong", "We could not retrieve the datim code from your server ");
+
+                                        }
+                                    } else {
+                                        loginView.hideLoadingAnimation();
+                                        loginView.showWarning("Something went wrong", "We could not retrieve the datim code from your server ");
+
+
+                                    }
                                 }
 
                                 @Override
-                                public void onResponse() {
-                                    // This method is intentionally empty
+                                public void onFailure(Call<Results<SystemSetting>> call, Throwable t) {
+                                    loginView.hideLoadingAnimation();
+                                    loginView.showWarning("Something went wrong", "We could not retrieve the datim code from your server ");
+
                                 }
+                            });//close bracket here
 
-                                @Override
-                                public void onErrorResponse(String errorMessage) {
-
-                                    OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
-//                                    loginView.showToast("Failed to fetch visit type",
-//                                            ToastUtil.ToastType.ERROR);
-                                }
-                            });
-                            setLogin(true, url);
-                            userService.updateUserInformation(username);
-
-                            loginView.userAuthenticated();
-                            loginView.finishLoginActivity();
-                        } else {
+                        }
+                        else {
                             loginView.hideLoadingAnimation();
                             loginView.showInvalidLoginOrPasswordSnackbar();
                         }
+
+
                     } else {
                         loginView.hideLoadingAnimation();
                         loginView.showToast(response.message(), ToastUtil.ToastType.ERROR);
@@ -210,6 +233,62 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
         }
     }
 
+
+    public void continueWithNormalLogin(Session session, boolean wipeDatabase, String url, String username, String password)
+    {
+        mOpenMRS.deleteSecretKey();
+        if (wipeDatabase) {
+            mOpenMRS.deleteDatabase(OpenMRSSQLiteOpenHelper.DATABASE_NAME);
+            setData(session.getSessionId(), url, username, password);
+            mWipeRequired = false;
+        }
+        if (authorizationManager.isUserNameOrServerEmpty()) {
+            setData(session.getSessionId(), url, username, password);
+        } else {
+            mOpenMRS.setSessionToken(session.getSessionId());
+            mOpenMRS.setPasswordAndHashedPassword(password);
+            mOpenMRS.setSystemId(session.getUser().getSystemId());
+        }
+        OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
+
+        visitRepository.getVisitType(new GetVisitTypeCallbackListener() {
+            @Override
+            public void onGetVisitTypeResponse(VisitType visitType) {
+                OpenMRS.getInstance().setVisitTypeUUID(visitType.getUuid());
+            }
+
+            @Override
+            public void onResponse() {
+                // This method is intentionally empty
+            }
+
+            @Override
+            public void onErrorResponse(String errorMessage) {
+
+                OpenMRS.getInstance().setVisitTypeUUID(ApplicationConstants.DEFAULT_VISIT_TYPE_UUID);
+//                                    loginView.showToast("Failed to fetch visit type",
+//                                            ToastUtil.ToastType.ERROR);
+            }
+        });
+        setLogin(true, url);
+        userService.updateUserInformation(username);
+
+        loginView.userAuthenticated();
+        loginView.finishLoginActivity();
+    }
+
+
+    private void saveDatimCodeToSharedPreference(String datimCode) {
+        SharedPreferences sharedPref =mOpenMRS.getOpenMRSSharedPreferences();
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("datim_code", datimCode);
+        editor.apply();
+    }
+
+    // get if the PBS Exporting loop is still send data
+    private String getDatimCodeFromShared() {
+        return mOpenMRS.getOpenMRSSharedPreferences().getString("datim_code", null);
+    }
 
     @Override
     public void saveLocationsToDatabase(List<Location> locationList, String selectedLocation) {

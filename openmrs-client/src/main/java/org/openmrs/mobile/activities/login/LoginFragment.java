@@ -60,6 +60,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 
 public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> implements LoginContract.View {
@@ -254,6 +255,17 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public void showWarning(String title, String body )
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(title);
+        builder.setMessage(body);
+        builder.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+        builder.setPositiveButton("Okay", (dialog, id) -> dialog.cancel());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void setSyncButtonState(boolean syncEnabled) {
         if (syncEnabled) {
             mSyncStateLabel.setText(getString(R.string.login_online));
@@ -341,7 +353,7 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         mLastCorrectURL = serverURL;
         mUrl.setText(serverURL);
         if (StringUtils.notEmpty(mOpenMRS.getLocation())){
-            mUrl.setEnabled(false);
+            //mUrl.setEnabled(false);
         }
         mLocationsList = locationsList;
         List<String> items = getLocationStringList(locationsList);

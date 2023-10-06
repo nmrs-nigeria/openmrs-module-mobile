@@ -44,10 +44,13 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
 import org.openmrs.mobile.activities.formlist.ip.EnforceChangeActivity;
 import org.openmrs.mobile.activities.login.LoginActivity;
+import org.openmrs.mobile.activities.login.LoginPresenter;
 import org.openmrs.mobile.activities.settings.SettingsActivity;
 import org.openmrs.mobile.activities.troubleshoot.TroubleshootActivity;
 import org.openmrs.mobile.api.EncounterService;
 import org.openmrs.mobile.api.PatientService;
+import org.openmrs.mobile.api.RestApi;
+import org.openmrs.mobile.api.RestServiceBuilder;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
@@ -57,7 +60,10 @@ import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.Results;
+import org.openmrs.mobile.models.SystemSetting;
 import org.openmrs.mobile.net.AuthorizationManager;
+import org.openmrs.mobile.sync.LogResponse;
 import org.openmrs.mobile.sync.SyncNewService;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ForceClose;
@@ -69,6 +75,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -78,12 +87,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public abstract class ACBaseActivity extends AppCompatActivity {
 
+    private RestApi restApi;
     protected FragmentManager mFragmentManager;
     protected final OpenMRS mOpenMRS = OpenMRS.getInstance();
     protected final OpenMRSLogger mOpenMRSLogger = mOpenMRS.getOpenMRSLogger();
     protected AuthorizationManager mAuthorizationManager;
     protected CustomFragmentDialog mCustomFragmentDialog;
-    private MenuItem mSyncbutton;
+    private MenuItem mSyncbutton, uploadbutton;
+
     private List<String> locationList;
     private Snackbar snackbar;
     private IntentFilter mIntentFilter;
@@ -92,7 +103,7 @@ public abstract class ACBaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new ForceClose(this));
-
+        this.restApi = RestServiceBuilder.createService(RestApi.class);
         setupTheme();
 
         mFragmentManager = getSupportFragmentManager();
@@ -144,11 +155,14 @@ public abstract class ACBaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(final Menu menu) {
-        //mSyncbutton = menu.findItem(R.id.syncbutton);
+        mSyncbutton = menu.findItem(R.id.syncbutton);
+        uploadbutton  = menu.findItem(R.id.uploadbutton);
         MenuItem logoutMenuItem = menu.findItem(R.id.actionLogout);
         if (logoutMenuItem != null) {
             logoutMenuItem.setTitle(getString(R.string.action_logout) + " " + mOpenMRS.getUsername());
         }
+        boolean syncState = OpenMRS.getInstance().getSyncState();
+        setSyncButtonState(syncState);
         /*if (mSyncbutton != null) {
             final Boolean syncState = NetworkUtils.isOnline();
             setSyncButtonState(syncState);
@@ -159,14 +173,19 @@ public abstract class ACBaseActivity extends AppCompatActivity {
     private void setSyncButtonState(boolean syncState) {
         if (syncState) {
             mSyncbutton.setIcon(R.drawable.ic_sync_on);
+            uploadbutton.setVisible(true);
+
         } else {
             mSyncbutton.setIcon(R.drawable.ic_sync_off);
+            uploadbutton.setVisible(false);
         }
     }
 
     private void startSyncing()
     {
-        new SyncData(getApplicationContext()).runSyncAwait();
+        Intent  sy= new Intent(this, SyncNewService.class);
+        startService(sy);
+        //new SyncData(getApplicationContext()).runSyncAwait();
         //Toast.makeText(getApplicationContext(), "Uplaoding", Toast.LENGTH_LONG).show();
     }
     @Override
@@ -188,7 +207,7 @@ public abstract class ACBaseActivity extends AppCompatActivity {
             case R.id.actionLogout:
                 this.showLogoutDialog();
                 return true;
-            /*case R.id.syncbutton:
+            case R.id.syncbutton:
                 boolean syncState = OpenMRS.getInstance().getSyncState();
                 if (syncState) {
                     OpenMRS.getInstance().setSyncState(false);
@@ -196,37 +215,48 @@ public abstract class ACBaseActivity extends AppCompatActivity {
                     showNoInternetConnectionSnackbar();
                     ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.NOTICE, R.string.disconn_server);
                 } else if (NetworkUtils.hasNetwork()) {
-                    OpenMRS.getInstance().setSyncState(true);
-                    setSyncButtonState(true);
+                    //get the datim of the server and ensure that it is the same with the datim code on the device
+                    Call<Results<SystemSetting>> call2 = restApi.getSystemSettingByKey("facility_datim_code");
+                    call2.enqueue(new Callback<Results<SystemSetting>>() {
+                        @Override
+                        public void onResponse(Call<Results<SystemSetting>> call, Response<Results<SystemSetting>> response) {
+                            if (response.isSuccessful()) {
+                                Results<SystemSetting> datimCodeData = response.body();
+                                if (datimCodeData.getResults().size() > 0) {
+                                    String[] datimCodeArray = datimCodeData.getResults().get(0).getDisplay().split("=");
+                                    String datimCode = datimCodeArray[1].trim();
+                                    String datimCodeFromDevice = ACBaseActivity.this.getDatimCodeFromShared();
+                                    if (datimCodeFromDevice != null) {//that means that the user has used this device before. and we need to check and ensure that the dbs are the same.
+                                        if (!datimCode.equals(datimCodeFromDevice)) {
+                                            //AlertDialog
+                                            OpenMRSCustomHandler.writeLogToFile(new LogResponse(false,"Datim Code",
+                                                    "You are trying to connect to a different instance of NMRS " + "Current Instance:" + datimCodeFromDevice + ". New Instance " + datimCode,"Look for the current instance before trying to sync","Mobile Dashboard").getFullMessage());
+                                            ACBaseActivity.this.showWarning("Warning", "You are trying to connect to a different instance of NMRS ");
 
-//                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
-//                    getApplicationContext().sendBroadcast(intent);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        Intent  sy= new Intent(this, SyncNewService.class);
-                        this.startService(sy);
+                                        }
+                                        else{
+                                            goOnline();
+                                        }
+                                    }
+                                    else{//if the datim code from the device is null, then something is seriously wrong. May be the user is using an old db with the new app
+                                        //either ways, don't go online
+                                    }
+                                }else{
+                                    goOnline();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Results<SystemSetting>> call, Throwable t) {
 
-//                        Intent ii = new Intent(getApplicationContext(), PatientService.class);
-//                        getApplicationContext().startService(ii);
-//
-//                        //This is to handle android sync version 10
-//                        Intent i1=new Intent(getApplicationContext(), EncounterService.class);
-//                        getApplicationContext().startService(i1);
-                    }else{
-                        Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
-                        getApplicationContext().sendBroadcast(intent);
-                    }
-
-                    ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.NOTICE, R.string.reconn_server);
-                    if (snackbar != null)
-                        snackbar.dismiss();
-                    ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.SUCCESS, R.string.connected_to_server_message);
+                        }
+                    });
 
                 } else {
                     showNoInternetConnectionSnackbar();
                 }
                 return true;
 
-             */
             case R.id.actionEnforce:
                 Intent ip = new Intent(this, EnforceChangeActivity.class);
                 startActivity(ip);
@@ -245,6 +275,54 @@ public abstract class ACBaseActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    private void goOnline()
+    {
+
+        OpenMRS.getInstance().setSyncState(true);
+        setSyncButtonState(true);
+
+//                    Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
+//                    getApplicationContext().sendBroadcast(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Intent  sy= new Intent(this, SyncNewService.class);
+            this.startService(sy);
+
+//                        Intent ii = new Intent(getApplicationContext(), PatientService.class);
+//                        getApplicationContext().startService(ii);
+//
+//                        //This is to handle android sync version 10
+//                        Intent i1=new Intent(getApplicationContext(), EncounterService.class);
+//                        getApplicationContext().startService(i1);
+        }else{
+            Intent intent = new Intent("org.openmrs.mobile.intent.action.SYNC_PATIENTS");
+            getApplicationContext().sendBroadcast(intent);
+        }
+
+        ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.NOTICE, R.string.reconn_server);
+        if (snackbar != null)
+            snackbar.dismiss();
+        ToastUtil.showShortToast(getApplicationContext(), ToastUtil.ToastType.SUCCESS, R.string.connected_to_server_message);
+
+    }
+    public void showWarning(String title, String body )
+    {
+        Snackbar.make(findViewById(android.R.id.content), body, Snackbar.LENGTH_INDEFINITE).
+                setAction("okay ", v -> {
+                }).
+                show();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.AppTheme );
+//        builder.setTitle(title);
+//        builder.setMessage(body);
+//        builder.setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
+//        builder.setPositiveButton("Okay", (dialog, id) -> dialog.cancel());
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+    }
+    private String getDatimCodeFromShared() {
+        return mOpenMRS.getOpenMRSSharedPreferences().getString("datim_code", null);
     }
 
     private Observer<List<Location>> getLocationList() {

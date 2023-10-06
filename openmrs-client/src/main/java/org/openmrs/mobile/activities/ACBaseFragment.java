@@ -31,6 +31,7 @@ public abstract class ACBaseFragment<T extends BasePresenterContract> extends Fr
         mPresenter = presenter;
     }
 
+
     public boolean isActive() {
         return isAdded();
     }

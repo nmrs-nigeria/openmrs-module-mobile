@@ -60,6 +60,7 @@ public interface LoginContract {
 
         void startFormListService();
 
+        void showWarning(String title, String description);
     }
 
     interface Presenter extends BasePresenterContract {

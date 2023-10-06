@@ -194,12 +194,18 @@ public interface RestApi {
     Call<Results<SystemSetting>> getSystemSettingsByQuery(@Query("q") String query,
                                                           @Query("v") String representation);
 
+    @GET("systemsetting")
+    Call<Results<SystemSetting>> getSystemSettingByKey(@Query("q") String q);
+
     @POST("form/{uuid}/resource")
     Call<FormCreate> formCreate(@Path("uuid") String uuid,
                                 @Body FormData obj);
 
     @GET("provider?v=default")
     Call<Results<Provider>> getProviderList();
+
+    /*@GET("systemsetting?v=default")
+    Call<Results<SystemSetting>> getGlobalProperty();*/
 
     @DELETE("provider/{uuid}?!purge")
     Call<ResponseBody> deleteProvider(@Path("uuid") String uuid);
