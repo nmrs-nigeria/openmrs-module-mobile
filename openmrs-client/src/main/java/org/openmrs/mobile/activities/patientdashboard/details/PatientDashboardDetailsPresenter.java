@@ -92,6 +92,10 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
 
     @Override
     public void subscribe() {
+        mPatient = patientDAO.findPatientByID(mPatient.getId().toString());
+        mPatientDetailsView.resolvePatientDataDisplay(patientDAO.findPatientByID(mPatient.getId().toString()));
+        mPatientDetailsView.setMenuTitle(mPatient.getName().getNameString(), mPatient.getIdentifier().getIdentifier());
+
         /*updatePatientDataFromServer();
         mPatient = patientDAO.findPatientByID(mPatient.getId().toString());
         mPatientDetailsView.resolvePatientDataDisplay(patientDAO.findPatientByID(mPatient.getId().toString()));
@@ -100,6 +104,7 @@ public class PatientDashboardDetailsPresenter extends PatientDashboardMainPresen
 //            mPatientDetailsView.attachSnackbarToActivity();
             mPatientDetailsView.showToast(R.string.no_internet_connection_message, true);
             mPatientDetailsView.dismissDialog();
+
         }*/
 
     }
