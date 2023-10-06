@@ -231,7 +231,7 @@ public class PatientSync {
                             } else {
                                 String err = "ErrorBody:" + res.errorBody().string() +
                                         "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                logResponse.appendLogs(err, "Contact HI", "Sync bio - getPatientIdentifierTypeUuid");
+                                logResponse.appendLogs(err, "Contact HI", "Sync bio - syncPatient -updatePatient or createPatient");
 
                             }
                         }
@@ -239,7 +239,8 @@ public class PatientSync {
             }
 
             } catch (Exception e) {
-                logResponse.appendLogs(e.getMessage(), "Contact HI", "sync patient update biography");
+                e.printStackTrace();
+                logResponse.appendLogs(e.getMessage(), "Contact HI", "sync patient  main");
             }
 
             return null;
@@ -338,7 +339,7 @@ public class PatientSync {
                             } else {
                                 String err = "ErrorBody:" + res.errorBody().string() +
                                         "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                logResponse.appendLogs(err, "Contact HI", "Sync bio - getPatientIdentifierTypeUuid");
+                                logResponse.appendLogs(err, "Contact HI", "Sync bio - updatePatient");
 
                             }
                             if (identifierHts != null) {
@@ -350,11 +351,11 @@ public class PatientSync {
                                         } else {
                                             String err = "ErrorBody:" + res.errorBody().string() +
                                                     "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                            logResponse.appendLogs(err, "Contact HI", "Sync bio - getPatientIdentifierTypeUuid");
+                                            logResponse.appendLogs(err, "Contact HI", "Sync bio - updatePatientIdentifier");
 
                                         }
                             } catch (Exception e) {
-                                logResponse.appendLogs(e.getMessage(), "", "Sync bio - getPatientIdentifierTypeUuid");
+                                logResponse.appendLogs(e.getMessage(), "", "Sync bio - updatePatientIdentifier");
 
                             }
 
@@ -371,6 +372,7 @@ public class PatientSync {
 
                     //
                 } catch (Exception e) {
+                    e.printStackTrace();
                     logResponse.appendLogs(e.getMessage(), "Contact HI", "sync patient update biography");
                 }
 
