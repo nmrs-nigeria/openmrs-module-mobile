@@ -62,6 +62,7 @@ import org.openmrs.mobile.dao.PatientBiometricJoinDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
 import org.openmrs.mobile.export.ExportService;
 import org.openmrs.mobile.export.FullExport;
@@ -665,7 +666,7 @@ public class ExportPBS extends ACBaseActivity {
     }
 
     Patient getPatientElement(JsonElement jsonElement, LogResponse logResponse) {
-
+        Util.log(jsonElement.toString());
         try {
 
 
@@ -728,7 +729,6 @@ public class ExportPBS extends ACBaseActivity {
             patient.setBirthdate(patientJSON.get("birthdate").toString());
             patient.setUuid(patientJSON.get("patientUuid").toString());
             //Save patient here
-
             return patient;
         } catch (Exception e) {
             logResponse.appendLogs(false,
@@ -894,6 +894,7 @@ public class ExportPBS extends ACBaseActivity {
                                 Long pid = new PatientDAO().insertPatientFully(patient, pbs, false);
                                 if (pid > -1) {
                                     logResponse.setSuccess(true);
+
                                     // save the log
                                     //  fingerPrintLog.setPid(String.valueOf(pid));
                                     //  fingerPrintLog.save();
