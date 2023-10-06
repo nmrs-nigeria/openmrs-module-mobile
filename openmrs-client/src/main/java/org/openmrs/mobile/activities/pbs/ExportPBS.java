@@ -477,7 +477,7 @@ public class ExportPBS extends ACBaseActivity {
             print.setCreator(p.getInt("creator"));
 //                 "patient_Id"))
 //                    reader.skipValue();
-            print.setDateCreated(p.getString("date_created"));
+
             print.setDateCreated(p.getString("dateCreated"));
             print.setFingerPositions(Enum.valueOf(FingerPositions.class, p.getString("fingerPosition")));
             print.setModel(p.getString("model"));
@@ -487,9 +487,7 @@ public class ExportPBS extends ACBaseActivity {
             return print;
         } catch (Exception e) {
             logResponse.appendLogs(false, e.getMessage(), "Extraction Key tempered", "createPatientBiometricContractFromReader");
-            logResponse.appendLogs(false, "Error: "+e.getMessage(),
-                    "Extraction Key tempered", "createPatientBiometricContractFromReader");
-        }
+              }
 
         return null;
     }
