@@ -12,9 +12,12 @@ package org.openmrs.mobile.api;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
+import com.google.gson.Gson;
 
+import org.json.JSONObject;
 import org.openmrs.mobile.api.repository.VisitRepository;
 import org.openmrs.mobile.api.retrofit.ProgramRepository;
 import org.openmrs.mobile.dao.PatientDAO;
@@ -122,27 +125,38 @@ public class EncounterService extends IntentService implements CustomApiCallback
 
         if (NetworkUtils.isOnline()) {
             try {
-                encountercreate.pullObslist();
-                encountercreate.setFormUuid(getFormResourceByName(encountercreate.getFormname()).getUuid());
-                Call<Encounter> call = apiService.createEncounter(encountercreate);
-                call.enqueue(new Callback<Encounter>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Encounter> call, @NonNull Response<Encounter> response) {
-                        if (response.isSuccessful()) {
-                            Encounter encounter = response.body();
-                            linkvisit(encountercreate.getPatientId(), encountercreate.getFormname(), encounter, encountercreate);
-                            encountercreate.setSynced(true);
-                            encountercreate.save();
-                            new VisitRepository().syncLastVitals(encountercreate.getPatient());
-                            if (callbackListener != null) {
-                                callbackListener.onResponse();
-                            }
-                        } else {
-                            if (callbackListener != null) {
-                                callbackListener.onErrorResponse(response.errorBody().toString());
-                            }
+            encountercreate.pullObslist();
+            encountercreate.setFormUuid(getFormResourceByName(encountercreate.getFormname()).getUuid());
+            Call<Encounter> call = apiService.createEncounter(encountercreate);
+            call.enqueue(new Callback<Encounter>() {
+                @Override
+                public void onResponse(@NonNull Call<Encounter> call, @NonNull Response<Encounter> response) {
+                    if (response.isSuccessful()) {
+                        Encounter encounter = response.body();
+                        linkvisit(encountercreate.getPatientId(), encountercreate.getFormname(), encounter, encountercreate);
+                        encountercreate.setSynced(true);
+                        encountercreate.save();
+                        new VisitRepository().syncLastVitals(encountercreate.getPatient());
+                        if (callbackListener != null) {
+                            callbackListener.onResponse();
+                        }
+                    } else {
+                        String error = "An error occurred.";
+                        try {
+                            error = response.errorBody().string();
+                            Log.e("EncounterService", "onResponse: " + error);
+
+                            JSONObject jObjError = new JSONObject(error);
+                            error = jObjError.getJSONObject("error").getString("message");
+                        } catch (Exception ee) {
+                            error = response.errorBody().toString();
+                        }
+
+                        if (callbackListener != null) {
+                            callbackListener.onErrorResponse(error);
                         }
                     }
+                }
 
                     @Override
                     public void onFailure(@NonNull Call<Encounter> call, @NonNull Throwable t) {

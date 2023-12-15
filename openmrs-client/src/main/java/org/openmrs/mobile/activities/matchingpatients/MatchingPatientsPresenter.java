@@ -98,7 +98,7 @@ public class MatchingPatientsPresenter extends BasePresenter implements Matching
 
     private void updatePatient(final Patient patient) {
         PatientDto patientDto = patient.getPatientDto();
-//        patient.setUuid(null);
+        //patient.setUuid(null);
         Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), ApplicationConstants.API.FULL);
         call.enqueue(new Callback<PatientDto>() {
             @Override

@@ -16,6 +16,8 @@ package org.openmrs.mobile.api.repository;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.activeandroid.query.Select;
 
@@ -47,7 +49,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,15 +101,20 @@ public class PatientRepository extends RetrofitRepository {
                         IdentifierType openmrsType = new IdentifierType();
                         List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
                         Results<IdentifierType> identifierTypesResults = (Results<IdentifierType>)results.get(2).getResult();
-                        for (PatientIdentifier p : identifiersPatients){
-                            for (IdentifierType resultIdentifiertype : identifierTypesResults.getResults()){
+                        for (PatientIdentifier p : identifiersPatients) {
+                            for (IdentifierType resultIdentifiertype : identifierTypesResults.getResults()) {
                                 if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
                                     final PatientIdentifier identifier = new PatientIdentifier();
                                     identifier.setLocation((Location) results.get(0).getResult());
                                     identifier.setIdentifier(p.getIdentifier());
                                     identifier.setIdentifierType(resultIdentifiertype);
-                                    identifiers.add(identifier);
+
+                                    if (!TextUtils.isEmpty(identifier.getIdentifier()) && !identifier.getIdentifier().equals(""))
+                                        identifiers.add(identifier);
+                                    else
+                                        Log.d(PatientRepository.class.getName(), "syncPatient: identifier empty or blank. identifier: " + identifier.getIdentifierType());
                                 }
+
                                 if(resultIdentifiertype.getDisplay().equals("OpenMRS ID")){
                                     openmrsType = resultIdentifiertype;
                                 }
@@ -119,9 +125,14 @@ public class PatientRepository extends RetrofitRepository {
                         identifier.setLocation((Location) results.get(0).getResult());
                         identifier.setIdentifier((String) results.get(1).getResult());
                         identifier.setIdentifierType(openmrsType);
-                        identifiers.add(identifier);
+
+                        if (!TextUtils.isEmpty(identifier.getIdentifier()) && !identifier.getIdentifier().equals(""))
+                            identifiers.add(identifier);
+                        else
+                            Log.d(PatientRepository.class.getName(), "syncPatient: identifier empty or blank. identifier: " + identifier.getIdentifierType());
 
                         patient.setIdentifiers(identifiers);
+
                         Call<PatientDto> call = new Call<PatientDto>() {
                             @Override
                             public Response<PatientDto> execute() throws IOException {
@@ -188,6 +199,12 @@ public class PatientRepository extends RetrofitRepository {
                                     }
 
                                 } else {
+                                    try {
+                                        Log.e(PatientRepository.class.getName(), "onResponse: " + response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
                                     ToastUtil.error("Patient[" + patient.getId() + "] cannot be synced due to server error" + response.message());
                                     deferred.reject(new RuntimeException("Patient cannot be synced due to server error: " + response.errorBody().toString()));
                                     if (callbackListener != null) {
@@ -315,19 +332,25 @@ public class PatientRepository extends RetrofitRepository {
 
                                         patientDao.updatePatient(patient.getId(), patient);
 
-                                        ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
-                                                + " updated");
-                                        if (callbackListener != null) {
-                                            callbackListener.onResponse();
-                                        }
-                                    } else {
-                                        ToastUtil.error("Patient " + patient.getPerson().getName().getNameString()
-                                                + " cannot be updated due to server error" + response.message());
-                                        if (callbackListener != null) {
-                                            callbackListener.onErrorResponse(response.message());
-                                        }
+                                    ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
+                                            + " updated");
+                                    if (callbackListener != null) {
+                                        callbackListener.onResponse();
+                                    }
+                                } else {
+                                    try{
+                                        Log.e("PatientRepository", response.errorBody().string());
+                                    }catch (Exception ignored) {
+
+                                    }
+
+                                    ToastUtil.error("Patient " + patient.getPerson().getName().getNameString()
+                                            + " cannot be updated due to server error" + response.message());
+                                    if (callbackListener != null) {
+                                        callbackListener.onErrorResponse(response.message());
                                     }
                                 }
+                            }
 
                                 @Override
                                 public void onFailure(@NonNull Call<PatientDto> call, @NonNull Throwable t) {
@@ -356,6 +379,11 @@ public class PatientRepository extends RetrofitRepository {
                                             }catch (Exception ignored) {
 
                                             }
+
+//                                            ToastUtil.error("Adding patient new identifier failed");
+//                                            if (callbackListener != null) {
+//                                                callbackListener.onErrorResponse(response.message());
+//                                            }
                                         }
                                     }
 
@@ -461,7 +489,7 @@ public class PatientRepository extends RetrofitRepository {
             if (encountercreate != null) {
                 encountercreate.setPatient(patient.getUuid());
                 encountercreate.save();
-                new EncounterService().addEncounter(encountercreate, DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+                new EncounterService().addEncounter(encountercreate,DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
             }
         }
     }
