@@ -63,7 +63,7 @@ For more information on the client, visit https://wiki.openmrs.org/display/proje
 - Offline access
 
 # Screenshots
-![Login](http://i.imgur.com/zinrnCK.png) ![Dashboard](http://i.imgur.com/TLIwMoy.png) ![Register Patient](http://i.imgur.com/n7LaeKS.png)
+![Login](/screenshots/login.jpg) ![Dashboard](/screenshots/dash.jpg) ![Register Patient](/screenshots/reg.jpg)
 
 # GSoC 2019
 
@@ -129,7 +129,19 @@ To release the application, make sure to do these steps **in order**:
 
 # Release Notes
 
-### **Version 25.1.1**
+### **Version 26.1.1** 
+
+- System Upgrade: Upgraded core version to 3.x.
+
+- Authentication: Fixed O3 authentication and login connectivity issues.
+
+- Data Integrity: Enforced State & LGA dropdowns to prevent manual entry errors.
+
+- Facility Selection: * Improved the Facility Selection dialog interface.
+
+- Fixed bug causing blank facility names during login.
+
+### **Version 25.1.1** 
 - Base fingerprint recapture replacement 
 - IP change without enforce IP Address
  - Update Address: Update the geocooordinate address per each encounter. Latitude and Longitude coordinates in openmrs.person_address are updated each time service is provide and data is sync for the patient.  
