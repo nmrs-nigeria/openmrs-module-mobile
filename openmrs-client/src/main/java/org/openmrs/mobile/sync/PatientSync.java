@@ -1,18 +1,19 @@
 package org.openmrs.mobile.sync;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.activeandroid.query.Select;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.openmrs.mobile.api.RestApi;
 import org.openmrs.mobile.api.RestServiceBuilder;
 import org.openmrs.mobile.api.repository.LocationRepository;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.IdGenPatientIdentifiers;
 import org.openmrs.mobile.models.IdentifierType;
@@ -54,20 +55,21 @@ public class PatientSync {
 
     private boolean calculatedLocally = false;
 
-    public  boolean syncPatient(@NonNull String identifier,@NonNull Patient patient,
-                  PatientAndMatchesWrapper patientAndMatchesWrapper) {
-       logResponse =  new LogResponse( identifier);
+    public boolean syncPatient(@NonNull String identifier, @NonNull Patient patient,
+                               PatientAndMatchesWrapper patientAndMatchesWrapper) {
+        logResponse = new LogResponse(identifier);
         try {
             if (!patient.isSynced()) {
                 fetchSimilarPatients(patient, patientAndMatchesWrapper, logResponse);
             } else {
-               new PatientRepository().syncPatient(patient, logResponse);
+
+                new PatientRepository().updatePatient(patient, logResponse);
             }
         } catch (Exception e) {
- logResponse.appendLogs(e.getMessage() ,"","syncPatient ");
+            logResponse.appendLogs(e.getMessage(), "", "syncPatient ");
         }
 
- return calculatedLocally;
+        return calculatedLocally;
     }
 
     private void fetchSimilarPatients(final Patient patient, final PatientAndMatchesWrapper patientAndMatchesWrapper, LogResponse logResponse) throws IOException {
@@ -95,9 +97,9 @@ public class PatientSync {
             List<Patient> similarPatient = new PatientComparator().findSimilarPatient(resp.body().getResults(), patient);
             if (!similarPatient.isEmpty()) {
                 patientAndMatchesWrapper.addToList(new PatientAndMatchingPatients(patient, similarPatient));
-            logResponse.appendLogs("Found similar patient","","Bio->PatientsAndCalculateLocally");
+                logResponse.appendLogs("Found similar patient", "", "Bio->PatientsAndCalculateLocally");
             } else {
-              new PatientRepository().syncPatient(patient, logResponse);
+                new PatientRepository().syncPatient(patient, logResponse);
             }
         }
     }
@@ -114,9 +116,9 @@ public class PatientSync {
                 List<Patient> similarPatient = new PatientComparator().findSimilarServePatient(patientList, patient);
                 if (!similarPatient.isEmpty()) {
                     patientAndMatchesWrapper.addToList(new PatientAndMatchingPatients(patient, patientList));
-                    logResponse.appendLogs("Similar patient found","","Bio->SimilarPatientsFromServer");
+                    logResponse.appendLogs("Similar patient found", "", "Bio->SimilarPatientsFromServer");
                 } else {
-                   new PatientRepository().syncPatient(patient, logResponse);
+                    new PatientRepository().syncPatient(patient, logResponse);
                 }
             } else {
                 new PatientRepository().syncPatient(patient, logResponse);
@@ -155,7 +157,6 @@ public class PatientSync {
          */
 
 
-        @Nullable
         private LogResponse syncPatient(final Patient patient, LogResponse logResponse) {
             try {
                     /*
@@ -175,72 +176,81 @@ public class PatientSync {
                 Results<IdentifierType> mIdentifierType = getPatientIdentifierTypeUuid(logResponse);
                 if (mIdentifierType == null) return logResponse;
                 // prepare content for sync
-                if (location != null && mIdentifier != null && mIdentifierType!=null) {
+                if (location != null && mIdentifier != null && mIdentifierType != null) {
                     {
 
 
-                            final List<PatientIdentifier> identifiers = new ArrayList<>();
-                            IdentifierType openmrsType = new IdentifierType();
-                            List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
+                        final List<PatientIdentifier> identifiers = new ArrayList<>();
+                        IdentifierType openmrsType = new IdentifierType();
+                        List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
                         for (PatientIdentifier p : identifiersPatients) {
-                                for (IdentifierType resultIdentifiertype : mIdentifierType.getResults()) {
-                                    if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
-                                        final PatientIdentifier identifier = new PatientIdentifier();
-                                        identifier.setLocation(location);
-                                        identifier.setIdentifier(p.getIdentifier());
-                                        identifier.setIdentifierType(resultIdentifiertype);
-                                        identifiers.add(identifier);
-                                    }
-                                    if (resultIdentifiertype.getDisplay().equals("OpenMRS ID")) {
-                                        openmrsType = resultIdentifiertype;
-                                    }
+                            for (IdentifierType resultIdentifiertype : mIdentifierType.getResults()) {
+                                if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
+                                    final PatientIdentifier identifier = new PatientIdentifier();
+                                    identifier.setLocation(location);
+                                    identifier.setIdentifier(p.getIdentifier());
+                                    identifier.setIdentifierType(resultIdentifiertype);
+                                    identifiers.add(identifier);
                                 }
-                            }
-
-                            final PatientIdentifier identifier = new PatientIdentifier();
-                            identifier.setLocation(location);
-                            identifier.setIdentifier(mIdentifier);
-                            identifier.setIdentifierType(openmrsType);
-                            identifiers.add(identifier);
-
-                            patient.setIdentifiers(identifiers);
-                            Call<PatientDto> call;
-                            if (patient.getUuid().trim().isEmpty()) {
-                                patient.setUuid(null);
-                                PatientDto patientDto = patient.getPatientDto();
-                                call = restApi.createPatient(patientDto);
-                            } else {
-                                PatientDto patientDto = patient.getPatientDto();
-                                call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
-                               }
-
-
-                        Response<PatientDto> res = call.execute();
-                            if(res.isSuccessful()){
-                                PatientDto newPatient = res.body();
-                                        patient.setUuid(newPatient.getUuid());
-                                        if (patient.getPhoto() != null)
-                                            uploadPatientPhoto(patient);
-
-                                        new PatientDAO().updatePatient(patient.getId(), patient);
-                                        if (!patient.getEncounters().equals("")) {
-                                            addEncounters(patient, logResponse);
-                                        }
-                                logResponse.setSuccess(true);
-
-                            } else {
-                                String err = "ErrorBody:" + res.errorBody().string() +
-                                        "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                logResponse.appendLogs(err, "Contact HI", "Sync bio - syncPatient -updatePatient or createPatient");
-
+                                if (resultIdentifiertype.getDisplay().equals("OpenMRS ID")) {
+                                    openmrsType = resultIdentifiertype;
+                                }
                             }
                         }
 
-            }
+                        final PatientIdentifier identifier = new PatientIdentifier();
+                        identifier.setLocation(location);
+                        identifier.setIdentifier(mIdentifier);
+                        identifier.setIdentifierType(openmrsType);
+                        identifiers.add(identifier);
+
+                        patient.setIdentifiers(identifiers);
+                        Call<PatientDto> call;
+                        if (patient.getUuid().trim().isEmpty()) {
+                            patient.setUuid(null);
+                            PatientDto patientDto = patient.getPatientDto();
+                            call = restApi.createPatient(patientDto);
+                        } else {
+                            PatientDto patientDto = patient.getPatientDto();
+                            call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+
+
+                        }
+
+
+                        Response<PatientDto> res = call.execute();
+                        if (res.isSuccessful()) {
+                            PatientDto newPatient = res.body();
+                            patient.setUuid(newPatient.getUuid());
+                            if (patient.getPhoto() != null) {
+                                uploadPatientPhoto(patient);
+                            }
+                            new PatientDAO().updatePatient(patient.getId(), patient);
+                            if (!patient.getEncounters().equals("")) {
+                                addEncounters(patient, logResponse);
+                            }
+                            logResponse.setSuccess(true);
+//Additional log precise
+                            logResponse.addSimpleLogs(new SimpleLog("Patient biodata", true));
+
+                        } else {
+                            Util.log("  Error " + patient.getEncounters());
+
+                            String err = "ErrorBody:" + res.errorBody().string() +
+                                    "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
+                            logResponse.appendLogs(err, "Contact Health Informatics", "Sync bio -  createPatient or updatePatient");
+//Additional log precise
+                            logResponse.addSimpleLogs(new SimpleLog("Patient biodata", false, err));
+                        }
+                    }
+
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
-                logResponse.appendLogs(e.getMessage(), "Contact HI", "sync patient  main");
+                logResponse.appendLogs(e.getMessage(), "Contact Health Informatics", "sync patient update biography");
+                //Additional log precise
+                logResponse.addSimpleLogs(new SimpleLog("Patient biodata", false, e.getMessage()));
             }
 
             return null;
@@ -258,9 +268,18 @@ public class PatientSync {
         /**
          * Update Patient
          */
-        public LogResponse updatePatient(final Patient patient, String refPatient) {
-            LogResponse logResponse = new LogResponse(refPatient);
-                try {
+        public LogResponse updatePatient(final Patient patient, LogResponse logResponse) {
+
+            //todo disable to stop duplicating Art number
+            logResponse.setSuccess(true);
+            if (true) {
+                //Additional log precise
+                logResponse.addSimpleLogs(new SimpleLog("Patient biodata- update", true, "Old patient" ,false));
+                return logResponse;
+
+            }
+
+            try {
                     /*
                       AndroidDeferredManager dm = new AndroidDeferredManager();
                         dm.when( getLocationUuid(), getIdGenPatientIdentifier(), getPatientIdentifierTypeUuid())
@@ -271,145 +290,149 @@ public class PatientSync {
 
                     All these variable request from server must not be null;
                      */
-                    Location location = getLocation(logResponse);
-                    if (location == null) return logResponse;
-                    String mIdentifier = getIdGenPatientIdentifier(logResponse);
-                    if (mIdentifier == null) return logResponse;
-                    Results<IdentifierType> mIdentifierType = getPatientIdentifierTypeUuid(logResponse);
-                    if (mIdentifierType == null) return logResponse;
-
-                     // prepare content for sync
-                    if (location != null && mIdentifier != null && mIdentifierType!=null) {
-                        final List<PatientIdentifier> identifiers = new ArrayList<>();
-                        IdentifierType openmrsType = new IdentifierType();
-                        List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
-                        boolean openmrs_code_exist = false;
-                        for (PatientIdentifier pid : identifiersPatients) {
-                            if (pid.getDisplay().equals("OpenMRS ID")) {
-                                openmrs_code_exist = true;
-                            }
+                Location location = getLocation(logResponse);
+                if (location == null) return logResponse;
+                String mIdentifier = getIdGenPatientIdentifier(logResponse);
+                if (mIdentifier == null) return logResponse;
+                Results<IdentifierType> mIdentifierType = getPatientIdentifierTypeUuid(logResponse);
+                if (mIdentifierType == null) return logResponse;
+                // prepare content for sync
+                if (location != null && mIdentifier != null && mIdentifierType != null) {
+                    final List<PatientIdentifier> identifiers = new ArrayList<>();
+                    IdentifierType openmrsType = new IdentifierType();
+                    List<PatientIdentifier> identifiersPatients = patient.getIdentifiers();
+                    boolean openmrs_code_exist = false;
+                    for (PatientIdentifier pid : identifiersPatients) {
+                        if ("OpenMRS ID".equals(pid.getDisplay())) {
+                            openmrs_code_exist = true;
                         }
+                    }
 
 
-                        for (PatientIdentifier p : identifiersPatients) {
-                            for (IdentifierType resultIdentifiertype : mIdentifierType.getResults()) {
-                                if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
-                                    final PatientIdentifier identifier = new PatientIdentifier();
-                                    identifier.setLocation(location);
-                                    identifier.setIdentifier(p.getIdentifier());
-                                    identifier.setIdentifierType(resultIdentifiertype);
-                                    identifiers.add(identifier);
-                                    if (resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number") || resultIdentifiertype.getDisplay().equals("ANC Number")) {
-                                        identifierHts = identifier;
-                                        openmrs_code_exist = true;
-                                    }
+                    for (PatientIdentifier p : identifiersPatients) {
+                        for (IdentifierType resultIdentifiertype : mIdentifierType.getResults()) {
+                            if (resultIdentifiertype.getDisplay().equals(p.getDisplay())) {
+                                final PatientIdentifier identifier = new PatientIdentifier();
+                                identifier.setLocation(location);
+                                identifier.setIdentifier(p.getIdentifier());
+                                identifier.setIdentifierType(resultIdentifiertype);
+                                identifiers.add(identifier);
+                                if (resultIdentifiertype.getDisplay().equals("HIV testing Id (Client Code)") || resultIdentifiertype.getDisplay().equals("ART Number") || resultIdentifiertype.getDisplay().equals("ANC Number")) {
+                                    identifierHts = identifier;
+                                    openmrs_code_exist = true;
                                 }
-                                if (resultIdentifiertype.getDisplay().equals("OpenMRS ID")) {
-                                    openmrsType = resultIdentifiertype;
+                            }
+                            if (resultIdentifiertype.getDisplay().equals("OpenMRS ID")) {
+                                openmrsType = resultIdentifiertype;
+                            }
+
+                        }
+                    }
+
+                    final PatientIdentifier identifier = new PatientIdentifier();
+                    identifier.setLocation(location);
+                    identifier.setIdentifier(mIdentifier);
+                    if (!openmrs_code_exist) {
+                        identifier.setIdentifierType(openmrsType);
+                        identifiers.add(identifier);
+                        patient.setIdentifiers(identifiers);
+                    }
+
+                    PatientDto patientDto = patient.getPatientDto();
+                    if (patient.getUuid() != null) {
+                        Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
+                        Response<PatientDto> res = call.execute();
+                        if (res.isSuccessful()) {
+                            PatientDto patientDtoNew = res.body();
+                            patient.setBirthdate(patientDtoNew.getPerson().getBirthdate());
+                            patient.setUuid(patientDtoNew.getUuid());
+                            if (patient.getPhoto() != null) {
+                                uploadPatientPhoto(patient);
+                            }
+                            // update local data
+                            patientDao.updatePatient(patient.getId(), patient);
+                            logResponse.appendLogs(true, "Success", "", "Sync bio -  Update patient");
+                            if (!patient.getEncounters().equals("")) {
+                                addEncounters(patient, logResponse);
+                            }
+
+                        } else {
+
+                            String err = "ErrorBody:" + res.errorBody().string() +
+                                    "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
+                            // todo this should be change to false. When the update request is fully tested.  failing to update on some patient and updating on some due openMRS code
+                            logResponse.appendLogs(true, err, "Contact Health Informatics", "Sync bio -  Update patient");
+                            OpenMRSCustomHandler.writeLogToFile(err);
+                        }
+                        if (identifierHts != null) {
+                            Call<PatientDto> callIdentifier = restApi.updatePatientIdentifier(patient.getUuid(), identifierHts, "full");
+                            try {
+                                Response<PatientDto> resIdentifier = callIdentifier.execute();
+                                if (resIdentifier.isSuccessful()) {
+                                    //   ToastUtil.success("Patient new identifier added successfully");
+                                } else {
+                                    String err = "ErrorBody:" + res.errorBody().string() +
+                                            "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
+                                    logResponse.appendLogs(err, "Contact Health Informatics", "Sync bio - updatePatientIdentifier");
+
                                 }
-
-                            }
-                        }
-
-                        final PatientIdentifier identifier = new PatientIdentifier();
-                        identifier.setLocation(location);
-                        identifier.setIdentifier(mIdentifier);
-                        if (!openmrs_code_exist) {
-                            identifier.setIdentifierType(openmrsType);
-                            identifiers.add(identifier);
-                            patient.setIdentifiers(identifiers);
-                        }
-
-                         PatientDto patientDto = patient.getPatientDto();
-                        if (patient.getUuid() != null) {
-                            Call<PatientDto> call = restApi.updatePatient(patientDto, patient.getUuid(), "full");
-                            Response<PatientDto> res = call.execute();
-
-                            if (res.isSuccessful()) {
-                                PatientDto patientDtoNew = res.body();
-                                patient.setBirthdate(patientDtoNew.getPerson().getBirthdate());
-                                patient.setUuid(patientDtoNew.getUuid());
-                                if (patient.getPhoto() != null)
-                                    uploadPatientPhoto(patient);
-                                // update local data
-                                patientDao.updatePatient(patient.getId(), patient);
-
-                                ToastUtil.success("Patient " + patient.getPerson().getName().getNameString()
-                                        + " updated");
-                            } else {
-                                String err = "ErrorBody:" + res.errorBody().string() +
-                                        "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                logResponse.appendLogs(err, "Contact HI", "Sync bio - updatePatient");
-
-                            }
-                            if (identifierHts != null) {
-                                Call<PatientDto> callIdentifier = restApi.updatePatientIdentifier(patient.getUuid(), identifierHts, "full");
-                          try{
-                            Response<PatientDto>   resIdentifier=  callIdentifier.execute();
-                                        if(resIdentifier.isSuccessful()){
-                                            ToastUtil.success("Patient new identifier added successfully");
-                                        } else {
-                                            String err = "ErrorBody:" + res.errorBody().string() +
-                                                    "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                                            logResponse.appendLogs(err, "Contact HI", "Sync bio - updatePatientIdentifier");
-
-                                        }
                             } catch (Exception e) {
                                 logResponse.appendLogs(e.getMessage(), "", "Sync bio - updatePatientIdentifier");
 
                             }
 
 
-                            }
                         }
-                        {
-                            syncPatient(patient, logResponse);
-                        }
-
-
+                    } else {
+                        syncPatient(patient, logResponse);
                     }
 
 
-                    //
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    logResponse.appendLogs(e.getMessage(), "Contact HI", "sync patient update biography");
                 }
 
 
+                //
+            } catch (Exception e) {
+                e.printStackTrace();
+                logResponse.appendLogs(e.getMessage(), "Contact Health Informatics", "sync patient update biography");
+            }
 
-           return logResponse;
+
+            return logResponse;
         }
 
 
         private void addEncounters(Patient patient, LogResponse logResponse) {
             String enc = patient.getEncounters();
             List<Long> list = new ArrayList<>();
-            for (String s : enc.split(","))
+            for (String s : enc.split(",")) {
                 list.add(Long.parseLong(s));
-            Visit visit =null;
+            }
+            Visit visit = null;
             for (long id : list) {
                 Encountercreate encountercreate = new Select()
                         .from(Encountercreate.class)
                         .where("id = ?", id)
                         .executeSingle();
                 if (encountercreate != null) {
+
                     encountercreate.setPatient(patient.getUuid());
                     encountercreate.save();
-                   //  todo This syncing have been move
+                    //  todo This syncing have been move
                     // added because of encouterdate for new patients who
-               Visit v=  new EncounterSync().addEncounter(encountercreate, DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT), logResponse);
-              if(v!=null){
-                  visit =v;
-              }
+                    Visit v = new EncounterSync().addEncounter(encountercreate, DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT), logResponse);
+                    if (v != null) {
+                        visit = v;
+                    }
+                } else {
+                    Util.log("Null Empty Eco" + patient.getUuid());
+
                 }
             }
-            if(visit!=null){
-                 new EncounterSync().endVisit(visit, logResponse);
+            if (visit != null) {
+                new EncounterSync().endVisit(visit, logResponse);
             }
         }
-
-
 
 
         private Location getLocation(@NonNull LogResponse logResponse) {
@@ -428,15 +451,16 @@ public class PatientSync {
                             if ((result.getDisplay().trim()).equalsIgnoreCase((openMrs.getLocation().trim()))) {
                                 count++;
                                 location = result;
-                            }}
-                            // validate if the location have unique name;
-                            if (count > 1) {
-                                location = null;
-                                logResponse.appendLogs("Two identical location found", "Contact HIs", "Select sync location");
-                            } else if (locationList.getResults().size() > 1 && count == 0) {
-                                logResponse.appendLogs("Locations Available but found no ,match",
-                                        "Make sure your syncing to same server you downloaded the patient", "Select sync location");
                             }
+                        }
+                        // validate if the location have unique name;
+                        if (count > 1) {
+                            location = null;
+                            logResponse.appendLogs("Two identical location found", "Contact HIs", "Select sync location");
+                        } else if (locationList.getResults().size() > 1 && count == 0) {
+                            logResponse.appendLogs("Locations Available but found no ,match",
+                                    "Make sure your syncing to same server you downloaded the patient", "Select sync location");
+                        }
 //                            else {
 //                                // location search is fine. No need for log or success, since it is an intermediate request
 //
@@ -446,7 +470,7 @@ public class PatientSync {
                 } else {
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                    logResponse.appendLogs(err, "Contact HI", "Select sync location");
+                    logResponse.appendLogs(err, "Contact Health Informatics", "Select sync location");
 
                 }
             } catch (Exception e) {
@@ -467,13 +491,13 @@ public class PatientSync {
                     IdGenPatientIdentifiers idList = res.body();
                     if (idList.getIdentifiers().size() > 0)
                         return idList.getIdentifiers().get(0);
-                    else logResponse.appendLogs("Identifier size ", "Contact HI",
+                    else logResponse.appendLogs("Identifier size ", "Contact Health Informatics",
                             "sync bio getIdGenPatientIdentifier");
 
-                }else {
+                } else {
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                    logResponse.appendLogs(err, "Contact HI", "sync bio getIdGenPatientIdentifier");
+                    logResponse.appendLogs(err, "Contact Health Informatics", "sync bio getIdGenPatientIdentifier");
 
                 }
             } catch (Exception e) {
@@ -494,9 +518,10 @@ public class PatientSync {
                     Results<IdentifierType> idresList = res.body();
                     return idresList;
                 } else {
+                    Util.log("Null identifier types");
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
-                    logResponse.appendLogs(err, "Contact HI", "Sync bio - getPatientIdentifierTypeUuid");
+                    logResponse.appendLogs(err, "Contact Health Informatics", "Sync bio - getPatientIdentifierTypeUuid");
 
                 }
             } catch (Exception e) {
@@ -512,3 +537,4 @@ public class PatientSync {
 
 
 }
+

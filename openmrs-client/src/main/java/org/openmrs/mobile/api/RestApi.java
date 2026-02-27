@@ -10,6 +10,9 @@
 
 package org.openmrs.mobile.api;
 
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
 import org.openmrs.mobile.activities.pbs.PatientBiometricSyncResponseModel;
@@ -36,6 +39,7 @@ import org.openmrs.mobile.models.PatientDto;
 import org.openmrs.mobile.models.PatientIdentifier;
 import org.openmrs.mobile.models.PatientPhoto;
 import org.openmrs.mobile.api.response.PbsServerContract;
+import org.openmrs.mobile.models.PersonAddress;
 import org.openmrs.mobile.models.ProgramEnrollment;
 import org.openmrs.mobile.models.Provider;
 import org.openmrs.mobile.models.Receipt;
@@ -88,7 +92,12 @@ public interface RestApi {
     @GET("patient/{uuid}")
     Call<PatientDto> getPatientByUUID(@Path("uuid") String uuid,
                                       @Query("v") String representation);
-
+    @GET("person/{uuid}")
+    Call<JsonObject> getPersonJSONByUUID(@Path("uuid") String uuid,
+                                         @Query("v") String representation);
+    @GET("patient/{uuid}")
+    Call<JsonObject> getPatientJSONByUUID(@Path("uuid") String uuid,
+                                         @Query("v") String representation);
     @GET("patient?lastviewed&v=full")
     Call<Results<Patient>> getLastViewedPatients(@Query("limit") Integer limit,
                                                  @Query("startIndex") Integer startIndex);
@@ -164,9 +173,14 @@ public interface RestApi {
                                            @Query("limit") int limit,
                                            @Query("order") String order);
 
-    @POST("patient/{uuid}")
+    @POST("person/{uuid}")
     Call<PatientDto> updatePatient(@Body PatientDto patientDto, @Path("uuid") String uuid,
                                    @Query("v") String representation);
+
+    @POST("person/{uuid}/address/{address_uuid}")
+    Call<PersonAddress> updatePersonAddress(@Body PersonAddress personAddress, @Path("uuid") String uuid,
+                                             @Path("address_uuid") String addressUuid,
+                                             @Query("v") String representation);
 
     @GET("encounter")
     Call<Results<Encounter>> getEncounter(@Query("patient") String patientUUID,

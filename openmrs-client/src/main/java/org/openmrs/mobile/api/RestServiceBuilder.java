@@ -37,7 +37,7 @@ public class RestServiceBuilder {
 
     protected static final OpenMRS mOpenMRS = OpenMRS.getInstance();
 
-    private static String API_BASE_URL = mOpenMRS.getServerUrl()+ ApplicationConstants.API.REST_ENDPOINT;
+    public static String API_BASE_URL = mOpenMRS.getServerUrl()+ ApplicationConstants.API.REST_ENDPOINT;
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

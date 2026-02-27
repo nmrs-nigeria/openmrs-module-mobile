@@ -1,7 +1,5 @@
 package org.openmrs.mobile.activities.pbs;
 
-import static org.openmrs.mobile.utilities.ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -30,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.activeandroid.query.Delete;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,28 +44,26 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 
-import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
-import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationContract;
-import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationDTO;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
+import org.openmrs.mobile.dao.EncounterDAO;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
-import org.openmrs.mobile.dao.PatientBiometricJoinDAO;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.databases.tables.FingerPrintTable;
 import org.openmrs.mobile.export.ExportService;
-import org.openmrs.mobile.export.FullExport;
 import org.openmrs.mobile.models.Encounter;
+import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Patient;
@@ -78,18 +75,13 @@ import org.openmrs.mobile.models.PersonName;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.security.HashMethods;
 import org.openmrs.mobile.sync.LogResponse;
-import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FileExportUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public class ExportPBS extends ACBaseActivity {
 
@@ -156,7 +148,7 @@ public class ExportPBS extends ACBaseActivity {
         } else {
 
             startService(new Intent(this, ExportService.class));
-          //  new FullExport(getApplicationContext(), openMRSFolder).starExportingPatients();
+            //  new FullExport(getApplicationContext(), openMRSFolder).starExportingPatients();
 /*
             if(true)  return;
 
@@ -380,15 +372,26 @@ public class ExportPBS extends ACBaseActivity {
         return db.update(FingerPrintTable.TABLE_NAME, newValues, _where_clause, whereArgs);
     }
 
-    public void updateSyncStatus() {
+    public void updateSyncStatusAddRemoveNewPatient() {
 
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         SQLiteDatabase db = openHelper.getWritableDatabase();
-        List<Patient>  patients = new PatientDAO().getAllPatientsLocal();
-        for(Patient patient :patients) {
+       PatientDAO patientDao=new PatientDAO();
+        List<Patient> patients =patientDao .getAllPatientsLocal();
+        FingerPrintDAO fingerPrintDAO = new FingerPrintDAO();
+        VisitDAO visitDAO = new VisitDAO();
+
+        for (Patient patient : patients) {
             //update sync only for patient who have valid UUID
-           if(patient.getUuid().trim().length()>2)
-               this.updateFingerPrint(db, String.valueOf(patient.getId()));
+            if (patient.getUuid().trim().length() > 2) {
+                this.updateFingerPrint(db, String.valueOf(patient.getId()));
+            } else {
+                // delete  all data for new patient
+                fingerPrintDAO.deletePrint(patient.getId());
+                visitDAO.deleteVisitsByPatientId(patient.getId());
+                patientDao.deletePatient(patient.getId());
+            }
+
         }
     }
 
@@ -396,29 +399,34 @@ public class ExportPBS extends ACBaseActivity {
     /*
     set the base pbs sync to 1 and  and completely remove the recapture prints
      */
-    public void deleteFingerPrints(View view) {
-        int total = countTemplateData();
+    public void deleteData(View view) {
+        List patientList = getPatientsWithUpdatedData(new PatientDAO().getAllPatientsLocal());
+        int total = patientList.size();
+
+
         if (total > 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Do you want to delete and clear all the FingerPrints on this Device?").
+            builder.setMessage("Do you want to delete and clear all the data on this Device?").
                     setCancelable(false).setPositiveButton("Yes", (dialog, id) -> {
-                updateSyncStatus();
-                new FingerPrintVerificationDAO().deleteAllPrints();
-                Toast.makeText(getBaseContext(), "Fingerprint Templates cleared successfully from the device.", Toast.LENGTH_LONG).show();
-                finish();
-            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //do things
-                    finish();
-                }
+                        //clear verification
+                        new FingerPrintVerificationDAO().deleteAllPrints();
+                        // Clear all encounters
+                        new Delete().from(Encountercreate.class).where("patientId > ?", -1).execute();
 
-            });
+                        // for the base data
+                        updateSyncStatusAddRemoveNewPatient();
+
+                        Toast.makeText(getBaseContext(), "Data cleared successfully from the device.", Toast.LENGTH_LONG).show();
+                        finish();
+                    }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        //do things
+                        finish();
+                    });
             AlertDialog alert = builder.create();
             alert.show();
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("There are no Fingerprint saved on this device.").setCancelable(false).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setMessage("There are no Encounters or PBS  data saved on this device.").setCancelable(false).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     finish();
                 }
@@ -428,13 +436,30 @@ public class ExportPBS extends ACBaseActivity {
         }
     }
 
-    private int countTemplateData() {
-        // this returns all the patient with base pbs and verification pbs.
-        List<Patient>  patients = new PatientBiometricJoinDAO().getPatientWithPBS();
-        if(patients!=null)
-            return patients.size();
-        return 0;
+
+    private List<Patient> getPatientsWithUpdatedData(List<Patient> patientList) {
+        EncounterDAO encounterDAO = new EncounterDAO();
+        FingerPrintDAO fingerPrintDAO = new FingerPrintDAO();
+        FingerPrintVerificationDAO fingerPrintVerificationDAO = new FingerPrintVerificationDAO();
+        List<Patient> newPatientList = new ArrayList<>();
+        for (Patient patient : patientList) {
+            Long id = patient.getId();
+            boolean isEncounterSafeToDelete = encounterDAO.safeToDelete(id);
+            boolean isFingerprintSafeToDelete = fingerPrintDAO.safeToDelete(id);
+            boolean isFingerprintsVerificationSafeToDelete = fingerPrintVerificationDAO.safeToDelete(id);
+            if (patient.isSynced()
+                    && isEncounterSafeToDelete &&
+                    isFingerprintSafeToDelete
+                    && isFingerprintsVerificationSafeToDelete) {
+                // data already sync
+            } else {
+                newPatientList.add(patient);
+            }
+        }
+
+        return newPatientList;
     }
+
 
     /*
     @importCSVFile entry point for getting patient into the mobile
@@ -488,7 +513,7 @@ public class ExportPBS extends ACBaseActivity {
             return print;
         } catch (Exception e) {
             logResponse.appendLogs(false, e.getMessage(), "Extraction Key tempered", "createPatientBiometricContractFromReader");
-              }
+        }
 
         return null;
     }
@@ -615,7 +640,7 @@ public class ExportPBS extends ACBaseActivity {
                 PatientBiometricContract patientBiometric =
                         createPatientBiometricContractFromJson(jsonObject, logResponse);
 
-                if(patientBiometric!=null) {
+                if (patientBiometric != null) {
                     result.add(patientBiometric);
                 }
             }
@@ -705,7 +730,10 @@ public class ExportPBS extends ACBaseActivity {
             personAttributeType.setDisplay("Telephone Number");
             personAttributeType.setUuid("14d4f066-15f5-102d-96e4-000c29c2a5d7");
             personAttribute.setAttributeType(personAttributeType);
-            personAttribute.setValue(addTrailingZeroForPhoneNumber(patientJSON.get("telephone").toString()));
+            String telephone = patientJSON.get("telephone").toString();
+            //handle case of empty telephone numbers
+            if (telephone != null && telephone.length() > 3)
+                personAttribute.setValue(addTrailingZeroForPhoneNumber(telephone));
 
             List<PersonAttribute> pAttributes = new ArrayList<>();
             pAttributes.add(personAttribute);
@@ -731,6 +759,7 @@ public class ExportPBS extends ACBaseActivity {
             //Save patient here
             return patient;
         } catch (Exception e) {
+            e.printStackTrace();
             logResponse.appendLogs(false,
                     "Parse Exception   " + e.getMessage(), "Types", "getPatient ");
             return null;
@@ -839,8 +868,10 @@ public class ExportPBS extends ACBaseActivity {
         }
         return telephone;
     }
+
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
+
     private class MyTask extends AsyncTask<String, Integer, Void> {
 
         @Override
@@ -979,7 +1010,6 @@ public class ExportPBS extends ACBaseActivity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-
             // Dismiss the progress dialog
             progressDialog.dismiss();
 

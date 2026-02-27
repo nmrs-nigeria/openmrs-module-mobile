@@ -36,12 +36,22 @@ import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
 import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivity;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.dao.EncounterDAO;
+import org.openmrs.mobile.dao.FingerPrintDAO;
+import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
+import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.NetworkUtils;
+import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Completable;
+import rx.Single;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class SyncedPatientsFragment extends ACBaseFragment<SyncedPatientsContract.Presenter> implements SyncedPatientsContract.View {
 
@@ -53,6 +63,8 @@ public class SyncedPatientsFragment extends ACBaseFragment<SyncedPatientsContrac
     private ProgressBar mProgressBar;
 
     private MenuItem mAddPatientMenuItem;
+private TextView totalPatientsTextView;
+private  TextView dataPatientsTextView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -70,6 +82,8 @@ public class SyncedPatientsFragment extends ACBaseFragment<SyncedPatientsContrac
 
         mEmptyList = root.findViewById(R.id.emptySyncedPatientList);
         mProgressBar = root.findViewById(R.id.syncedPatientsInitialProgressBar);
+        totalPatientsTextView=root.findViewById(R.id.totalPatients);
+        dataPatientsTextView=root.findViewById(R.id.dataPatients);
 
         // Font config
         FontsUtil.setFont(this.getActivity().findViewById(android.R.id.content));
@@ -111,6 +125,41 @@ public class SyncedPatientsFragment extends ACBaseFragment<SyncedPatientsContrac
         SyncedPatientsRecyclerViewAdapter adapter = new SyncedPatientsRecyclerViewAdapter(this, patientList);
         adapter.notifyDataSetChanged();
         mSyncedPatientRecyclerView.setAdapter(adapter);
+        totalPatientsTextView.setText(String.format("%d", patientList.size()));
+
+        Single.fromCallable(() -> getPatientsWithUpdatedData(patientList))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(dataPatients -> {
+                    dataPatientsTextView.setText(String.format("%d", dataPatients.size()));
+                }, throwable -> {
+                    dataPatientsTextView.setText("Error");
+                });
+    }
+
+
+
+    private List<Patient> getPatientsWithUpdatedData(List<Patient> patientList) {
+        EncounterDAO encounterDAO = new EncounterDAO();
+        FingerPrintDAO fingerPrintDAO = new FingerPrintDAO();
+        FingerPrintVerificationDAO fingerPrintVerificationDAO = new FingerPrintVerificationDAO();
+        List<Patient> newPatientList = new ArrayList<>();
+        for (Patient patient : patientList) {
+            Long id = patient.getId();
+            boolean isEncounterSafeToDelete = encounterDAO.safeToDelete(id);
+            boolean isFingerprintSafeToDelete = fingerPrintDAO.safeToDelete(id);
+            boolean isFingerprintsVerificationSafeToDelete = fingerPrintVerificationDAO.safeToDelete(id);
+            if (patient.isSynced()
+                    && isEncounterSafeToDelete &&
+                    isFingerprintSafeToDelete
+                    && isFingerprintsVerificationSafeToDelete) {
+                // data already sync
+            } else {
+                newPatientList.add(patient);
+            }
+        }
+
+        return newPatientList;
     }
 
     @Override

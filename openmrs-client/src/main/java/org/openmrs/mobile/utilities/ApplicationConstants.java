@@ -14,10 +14,11 @@
 
 package org.openmrs.mobile.utilities;
 
-import org.openmrs.mobile.R;
 import org.openmrs.mobile.models.EncounterType;
 
 public abstract class ApplicationConstants {
+    public static final String CURRENT_METADATA_VERSION="unified-1.2.6";
+    public static final String CURRENT_PBS_SERVICE_VERSION="2.2.0-SNAPSHOT";
    // Password should be change with the version number if compromise
     public static final String PBS_PASSWORD="CIHP";
     public static final String PATIENT_IMPORT_PASSWORD="";
@@ -67,6 +68,8 @@ public abstract class ApplicationConstants {
         public static final String USER_PERSON_NAME = "userDisplay";
         public static final String USER_UUID = "userUUID";
         public static final String LOGIN = "login";
+        public static final String METADATA_VERSION_UUID = "nmrsmetadata";
+        public static final String PBS_SERVER_VERSION = "pbs_server_version" ;
     }
 
     public abstract static class DialogTAG {

@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -51,6 +52,7 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         /*TODO: Permission handling to be coded later, moving to SDK 22 for now.
         currinstantstate=savedInstanceState;
@@ -115,31 +117,41 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             Notifier.createNotificationChannel(getSystemService(NotificationManager.class), Notifier.CHANNEL_SYNC_PBS,"Sync PBS");
 
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+      if(!isLoginActive())  {
+          startValidate(false);
+      }
+    }
 
     /*TODO: Permission handling to be coded later, moving to SDK 22 for now.
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    super.onCreate(currinstantstate);
-                    setContentView(R.layout.activity_dashboard);
-                    FontsUtil.setFont((ViewGroup) findViewById(android.R.id.content));
+        @Override
+        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+            switch (requestCode) {
+                case REQUEST_CODE_ASK_PERMISSIONS:
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Permission Granted
+                        super.onCreate(currinstantstate);
+                        setContentView(R.layout.activity_dashboard);
+                        FontsUtil.setFont((ViewGroup) findViewById(android.R.id.content));
 
-                } else {
-                    // Permission Denied
-                    Toast.makeText(DashboardActivity.this, "Permission Denied, Exiting", Toast.LENGTH_SHORT)
-                            .show();
-                    finish();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }*/
+                    } else {
+                        // Permission Denied
+                        Toast.makeText(DashboardActivity.this, "Permission Denied, Exiting", Toast.LENGTH_SHORT)
+                                .show();
+                        finish();
+                    }
+                    break;
+                default:
+                    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }*/
     @Override
     protected void onStart() {
         super.onStart();
@@ -156,7 +168,5 @@ public class DashboardActivity extends ACBaseActivity implements LogOutTimerUtil
     public void doLogout() {
         logout();
     }
-
-
 
 }

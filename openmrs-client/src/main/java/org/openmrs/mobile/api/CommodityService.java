@@ -32,6 +32,7 @@ import org.openmrs.mobile.api.repository.ReceiptRepository;
 import org.openmrs.mobile.api.repository.TransferRepository;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.CommodityDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.models.Adjustment;
 import org.openmrs.mobile.models.AdjustmentItem;
@@ -43,6 +44,7 @@ import org.openmrs.mobile.models.Receipt;
 import org.openmrs.mobile.models.ReceiptItem;
 import org.openmrs.mobile.models.Transfer;
 import org.openmrs.mobile.models.TransferItem;
+import org.openmrs.mobile.sync.LogResponse;
 import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
 
@@ -81,11 +83,11 @@ public class CommodityService extends IntentService implements CustomApiCallback
      * It pulls out all data from the sqlite and pushes them over the restApi to the server
      */
     public void syncCommodity() {
-        syncConsumption();
+      //  syncConsumption();
         syncReceipt();
-        syncDistribution();
-        syncTransfer();
-        syncAdjustment();
+//        syncDistribution();
+//        syncTransfer();
+//        syncAdjustment();
 
         //getInventoryStockSummary();
     }
@@ -111,6 +113,9 @@ public class CommodityService extends IntentService implements CustomApiCallback
             consumption.setRetired(row.getRetired());
             consumption.setDataSystem(row.getDataSystem());
 
+
+            OpenMRSCustomHandler.writeLogToFile(OpenMRSCustomHandler.showJson(consumption,"") );
+
             consumptionRepository.syncConsumption(consumption, new DefaultResponseCallbackListener() {
                 @Override
                 public void onResponse() {
@@ -118,6 +123,8 @@ public class CommodityService extends IntentService implements CustomApiCallback
                             .set("isSynced = 1")
                             .where("id = ?", row.getId())
                             .execute();
+
+                    Util.log("Success" );
                     //consumption.setSynced(true);
                     //consumption.save();
                     //mConsumptionInfoView.startCommodityDashboardActivity();
@@ -128,6 +135,13 @@ public class CommodityService extends IntentService implements CustomApiCallback
                 public void onErrorResponse(String errorMessage) {
                     //registeringConsumption = false;
                     //mConsumptionInfoView.setProgressBarVisibility(false);
+                    OpenMRSCustomHandler.writeLogToFile(new LogResponse(
+                            false,  "CMM .syncConsumption" , errorMessage,
+                            ""
+                    ).getFullMessage());
+
+
+                    Util.log("Error" );
                 }
             });
         }
@@ -184,6 +198,10 @@ public class CommodityService extends IntentService implements CustomApiCallback
                 public void onErrorResponse(String errorMessage) {
                     //registeringConsumption = false;
                     //mConsumptionInfoView.setProgressBarVisibility(false);
+                    OpenMRSCustomHandler.writeLogToFile(new LogResponse(
+                              false,  "CMM syncReceipt" , errorMessage,
+                            ""
+                    ).getFullMessage());
                 }
             });
         }

@@ -225,7 +225,7 @@ public class SyncPBS {
                     PatientBiometricVerificationDTO dto = new PatientBiometricVerificationDTO();
                     dto.setFingerPrintList(new ArrayList<>(pbsVerification));
                     dto.setPatientUUID(patientUUID);
-                    new FingerPrintVerificationSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
+                    new FingerPrintVerificationSyncService().startSync(dto.isReplaceBase(), dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
                         @Override
                         public void onResponse(PatientBiometricSyncResponseModel obj) {
                             if(obj !=null && obj.getIsSuccessful()){

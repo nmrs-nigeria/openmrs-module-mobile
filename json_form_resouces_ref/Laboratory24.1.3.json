@@ -1,0 +1,1179 @@
+{
+  "name": "Laboratory Order and Result Form",
+  "uuid": "889ce948-f1ee-4656-91af-147a9e760309",
+  "processor": "EncounterFormProcessor",
+  "pages": [
+    {
+      "label": "Laboratory Order and Result Form",
+      "sections": [
+        {
+          "label": "Laboratory Order and Result Form",
+          "questions": [
+            {
+              "label": "Visit Date",
+              "required": "yes",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "6bcaf85b-8504-4c7f-b510-a50436236b80"
+              },
+              "type": "encounterDate",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Lab Registration Number",
+              "id": "lab_registration_number",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "f16ab53d-25f4-4e3b-b5e3-8adf650308cd"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Indication for AHD",
+              "id": "Indication_for_ahd",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "a80fd390-3c6d-4aab-b16e-e3a98c39cc5e",
+                "answers": [
+                  {
+                    "concept": "162080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Baseline"
+                  },
+                  {
+                    "concept": "162081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Repeat"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Laboratory Order and Result Form",
+      "sections": [
+        {
+          "label": "",
+          "questions": [
+            {
+              "label": "CD4+ cell count (cells/mm3)",
+              "id": "cd4_cell_count",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "5497AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "CD4 (%)",
+              "id": "cd4_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "730AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "CD4 LFA",
+              "type": "obs",
+              "id": "",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "90d7951d-c0a7-4b9f-b893-ab9b83afb142",
+                "answers": [
+                  {
+                    "concept": "b62ff565-55a3-472a-9d11-c1f5dfe95a00",
+                    "label": "<200"
+                  },
+                  {
+                    "concept": "f3720c6d-828a-42db-95e0-a5e3f3fdadcb",
+                    "label": ">=200"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "WBC (x10^9/cL):",
+              "id": "wbc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "678AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Polymorphs (/mm^3)",
+              "id": "Polymorphs",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1022AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Polymorphs (%):",
+              "id": "Polymorphs_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "f9a9acd9-50ba-420d-8a2e-433cf8b167dc",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Lymphocytes (/mm^3):",
+              "id": "Lymphocytes",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Lymphocytes (%):",
+              "id": "Lymphocytes_perce",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1338AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Monocytes /mm^3",
+              "id": "Monocytes",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1023AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Monocytes (%):",
+              "id": "Monocytes_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "label": "Laboratory Order and Result Form",
+          "questions": [
+            {
+              "label": "Eosinophils(/mm^3)",
+              "id": "Eosinophils",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1024AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Eosinophil (%)",
+              "id": "Eosinophil_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Basophils (/mm^3)",
+              "id": "Basophils",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1025AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Basophils (%):",
+              "id": "Basophils_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1341AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "PCV/Hb (%):",
+              "id": "hb_pcv_perc",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "ff2e9dd2-e806-4da5-8897-11216e5f69fb",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "PCV/Hb (g/dl):",
+              "id": "hb_pcv",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "52a243ab-54da-4550-84af-b9f0218a4495",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Platelets (x 10^9 c/L):",
+              "id": "Platelets",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "729AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "HCV antibody:",
+              "type": "obs",
+              "id": "HCV_antibody",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "1325AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Positive"
+                  },
+                  {
+                    "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Negative"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "HBsAG:",
+              "type": "obs",
+              "id": "HBsAG",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "159430AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Positive"
+                  },
+                  {
+                    "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Negative"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "label": "Laboratory Order and Result Form",
+          "questions": [
+            {
+              "label": "VDRL:",
+              "type": "obs",
+              "id": "VDRL",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "1228AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Reactive"
+                  },
+                  {
+                    "concept": "1229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Non-Reactive"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Creatinine (mmol/l)",
+              "id": "Creatinine",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "164364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "ALT/SGPT (U/I)",
+              "id": "ALT",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "654AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "ALT/SGPT (mmol/L):",
+              "id": "ALT_SGPT_mmol_L)",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "dd5bea86-e7f4-434d-bba1-5712e456d01f",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "AST/SGOT (µ/L):",
+              "id": "AST",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "653AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Alk. Phosphate (U/l):",
+              "id": "Alk_Phosphate",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "785AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Total Bilirubin (mmol/l):",
+              "id": "Total_Bilirubin",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "655AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Na+ (mmol/L):",
+              "id": "Na",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1132AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "K+ (mmol/L):",
+              "id": "K",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1133AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "label": "Laboratory Order and Result Form",
+          "questions": [
+            {
+              "label": "Fasting Glucose (mmol/l)",
+              "id": "Fasting_Glucose",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "160053AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Total Cholesterol (mmol/l)",
+              "id": "Total_Cholesterol",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "LDL (mmol/L)",
+              "id": "LDL",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1008AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "HDL (mmol/L):",
+              "id": "HDL",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1007AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Glucose:",
+              "id": "Glucose",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "887AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Protein:",
+              "id": "Protein",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "78efdba1-2598-4c0c-b94b-e69d45f6d0a7",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Cytology/Pap Smear:",
+              "id": "Cytology_Pap_Smear",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "921d5e09-ef3f-4b0f-a061-7955d854b7fa",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Triglyceride:",
+              "id": "Triglyceride",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "1009AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "350",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Pregnancy:",
+              "type": "obs",
+              "id": "Pregnancy",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "45AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Positive"
+                  },
+                  {
+                    "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Negative"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Malaria smear:",
+              "type": "obs",
+              "id": "Malaria_smear",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "32AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Positive"
+                  },
+                  {
+                    "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Negative"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "TB LF LAM:",
+              "type": "obs",
+              "id": "",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "7af102e2-5884-4acf-8667-b0b26cc3ca0c",
+                "answers": [
+                  {
+                    "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Positive"
+                  },
+                  {
+                    "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Negative"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Urinalysis",
+              "id": "",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "160987AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "label": "Viral Load",
+
+
+          
+          "questions": [  
+                {
+                  "label": "Viral Load Order",
+                  "type": "obs",
+                  "id": "Viral Load Order",
+                  "questionOptions": {
+                    "rendering": "radio",
+                    "concept": "f5368416-5382-4deb-a0ae-a9c124a809a2",
+
+                    "answers": [
+                      {
+                        "concept":  false,
+                        "label": "Yes"
+                      },
+                      {
+                        "concept": true,
+                        "label": "No"
+                      }
+                    ], 
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44",
+                          "controlType": "text"
+                        },
+                        {
+                          "when":"No",
+                          "displayType": "hide",
+                          "childControl": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44",
+                          "controlType": "text"
+                        }  ,
+
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "select"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "select"
+                        }     
+
+,                      {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "884f0b28-4287-42ad-b537-af1e11c35cbb",
+                          "controlType": "select"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "884f0b28-4287-42ad-b537-af1e11c35cbb",
+                          "controlType": "select"
+                        }  
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "a667af53-ca79-4bdf-871c-9a97644e1cc3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "a667af53-ca79-4bdf-871c-9a97644e1cc3",
+                          "controlType": "text"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "467cb366-0c42-428d-a6ca-dc86900b3cf2",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "467cb366-0c42-428d-a6ca-dc86900b3cf2",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "dc776767-01dd-4742-b87a-b68d32a60f14",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "dc776767-01dd-4742-b87a-b68d32a60f14",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "36e2d500-0e1b-479c-bb02-c2dec6f53965",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "36e2d500-0e1b-479c-bb02-c2dec6f53965",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "43d4c591-9976-4fc2-a2f0-14b8159624f2",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "43d4c591-9976-4fc2-a2f0-14b8159624f2",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "c7d3fb2c-8f1c-4209-b8e2-cf862e3f862c",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "c7d3fb2c-8f1c-4209-b8e2-cf862e3f862c",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "e4cf058e-8c7f-4913-bbae-1adece74f9fa",
+                          "controlType": "date"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "e4cf058e-8c7f-4913-bbae-1adece74f9fa",
+                          "controlType": "date"
+                        } 
+                        ,
+
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "81e71015-5c53-4dec-97c6-8f0b0a00c051",
+                          "controlType": "select"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "81e71015-5c53-4dec-97c6-8f0b0a00c051",
+                          "controlType": "select"
+                        } ,
+                        {
+                          "when": "Yes",
+                          "displayType": "show",
+                          "childControl": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "number"
+                        },
+                        {
+                          "when": "No",
+                          "displayType": "hide",
+                          "childControl": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                          "controlType": "number"
+                        } 
+
+
+                      ]
+                    }
+                  }
+                },
+
+            {
+              "label": "PCR Lab Sample ID",
+              "id": "PCR_Lab_Sample_No", 
+            "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Sample Type:",
+              "type": "obs",
+              
+            "defaultDisplay": "hide",
+              "id": "Sample_Type",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Whole Blood"
+                  },
+                  {
+                    "concept": "1002AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Plasma"
+                  },
+                  {
+                    "concept": "397afc02-f2d6-4436-895a-7ade17e76d6e",
+                    "label": "DBS"
+                  },
+                  {
+                    "concept": "a7ed790e-f9cc-4273-b0bf-647affc73c2a",
+                    "label": "Plasma separation Card (PSC)"
+                  }
+                ]
+              }
+            },
+            {  
+            "defaultDisplay": "hide",
+              "label": "Indication for Viral Load:",
+              "type": "obs",
+              "id": "Indication_for_Viral_Load",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "884f0b28-4287-42ad-b537-af1e11c35cbb",
+                "answers": [
+                  {
+                    "concept": "162080AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Baseline (6 months after ART initiation)"
+                  },
+                  {
+                    "concept": "161236AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Routine (every 12 months)"
+                  },
+                  {
+                    "concept": "162082AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Confirmation (3-6 months after intense adherence counselling)"
+                  },
+                  {
+                    "concept": "162081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Repeat test"
+                  },
+                  {
+                    "concept": "163523AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Clinical failure"
+                  },
+                  {
+                    "concept": "160566AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Immunological failure"
+                  },
+                  {
+                    "concept": "6cb50e40-ddf7-4a62-9340-392ef7de1109",
+                    "label": "PMTCT 32-36 weeks gestation"
+                  }
+                ]
+              }
+            },
+            {
+              
+            "defaultDisplay": "hide",
+              "label": "If repeat? reason for Repeat:",
+              "id": "reason_fo_repeat",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "a667af53-ca79-4bdf-871c-9a97644e1cc3"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              
+            "defaultDisplay": "hide",
+              "label": "Sample Collection Date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Date sample sent to PCR Lab",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Date sample received at PCR Lab",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "467cb366-0c42-428d-a6ca-dc86900b3cf2"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Date result was sent from PCR Lab",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "dc776767-01dd-4742-b87a-b68d32a60f14"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Date result was received at the facility",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "36e2d500-0e1b-479c-bb02-c2dec6f53965"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Result Date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "43d4c591-9976-4fc2-a2f0-14b8159624f2"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Assay Date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "c7d3fb2c-8f1c-4209-b8e2-cf862e3f862c"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Approval Date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "e4cf058e-8c7f-4913-bbae-1adece74f9fa"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Alphanumeric Viral Load Result",
+              "type": "obs",
+              "id": "",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "81e71015-5c53-4dec-97c6-8f0b0a00c051",
+                "answers": [
+                  {
+                    "concept": "341b01b6-8858-4afc-ac78-7090b9307808",
+                    "label": "<20"
+                  },
+                  {
+                    "concept": "ef932eb8-16ee-41ec-bcda-215d75d91809",
+                    "label": "<29"
+                  },
+                  {
+                    "concept": "11346d03-015f-4cdd-a1a5-1f920bb16ed9",
+                    "label": "<30"
+                  },
+                  {
+                    "concept": "75743ab8-4189-424e-a18a-38978bd49252",
+                    "label": "<40"
+                  },
+                  {
+                    "concept": "e73e6a1c-8161-40be-88ba-ca14182d91da",
+                    "label": "<400"
+                  },
+                  {
+                    "concept": "2a5a7fed-b0d4-4736-b541-463c795f0c75",
+                    "label": "<80"
+                  },
+                  {
+                    "concept": "02518676-2b57-46dd-b2a1-bbf9f523f07a",
+                    "label": ">10 000 000"
+                  },
+                  {
+                    "concept": "06ab11bb-97d9-40f5-ba0b-a9547cc025ad",
+                    "label": "Aborted"
+                  },
+                  {
+                    "concept": "ce596291-2a3a-4a3b-8ab5-3c35d343d381",
+                    "label": "Double entry"
+                  },
+                  {
+                    "concept": "fa74a055-a622-4e0e-a462-c672e45b1262",
+                    "label": "Duplicate"
+                  },
+                  {
+                    "concept": "c0cb71b6-d752-4d7b-b2e3-209138f5e5cd",
+                    "label": "Failed"
+                  },
+                  {
+                    "concept": "c99b3c37-c64d-468c-aa70-763f9e2d0c52",
+                    "label": "Failed twice"
+                  },
+                  {
+                    "concept": "85efaa33-e5ba-4a6b-a340-58b3f7ccc20a",
+                    "label": "Incomplete number"
+                  },
+                  {
+                    "concept": "6b724cad-6939-4486-8e41-c1f86d250aa9",
+                    "label": "Incorrect entry"
+                  },
+                  {
+                    "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Invalid"
+                  },
+                  {
+                    "concept": "dbf837e2-9f05-4010-a581-d2dfddcbbc44",
+                    "label": "Target not detected"
+                  },
+                  {
+                    "concept": "24332632-cb52-4427-a83a-75828939465a",
+                    "label": "Wrong entry"
+                  },
+                  {
+                    "concept": "0166cf96-67b8-416c-af1d-c31a48f9ee71",
+                    "label": "Numeric value"
+                  }
+                ]
+              }
+            },
+            {
+              "defaultDisplay": "hide",
+              "label": "Viral Load test result(copies/ml):",
+              "id": "Viral_Load_test_result",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max": "1000000000000",
+                "min": "0"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Signature",
+          "questions": [
+            {
+              "label": "Date orderd:",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "2552b7df-30b8-4789-8165-46461cd4b015"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

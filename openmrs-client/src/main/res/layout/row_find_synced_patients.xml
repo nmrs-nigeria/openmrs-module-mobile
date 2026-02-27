@@ -46,7 +46,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:textSize="@dimen/big_heading"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="#hn0003" />
 
             <TextView
                 android:id="@+id/syncedPatientDisplayName"
@@ -57,7 +58,8 @@
                 android:layout_toEndOf="@+id/syncedPatientIdentifier"
                 android:layout_toRightOf="@+id/syncedPatientIdentifier"
                 android:gravity="end"
-                android:textSize="@dimen/small_heading" />
+                android:textSize="@dimen/small_heading"
+                tools:text="James John Ray" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -73,7 +75,8 @@
                 android:id="@+id/syncedPatientGender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/size_sub_body" />
+                android:textSize="@dimen/size_sub_body"
+                tools:text="M" />
 
             <TextView
                 android:id="@+id/syncedPatientAge"
@@ -83,7 +86,8 @@
                 android:layout_marginLeft="15dp"
                 android:layout_toEndOf="@id/syncedPatientGender"
                 android:layout_toRightOf="@id/syncedPatientGender"
-                android:textSize="@dimen/size_sub_body" />
+                android:textSize="@dimen/size_sub_body"
+                tools:text="34" />
 
             <TextView
                 android:id="@+id/syncedPatientBirthDate"
@@ -93,7 +97,8 @@
                 android:layout_marginLeft="15dp"
                 android:layout_toEndOf="@id/syncedPatientAge"
                 android:layout_toRightOf="@id/syncedPatientAge"
-                android:textSize="@dimen/size_sub_body" />
+                android:textSize="@dimen/size_sub_body"
+                tools:text="12/06/2023" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -105,7 +110,8 @@
                 android:layout_toRightOf="@+id/syncedPatientBirthDate"
                 android:gravity="end"
 
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/sync_patient"

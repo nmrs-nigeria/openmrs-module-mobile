@@ -11,8 +11,12 @@
 package org.openmrs.mobile.activities.formdisplay;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Spinner;
 
 import org.intellij.lang.annotations.Identifier;
@@ -67,6 +71,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.fragment.app.Fragment;
 
@@ -81,6 +86,12 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     private final String mEncountertype;
     private final String mFormname;
     private FormDisplayContract.View.MainView mFormDisplayView;
+
+
+    public void setmPatient(Patient mPatient) {
+        this.mPatient = mPatient;
+    }
+
     private Patient mPatient;
     private FormPageAdapter mPageAdapter;
     private String mEncounterDate = null;
@@ -117,11 +128,11 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
     public void createEncounter(boolean isEligible, boolean isValid, boolean isValidPatientIdentifier, String mMessage) {
 
         if (!isValid) {
-            ToastUtil.error("Please ensure you enter the visit date or other compulsory fields. ");
+            ToastUtil.error("Please ensure you enter the visit date and other compulsory fields. ");
             return;
         }
         if (!isValidPatientIdentifier) {
-            ToastUtil.error("Please ensure you enter the patient identifier or other compulsory fields. ");
+            ToastUtil.error("Please ensure you enter the patient identifier and other compulsory fields. ");
             return;
         }
         List<InputField> inputFields = new ArrayList<>();
@@ -167,6 +178,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             for (InputField input : inputFields) {
                 if (input.getObs().equals("encounterDate")) {
                     if (input.getValueAll().isEmpty()) {
+                        mFormDisplayView.enableSubmitButton(true);
+                        ToastUtil.warning("Encounter date not entered");
                         return;
                     } else {
                         this.mEncounterDate = DateUtils.convertTime(DateUtils.convertTime(input.getValueAll()), DateUtils.OPEN_MRS_REQUEST_FORMAT);
@@ -179,6 +192,8 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 if (input.getGroupConcept() != null && !obsGroupList.contains(input.getGroupConcept())) {
                     obsGroupList.add(input.getGroupConcept());
                 }
+
+
                 if (!input.getValueAll().isEmpty() && !input.getValueAll().equals("")) {
                     if (input.getGroupConcept() == null) {
                         Obscreate obscreate = new Obscreate();
@@ -297,6 +312,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     }
                 }
                 for (SelectManyFields selectManyField : selectManyFields) {
+
                     if (selectManyField.getChosenAnswerList().size() > 0 && selectManyField.getObs().equals("obs")) {
                         if (selectManyField.getGroupConcept() != null) {
                             for (Answer answer : selectManyField.getChosenAnswerList()) {
@@ -415,7 +431,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 _servicelog.setVoided(0);
                 _servicelog.setDateCreated(todayDate);
                 _servicelog.setVisitDate(mEncounterDate);
-                _servicelog.setPatientUUID(patientUUID==null?"":patientUUID);
+                _servicelog.setPatientUUID(patientUUID == null ? "" : patientUUID);
                 _servicelog.setFormName(mFormname);
                 new ServiceLogDAO().saveServiceLog(_servicelog);
 
@@ -427,44 +443,68 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
             // get if this patient has a visit locally on this date
             Long visitId = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);
             //We do not want to do anything online automatically again
-            //if (!NetworkUtils.isOnline()) { // offline case
-            if (visitId == 0) { // visit not found  offline case
-                visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
-                Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
-                Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);  // get the new Visit by ID
-                encountercreate.setVisit(visit.getUuid()); // set visit UUID
-                encountercreate.save();  //  save to update the encounter
+            if (!NetworkUtils.isOnline()) { // offline case
+                if (visitId == 0) { // visit not found  offline case
+                    visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
+                    Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
+                    Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);  // get the new Visit by ID
+                    encountercreate.setVisit(visit.getUuid()); // set visit UUID
+                    encountercreate.save();  //  save to update the encounter
 
-            } else {  // visit found offline
-                Visit visit = new VisitDAO().getVisitByIDLocally(visitId); // get the visit
-                encountercreate.setVisit(visit.getUuid());//  set visit UUID
-                encountercreate.save(); // update the  encounter
+                } else {  // visit found offline
+                    Visit visit = new VisitDAO().getVisitByIDLocally(visitId); // get the visit
+                    encountercreate.setVisit(visit.getUuid());//  set visit UUID
+                    encountercreate.save(); // update the  encounter
+                }
+
+
+
             }
-
-            mFormDisplayView.enableSubmitButton(true);
-            mFormDisplayView.quitFormEntry();
-
-            /*} else {  // online case
-                if (visitId != 0) {  // visit found locally and server is online
+            // online case
+            else {
+            /*     if (visitId != 0) {  // visit found locally and server is online
+                    Util.log("Visit found ");
                     Visit visit = new VisitDAO().getVisitByIDLocally(visitId);
                     visitRepository.reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                     encountercreate.setVisit(visit.getUuid());
                     visit.setStopDatetime(null);
                     new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
                     encountercreate.save();
-                } else {
-                    Visit visit = new VisitDAO().getActiveLocalVisitByPatientId(mPatientID);
-                    if (visit != null) {
-                        visitRepository.endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
-                        encountercreate.setVisit(visit.getUuid());
-                        encountercreate.save();
+                    visitRepository.endVisitByUUID( new VisitDAO().getVisitByIDLocally(visit.getId()));
+
+                } else { //online but visit on that day not locally saved
+                    //end an old  active visit
+                    Visit oldVisit = new VisitDAO().getActiveLocalVisitByPatientId(mPatientID);
+                    if (oldVisit != null) {
+                        Util.log("End old Visit  "+oldVisit.getStartDatetime());
+                        // end past visit not ended before.
+                        visitRepository.endVisitByUUID( oldVisit);
+                        new VisitDAO().updateVisitLocally(oldVisit, oldVisit.getId(), oldVisit.getPatient().getId());
                     }
+                    // get active visit of the patient locally
+                    visitRepository.startVisitLocally(mPatient, mEncounterDate);// start new visit
+                    Long visitIdNow = new VisitDAO().getVisitsIDByDate(mPatientID, mEncounterDate);// get the  new visit ID
+                    Visit visit = new VisitDAO().getVisitByIDLocally(visitIdNow);
+                    Util.log("StARTED VIST LOCAL  "+oldVisit.getStartDatetime());
+                    if (visit != null) {
+                        // get the new Visit by ID
+                        encountercreate.setVisit(visit.getUuid()); // set visit UUID
+                        encountercreate.save();  //  save to update the encounter
+                        // This will start and end the visit on the server
+                        visitRepository.syncVisit(mPatient, visit, encountercreate);
+                        Util.log("StARTED VIST LOCAL  sync "+oldVisit.getStartDatetime());
+
+//                    }else{
+//                        Util.log("No visit Visit found  ");
+//
+//                    }
 
                 }
-            }*/
+            }
+            */
+            }
 
-
-            /*if (!mPatient.isSynced()) {
+            if (!mPatient.isSynced()) {
                 PatientIdentifier identifier = mPatient.getIdentifier();
                 //I commented this out. It appends the patient id to the patient identifier while syncing
                 //identifier.setIdentifier(identifier.getIdentifier()+mPatientID);
@@ -500,9 +540,10 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                 new PatientDAO().updatePatient(mPatient.getId(), mPatient);
                 ToastUtil.warning("Patient not yet synced. Form data is saved locally " +
                         "and will sync when internet connection is restored. ");
-                mFormDisplayView.enableSubmitButton(true);
-                mFormDisplayView.quitFormEntry();*/
-            /*} else {
+
+             } else {
+                //online saving muted
+                /*
                 PatientIdentifier identifier = mPatient.getIdentifier();
                 identifier.setIdentifier(identifier.getIdentifier() + mPatientID);
                 List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
@@ -517,7 +558,7 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                     patientIdentifier.setIdentifierType(identifierType);
                     identifiers.add(patientIdentifier);
                     mPatient.setIdentifiers(identifiers);
-              /*      PatientRepository patientRepository = new PatientRepository();
+                   PatientRepository patientRepository = new PatientRepository();
                     patientRepository.updatePatient(mPatient, new DefaultResponseCallbackListener() {
                         @Override
                         public void onResponse() {
@@ -606,12 +647,134 @@ public class FormDisplayMainPresenter extends BasePresenter implements FormDispl
                         mFormDisplayView.enableSubmitButton(true);
                     }
                 });
+                  */
 
-                mFormDisplayView.quitFormEntry();
-            }*/
+
+            }
+
+            mFormDisplayView.enableSubmitButton(true);
+            mFormDisplayView.quitFormEntry();
         } else {
             mFormDisplayView.enableSubmitButton(true);
         }
+    }
+
+    @Override
+    public void calculateNextAppointment(RangeEditText rangeEditTextDate, RangeEditText rangeEditTextPillBalance) {
+        List<InputField> inputFields = new ArrayList<>();
+//        List<SelectOneField> radioGroupFields = new ArrayList<>();
+//        List<SelectManyFields> selectManyFields = new ArrayList<>();
+//        List<String> obsGroupList = new ArrayList<>();
+//        List<List<Obsgroup>> dataList = new ArrayList<List<Obsgroup>>();
+//        List<List<ObsgroupLocal>> dataListLocal = new ArrayList<List<ObsgroupLocal>>();
+      final String repeatConceptARV1 = "c78cb3a9-f561-435e-a274-1d6adb303dcf1";
+        final String conceptDurationDays = "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        final String conceptQuantityDispensed = "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        final String conceptPillBalance = "6577d9c0-10ec-4e02-b71e-cce212168447";
+
+        Date visitDate = null;
+        int durationDays = 0;
+        int quantityDispensed = 0;
+        int pillBalance = 0;
+        SparseArray<Fragment> activefrag = mPageAdapter.getRegisteredFragments();
+        for (int i = 0; i < activefrag.size(); i++) {
+            FormDisplayPageFragment formPageFragment = (FormDisplayPageFragment) activefrag.get(i);
+            if (formPageFragment != null) {
+                inputFields.addAll(formPageFragment.getInputFields());
+//                radioGroupFields.addAll(formPageFragment.getSelectOneFields());
+//                selectManyFields.addAll(formPageFragment.getSelectManyFields());
+            }
+        }
+
+        for (InputField input : inputFields) {
+            if(input.getValueAll().isEmpty())
+                continue;
+            try {
+                //visit date
+                if (input.getObs().equals("encounterDate")) {
+                    if (input.getValueAll().isEmpty()) {
+                        ToastUtil.error("Missing the Visit Date. Next Appointment failed");
+                        return;
+                    } else {
+                        visitDate = DateUtils.getDateFromString(input.getValueAll());
+                    }
+                    // only for the first drug
+                } else if (repeatConceptARV1.equals(input.getRepeatConcept())) {
+                    // only for the first drug
+                    if (conceptDurationDays.equals(input.getConcept())) {
+                         durationDays = Integer.parseInt(input.getValueAll());
+                    } else if (conceptQuantityDispensed.equals(input.getConcept())) {
+                        quantityDispensed = Integer.parseInt(input.getValueAll());
+
+                    }
+
+                } else if (conceptPillBalance.equals(input.getConcept())) {
+                    pillBalance = Integer.parseInt(input.getValueAll());
+                }
+            }catch (Exception e){}
+        }
+
+        Date finalVisitDate = visitDate;
+        int finalDurationDays = durationDays;
+        int finalQuantityDispensed = quantityDispensed;
+
+
+
+        rangeEditTextPillBalance.setOnKeyListener((view, i, keyEvent) -> {
+
+            try{
+                String  pillBalanceString = rangeEditTextPillBalance.getText().toString();
+                if(pillBalanceString.isEmpty()){
+                    calculateNextAppointment(rangeEditTextDate, finalVisitDate, finalDurationDays, finalQuantityDispensed, 0);
+                } else {
+                    int finalPillBalance = Integer.parseInt(pillBalanceString);
+                    calculateNextAppointment(rangeEditTextDate, finalVisitDate, finalDurationDays, finalQuantityDispensed, finalPillBalance);
+                }}catch (Exception ignored){
+
+            }
+              return false;
+        });
+        calculateNextAppointment(rangeEditTextDate, visitDate, durationDays, quantityDispensed, pillBalance);
+    }
+
+    // calculate next appointment
+    private void calculateNextAppointment(RangeEditText rangeEditTextNextAppointment, Date visitDate, int durationDays, int quantityDispensed, int pillBalance) {
+        Date nextAppointmentDate = calculateNextAppointmentDate(visitDate, durationDays, pillBalance, quantityDispensed);
+        if (nextAppointmentDate != null) {
+            String myFormat = "yyyy-MM-dd"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            String dateString=sdf.format(nextAppointmentDate);
+            rangeEditTextNextAppointment.setText(dateString);
+        } else {
+            ToastUtil.error("Next appointment not calculated. Check your inputs");
+        }
+    }
+    private Date calculateNextAppointmentDate(Date visitDate, int durationDays, int pillBalance, int quantityDispensed) {
+        // Add the duration in days to the visit date
+        if (visitDate == null) {
+            //return no visit date no appointment date
+            return null;
+        } else   {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(visitDate);
+            // duration in days must be greater than zero
+            if (durationDays > 0) {
+                calendar.add(Calendar.DAY_OF_MONTH, durationDays);
+                //add days when pill patient have pills remaining with him/her
+                if (pillBalance > 0 && quantityDispensed > 0) {
+                    int dailyUnit = (int) Math.ceil((double) quantityDispensed / durationDays);
+                    int addDays = (int) Math.floor((double) pillBalance / dailyUnit);
+                    calendar.add(Calendar.DAY_OF_MONTH, addDays);
+                }
+                return calendar.getTime();
+            } else {
+                // no next appointment date, drug duration not set
+                return null;
+            }
+        }
+    }
+    public Patient getPatient() {
+        return mPatient;
     }
 
     @Override

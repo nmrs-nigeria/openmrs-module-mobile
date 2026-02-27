@@ -1,0 +1,2828 @@
+{
+  "name": "Pharmacy Order Form",
+  "uuid": "4a238dc4-a76b-4c0f-a100-229d98fd5758",
+  "processor": "EncounterFormProcessor",
+  "pages": [
+    {
+      "label": "Pharmacy Order Form",
+      "sections": [
+        {
+          "label": "Treatment type",
+          "questions": [
+            {
+              "label": "Visit Date",
+              "required": "yes",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "6bcaf85b-8504-4c7f-b510-a50436236b80"
+              },
+              "type": "encounterDate",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Treatment type",
+              "type": "obs",
+              "id": "Treatment_type",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "b970bed0-dc6c-4334-a9a4-c0488b0f8c76",
+                "answers": [
+                  {
+                    "concept": "9b49eb5e-9ca9-4494-a2ff-f1d62b6feecc",
+                    "label": "ART"
+                  },
+                  {
+                    "concept": "0df2d48c-9713-4b89-853d-93507f0d7e21",
+                    "label": "Non-ART"
+                  },
+                  {
+                    "concept": "09f8cb22-ed52-4d3d-910d-7bf6ec7c90d0",
+                    "label": "Occup PEP"
+                  },
+                  {
+                    "concept": "7724ab9d-75ed-4abb-8a3f-7dc5974dad12",
+                    "label": "Non-Occup PEP"
+                  },
+                  {
+                    "concept": "fa2f68b3-a9f2-4a00-82f4-901a477d72a8",
+                    "label": "HIV-Exposed Infant"
+                  },
+                  {
+                    "concept": "6beb2084-7908-4737-9b9b-7b1bc2ee4278",
+                    "label": "PMTCT"
+                  },
+                  {
+                    "concept": "5f21852c-a440-40b9-b265-0e0ef417306e",
+                    "label": "PrEP"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Visit Type",
+              "type": "obs",
+              "id": "visit_type_pharm",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "164181AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164180AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Initial Visit"
+                  },
+                  {
+                    "concept": "160530AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Follow-up Visit"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Pregnancy Status",
+              "type": "obs",
+              "id": "Pregnancy_Status",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "86c6437e-a03c-4d31-a0b0-d6dda17c419b",
+                "answers": [
+                  {
+                    "concept": "3bb7b175-ba9b-4c75-b01c-f315856ee044",
+                    "label": "Not Pregnant"
+                  },
+                  {
+                    "concept": "61a85f36-1426-4bc5-97df-46c8ca9ea9aa",
+                    "label": "Pregnant"
+                  },
+                  {
+                    "concept": "f036a5d3-435f-4f10-bb47-1deab6556255",
+                    "label": "Breastfeeding"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Pick Up Reason",
+              "type": "obs",
+              "id": "pick_up_reason_pharm",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "5d16ec0d-6e7b-4c64-82b5-cd1f1bc97416",
+                "answers": [
+                  {
+                    "concept": "0bba8191-cc88-43d9-bcdf-65a7d1a3e013",
+                    "label": "Drug refill"
+                  },
+                  {
+                    "concept": "20402168-1b1d-4b87-af0c-b5244377931f",
+                    "label": "New"
+                  },
+                  {
+                    "concept": "01d08eb7-e6c8-4455-8546-ad03e8d1fe37",
+                    "label": "Switch"
+                  },
+                  {
+                    "concept": "94633cf0-72ed-40b6-9444-df4059dab5aa",
+                    "label": "Substitution"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Service Delivery Model",
+          "questions": [
+            
+            {
+              "label": "DSD Status",
+              "type": "obs",
+              "id": "DSD_Status",
+              "required": "yes",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Devolved",
+                      "displayType": "show",
+                      "childControl": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "ba9feb87-5bcb-40ca-911c-06467fd8632c",
+                "answers": [
+                  {
+                    "concept": "56b10951-308d-406d-a4c6-a3638276ae30",
+                    "label": "Devolved"
+                  },
+                  {
+                    "concept": "97b81125-e421-4e59-ab87-79c3de3b0cff",
+                    "label": "Not Devolved"
+                  }
+                ]
+              }
+            },
+
+
+            
+            {
+              "label": "Dispensing Modality",
+              "type": "obs",
+              "id": "Dispensing_Modality",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Facility Based DSD Model",
+                      "displayType": "show",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Facility Based DSD Model",
+                      "displayType": "hide",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Community Based DSD Models",
+                      "displayType": "hide",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Community Based DSD Models",
+                      "displayType": "show",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                "answers": [
+                  {
+                    "concept": "60882cd1-1f42-485b-8afb-cd988282251e",
+                    "label": "Facility Based DSD Model"
+                  },
+                  {
+                    "concept": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                    "label": "Community Based DSD Models"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Facility Dispensing",
+              "type": "obs",
+              "id": "Facility_Dispensing",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "60882cd1-1f42-485b-8afb-cd988282251e",
+                "answers": [
+                  {
+                    "concept": "03d6c319-3ed2-441f-bec4-9ebbedbcf9e4",
+                    "label": "Fast Track"
+                  },
+                  {
+                    "concept": "aed4fa7a-ca54-4118-aa20-dfd08a84d9f2",
+                    "label": "Facility ART group HCW led"
+                  },
+                  {
+                    "concept": "05f958a6-5be7-4498-a9e5-42a199045b91",
+                    "label": "Facility ART group support group"
+                  },
+                  {
+                    "concept": "b307b21d-10b0-4a84-b478-4a31feb434a8",
+                    "label": "Decentralization (Hub and Spoke)"
+                  },
+                  {
+                    "concept": "747a4b88-aca6-435f-9dec-199f6b3299b6",
+                    "label": "After hours"
+                  },
+                  {
+                    "concept": "2abe65c9-0cc1-4a91-9e28-1a42aa496ed3",
+                    "label": "Weekend and Public holidays"
+                  },
+                  {
+                    "concept": "a050fe91-4e1b-4537-9dde-ecc86ea1d275",
+                    "label": "Child/Teen/Adolescents club (Peer Managed)"
+                  },
+                  {
+                    "concept": "a28e17c6-7db9-43cc-afa9-2e4c91841e3f",
+                    "label": "Mother infant pair/Mentor mother led"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Community Dispensing (DDD)",
+              "type": "obs",
+              "id": "ddd_Dispensing",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                "answers": [
+                  {
+                    "concept": "343e3b47-f601-44ae-b944-8a838484dc71",
+                    "label": "Community Pharmacy"
+                  },
+                  {
+                    "concept": "15805972-a0ab-40a4-8dca-52df6a104f5d",
+                    "label": "Community ART Group (HCW-led)"
+                  },
+                  {
+                    "concept": "19f92419-1c34-4842-ae4d-58a35922fb2c",
+                    "label": "Community ART Refill Group (PLHIV-led)"
+                  },
+                  {
+                    "concept": "0bac9e27-da33-4642-bf6e-6a1303560552",
+                    "label": "Adolescent Community ART/ peer-led groups"
+                  },
+                  {
+                    "concept": "51757611-d9cc-4c0f-b384-36bf0f7229da",
+                    "label": "One Stop Shop (OSS)"
+                  },
+                  {
+                    "concept": "90774ce1-d1b0-4a39-a8da-7f3f9cf5d7f4",
+                    "label": "Home/Courier Delivery"
+                  }
+                ]
+              }
+            },
+
+            {
+              "label": "Multi-Month Dispensing (MMD)",
+              "type": "obs",
+              "id": "mmd_Dispensings",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "0613f7e8-6d43-42ae-9200-aa781f6d014b",
+                "answers": [
+                  {
+                    "concept": "add6ab10-b7eb-4e30-89cd-96356c668d44",
+                    "label": "MMD less than 3"
+                  },
+                  {
+                    "concept": "54a58fb0-ea48-4d0f-809e-d88f6b12b957",
+                    "label": "MMD 3 to 5"
+                  },
+                  {
+                    "concept": "c72823c5-4ff4-4baf-a4a7-0775b73f58be",
+                    "label": "MMD greater than or equal to 6"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Medication Adherence",
+          "questions": [
+            {
+              "label": "Number of missed doses per month",
+              "type": "obs",
+              "id": "misses_dose_pharm",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "c5e4804d-b666-4d0d-a5ae-644edd5fb7d3",
+                "answers": [
+                  {
+                    "concept": "69c725d5-f9da-4686-b3b8-62eedf18860f",
+                    "label": "Less than 3 doses"
+                  },
+                  {
+                    "concept": "a7fd5027-9c09-4245-9d57-9acbc77c207b",
+                    "label": "4 - 8 doses"
+                  },
+                  {
+                    "concept": "4e5be66a-c424-4d83-9f10-a15934d64e61",
+                    "label": "Greater than 9 doses"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Adherence councelling offered",
+              "type": "obs",
+              "id": "adhere_coun_pharm",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "510c6717-382a-47d3-a3ca-2dee33606178",
+                "answers": [
+                  {
+                    "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "No"
+                  },
+                  {
+                    "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Yes"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "ARV Medication",
+          "questions": [
+            {
+              "label": "Treatment Age Group",
+              "type": "obs",
+              "id": "Treatment_age_group",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "718864d2-dd9b-4210-80fe-21e6f8dcbb14",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Child",
+                      "displayType": "show",
+                      "childControl": "91bf2c14-1677-4c7f-be1b-99a2b64231b4",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Adult",
+                      "displayType": "show",
+                      "childControl": "91bf2c14-1677-4c7f-be1b-99a2b64231b4",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "",
+                      "displayType": "hide",
+                      "childControl": "91bf2c14-1677-4c7f-be1b-99a2b64231b4",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "answers": [
+                  {
+                    "concept": "1528AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Child"
+                  },
+                  {
+                    "concept": "a291af62-d00e-4ace-a672-f6f965b325fe",
+                    "label": "Adult"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Regimen Line",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "regimen_line",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "91bf2c14-1677-4c7f-be1b-99a2b64231b4",
+                "answers": [
+                  {
+                    "concept": "164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "First Line"
+                  },
+                  {
+                    "concept": "164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Second Line"
+                  },
+                  {
+                    "concept": "73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                    "label": "Salvage"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Adult 1st Line Regimens (Choose if adult age group)",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Adult_1st_Line_Regimens",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-EFV"
+                  },
+                  {
+                    "concept": "104565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-EFV"
+                  },
+                  {
+                    "concept": "160124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-EFV"
+                  },
+                  {
+                    "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-NVP"
+                  },
+                  {
+                    "concept": "8a343013-0216-44e0-aefe-53909ffd5631",
+                    "label": "TDF-3TC-DTG"
+                  },
+                  {
+                    "concept": "d20de0fd-8c89-423b-be81-dd357e65c206",
+                    "label": "TDF-FTC-DTG"
+                  },
+                  {
+                    "concept": "114e5457-09fb-42bf-9947-2f7d20785419",
+                    "label": "TDF-3TC-EFV400"
+                  },
+                  {
+                    "concept": "f0772a15-d0d9-4039-a3f4-af0c5d15ed0c",
+                    "label": "TDF-FTC-EFV400"
+                  },
+                  {
+                    "concept": "162563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-EFV"
+                  },
+                  {
+                    "concept": "162565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-NVP"
+                  },
+                  {
+                    "concept": "164854AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-NVP"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Adult 2nd Line ARV Regimen",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Adult_2nd_line_ARV_regimen",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "164511AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "4b24d78c-032c-4ed9-aaef-323a4c80184a",
+                    "label": "TDF-AZT-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "c8109095-fa8e-41cb-846a-95270c7eb9df",
+                    "label": "AZT-TDF-3TC-LPV/r"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Adult 3rd Line ARV Regimens",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Adult_3rd_Line_ARV_Regimens",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                "answers": [
+                  {
+                    "concept": "d7827ccd-85a4-4e8e-91d6-bca3d0c5e895",
+                    "label": "DRV/r-DTG + 1-2 NRTIs"
+                  },
+                  {
+                    "concept": "e8afbb20-f696-4a6d-af40-36fef51dadbd",
+                    "label": "DRV/r-2NRTIs + NNRTI"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Child 1st Line ARV Regimen",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Child_1st_line_ARV_regimen",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-EFV"
+                  },
+                  {
+                    "concept": "104565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-EFV"
+                  },
+                  {
+                    "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-NVP"
+                  },
+                  {
+                    "concept": "162199AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-NVP"
+                  },
+                  {
+                    "concept": "e0df55a1-3713-4fb2-ae11-0b98f9ec032f",
+                    "label": " ABC-FTC-NVP"
+                  },
+                  {
+                    "concept": "160124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-EFV"
+                  },
+                  {
+                    "concept": "8a343013-0216-44e0-aefe-53909ffd5631",
+                    "label": "TDF-3TC-DTG"
+                  },
+                  {
+                    "concept": "d20de0fd-8c89-423b-be81-dd357e65c206",
+                    "label": "TDF-FTC-DTG"
+                  },
+                  {
+                    "concept": "162565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-NVP"
+                  },
+                  {
+                    "concept": "164854AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-NVP"
+                  },
+                  {
+                    "concept": "114e5457-09fb-42bf-9947-2f7d20785419",
+                    "label": " TDF-3TC-EFV400"
+                  },
+                  {
+                    "concept": "f0772a15-d0d9-4039-a3f4-af0c5d15ed0c",
+                    "label": "TDF-FTC-EFV400"
+                  },
+                  {
+                    "concept": "14c41615-9c0e-4254-b4b1-770956d390e9",
+                    "label": "ABC-3TC-DTG"
+                  },
+                  {
+                    "concept": "1f9ad8f3-1033-45eb-8c5c-8f65fe280984",
+                    "label": "ABC-FTC-DTG"
+                  },
+                  {
+                    "concept": "7fb25099-b9f0-4a56-b426-54af91006e09",
+                    "label": "ABC-3TC-EFV400"
+                  },
+                  {
+                    "concept": "ff885937-9b61-477c-a50a-beb2f66cb3d5",
+                    "label": "ABC-FTC-EFV400"
+                  },
+                  {
+                    "concept": "162200AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "162561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "162563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-EFV"
+                  },
+                  {
+                    "concept": "7f815ed1-c406-4365-a122-9882b2de5176",
+                    "label": "AZT-3TC-RAL"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Child 2nd Line ARV Regimen",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Child_2nd_line_ARV_regimen",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": " TDF-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "162201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "164511AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162200AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "7f815ed1-c406-4365-a122-9882b2de5176",
+                    "label": "AZT-3TC-RAL"
+                  },
+                  {
+                    "concept": "1eb4b11a-0e28-49cf-b4cd-d926a3e5d4cc",
+                    "label": "ABC-3TC-RAL"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Child 3rd Line ARV Regimens",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "id": "Child_3rd_Line_ARV_Regimens",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                "answers": [
+                  {
+                    "concept": "44262769-197b-4936-b092-07fceaf9f0d1",
+                    "label": "DTG+2 NRTIs"
+                  },
+                  {
+                    "concept": "fa4dda1a-c260-42d3-920f-64fb8d7d4a12",
+                    "label": "DRV/r + 2 NRTIs + 2 NNRTI"
+                  },
+                  {
+                    "concept": "d7827ccd-85a4-4e8e-91d6-bca3d0c5e895",
+                    "label": "DRV/r-DTG + 1-2 NRTIs"
+                  },
+                  {
+                    "concept": "cb77ca6b-9000-4664-9818-10fc6ec6a733",
+                    "label": "RAL + 2 NRTIs"
+                  },
+                  {
+                    "concept": "739b5068-4451-4eaa-8a71-25655b9b87b4",
+                    "label": "DRV/r +2 NRTIs"
+                  },
+                  {
+                    "concept": "b941eb8a-5fe0-43e2-aa9f-ece8e505a0a7",
+                    "label": "DRV/r-RAL + 1-2 NRTIs"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "obsGroup",
+              "label": "1. ARV Drugs",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "162240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf1"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "Drugs_",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "c50dc847-e37e-40b1-92b9-408d9c93b858",
+                    "answers": [
+                      {
+                        "concept": "5ec4bfef-2e06-43ea-83f0-51de36117824",
+                        "label": "Tenofovir/Lamivudine/Dolutegravir"
+                      },
+                      {
+                        "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Efavirenz / Tenofovir"
+                      },
+                      {
+                        "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Nevirapine / Zidovudine"
+                      },
+                      {
+                        "concept": "161364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Tenofovir"
+                      },
+                      {
+                        "concept": "630AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Zidovudine"
+                      },
+                      {
+                        "concept": "103166AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir / Lamivudine"
+                      },
+                      {
+                        "concept": "75523AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Efavirenz"
+                      },
+                      {
+                        "concept": "86663AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Zidovudine"
+                      },
+                      {
+                        "concept": "159809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Atazanavir And Ritonavir"
+                      },
+                      {
+                        "concept": "794AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lopinavir / Ritonavir"
+                      },
+                      {
+                        "concept": "74258AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir"
+                      },
+                      {
+                        "concept": "83412AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Ritonavir"
+                      },
+                      {
+                        "concept": "162796AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir / Ritonavir"
+                      },
+                      {
+                        "concept": "80586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Nevirapine"
+                      },
+                      {
+                        "concept": "70056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir"
+                      },
+                      {
+                        "concept": "154378AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Raltegravir"
+                      },
+                      {
+                        "concept": "9685c8e0-2ef1-4b7b-9283-0396198e446a",
+                        "label": "Dolutegravir"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Strength",
+                  "type": "obs",
+                  "id": "Drug_Strength",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "0cd9c98e-7f52-48b9-a987-404ec90cc5fe",
+                        "label": "300/300/50mg"
+                      },
+                      {
+                        "concept": "4db3bbfd-2e59-48af-ba55-1b6deed9ec32",
+                        "label": "300/300/600mg"
+                      },
+                      {
+                        "concept": "b77b132b-2fff-452e-a198-53792ebe9122",
+                        "label": "300/300/400mg"
+                      },
+                      {
+                        "concept": "d1359cec-4457-4699-b050-7b65a25c1ca3",
+                        "label": "150/300/200mg"
+                      },
+                      {
+                        "concept": "fcd74eb9-c917-42b1-969a-696b15a5627c",
+                        "label": "300/300mg"
+                      },
+                      {
+                        "concept": "6717b4c6-4cf3-4ef1-9734-f2da5300003f",
+                        "label": "300/150mg"
+                      },
+                      {
+                        "concept": "ade6f2de-de75-4586-a67c-68145cf11185",
+                        "label": "600/300mg"
+                      },
+                      {
+                        "concept": "d6a11b94-efe5-415e-8071-29d75356bac0",
+                        "label": "600mg"
+                      },
+                      {
+                        "concept": "abbb66b8-61c9-4b58-bad6-edf1efa546e1",
+                        "label": "300mg"
+                      },
+                      {
+                        "concept": "ddd236eb-b5af-465f-9c37-862741ca75a6",
+                        "label": "300/100mg"
+                      },
+                      {
+                        "concept": "9339100a-1fe3-4978-9af1-a6ee868840ac",
+                        "label": "200/50mg"
+                      },
+                      {
+                        "concept": "27f5a185-9791-45b2-89e8-89df69fdac71",
+                        "label": "100mg"
+                      },
+                      {
+                        "concept": "7c844c65-b960-4ac7-8642-69b618db3602",
+                        "label": "400/50mg"
+                      },
+                      {
+                        "concept": "c543792b-6225-4a70-8e1f-04ea5be06212",
+                        "label": "50mg"
+                      },
+                      {
+                        "concept": "455ecca9-0cb9-401a-b953-b1aaff306d5a",
+                        "label": "30/60/50mg"
+                      },
+                      {
+                        "concept": "e97eba7b-a430-4efe-a604-0d813f43bd28",
+                        "label": "60/30mg"
+                      },
+                      {
+                        "concept": "da318ab9-efce-47a9-a975-468a718d4ef6",
+                        "label": "200mg"
+                      },
+                      {
+                        "concept": "d491a77a-098f-4e10-9126-59b9da40f2cc",
+                        "label": "50mg/5ml"
+                      },
+                      {
+                        "concept": "9bc9cdce-14c5-4574-b280-3f4d4c5f5ef6",
+                        "label": "60mg"
+                      },
+                      {
+                        "concept": "e4ed52d2-a9c9-410a-9d83-510ce6c7a4a0",
+                        "label": "100/25mg"
+                      },
+                      {
+                        "concept": "27de4bbd-9839-4c36-b58a-d88e1db86db4",
+                        "label": "80/20mg/ml"
+                      },
+                      {
+                        "concept": "d831cc52-0b6c-439c-a3bb-3bc0e38de1e4",
+                        "label": "40/10mg"
+                      },
+                      {
+                        "concept": "3620ba59-4313-45b4-897f-764f0609512c",
+                        "label": "25mg"
+                      },
+                      {
+                        "concept": "a5bb8a09-4f0c-4186-98d8-4c066e220806",
+                        "label": "10mg/ml"
+                      },
+                      {
+                        "concept": "1b6cd424-0941-42c5-910c-19a260c73b3b",
+                        "label": "120mg"
+                      },
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      },
+                      {
+                        "concept": "162401AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Kit"
+                      },
+                      {
+                        "concept": "106d9ce8-92d4-4549-9735-9ddaad20136a",
+                        "label": "480mg"
+                      },
+                      {
+                        "concept": "81246203-b486-4ec7-babf-05ad0669c51b",
+                        "label": "1920mg"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Dosage:",
+                  "id": "Dosage_",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "14350107-602c-427a-9e97-cc1bd49adb1b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }, {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Frequency",
+                  "type": "obs",
+                  "id": "Drug_Frequency",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Once daily"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Twice daily"
+                      },
+                      {
+                        "concept": "6f973a60-16a5-49bc-9278-300a9e998646",
+                        "label": "2 BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Four times daily"
+                      },
+                      {
+                        "concept": "a0c98b53-f014-4cb0-a41e-8503c608ef57",
+                        "label": "3ce/week"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "2. ARV Drugs",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "162240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf2"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "Drugs_",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "c50dc847-e37e-40b1-92b9-408d9c93b858",
+                    "answers": [
+                      {
+                        "concept": "5ec4bfef-2e06-43ea-83f0-51de36117824",
+                        "label": "Tenofovir/Lamivudine/Dolutegravir"
+                      },
+                      {
+                        "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Efavirenz / Tenofovir"
+                      },
+                      {
+                        "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Nevirapine / Zidovudine"
+                      },
+                      {
+                        "concept": "161364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Tenofovir"
+                      },
+                      {
+                        "concept": "630AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Zidovudine"
+                      },
+                      {
+                        "concept": "103166AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir / Lamivudine"
+                      },
+                      {
+                        "concept": "75523AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Efavirenz"
+                      },
+                      {
+                        "concept": "86663AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Zidovudine"
+                      },
+                      {
+                        "concept": "159809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Atazanavir And Ritonavir"
+                      },
+                      {
+                        "concept": "794AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lopinavir / Ritonavir"
+                      },
+                      {
+                        "concept": "74258AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir"
+                      },
+                      {
+                        "concept": "83412AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Ritonavir"
+                      },
+                      {
+                        "concept": "162796AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir / Ritonavir"
+                      },
+                      {
+                        "concept": "80586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Nevirapine"
+                      },
+                      {
+                        "concept": "70056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir"
+                      },
+                      {
+                        "concept": "154378AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Raltegravir"
+                      },
+                      {
+                        "concept": "9685c8e0-2ef1-4b7b-9283-0396198e446a",
+                        "label": "Dolutegravir"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Strength",
+                  "type": "obs",
+                  "id": "Drug_Strength",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "0cd9c98e-7f52-48b9-a987-404ec90cc5fe",
+                        "label": "300/300/50mg"
+                      },
+                      {
+                        "concept": "4db3bbfd-2e59-48af-ba55-1b6deed9ec32",
+                        "label": "300/300/600mg"
+                      },
+                      {
+                        "concept": "b77b132b-2fff-452e-a198-53792ebe9122",
+                        "label": "300/300/400mg"
+                      },
+                      {
+                        "concept": "d1359cec-4457-4699-b050-7b65a25c1ca3",
+                        "label": "150/300/200mg"
+                      },
+                      {
+                        "concept": "fcd74eb9-c917-42b1-969a-696b15a5627c",
+                        "label": "300/300mg"
+                      },
+                      {
+                        "concept": "6717b4c6-4cf3-4ef1-9734-f2da5300003f",
+                        "label": "300/150mg"
+                      },
+                      {
+                        "concept": "ade6f2de-de75-4586-a67c-68145cf11185",
+                        "label": "600/300mg"
+                      },
+                      {
+                        "concept": "d6a11b94-efe5-415e-8071-29d75356bac0",
+                        "label": "600mg"
+                      },
+                      {
+                        "concept": "abbb66b8-61c9-4b58-bad6-edf1efa546e1",
+                        "label": "300mg"
+                      },
+                      {
+                        "concept": "ddd236eb-b5af-465f-9c37-862741ca75a6",
+                        "label": "300/100mg"
+                      },
+                      {
+                        "concept": "9339100a-1fe3-4978-9af1-a6ee868840ac",
+                        "label": "200/50mg"
+                      },
+                      {
+                        "concept": "27f5a185-9791-45b2-89e8-89df69fdac71",
+                        "label": "100mg"
+                      },
+                      {
+                        "concept": "7c844c65-b960-4ac7-8642-69b618db3602",
+                        "label": "400/50mg"
+                      },
+                      {
+                        "concept": "c543792b-6225-4a70-8e1f-04ea5be06212",
+                        "label": "50mg"
+                      },
+                      {
+                        "concept": "455ecca9-0cb9-401a-b953-b1aaff306d5a",
+                        "label": "30/60/50mg"
+                      },
+                      {
+                        "concept": "e97eba7b-a430-4efe-a604-0d813f43bd28",
+                        "label": "60/30mg"
+                      },
+                      {
+                        "concept": "da318ab9-efce-47a9-a975-468a718d4ef6",
+                        "label": "200mg"
+                      },
+                      {
+                        "concept": "d491a77a-098f-4e10-9126-59b9da40f2cc",
+                        "label": "50mg/5ml"
+                      },
+                      {
+                        "concept": "9bc9cdce-14c5-4574-b280-3f4d4c5f5ef6",
+                        "label": "60mg"
+                      },
+                      {
+                        "concept": "e4ed52d2-a9c9-410a-9d83-510ce6c7a4a0",
+                        "label": "100/25mg"
+                      },
+                      {
+                        "concept": "27de4bbd-9839-4c36-b58a-d88e1db86db4",
+                        "label": "80/20mg/ml"
+                      },
+                      {
+                        "concept": "d831cc52-0b6c-439c-a3bb-3bc0e38de1e4",
+                        "label": "40/10mg"
+                      },
+                      {
+                        "concept": "3620ba59-4313-45b4-897f-764f0609512c",
+                        "label": "25mg"
+                      },
+                      {
+                        "concept": "a5bb8a09-4f0c-4186-98d8-4c066e220806",
+                        "label": "10mg/ml"
+                      },
+                      {
+                        "concept": "1b6cd424-0941-42c5-910c-19a260c73b3b",
+                        "label": "120mg"
+                      },
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      },
+                      {
+                        "concept": "162401AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Kit"
+                      },
+                      {
+                        "concept": "106d9ce8-92d4-4549-9735-9ddaad20136a",
+                        "label": "480mg"
+                      },
+                      {
+                        "concept": "81246203-b486-4ec7-babf-05ad0669c51b",
+                        "label": "1920mg"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Dosage:",
+                  "id": "Dosage_",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "14350107-602c-427a-9e97-cc1bd49adb1b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }, {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Frequency",
+                  "type": "obs",
+                  "id": "Drug_Frequency",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Once daily"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Twice daily"
+                      },
+                      {
+                        "concept": "6f973a60-16a5-49bc-9278-300a9e998646",
+                        "label": "2 BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Four times daily"
+                      },
+                      {
+                        "concept": "a0c98b53-f014-4cb0-a41e-8503c608ef57",
+                        "label": "3ce/week"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "3. ARV Drugs",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "162240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf3"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "Drugs_",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "c50dc847-e37e-40b1-92b9-408d9c93b858",
+                    "answers": [
+                      {
+                        "concept": "5ec4bfef-2e06-43ea-83f0-51de36117824",
+                        "label": "Tenofovir/Lamivudine/Dolutegravir"
+                      },
+                      {
+                        "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Efavirenz / Tenofovir"
+                      },
+                      {
+                        "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Nevirapine / Zidovudine"
+                      },
+                      {
+                        "concept": "161364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Tenofovir"
+                      },
+                      {
+                        "concept": "630AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lamivudine / Zidovudine"
+                      },
+                      {
+                        "concept": "103166AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir / Lamivudine"
+                      },
+                      {
+                        "concept": "75523AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Efavirenz"
+                      },
+                      {
+                        "concept": "86663AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Zidovudine"
+                      },
+                      {
+                        "concept": "159809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Atazanavir And Ritonavir"
+                      },
+                      {
+                        "concept": "794AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lopinavir / Ritonavir"
+                      },
+                      {
+                        "concept": "74258AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir"
+                      },
+                      {
+                        "concept": "83412AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Ritonavir"
+                      },
+                      {
+                        "concept": "162796AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Darunavir / Ritonavir"
+                      },
+                      {
+                        "concept": "80586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Nevirapine"
+                      },
+                      {
+                        "concept": "70056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Abacavir"
+                      },
+                      {
+                        "concept": "154378AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Raltegravir"
+                      },
+                      {
+                        "concept": "9685c8e0-2ef1-4b7b-9283-0396198e446a",
+                        "label": "Dolutegravir"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Strength",
+                  "type": "obs",
+                  "id": "Drug_Strength",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "0cd9c98e-7f52-48b9-a987-404ec90cc5fe",
+                        "label": "300/300/50mg"
+                      },
+                      {
+                        "concept": "4db3bbfd-2e59-48af-ba55-1b6deed9ec32",
+                        "label": "300/300/600mg"
+                      },
+                      {
+                        "concept": "b77b132b-2fff-452e-a198-53792ebe9122",
+                        "label": "300/300/400mg"
+                      },
+                      {
+                        "concept": "d1359cec-4457-4699-b050-7b65a25c1ca3",
+                        "label": "150/300/200mg"
+                      },
+                      {
+                        "concept": "fcd74eb9-c917-42b1-969a-696b15a5627c",
+                        "label": "300/300mg"
+                      },
+                      {
+                        "concept": "6717b4c6-4cf3-4ef1-9734-f2da5300003f",
+                        "label": "300/150mg"
+                      },
+                      {
+                        "concept": "ade6f2de-de75-4586-a67c-68145cf11185",
+                        "label": "600/300mg"
+                      },
+                      {
+                        "concept": "d6a11b94-efe5-415e-8071-29d75356bac0",
+                        "label": "600mg"
+                      },
+                      {
+                        "concept": "abbb66b8-61c9-4b58-bad6-edf1efa546e1",
+                        "label": "300mg"
+                      },
+                      {
+                        "concept": "ddd236eb-b5af-465f-9c37-862741ca75a6",
+                        "label": "300/100mg"
+                      },
+                      {
+                        "concept": "9339100a-1fe3-4978-9af1-a6ee868840ac",
+                        "label": "200/50mg"
+                      },
+                      {
+                        "concept": "27f5a185-9791-45b2-89e8-89df69fdac71",
+                        "label": "100mg"
+                      },
+                      {
+                        "concept": "7c844c65-b960-4ac7-8642-69b618db3602",
+                        "label": "400/50mg"
+                      },
+                      {
+                        "concept": "c543792b-6225-4a70-8e1f-04ea5be06212",
+                        "label": "50mg"
+                      },
+                      {
+                        "concept": "455ecca9-0cb9-401a-b953-b1aaff306d5a",
+                        "label": "30/60/50mg"
+                      },
+                      {
+                        "concept": "e97eba7b-a430-4efe-a604-0d813f43bd28",
+                        "label": "60/30mg"
+                      },
+                      {
+                        "concept": "da318ab9-efce-47a9-a975-468a718d4ef6",
+                        "label": "200mg"
+                      },
+                      {
+                        "concept": "d491a77a-098f-4e10-9126-59b9da40f2cc",
+                        "label": "50mg/5ml"
+                      },
+                      {
+                        "concept": "9bc9cdce-14c5-4574-b280-3f4d4c5f5ef6",
+                        "label": "60mg"
+                      },
+                      {
+                        "concept": "e4ed52d2-a9c9-410a-9d83-510ce6c7a4a0",
+                        "label": "100/25mg"
+                      },
+                      {
+                        "concept": "27de4bbd-9839-4c36-b58a-d88e1db86db4",
+                        "label": "80/20mg/ml"
+                      },
+                      {
+                        "concept": "d831cc52-0b6c-439c-a3bb-3bc0e38de1e4",
+                        "label": "40/10mg"
+                      },
+                      {
+                        "concept": "3620ba59-4313-45b4-897f-764f0609512c",
+                        "label": "25mg"
+                      },
+                      {
+                        "concept": "a5bb8a09-4f0c-4186-98d8-4c066e220806",
+                        "label": "10mg/ml"
+                      },
+                      {
+                        "concept": "1b6cd424-0941-42c5-910c-19a260c73b3b",
+                        "label": "120mg"
+                      },
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      },
+                      {
+                        "concept": "162401AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Kit"
+                      },
+                      {
+                        "concept": "106d9ce8-92d4-4549-9735-9ddaad20136a",
+                        "label": "480mg"
+                      },
+                      {
+                        "concept": "81246203-b486-4ec7-babf-05ad0669c51b",
+                        "label": "1920mg"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Dosage:",
+                  "id": "Dosage_",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "14350107-602c-427a-9e97-cc1bd49adb1b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }, {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Frequency",
+                  "type": "obs",
+                  "id": "Drug_Frequency",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Once daily"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Twice daily"
+                      },
+                      {
+                        "concept": "6f973a60-16a5-49bc-9278-300a9e998646",
+                        "label": "2 BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Four times daily"
+                      },
+                      {
+                        "concept": "a0c98b53-f014-4cb0-a41e-8503c608ef57",
+                        "label": "3ce/week"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Drugs for OI Prophylaxis/Treatment",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "Cotrimoxazole",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "99577a67-24b2-448f-aeab-6f1b67f265d6",
+                "repeatConcept": "dbf8a287-3c82-440b-bfc3-a4b9432f9183"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "b04e1799-87fa-476c-bd43-c05a7de70a69",
+                    "answers": [
+                      {
+                        "concept": "dbf8a287-3c82-440b-bfc3-a4b9432f9183",
+                        "label": "Cotrimoxazole"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      }
+                    ]
+                  }
+                },
+            {
+              "label": "Drug Unit",
+              "type": "obs",
+              "id": "DrugUnit",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                "answers": [
+                  {
+                    "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Milliliter"
+                  },
+                  {
+                    "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tube"
+                  },
+                  {
+                    "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Lotion"
+                  },
+                  {
+                    "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tablet"
+                  },
+                  {
+                    "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Capsule"
+                  }
+                ]
+              }
+            },
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Drugs for OI Prophylaxis/Treatment",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "Fluconazole",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "99577a67-24b2-448f-aeab-6f1b67f265d6",
+                "repeatConcept": "76488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "b04e1799-87fa-476c-bd43-c05a7de70a69",
+                    "answers": [
+                      {
+                        "concept": "76488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Fluconazole"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      }
+                    ]
+                  }
+                },
+                
+            {
+              "label": "Drug Unit",
+              "type": "obs",
+              "id": "DrugUnit",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                "answers": [
+                  {
+                    "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Milliliter"
+                  },
+                  {
+                    "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tube"
+                  },
+                  {
+                    "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Lotion"
+                  },
+                  {
+                    "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tablet"
+                  },
+                  {
+                    "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Capsule"
+                  }
+                ]
+              }
+            },
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Drugs for OI Prophylaxis/Treatment",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "Isoniazid",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "99577a67-24b2-448f-aeab-6f1b67f265d6",
+                "repeatConcept": "1679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "b04e1799-87fa-476c-bd43-c05a7de70a69",
+                    "answers": [
+                      {
+                        "concept": "1679AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Isoniazid"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "abbb66b8-61c9-4b58-bad6-edf1efa546e1",
+                        "label": "300mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      },
+                      {
+                        "concept": "27f5a185-9791-45b2-89e8-89df69fdac71",
+                        "label": "100mg"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Drugs for OI Prophylaxis/Treatment",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "Nystatin",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "99577a67-24b2-448f-aeab-6f1b67f265d6",
+                "repeatConcept": "80945AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "b04e1799-87fa-476c-bd43-c05a7de70a69",
+                    "answers": [
+                      {
+                        "concept": "80945AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Nystatin"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                        "label": "960mg"
+                      },
+                      {
+                        "concept": "409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                        "label": "150mg"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                }, 
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_2_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "qty_prescribed_2_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Anti-TB Drugs",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "RHZE/RH",
+              "questionOptions": {
+                "rendering": "group",
+                "repeatConcept": "1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "concept": "f3772dae-fc93-4428-baa7-268f83462e3f"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "3e6d3fbc-a059-4b9d-8427-202e612fb15e",
+                    "answers": [
+                      {
+                        "concept": "1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "RHZE/RH"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "162401AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Kit"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "6f973a60-16a5-49bc-9278-300a9e998646",
+                        "label": "2 BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      },
+                      {
+                        "concept": "a0c98b53-f014-4cb0-a41e-8503c608ef57",
+                        "label": "3ce/week"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_5_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "duration_5_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                
+{
+  "label": "Duration Dispensed (days)",
+  "id": "DurationDispensed_Day",
+  "questionOptions": {
+    "rendering": "number",
+    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+    "max": "365",
+    "min": "0"
+  },
+  "type": "obs",
+  "validators": []
+},
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Anti-TB Drugs",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "Rifabutin",
+              "questionOptions": {
+                "rendering": "group",
+                "repeatConcept": "83352AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "concept": "f3772dae-fc93-4428-baa7-268f83462e3f"
+              },
+              "questions": [
+                {
+                  "label": "Drugs",
+                  "type": "obs",
+                  "id": "drugs_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "3e6d3fbc-a059-4b9d-8427-202e612fb15e",
+                    "answers": [
+                      {
+                        "concept": "83352AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Rifabutin"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Strength",
+                  "type": "obs",
+                  "id": "drug_strength_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "21ea74ee-f6fa-4c55-be36-6337a8f4086c",
+                    "answers": [
+                      {
+                        "concept": "162401AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Kit"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Drug Unit",
+                  "type": "obs",
+                  "id": "DrugUnit",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                    "answers": [
+                      {
+                        "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Milliliter"
+                      },
+                      {
+                        "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tube"
+                      },
+                      {
+                        "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Lotion"
+                      },
+                      {
+                        "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Tablet"
+                      },
+                      {
+                        "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Capsule"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Frequency",
+                  "type": "obs",
+                  "id": "drug_frequency_5_pharm",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "4919b76b-81e6-41c7-a5b5-cb383ff4b2fa",
+                    "answers": [
+                      {
+                        "concept": "160862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "OD"
+                      },
+                      {
+                        "concept": "160858AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "BD"
+                      },
+                      {
+                        "concept": "6f973a60-16a5-49bc-9278-300a9e998646",
+                        "label": "2 BD"
+                      },
+                      {
+                        "concept": "160870AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "QDS"
+                      },
+                      {
+                        "concept": "a0c98b53-f014-4cb0-a41e-8503c608ef57",
+                        "label": "3ce/week"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Duration (in days)",
+                  "id": "duration_5_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "159368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "180",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Prescribed",
+                  "id": "duration_5_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "160856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Duration Dispensed (days)",
+                  "id": "DurationDispensed_Day",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "640de6fb-a670-43e6-8e6c-c3d33582e1a8",
+                    "max": "365",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Qty Dispensed",
+                  "id": "qty_dispensed_pharm",
+                  "questionOptions": {
+                    "rendering": "number",
+                    "concept": "1443AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "max": "720",
+                    "min": "0"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Next Appointment",
+          "questions": [
+            {
+              "label": "Calculated Next Appointment Date",
+              "type": "obs",
+              "id": "calculated_next_appointment_date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "5096AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                 
+              }
+            },
+            {
+              "label": "Pill ballance",
+              "id": "pillBallance",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "6577d9c0-10ec-4e02-b71e-cce212168447"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+        },
+
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Signature",
+          "questions": [
+            {
+              "label": "Date orderd:",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "2552b7df-30b8-4789-8165-46461cd4b015"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+      
+
+
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Feedback from the Pharmacist in case of any observed medication error",
+          "questions": [
+            {
+              "label": "Name of the drug(s):",
+              "id": "name_of_drug_pharm",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "642c39a4-3dff-4290-af10-78b8e387ce8a"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Nature of ARV medication error(s):",
+              "id": "name_of_arv_error_pharm",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "d552f1aa-7967-4d54-a576-e88ffddfbd82"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

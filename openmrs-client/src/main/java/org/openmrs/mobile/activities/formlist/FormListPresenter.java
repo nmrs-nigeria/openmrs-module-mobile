@@ -95,7 +95,10 @@ public class FormListPresenter extends BasePresenter implements FormListContract
         EncounterType encType = new EncounterType();
         if(formsStringArray[position].equalsIgnoreCase("PMTCT HTS Register")){
             encType = encounterDAO.getEncounterTypeByFormName("PMTCT (Prevention of mother-to-child trans)");
-        }else {
+        }else  if(formsStringArray[position].equalsIgnoreCase("Care Card")){
+            encType = encounterDAO.getEncounterTypeByFormName("Care");
+        }  else
+        {
             encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
         }
         if (encType != null) {

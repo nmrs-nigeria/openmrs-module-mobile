@@ -1,0 +1,2366 @@
+{
+  "name":"Care Card Form",
+  "uuid":"5d522e63-463e-4a9f-a2c1-7ebbe4069a49",
+  "processor":"EncounterFormProcessor",
+  "pages":[
+    {
+      "label":"Care Card",
+      "sections":[
+        {
+          "label":"Vital Signs",
+          "questions":[
+            {
+              "label":"Visit Date",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"6bcaf85b-8504-4c7f-b510-a50436236b80"
+              },
+              "type":"encounterDate",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            },
+            {
+              "label":"Pregnancy/Breastfeeding Status:",
+              "id":"Pregnancy_Breastfeeding_Status",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"Pregnant",
+                      "displayType":"show",
+                      "childControl":"1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Pregnant",
+                      "displayType":"show",
+                      "childControl":"1438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"number"
+                    },
+                    {
+                      "when":"Pregnant",
+                      "displayType":"show",
+                      "childControl":"5596AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Not Pregnant",
+                      "displayType":"hide",
+                      "childControl":"1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Not Pregnant",
+                      "displayType":"hide",
+                      "childControl":"1438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"number"
+                    },
+                    {
+                      "when":"Not Pregnant",
+                      "displayType":"hide",
+                      "childControl":"5596AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Breastfeeding",
+                      "displayType":"hide",
+                      "childControl":"1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Breastfeeding",
+                      "displayType":"hide",
+                      "childControl":"1438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"number"
+                    },
+                    {
+                      "when":"Breastfeeding",
+                      "displayType":"hide",
+                      "childControl":"5596AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"date"
+                    }
+                  ]
+                },
+                "concept":"86c6437e-a03c-4d31-a0b0-d6dda17c419b",
+                "answers":[
+                  {
+                    "concept":"61a85f36-1426-4bc5-97df-46c8ca9ea9aa",
+                    "label":"Pregnant"
+                  },
+                  {
+                    "concept":"f036a5d3-435f-4f10-bb47-1deab6556255",
+                    "label":"Breastfeeding"
+                  },
+                  {
+                    "concept":"3bb7b175-ba9b-4c75-b01c-f315856ee044",
+                    "label":"Not Pregnant"
+                  }
+                ]
+              },
+              "type":"obs",
+              "validators":[
+                {
+                  "type":"select "
+                }
+              ]
+            },
+            {
+              "label":"Last menstrual period:",
+              "defaultDisplay":"hide",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"1427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type":"obs",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            },
+            {
+              "label":"Gestational age in weeks:",
+              "defaultDisplay":"hide",
+              "id":"Weight",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"1438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"350",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Expected Date of Delivery",
+              "defaultDisplay":"hide",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"5596AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type":"obs",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            },
+            {
+              "label":"Weight (kg):",
+              "id":"Weight",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"350",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Height (cm):",
+              "id":"height",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"350",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Length (cm):",
+              "id":"length",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"350",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Temp (c):",
+              "id":"temp",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"350",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Systolic blood pressure (mmHg):",
+              "id":"Systolic_blood_pressure",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"1000",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Diastolic blood pressure (mmHg):",
+              "id":"Diastolic_blood_pressure",
+              "questionOptions":{
+                "rendering":"number",
+                "concept":"5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "max":"1000",
+                "min":"0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Body Mass Index (BMI):",
+              "id":"Body_Mass_Index",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"1342AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"MUAC Interpretation:",
+              "type":"obs",
+              "id":"muac_p",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"f887befe-01dd-43f5-bb3e-b1f83db1836e",
+                "answers":[
+                  {
+                    "concept":"44cab759-360c-4aa8-be1b-285cf364b0b2",
+                    "label":"Overweight"
+                  },
+                  {
+                    "concept":"8a160f90-ad58-43de-9e6e-65faf63bd699",
+                    "label":"Underweight"
+                  },
+                  {
+                    "concept":"dcd7075c-3163-4797-9516-1b9f4b0fa387",
+                    "label":"Normal"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"MUAC:",
+              "id":"BMI_MUAC",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"178f8e03-d91a-4203-a436-de97ce2f34a0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Is Patient on Family Planning:",
+              "type":"obs",
+              "id":"Is_Patient_on_Family_Planning",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"Yes",
+                      "displayType":"show",
+                      "childControl":"374AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"No",
+                      "displayType":"hide",
+                      "childControl":"374AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"5271AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"true",
+                    "label":"Yes"
+                  },
+                  {
+                    "concept":"false",
+                    "label":"No"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Family planning Method :",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Family_planning_Method",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"374AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"190AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Condoms"
+                  },
+                  {
+                    "concept":"780AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Oral contraception"
+                  },
+                  {
+                    "concept":"5279AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Injectable contraceptives"
+                  },
+                  {
+                    "concept":"5278AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Diaphragm"
+                  },
+                  {
+                    "concept":"5275AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Intrauterine device"
+                  },
+                  {
+                    "concept":"1489AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Vasectomy"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Clinical Information",
+      "sections":[
+        {
+          "label":"Clinical Information",
+          "questions":[
+            {
+              "label":"Functional Status:",
+              "type":"obs",
+              "id":"Functional_Status",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"c2f53f04-5446-44b5-855a-86aba0a8ed9c",
+                "answers":[
+                  {
+                    "concept":"159468AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Working"
+                  },
+                  {
+                    "concept":"162752AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Bedridden"
+                  },
+                  {
+                    "concept":"160026AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Patient Ambulatory"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"WHO Clinical stage :",
+              "type":"obs",
+              "id":"WHO_Clinical_stage",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"5356AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"1204AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"1"
+                  },
+                  {
+                    "concept":"1205AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"2"
+                  },
+                  {
+                    "concept":"1206AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"3"
+                  },
+                  {
+                    "concept":"1207AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"4"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"TB Status:",
+              "type":"obs",
+              "id":"TB_Status",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"Confirmed TB",
+                      "displayType":"show",
+                      "childControl":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Presumptive TB",
+                      "displayType":"hide",
+                      "childControl":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"TPT",
+                      "displayType":"hide",
+                      "childControl":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"No Signs",
+                      "displayType":"hide",
+                      "childControl":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"TB Treatment",
+                      "displayType":"hide",
+                      "childControl":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"1659AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"1660AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"No Signs"
+                  },
+                  {
+                    "concept":"142177AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Presumptive TB"
+                  },
+                  {
+                    "concept":"1d0e563c-51f2-43ca-9a12-ed4907575870",
+                    "label":"TPT"
+                  },
+                  {
+                    "concept":"1661AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Confirmed TB"
+                  },
+                  {
+                    "concept":"1662AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"TB Treatment"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"TB Method of Diagnosis:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"TB_Method_of_Diagnosis",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"66ac5e6a-8ed5-4966-b76a-967bf8c21486",
+                "answers":[
+                  {
+                    "concept":"4442af9f-579a-460f-ba6c-c9ff9570591f",
+                    "label":"Confirmed with GeneXpert"
+                  },
+                  {
+                    "concept":"1462177c-0d60-4e4b-bd07-536eb039e546",
+                    "label":"Confirmed with CXR"
+                  },
+                  {
+                    "concept":"1462177c-0d60-4e4b-bd07-536eb039e546",
+                    "label":"Confirmed with LF LAM"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Clinical Information",
+      "sections":[
+        {
+          "label":"Clinical Information",
+          "questions":[
+            {
+              "label":"Other OIs/Other problems:",
+              "type":"obs",
+              "id":"Other_OIs_Other_problems",
+              "questionOptions":{
+                "rendering":"check",
+                "concept":"160170AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"117543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Herpes Zoster"
+                  },
+                  {
+                    "concept":"114100AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Pneumonia"
+                  },
+                  {
+                    "concept":"119566AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Dementia/Encephalitis"
+                  },
+                  {
+                    "concept":"5334AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Thrush, Oral/Virginal"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Other OIs:",
+              "id":"Other_OIs",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"245ed05a-4ad2-451a-9365-b4809e4d541e"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            },
+            {
+              "label":"Noted Side Effects:",
+              "type":"obs",
+              "id":"Noted_Side_Effects",
+              "questionOptions":{
+                "rendering":"check",
+                "concept":"159935AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"133473AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Nausea and Vomiting"
+                  },
+                  {
+                    "concept":"139084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Headache"
+                  },
+                  {
+                    "concept":"116743AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Insomnia"
+                  },
+                  {
+                    "concept":"5226AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Weakness"
+                  },
+                  {
+                    "concept":"9059d3d6-1482-41e1-a5a4-1deb6523528f",
+                    "label":"PV Bleeding/Discharge"
+                  },
+                  {
+                    "concept":"1dbbce81-ab01-4c4d-9c07-135ce7fe0d02",
+                    "label":"Fat changes"
+                  },
+                  {
+                    "concept":"121629AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Anaemia"
+                  },
+                  {
+                    "concept":"36a661d3-f489-426b-b2d6-33944ed23637",
+                    "label":"Drainage of liquor"
+                  },
+                  {
+                    "concept":"125886AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Stevens-Johnson Syndrome"
+                  },
+                  {
+                    "concept":"138291AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Hyperglycemia"
+                  },
+                  {
+                    "concept":"512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Rash"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Others Side Effects:",
+              "id":"Others_Side_Effects",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"7b2fbb6f-40a1-42df-b70a-67ee97d03fa4"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "DSD Model",
+          "questions": [
+            
+            {
+              "label": "DSD Status",
+              "type": "obs",
+              "id": "DSD_Status",
+              "required": "yes",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Devolved",
+                      "displayType": "show",
+                      "childControl": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Devolved",
+                      "displayType": "show",
+                      "childControl": "8d5e5ecc-8b08-4ae9-b104-51024b95eb3a",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "8d5e5ecc-8b08-4ae9-b104-51024b95eb3a",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Not Devolved",
+                      "displayType": "hide",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "ba9feb87-5bcb-40ca-911c-06467fd8632c",
+                "answers": [
+                  {
+                    "concept": "56b10951-308d-406d-a4c6-a3638276ae30",
+                    "label": "Devolved"
+                  },
+                  {
+                    "concept": "97b81125-e421-4e59-ab87-79c3de3b0cff",
+                    "label": "Not Devolved"
+                  }
+                ]
+              }
+            },
+
+
+            
+            {
+              "label": "Dispensing Modality",
+              "type": "obs",
+              "id": "Dispensing_Modality",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Facility Based DSD Model",
+                      "displayType": "show",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Facility Based DSD Model",
+                      "displayType": "hide",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Community Based DSD Models",
+                      "displayType": "hide",
+                      "childControl": "60882cd1-1f42-485b-8afb-cd988282251e",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Community Based DSD Models",
+                      "displayType": "show",
+                      "childControl": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "ac14e589-f635-4d7a-b99e-d9cf2b37842d",
+                "answers": [
+                  {
+                    "concept": "60882cd1-1f42-485b-8afb-cd988282251e",
+                    "label": "Facility Based DSD Model"
+                  },
+                  {
+                    "concept": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                    "label": "Community Based DSD Models"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Facility Dispensing",
+              "type": "obs",
+              "id": "Facility_Dispensing",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "60882cd1-1f42-485b-8afb-cd988282251e",
+                "answers": [
+                  {
+                    "concept": "03d6c319-3ed2-441f-bec4-9ebbedbcf9e4",
+                    "label": "Fast Track"
+                  },
+                  {
+                    "concept": "aed4fa7a-ca54-4118-aa20-dfd08a84d9f2",
+                    "label": "Facility ART group HCW led"
+                  },
+                  {
+                    "concept": "05f958a6-5be7-4498-a9e5-42a199045b91",
+                    "label": "Facility ART group support group"
+                  },
+                  {
+                    "concept": "b307b21d-10b0-4a84-b478-4a31feb434a8",
+                    "label": "Decentralization (Hub and Spoke)"
+                  },
+                  {
+                    "concept": "747a4b88-aca6-435f-9dec-199f6b3299b6",
+                    "label": "After hours"
+                  },
+                  {
+                    "concept": "2abe65c9-0cc1-4a91-9e28-1a42aa496ed3",
+                    "label": "Weekend and Public holidays"
+                  },
+                  {
+                    "concept": "a050fe91-4e1b-4537-9dde-ecc86ea1d275",
+                    "label": "Child/Teen/Adolescents club (Peer Managed)"
+                  },
+                  {
+                    "concept": "a28e17c6-7db9-43cc-afa9-2e4c91841e3f",
+                    "label": "Mother infant pair/Mentor mother led"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Community Dispensing (DDD)",
+              "type": "obs",
+              "id": "ddd_Dispensing",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "01fe63b3-b308-4065-aa42-69d3fc57f3dc",
+                "answers": [
+                  {
+                    "concept": "343e3b47-f601-44ae-b944-8a838484dc71",
+                    "label": "Community Pharmacy"
+                  },
+                  {
+                    "concept": "15805972-a0ab-40a4-8dca-52df6a104f5d",
+                    "label": "Community ART Group (HCW-led)"
+                  },
+                  {
+                    "concept": "19f92419-1c34-4842-ae4d-58a35922fb2c",
+                    "label": "Community ART Refill Group (PLHIV-led)"
+                  },
+                  {
+                    "concept": "0bac9e27-da33-4642-bf6e-6a1303560552",
+                    "label": "Adolescent Community ART/ peer-led groups"
+                  },
+                  {
+                    "concept": "51757611-d9cc-4c0f-b384-36bf0f7229da",
+                    "label": "One Stop Shop (OSS)"
+                  },
+                  {
+                    "concept": "90774ce1-d1b0-4a39-a8da-7f3f9cf5d7f4",
+                    "label": "Home/Courier Delivery"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"DSD Start Date",
+              "defaultDisplay":"hide",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"8d5e5ecc-8b08-4ae9-b104-51024b95eb3a"
+              },
+              "type":"encounterDate",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Medication Plan",
+      "sections":[
+        {
+          "label":"Medication Plan",
+          "questions":[
+            {
+              "label":"ARV Medication Plan:",
+              "type":"obs",
+              "id":"ARV_Medication_Plan",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"Substitute Regimen",
+                      "displayType":"show",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Switch Regimen",
+                      "displayType":"show",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Substitute Regimen",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Switch Regimen",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Stop Regimen",
+                      "displayType":"show",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Stop Regimen",
+                      "displayType":"show",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Stop Regimen",
+                      "displayType":"hide",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Continue Regimen",
+                      "displayType":"hide",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Restart medication",
+                      "displayType":"hide",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Commence ART",
+                      "displayType":"hide",
+                      "childControl":"c880944b-34e3-4789-a3d7-32b958db4798",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Continue Regimen",
+                      "displayType":"hide",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Continue Regimen",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Substitute Regimen",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Switch Regimen",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Restart medication",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Commence ART",
+                      "displayType":"hide",
+                      "childControl":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Substitute Regimen",
+                      "displayType":"hide",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Switch Regimen",
+                      "displayType":"hide",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Restart medication",
+                      "displayType":"hide",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    },
+                    {
+                      "when":"Commence ART",
+                      "displayType":"hide",
+                      "childControl":"18aa23ce-5016-4703-b4ef-6d78eea72b46",
+                      "controlType":"date"
+                    }
+                  ]
+                },
+                "concept":"ef004b7d-87a3-412a-954e-1db7c7c862a9",
+                "answers":[
+                  {
+                    "concept":"1257AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Continue Regimen"
+                  },
+                  {
+                    "concept":"48926c61-4a4d-4dbc-8470-c12a7260421f",
+                    "label":"Substitute Regimen"
+                  },
+                  {
+                    "concept":"e9ec5bf9-37ce-4221-a79f-1f431d13f33b",
+                    "label":"Switch Regimen"
+                  },
+                  {
+                    "concept":"ad106904-30cd-427d-828e-a90006dc62e7",
+                    "label":"Stop Regimen"
+                  },
+                  {
+                    "concept":"162904AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Restart medication"
+                  },
+                  {
+                    "concept":"56d6bfe6-8545-4a77-9b67-89597dccade3",
+                    "label":"Commence ART"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Regimen switch/substitution reason:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Regimen_switch_reason",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"c880944b-34e3-4789-a3d7-32b958db4798",
+                "answers":[
+                  {
+                    "concept":"102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Toxicity/side effects"
+                  },
+                  {
+                    "concept":"61a85f36-1426-4bc5-97df-46c8ca9ea9aa",
+                    "label":"Pregnancy"
+                  },
+                  {
+                    "concept":"160559AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Risk of pregnancy"
+                  },
+                  {
+                    "concept":"160567AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Due to new TB"
+                  },
+                  {
+                    "concept":"160561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"New drug available"
+                  },
+                  {
+                    "concept":"159834AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Drug out of stock"
+                  },
+                  {
+                    "concept":"163523AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Clinical treatment failure"
+                  },
+                  {
+                    "concept":"160566AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Immunologic failure"
+                  },
+                  {
+                    "concept":"160569AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Virologic failure"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Regimen stop reasons:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Regimen_stop_reason",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"1252AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Toxicity/side effects"
+                  },
+                  {
+                    "concept":"1434AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Pregnancy"
+                  },
+                  {
+                    "concept":"843AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Treatment failure"
+                  },
+                  {
+                    "concept":"159598AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Poor adherence"
+                  },
+                  {
+                    "concept":"5485AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Illness or hospitalization"
+                  },
+                  {
+                    "concept":"1754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Drugs out of stock"
+                  },
+                  {
+                    "concept":"819AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Patient lacks finances"
+                  },
+                  {
+                    "concept":"164435AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Other patient decision"
+                  },
+                  {
+                    "concept":"160016AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Planned Rx interruption"
+                  },
+                  {
+                    "concept":"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Other"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Date Stopped Regimen",
+              "defaultDisplay":"hide",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"18aa23ce-5016-4703-b4ef-6d78eea72b46"
+              },
+              "type":"encounterDate",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Prescriped Medications",
+      "sections":[
+        {
+          "label":"Prescriped Medications",
+          "questions":[
+            {
+              "label":"ARV Regimen Line",
+              "type":"obs",
+              "defaultDisplay":"show",
+              "id":"ARV_Regimen_Line",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"91bf2c14-1677-4c7f-be1b-99a2b64231b4",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"show",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"show",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"hide",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"hide",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"hide",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"hide",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 2nd-line regimen",
+                      "displayType":"hide",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"show",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Adult 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"show",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 1st-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"show",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 2nd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"show",
+                      "childControl":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"Paediatric 3rd-Line Regimen",
+                      "displayType":"hide",
+                      "childControl":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "answers":
+                
+                [
+                  {
+                    "concept":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Adult 1st-Line Regimen"
+                  },
+                  {
+                    "concept":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Adult 2nd-line regimen"
+                  },
+                  {
+                    "concept":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                    "label":"Adult 3rd-Line Regimen"
+                  },
+                  {
+                    "concept":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Paediatric 1st-Line Regimen"
+                  },
+                  {
+                    "concept":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Paediatric 2nd-Line Regimen"
+                  },
+                  {
+                    "concept":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                    "label":"Paediatric 3rd-Line Regimen"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Adult 1st Line Regimens (Choose if adult age group)",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Adult_1st_Line_Regimens",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"164506AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":
+                [
+                  {
+                    "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-EFV"
+                  },
+                  {
+                    "concept": "104565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-EFV"
+                  },
+                  {
+                    "concept": "160124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-EFV"
+                  },
+                  {
+                    "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-NVP"
+                  },
+                  {
+                    "concept": "8a343013-0216-44e0-aefe-53909ffd5631",
+                    "label": "TDF-3TC-DTG"
+                  },
+                  {
+                    "concept": "d20de0fd-8c89-423b-be81-dd357e65c206",
+                    "label": "TDF-FTC-DTG"
+                  },
+                  {
+                    "concept": "114e5457-09fb-42bf-9947-2f7d20785419",
+                    "label": "TDF-3TC-EFV400"
+                  },
+                  {
+                    "concept": "f0772a15-d0d9-4039-a3f4-af0c5d15ed0c",
+                    "label": "TDF-FTC-EFV400"
+                  },
+                  {
+                    "concept": "162563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-EFV"
+                  },
+                  {
+                    "concept": "162565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-NVP"
+                  },
+                  {
+                    "concept": "164854AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-NVP"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Adult 2nd Line ARV Regimen",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Adult_2nd_line_ARV_regimen",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"164513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":
+                [
+                  {
+                    "concept": "164512AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162201AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "164511AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "162561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "4b24d78c-032c-4ed9-aaef-323a4c80184a",
+                    "label": "TDF-AZT-3TC-ATV/r"
+                  },
+                  {
+                    "concept": "c8109095-fa8e-41cb-846a-95270c7eb9df",
+                    "label": "AZT-TDF-3TC-LPV/r"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Adult 3rd Line ARV Regimens",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Adult_3rd_Line_ARV_Regimens",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"73fbac92-4663-43c1-ad89-5fe0bc2e52c7",
+                "answers": [
+                  {
+                    "concept": "d7827ccd-85a4-4e8e-91d6-bca3d0c5e895",
+                    "label": "DRV/r-DTG + 1-2 NRTIs"
+                  },
+                  {
+                    "concept": "e8afbb20-f696-4a6d-af40-36fef51dadbd",
+                    "label": "DRV/r-2NRTIs + NNRTI"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Child 1st Line ARV Regimen",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Child_1st_line_ARV_regimen",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"164507AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "164505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-EFV"
+                  },
+                  {
+                    "concept": "104565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-EFV"
+                  },
+                  {
+                    "concept": "1652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-NVP"
+                  },
+                  {
+                    "concept": "162199AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-NVP"
+                  },
+                  {
+                    "concept": "e0df55a1-3713-4fb2-ae11-0b98f9ec032f",
+                    "label": " ABC-FTC-NVP"
+                  },
+                  {
+                    "concept": "160124AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-EFV"
+                  },
+                  {
+                    "concept": "8a343013-0216-44e0-aefe-53909ffd5631",
+                    "label": "TDF-3TC-DTG"
+                  },
+                  {
+                    "concept": "d20de0fd-8c89-423b-be81-dd357e65c206",
+                    "label": "TDF-FTC-DTG"
+                  },
+                  {
+                    "concept": "162565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-3TC-NVP"
+                  },
+                  {
+                    "concept": "164854AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "TDF-FTC-NVP"
+                  },
+                  {
+                    "concept": "114e5457-09fb-42bf-9947-2f7d20785419",
+                    "label": " TDF-3TC-EFV400"
+                  },
+                  {
+                    "concept": "f0772a15-d0d9-4039-a3f4-af0c5d15ed0c",
+                    "label": "TDF-FTC-EFV400"
+                  },
+                  {
+                    "concept": "14c41615-9c0e-4254-b4b1-770956d390e9",
+                    "label": "ABC-3TC-DTG"
+                  },
+                  {
+                    "concept": "1f9ad8f3-1033-45eb-8c5c-8f65fe280984",
+                    "label": "ABC-FTC-DTG"
+                  },
+                  {
+                    "concept": "7fb25099-b9f0-4a56-b426-54af91006e09",
+                    "label": "ABC-3TC-EFV400"
+                  },
+                  {
+                    "concept": "ff885937-9b61-477c-a50a-beb2f66cb3d5",
+                    "label": "ABC-FTC-EFV400"
+                  },
+                  {
+                    "concept": "162200AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "162561AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "AZT-3TC-LPV/r"
+                  },
+                  {
+                    "concept": "162563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ABC-3TC-EFV"
+                  },
+                  {
+                    "concept": "7f815ed1-c406-4365-a122-9882b2de5176",
+                    "label": "AZT-3TC-RAL"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Child 2nd Line ARV Regimen",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Child_2nd_line_ARV_regimen",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"164514AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":  [
+                  {
+                    "concept": "44262769-197b-4936-b092-07fceaf9f0d1",
+                    "label": "DTG+2 NRTIs"
+                  },
+                  {
+                    "concept": "fa4dda1a-c260-42d3-920f-64fb8d7d4a12",
+                    "label": "DRV/r + 2 NRTIs + 2 NNRTI"
+                  },
+                  {
+                    "concept": "d7827ccd-85a4-4e8e-91d6-bca3d0c5e895",
+                    "label": "DRV/r-DTG + 1-2 NRTIs"
+                  },
+                  {
+                    "concept": "cb77ca6b-9000-4664-9818-10fc6ec6a733",
+                    "label": "RAL + 2 NRTIs"
+                  },
+                  {
+                    "concept": "739b5068-4451-4eaa-8a71-25655b9b87b4",
+                    "label": "DRV/r +2 NRTIs"
+                  },
+                  {
+                    "concept": "b941eb8a-5fe0-43e2-aa9f-ece8e505a0a7",
+                    "label": "DRV/r-RAL + 1-2 NRTIs"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Child 3rd Line ARV Regimens",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Child_3rd_Line_ARV_Regimens",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"032e80e0-ed50-4e88-8ce3-7a2dfa40d0ae",
+                "answers":[
+                  {
+                    "concept":"44262769-197b-4936-b092-07fceaf9f0d1",
+                    "label":"DTG+2 NRTIs"
+                  },
+                  {
+                    "concept":"fa4dda1a-c260-42d3-920f-64fb8d7d4a12",
+                    "label":"DRV/r + 2 NRTIs + 2 NNRTI"
+                  },
+                  {
+                    "concept":"d7827ccd-85a4-4e8e-91d6-bca3d0c5e895",
+                    "label":"DRV/r-DTG + 1-2 NRTIs"
+                  },
+                  {
+                    "concept":"cb77ca6b-9000-4664-9818-10fc6ec6a733",
+                    "label":"RAL + 2 NRTIs"
+                  },
+                  {
+                    "concept":"739b5068-4451-4eaa-8a71-25655b9b87b4",
+                    "label":"DRV/r +2 NRTIs"
+                  },
+                  {
+                    "concept":"b941eb8a-5fe0-43e2-aa9f-ece8e505a0a7",
+                    "label":"DRV/r-RAL + 1-2 NRTIs"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"ARV Adherence:",
+              "type":"obs",
+              "id":"ARV_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"G (Good) >= 95%",
+                      "displayType":"hide",
+                      "childControl":"5b4b9c40-7ee4-45d0-b046-ec019b06813c",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"F (Fair) 85-94%",
+                      "displayType":"hide",
+                      "childControl":"5b4b9c40-7ee4-45d0-b046-ec019b06813c",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"P (Poor) <85%",
+                      "displayType":"show",
+                      "childControl":"5b4b9c40-7ee4-45d0-b046-ec019b06813c",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"fc317cd6-e033-43fc-9f36-d1a5ebe296f5",
+                "answers":[
+                {
+                  "concept":"92d268d2-13e8-404a-b7fb-c1d7bd460d9e",
+                  "label":"G (Good) >= 95%"
+                },
+                {
+                  "concept":"20f073ee-371a-4550-8a52-f3c342cf410e",
+                  "label":"F (Fair) 85-94%"
+                },
+                  {
+                    "concept":"dad3327c-79d1-4ba4-ab5a-a2a26a83d437",
+                    "label":"P (Poor) <85%"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Why Poor/Fair ARV Adherence:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Why_Poor_Fair_ARV_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"5b4b9c40-7ee4-45d0-b046-ec019b06813c",
+                "answers":[
+                  {
+                    "concept":"160587AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Forgot to take medication"
+                  },
+                  {
+                    "concept":"d9812a4d-c6d5-46a3-95a6-d648456c96bf",
+                    "label":"Fell asleep/slept through dose"
+                  },
+                  {
+                    "concept":"acc68633-ecdc-4da1-b6b0-81fc256edd12",
+                    "label":"Change in routine/away from home"
+                  },
+                  {
+                    "concept":"648341a3-0a2b-44e4-8253-15e18699a761",
+                    "label":"Busy/working/at school"
+                  },
+                  {
+                    "concept":"a585da37-ee63-4016-9122-bd7dbf47f4a4",
+                    "label":"Got pregnant"
+                  },
+                  {
+                    "concept":"251f8afb-63e8-478e-935a-57df6aa887a3",
+                    "label":"Patient moved"
+                  },
+                  {
+                    "concept":"160584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Ran out of medications"
+                  },
+                  {
+                    "concept":"1754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Drug stock-out"
+                  },
+                  {
+                    "concept":"819AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Not able to pay"
+                  },
+                  {
+                    "concept":"160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt well"
+                  },
+                  {
+                    "concept":"160585AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt sick/bad"
+                  },
+                  {
+                    "concept":"119537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt overwhelmed/depressed"
+                  },
+                  {
+                    "concept":"38ac8531-b105-40f1-8535-74691ac09f59",
+                    "label":"Did not understand how to take medication"
+                  },
+                  {
+                    "concept":"160589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Did not want others to know"
+                  },
+                  {
+                    "concept":"160588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Too many pills"
+                  },
+                  {
+                    "concept":"604f9803-ffcf-467f-9655-36b5913f5056",
+                    "label":"Did not want to take meds"
+                  },
+                  {
+                    "concept":"102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Afraid of/affected by drug side effects"
+                  },
+                  {
+                    "concept":"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Others"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Cotrimoxazole Dose",
+              "type":"obs",
+              "id":"Cotrimoxazole_Dose",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"5d0dcc34-a6c3-4583-9101-e1f0c480181f",
+                "answers":[
+                  {
+                    "concept":"c03561ed-1402-4bfe-b95d-9547fe6b9bf7",
+                    "label":"CTX 960mg"
+                  },
+                  {
+                    "concept":"409fccb1-a7de-412f-9ee6-1e96d4b0b65a",
+                    "label":"CTX 480mg"
+                  },
+                  {
+                    "concept":"1515AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"CTX Suspension"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Cotrimoxazole Adherence:",
+              "type":"obs",
+              "id":"Cotrimoxazole_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"G (Good) >= 95%",
+                      "displayType":"hide",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"F (Fair) 85-94%",
+                      "displayType":"hide",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"P (Poor) <85%",
+                      "displayType":"show",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"161652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"92d268d2-13e8-404a-b7fb-c1d7bd460d9e",
+                    "label":"G (Good) >= 95%"
+                  },
+                  {
+                    "concept":"20f073ee-371a-4550-8a52-f3c342cf410e",
+                    "label":"F (Fair) 85-94%"
+                  },
+                  {
+                    "concept":"dad3327c-79d1-4ba4-ab5a-a2a26a83d437",
+                    "label":"P (Poor) <85%"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"TPT Adherence:",
+              "type":"obs",
+              "id":"Tpt_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"G (Good) >= 95%",
+                      "displayType":"hide",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"F (Fair) 85-94%",
+                      "displayType":"hide",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"P (Poor) <85%",
+                      "displayType":"show",
+                      "childControl":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"161652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"92d268d2-13e8-404a-b7fb-c1d7bd460d9e",
+                    "label":"G (Good) >= 95%"
+                  },
+                  {
+                    "concept":"20f073ee-371a-4550-8a52-f3c342cf410e",
+                    "label":"F (Fair) 85-94%"
+                  },
+                  {
+                    "concept":"dad3327c-79d1-4ba4-ab5a-a2a26a83d437",
+                    "label":"P (Poor) <85%"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Why Poor/Fair Cotrimoxazole Adherence:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Why_Poor_Fair_Cotrimoxazole_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"3e308341-080a-44a6-ae73-e99c10a4bcf5",
+                "answers":[
+                  {
+                    "concept":"160587AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Forgot to take medication"
+                  },
+                  {
+                    "concept":"d9812a4d-c6d5-46a3-95a6-d648456c96bf",
+                    "label":"Fell asleep/slept through dose"
+                  },
+                  {
+                    "concept":"acc68633-ecdc-4da1-b6b0-81fc256edd12",
+                    "label":"Change in routine/away from home"
+                  },
+                  {
+                    "concept":"648341a3-0a2b-44e4-8253-15e18699a761",
+                    "label":"Busy/working/at school"
+                  },
+                  {
+                    "concept":"a585da37-ee63-4016-9122-bd7dbf47f4a4",
+                    "label":"Got pregnant"
+                  },
+                  {
+                    "concept":"251f8afb-63e8-478e-935a-57df6aa887a3",
+                    "label":"Patient moved"
+                  },
+                  {
+                    "concept":"160584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Ran out of medications"
+                  },
+                  {
+                    "concept":"1754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Drug stock-out"
+                  },
+                  {
+                    "concept":"819AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Not able to pay"
+                  },
+                  {
+                    "concept":"160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt well"
+                  },
+                  {
+                    "concept":"160585AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt sick/bad"
+                  },
+                  {
+                    "concept":"119537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt overwhelmed/depressed"
+                  },
+                  {
+                    "concept":"38ac8531-b105-40f1-8535-74691ac09f59",
+                    "label":"Did not understand how to take medication"
+                  },
+                  {
+                    "concept":"160589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Did not want others to know"
+                  },
+                  {
+                    "concept":"160588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Too many pills"
+                  },
+                  {
+                    "concept":"604f9803-ffcf-467f-9655-36b5913f5056",
+                    "label":"Did not want to take meds"
+                  },
+                  {
+                    "concept":"102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Afraid of/affected by drug side effects"
+                  },
+                  {
+                    "concept":"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Others"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"INH Dose",
+              "type":"obs",
+              "id":"INH_Dose",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"be12c05b-747d-49d0-a079-a1def816b8b5",
+                "answers":[
+                  {
+                    "concept":"abbb66b8-61c9-4b58-bad6-edf1efa546e1",
+                    "label":"INH 300mg"
+                  },
+                  {
+                    "concept":"27f5a185-9791-45b2-89e8-89df69fdac71",
+                    "label":"INH 100mg"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"INH Adherence:",
+              "type":"obs",
+              "id":"INH_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "control":{
+                  "conditionOptions":[
+                    {
+                      "when":"P (Poor) <85% >9 doses",
+                      "displayType":"show",
+                      "childControl":"6de49e1a-d968-4517-be1f-2769011b91eb",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"F (Fair) 85-94% 4-8 doses",
+                      "displayType":"hide",
+                      "childControl":"6de49e1a-d968-4517-be1f-2769011b91eb",
+                      "controlType":"select"
+                    },
+                    {
+                      "when":"G (Good) > 95% < 3 doses",
+                      "displayType":"hide",
+                      "childControl":"6de49e1a-d968-4517-be1f-2769011b91eb",
+                      "controlType":"select"
+                    }
+                  ]
+                },
+                "concept":"161653AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"dad3327c-79d1-4ba4-ab5a-a2a26a83d437",
+                    "label":"P (Poor) <85% >9 doses"
+                  },
+                  {
+                    "concept":"20f073ee-371a-4550-8a52-f3c342cf410e",
+                    "label":"F (Fair) 85-94% 4-8 doses"
+                  },
+                  {
+                    "concept":"92d268d2-13e8-404a-b7fb-c1d7bd460d9e",
+                    "label":"G (Good) > 95% < 3 doses"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Why Poor/Fair INH Adherence:",
+              "type":"obs",
+              "defaultDisplay":"hide",
+              "id":"Why_Poor_Fair_INH_Adherence",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"6de49e1a-d968-4517-be1f-2769011b91eb",
+                "answers":[
+                  {
+                    "concept":"160587AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Forgot to take medication"
+                  },
+                  {
+                    "concept":"d9812a4d-c6d5-46a3-95a6-d648456c96bf",
+                    "label":"Fell asleep/slept through dose"
+                  },
+                  {
+                    "concept":"acc68633-ecdc-4da1-b6b0-81fc256edd12",
+                    "label":"Change in routine/away from home"
+                  },
+                  {
+                    "concept":"648341a3-0a2b-44e4-8253-15e18699a761",
+                    "label":"Busy/working/at school"
+                  },
+                  {
+                    "concept":"a585da37-ee63-4016-9122-bd7dbf47f4a4",
+                    "label":"Got pregnant"
+                  },
+                  {
+                    "concept":"251f8afb-63e8-478e-935a-57df6aa887a3",
+                    "label":"Patient moved"
+                  },
+                  {
+                    "concept":"160584AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Ran out of medications"
+                  },
+                  {
+                    "concept":"1754AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Drug stock-out"
+                  },
+                  {
+                    "concept":"819AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Not able to pay"
+                  },
+                  {
+                    "concept":"160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt well"
+                  },
+                  {
+                    "concept":"160585AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt sick/bad"
+                  },
+                  {
+                    "concept":"119537AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Felt overwhelmed/depressed"
+                  },
+                  {
+                    "concept":"38ac8531-b105-40f1-8535-74691ac09f59",
+                    "label":"Did not understand how to take medication"
+                  },
+                  {
+                    "concept":"160589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Did not want others to know"
+                  },
+                  {
+                    "concept":"160588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Too many pills"
+                  },
+                  {
+                    "concept":"604f9803-ffcf-467f-9655-36b5913f5056",
+                    "label":"Did not want to take meds"
+                  },
+                  {
+                    "concept":"102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Afraid of/affected by drug side effects"
+                  },
+                  {
+                    "concept":"5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Others"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Other Drugs Prescribed:",
+              "id":"Other_Drugs_Prescribed",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"163101AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Lab Plan",
+      "sections":[
+        {
+          "label":"Lab Plan",
+          "questions":[
+            {
+              "label":"Lab Orders:",
+              "type":"obs",
+              "id":"Lab_Orders",
+              "questionOptions":{
+                "rendering":"check",
+                "concept":"1271AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"657AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"CD4"
+                  },
+                  {
+                    "concept":"856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Viral Load"
+                  },
+                  {
+                    "concept":"156176AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Esophageal Thrush"
+                  },
+                  {
+                    "concept":"21AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"HB/PCV"
+                  },
+                  {
+                    "concept":"678AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"WBC + Diff"
+                  },
+                  {
+                    "concept":"654AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"ALT"
+                  },
+                  {
+                    "concept":"653AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"AST"
+                  },
+                  {
+                    "concept":"1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Differential Lymphocytes count (DLC)"
+                  },
+                  {
+                    "concept":"790AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Creatinine"
+                  },
+                  {
+                    "concept":"1010AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Lipid Profile"
+                  },
+                  {
+                    "concept":"77427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"HBsAg"
+                  },
+                  {
+                    "concept":"734b7bad-1224-42ef-b92e-d5e60c70b8ba",
+                    "label":"HCV"
+                  },
+                  {
+                    "concept":"952AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Total lymphocytes count (TLC)"
+                  },
+                  {
+                    "concept":"299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"VDRL"
+                  },
+                  {
+                    "concept":"302AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Urinalysis"
+                  },
+                  {
+                    "concept":"307AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Sputum AFB"
+                  },
+                  {
+                    "concept":"12AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Chest Xray"
+                  }
+                ]
+              }
+            },
+            {
+              "label":" Indication for Viral Load Test:",
+              "type":"obs",
+              "id":" Indication_for_Viral_Load_Test ",
+              "questionOptions":{
+                "rendering":"select",
+                "concept":"884f0b28-4287-42ad-b537-af1e11c35cbb",
+                "answers":[
+                  {
+                    "concept":"162082AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Targeted"
+                  },
+                  {
+                    "concept":"161236AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Routine"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Others :",
+              "id":"Others__",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"9e4247bc-d168-46b1-a478-5c89c5ec8c0e"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Referrals",
+      "sections":[
+        {
+          "label":"Referrals",
+          "questions":[
+            {
+              "label":"Consult Hospitalise Refer Link:",
+              "type":"obs",
+              "id":"Consult Hospitalise Refer Link",
+              "questionOptions":{
+                "rendering":"check",
+                "concept":"1272AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers":[
+                  {
+                    "concept":"5488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"Adherence Counseling"
+                  },
+                  {
+                    "concept":"e5556848-d9a9-4152-a3cd-07d5505fa3d5",
+                    "label":"Intensive Adherence Counseling"
+                  },
+                  {
+                    "concept":"343e3b47-f601-44ae-b944-8a838484dc71",
+                    "label":"Community Pharmacy"
+                  },
+                  {
+                    "concept":"15805972-a0ab-40a4-8dca-52df6a104f5d",
+                    "label":"Community ART"
+                  },
+                  {
+                    "concept":"5576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"PMTCT Services"
+                  },
+                  {
+                    "concept":"160546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"STI Services"
+                  },
+                  {
+                    "concept":"5487AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"TB Services"
+                  },
+                  {
+                    "concept":"5486AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label":"OVC Program"
+                  }
+                ]
+              }
+            },
+            {
+              "label":"Others Referrals:",
+              "id":"Others_Referrals",
+              "questionOptions":{
+                "rendering":"text",
+                "concept":"ba4a0960-3ab7-495a-aa52-dfe2004281c0"
+              },
+              "type":"obs",
+              "validators":[
+
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Next Appointment Date",
+      "sections":[
+        {
+          "label":"Next Appointment Date",
+          "questions":[
+            {
+              "label":"Next Appointment Date:",
+              "id":"Next_Appointment_Date",
+              "questionOptions":{
+                "rendering":"date",
+                "concept":"5096AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type":"obs",
+              "validators":[
+                {
+                  "type":"date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

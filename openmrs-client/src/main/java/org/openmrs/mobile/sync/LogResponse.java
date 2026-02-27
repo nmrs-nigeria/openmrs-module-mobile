@@ -1,6 +1,8 @@
 package org.openmrs.mobile.sync;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class LogResponse {
     // when the process archive the main goal success is set to be true
@@ -13,28 +15,52 @@ public class LogResponse {
     // Recommendation for the log user
     private  String recommendation;
     //Process name or function name to help program go the line of code
-    private  String  process;
+    private  String eventType;
     // When a process have many request use index to separate each and it recommendation
     private  int  index =1;
+    List<SimpleLog> simpleLogs =new ArrayList<>();
 
     // init with all result.
-    public LogResponse(boolean isSuccess, String patientIdentifier, String message, String recommendation, String process) {
+    public LogResponse(boolean isSuccess, String patientIdentifier, String message, String recommendation, String eventType) {
         this.isSuccess = isSuccess;
         this.patientIdentifier = patientIdentifier;
         this.message = message;
         this.recommendation = recommendation;
-        this.process = process;
+        this.eventType = eventType;
+        index++;
+    }
+    public LogResponse(boolean isSuccess, String patientIdentifier, String message, String recommendation ) {
+        this.isSuccess = isSuccess;
+        this.patientIdentifier = patientIdentifier;
+        this.message = message;
+        this.recommendation = recommendation;
+        this.eventType = "";
+        index++;
+    }
+    public LogResponse(boolean isSuccess, String patientIdentifier, String message ) {
+        this.isSuccess = isSuccess;
+        this.patientIdentifier = patientIdentifier;
+        this.message = message;
+        this.recommendation = "";
+        this.eventType = "";
+        index++;
     }
 
     public LogResponse(String patientIdentifier) {
         this.isSuccess = false;
         this.message ="";
         this.recommendation = "";
-        this.process = "";
+        this.eventType = "";
         this.patientIdentifier =patientIdentifier;
     }
 
 
+    public List<SimpleLog> getSimpleLogs() {
+        return simpleLogs;
+    }
+    public void addSimpleLogs(SimpleLog simpleLog) {
+         simpleLogs.add(simpleLog);
+    }
 
     public boolean isSuccess() {
         return isSuccess;
@@ -68,26 +94,38 @@ public class LogResponse {
         this.recommendation = recommendation;
     }
 
-    public String getProcess() {
-        return process;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setProcess(String process) {
-        this.process = process;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
     // add more result
     public  void  appendLogs(boolean isSuccess, String message, String recommendation, String process){
-      this.message=  this.message+"\t"+index+":\t"+message;
+
+        this.message=  this.message+"\t"+index+":\t"+message;
        this.recommendation=  this.recommendation+"\t"+index+":\t"+recommendation;
-        this.process=  this.process+"\t"+index+":\t"+process;
+        this.eventType =  this.eventType +"\t"+index+":\t"+process;
         this.isSuccess= isSuccess;
+        index++;
     }
  // add more result with  set the success. Track progress
     public  void  appendLogs( String message, String recommendation, String process){
+
         this.message=  this.message+"\t"+index+":\t"+message;
         this.recommendation=  this.recommendation+"\t"+index+":\t"+recommendation;
-        this.process=  this.process+"\t"+index+":\t"+process;
+        this.eventType =  this.eventType +"\t"+index+":\t"+process;
+        index++;
     }
+
+
+
+
+
+
+
+
 
 // Format the response in to a single string for logging
     public String getFullMessage() {
@@ -95,7 +133,7 @@ public class LogResponse {
         return patientIdentifier+"\t"  +d.getHours()+":"
                 +d.getMinutes()+":"  +d.getSeconds()+
                 "'IS_SUCCESS': ["+this.isSuccess+"] \t\t"+
-                "'PROCESS': ["+this.process+"] \t\t"+
+                "'EVENT_TYPE': ["+this.eventType +"] \t\t"+
                 "'MESSAGE': ["+this.message+"] \t\t"+
                 "'RECOMMENDATION': ["+this.recommendation+"]";
 

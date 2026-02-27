@@ -36,6 +36,14 @@ public class Session {
     }
 
     public String getSessionId() {
+        if (sessionId == null) {
+            if(authenticated){
+                // If sessionId is null and authenticated is true, generate a new sessionId
+                return "o3:Gbenge" + user.getUuid();
+            } else {
+                return null;
+            }
+        }
         return sessionId;
     }
 

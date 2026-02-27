@@ -14,6 +14,9 @@
 
 package org.openmrs.mobile.activities.dashboard;
 
+import static org.openmrs.mobile.utilities.VersioningUtil.compareVersions;
+import static org.openmrs.mobile.utilities.VersioningUtil.extractVersion;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -23,12 +26,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
@@ -38,7 +45,6 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.activities.ACBaseFragment;
-import org.openmrs.mobile.activities.activevisits.ActiveVisitsActivity;
 import org.openmrs.mobile.activities.addeditpatient.AddEditPatientActivity;
 import org.openmrs.mobile.activities.commodity.CommodityActivity;
 import org.openmrs.mobile.activities.formentrypatientlist.FormEntryPatientListActivity;
@@ -46,10 +52,17 @@ import org.openmrs.mobile.activities.pbs.ExportPBS;
 import org.openmrs.mobile.activities.providermanagerdashboard.ProviderManagerDashboardActivity;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsActivity;
 import org.openmrs.mobile.activities.syncedvisits.SyncedVisitsActivity;
+import org.openmrs.mobile.api.FormListService;
+import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.databases.Util;
+import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.ImageUtils;
+import org.openmrs.mobile.utilities.NetworkUtils;
 import org.openmrs.mobile.utilities.ThemeUtils;
-import org.w3c.dom.Text;
+import org.openmrs.mobile.utilities.ToastUtil;
+
+import java.util.List;
 
 public class DashboardFragment extends ACBaseFragment<DashboardContract.Presenter> implements DashboardContract.View, View.OnClickListener {
 
@@ -70,7 +83,6 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
     private RelativeLayout mPatientBiometricView;
     private TextView mRegistryLabel;
     private SparseArray<Bitmap> mBitmapCache;
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -228,6 +240,8 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
             initFragmentFields(root);
             setListeners();
             hideVisitAndFormEntry();
+            validateDependencies();
+
         }
 
         // Font config
@@ -238,7 +252,28 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         return root;
     }
 
-    private void hideVisitAndFormEntry(){
+    private void validateDependencies() {
+
+//
+//        if (ApplicationConstants.EMPTY_STRING.equals(OpenMRS.getInstance().getMetadataVersion())) {
+//            mPbsServiceVersionLabel.setTextColor(getResources().getColor(R.color.red));
+//            if (ApplicationConstants.EMPTY_STRING.equals(OpenMRS.getInstance().getPBSserverVersion())) {
+//                mMetadataVersionLabel.setTextColor(getResources().getColor(R.color.red));
+//            }
+//            stopApp("Refresh to verify version");
+//            return;
+//        }
+//        if (ApplicationConstants.EMPTY_STRING.equals(OpenMRS.getInstance().getPBSserverVersion())) {
+//            mMetadataVersionLabel.setTextColor(getResources().getColor(R.color.red));
+//            stopApp("Refresh to verify version. Start the service and reopen the App");
+//            return;
+//        }
+//        setMetadataVersion();
+//        setPbsServiceVersion();
+    }
+
+
+    private void hideVisitAndFormEntry() {
         mCaptureVitalsView.setVisibility(View.GONE);
 //        mActiveVisitsView.setVisibility(View.GONE);
     }
@@ -259,6 +294,8 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mProviderManagementView = root.findViewById(R.id.dashboardProviderManagementView);
         mPatientBiometricView = root.findViewById(R.id.patientBiometricView);
         mRegistryLabel = root.findViewById(R.id.registryLabel);
+
+
     }
 
     private void setListeners() {
@@ -269,6 +306,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
         mCaptureVitalsView.setOnClickListener(this);
         mProviderManagementView.setOnClickListener(this);
         mPatientBiometricView.setOnClickListener(this);
+
     }
 
     @Override
@@ -345,6 +383,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()) {
             case R.id.findPatientView:
                 startNewActivity(SyncedPatientsActivity.class);
@@ -375,6 +414,7 @@ public class DashboardFragment extends ACBaseFragment<DashboardContract.Presente
                 break;
         }
     }
+
 
     private void changeColorOfDashboardIcons() {
         final int greenColorResId = R.color.green;

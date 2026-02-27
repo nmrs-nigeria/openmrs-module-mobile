@@ -26,6 +26,7 @@ import java.util.Locale;
 public class OpenMRSCustomHandler {
 
     public static String folderName = "NMRSLog";
+    public static String folderNameVersion = "NMRSLog/version report";
     private static String logFile = "nmrs_log_";
     private static String crashFile = "nmrs_crash_log_";
 
@@ -61,6 +62,14 @@ public class OpenMRSCustomHandler {
 
     public static File createFolder(){
         File dir = new File(Environment.getExternalStorageDirectory() + "/" + OpenMRSCustomHandler.folderName);
+
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        return dir;
+    }
+    public static File createFolderVersion(){
+        File dir = new File(Environment.getExternalStorageDirectory() + "/" + OpenMRSCustomHandler.folderNameVersion);
 
         if(!dir.exists()){
             dir.mkdir();

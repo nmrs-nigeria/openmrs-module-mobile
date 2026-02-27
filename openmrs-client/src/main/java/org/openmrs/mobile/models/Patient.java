@@ -13,6 +13,8 @@ package org.openmrs.mobile.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.openmrs.mobile.R;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.utilities.StringUtils;
 
 import java.io.Serializable;
@@ -79,10 +81,49 @@ public class Patient extends Person implements Serializable{
 
     public PatientIdentifier getIdentifier() {
         if (!identifiers.isEmpty()) {
-            return identifiers.get(0);
-        } else {
-            return null;
+            PatientIdentifier artNumber = null;
+            PatientIdentifier ancNumber = null;
+            PatientIdentifier hospitalNumber = null;
+            PatientIdentifier anyOtherIdentifier = null;
+
+            for (PatientIdentifier identifier : identifiers) {
+                if (identifier.getIdentifier() != null && !identifier.getIdentifier().trim().isEmpty()) {
+                    if ("ART Number".equalsIgnoreCase(identifier.getDisplay())) {
+                        if (artNumber == null) {
+                            artNumber = identifier;
+                        }
+                    } else if ("ANC Number".equalsIgnoreCase(identifier.getDisplay())) {
+                        if (ancNumber == null) {
+                            ancNumber = identifier;
+                        }
+                    } else if ("Hospital Number".equalsIgnoreCase(identifier.getDisplay())) {
+                        if (hospitalNumber == null) {
+                            hospitalNumber = identifier;
+                        }
+                    } else {
+                        if (anyOtherIdentifier == null) {
+                            anyOtherIdentifier = identifier;
+                        }
+                    }
+                }
+            }
+
+            // Return in the priority order: ART > ANC > Hospital > Any Other
+            if (artNumber != null) {
+                return artNumber;
+            }
+            if (ancNumber != null) {
+                return ancNumber;
+            }
+            if (hospitalNumber != null) {
+                return hospitalNumber;
+            }
+            if (anyOtherIdentifier != null) {
+                return anyOtherIdentifier;
+            }
         }
+
+        return null; // Return null if no valid identifier is found
     }
 
 

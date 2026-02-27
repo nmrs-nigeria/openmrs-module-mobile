@@ -38,6 +38,11 @@ public class FingerPrintVerificationDAO {
         DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         return   openHelper.updateVerificationSync(openHelper.getWritableDatabase(),patientID,syncValue);
     }
+// replace base update   status code 1, replace zero don't replace
+    public   int updateReplaceBase(Long patientID, int replace){
+        DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+        return   openHelper.updateVerificationReplaceBase(openHelper.getWritableDatabase(),patientID,replace);
+    }
 
     public long saveFingerPrint(PatientBiometricVerificationContract pbs) {
         deletePrintPosition((long) pbs.getPatienId(), pbs.getFingerPositions());
@@ -106,6 +111,7 @@ public class FingerPrintVerificationDAO {
                     int manufacturer_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.manufacturer);
                     int creator_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.creator);
                     int syncStatus_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.SyncStatus);
+                    int replaceBase_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.replaceBase);
                     int dateCreated_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.dateCreated);
 
 
@@ -122,6 +128,7 @@ public class FingerPrintVerificationDAO {
                     String manufacturer = cursor.getString(manufacturer_CI);
                     int creator = cursor.getInt(creator_CI);
                     int syncStatus = cursor.getInt(syncStatus_CI);
+                    int replaceBase = cursor.getInt(replaceBase_CI);
                     String dateCreated = cursor.getString(dateCreated_CI);// visit date
 
                     PatientBiometricVerificationContract pbs = new PatientBiometricVerificationContract();
@@ -139,6 +146,7 @@ public class FingerPrintVerificationDAO {
                     pbs.setCreator(creator);
                     pbs.setSyncStatus(syncStatus);
                     pbs.setDateCreated(dateCreated);
+                    pbs.setReplaceBase(replaceBase);
 
                     pbsList.add(pbs);
                 }
@@ -236,7 +244,7 @@ public class FingerPrintVerificationDAO {
                     int manufacturer_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.manufacturer);
                     int creator_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.creator);
                     int syncStatus_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.SyncStatus);
-
+                    int replaceBase_CI = cursor.getColumnIndex(FingerPrintVerificationTable.Column.replaceBase);
 
                     String biometricInfo_Id = cursor.getString(biometricInfo_Id_CI);
                     int patientId = cursor.getInt(patientId_CI);
@@ -251,6 +259,7 @@ public class FingerPrintVerificationDAO {
                     String manufacturer = cursor.getString(manufacturer_CI);
                     int creator = cursor.getInt(creator_CI);
                     int syncStatus = cursor.getInt(syncStatus_CI);
+                    int replaceBase = cursor.getInt(replaceBase_CI);
 
                     PatientBiometricVerificationContract pbs = new PatientBiometricVerificationContract();
                     pbs.setBiometricInfo_Id(biometricInfo_Id);
@@ -266,6 +275,7 @@ public class FingerPrintVerificationDAO {
                     pbs.setManufacturer(manufacturer);
                     pbs.setCreator(creator);
                     pbs.setSyncStatus(syncStatus);
+                    pbs.setReplaceBase(replaceBase);
 
                     pbsList.add(pbs);
 

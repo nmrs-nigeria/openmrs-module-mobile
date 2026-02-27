@@ -944,17 +944,6 @@
                             android:background="@drawable/custom_bg"
                             android:layout_marginTop="16dp"
                             >
-
-                            <!--                            <EditText-->
-                            <!--                                android:id="@+id/city"-->
-                            <!--                                android:layout_width="fill_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:focusable="true"-->
-                            <!--                                android:hint="@string/patient_city_label"-->
-                            <!--                                android:imeOptions="actionNext"-->
-                            <!--                                android:inputType="text"-->
-                            <!--                                android:maxLines="1"-->
-                            <!--                                android:textSize="14sp" />-->
                             <AutoCompleteTextView
                                 android:id="@+id/city"
                                 android:layout_width="match_parent"
@@ -993,44 +982,9 @@
                                 android:inputType="text"
                                 android:maxLines="1"
                                 android:textSize="14sp" />
-
-                            <!--                            <EditText-->
-                            <!--                                android:id="@+id/postal"-->
-                            <!--                                android:layout_width="fill_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:layout_marginBottom="20dp"-->
-                            <!--                                android:digits="@string/alphanumeric_postal_code"-->
-                            <!--                                android:focusable="true"-->
-                            <!--                                android:hint="@string/patient_postal_label"-->
-                            <!--                                android:imeOptions="actionDone"-->
-                            <!--                                android:inputType="text"-->
-                            <!--                                android:maxLines="1"-->
-                            <!--                                android:textSize="14sp" />-->
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
-                    <!--<TextView-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginTop="20dp"-->
-                    <!--android:layout_marginLeft="12dp"-->
-                    <!--android:textSize="18sp"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:textColor="#555"-->
-                    <!--android:text="@string/reg_ques_phno"/>-->
-
-                    <!--<EditText-->
-                    <!--android:id="@+id/phone"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="20dp"-->
-                    <!--android:layout_marginRight="20dp"-->
-                    <!--android:layout_marginBottom="20dp"-->
-                    <!--android:textSize="14sp"-->
-                    <!--android:focusable="true"-->
-                    <!--android:hint="@string/phone_hint"-->
-                    <!--android:inputType="phone"-->
-                    <!--android:singleLine="true" />-->
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

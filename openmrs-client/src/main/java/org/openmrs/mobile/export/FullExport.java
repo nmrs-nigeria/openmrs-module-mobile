@@ -1,6 +1,7 @@
 package org.openmrs.mobile.export;
 
 import static org.openmrs.mobile.utilities.ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT;
+import static org.openmrs.mobile.utilities.FormService.getFormResourceByName;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,18 +22,33 @@ import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificatio
 import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationDTO;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
+import org.openmrs.mobile.dao.EncounterDAO;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
+import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.VisitDAO;
 import org.openmrs.mobile.databases.Util;
+import org.openmrs.mobile.models.Encounter;
+import org.openmrs.mobile.models.EncounterProvider;
 import org.openmrs.mobile.models.Encountercreate;
+import org.openmrs.mobile.models.IdentifierType;
+import org.openmrs.mobile.models.Location;
+import org.openmrs.mobile.models.Observation;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PatientDto;
+import org.openmrs.mobile.models.PatientIdentifier;
+import org.openmrs.mobile.models.ProgramEnrollment;
+import org.openmrs.mobile.models.Resource;
+import org.openmrs.mobile.models.Results;
 import org.openmrs.mobile.models.Visit;
 import org.openmrs.mobile.security.HashMethods;
+import org.openmrs.mobile.sync.EncounterSync;
 import org.openmrs.mobile.sync.LogResponse;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.Notifier;
+import org.openmrs.mobile.utilities.ObservationDeserializer;
+import org.openmrs.mobile.utilities.ResourceSerializer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,15 +59,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import retrofit2.Call;
+
 public class FullExport {
 
-    private  File openMRSFolder;
+    private File openMRSFolder;
     Context context;
     FingerPrintDAO dao = new FingerPrintDAO();
     FingerPrintVerificationDAO daoVerification = new FingerPrintVerificationDAO();
+    private Gson myGson;
+
     public FullExport(Context context, File openMRSFolder) {
         this.context = context;
-        this.openMRSFolder=openMRSFolder;
+        this.openMRSFolder = openMRSFolder;
+
+        myGson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .registerTypeHierarchyAdapter(Resource.class, new ResourceSerializer())
+                .registerTypeHierarchyAdapter(Observation.class, new ObservationDeserializer())
+                .create();
     }
 
     private void setSyncState(boolean b) {
@@ -71,21 +97,21 @@ public class FullExport {
 
     // variable to determine if the patient comparison is done offline or online
 
-  private int size;
+    private int size;
+
     private void updateNotification(int index, String sub,
                                     int success, int fail, LogResponse logResponse) {
 
-        String summary=   "Exporting "+ index +" out of "+ size+
-                ". Succeeded: "+  success+
-             ( fail==0?"":  ". Failed: "+fail);
-        String bContent=  summary+
-                 (getSyncState()?"\tRunning":"\tCompleted     "   )
-                +(   logResponse.isSuccess()?"":"\tMessage "+ logResponse.getMessage())
-             ;
+        String summary = "Exporting " + index + " out of " + size +
+                ". Succeeded: " + success +
+                (fail == 0 ? "" : ". Failed: " + fail);
+        String bContent = summary +
+                (getSyncState() ? "\tRunning" : "\tCompleted     ")
+                + (logResponse.isSuccess() ? "" : "\tMessage " + logResponse.getMessage());
 
-        if(logResponse.isSuccess())
+        if (logResponse.isSuccess())
             Notifier.notify(context, 1, Notifier.CHANNEL_SYNC_PBS,
-                    "NMRS Exporting",  summary, bContent);
+                    "NMRS Exporting", summary, bContent);
         else
             Notifier.notify(context, 1, Notifier.CHANNEL_SYNC_PBS, "NMRS Exporting",
                     bContent, bContent);
@@ -97,83 +123,111 @@ public class FullExport {
 
 
 
+    private List<Patient> getPatientsWithUpdatedData(List<Patient> patientList) {
+        EncounterDAO encounterDAO = new EncounterDAO();
+        FingerPrintDAO fingerPrintDAO = new FingerPrintDAO();
+        FingerPrintVerificationDAO fingerPrintVerificationDAO = new FingerPrintVerificationDAO();
+        List<Patient> newPatientList = new ArrayList<>();
+        for (Patient patient : patientList) {
+            Long id = patient.getId();
+            boolean isEncounterSafeToDelete = encounterDAO.safeToDelete(id);
+            boolean isFingerprintSafeToDelete = fingerPrintDAO.safeToDelete(id);
+            boolean isFingerprintsVerificationSafeToDelete = fingerPrintVerificationDAO.safeToDelete(id);
+            if (patient.isSynced()
+                    && isEncounterSafeToDelete &&
+                    isFingerprintSafeToDelete
+                    && isFingerprintsVerificationSafeToDelete) {
+                // data already sync
+            } else {
+                newPatientList.add(patient);
+            }
+        }
+
+        return newPatientList;
+    }
+
+
     // methode to syn all patient  EXPORT all the patient available
     public void starExportingPatients() {
         OpenMRS openMrs = OpenMRS.getInstance();
         Notifier.cancel(context, 1);
         Notifier.notify(context, 1, Notifier.CHANNEL_EXPORT, "NMRS Export",
-                "Checking patient", null  );
+                "Checking patient", null);
         PatientDAO patientDAO = new PatientDAO();
-        List<Patient> patientList = patientDAO.getAllPatientsLocal();
+        List<Patient> patientList =  getPatientsWithUpdatedData(patientDAO.getAllPatientsLocal());
+
         // hold patient that should not EXPORT base on it already existing
 
 
         setSyncState(true);
-        int i= 0;
-        int sucess =0;
-        int fail=0;
-        size=patientList.size();
+        int i = 0;
+        int sucess = 0;
+        int fail = 0;
+        size = patientList.size();
         JSONArray dataJson = new JSONArray();
         for (Patient patient : patientList) {
-                i++;
-            JSONObject patientObject= new JSONObject();
-                // EXPORT patient
-               
-            LogResponse pLogResponse = addBioData(patientObject, patient,"BIO_EXPORT" + patient.getUuid() + " id" + patient.getId() );
-                updateNotification(i+1, "bio",sucess, fail, pLogResponse);
-                if(!pLogResponse.isSuccess()) {
-                    OpenMRSCustomHandler.writeLogToFile(pLogResponse.getFullMessage());
-                }
-                // Encounter EXPORT
-                LogResponse eLogResponse = addEncounters(patientObject,
-                        patient, "ENC_EXPORT" + patient.getUuid() + " id" + patient.getId());
-                updateNotification(i, "eco",sucess, fail, eLogResponse);
-                if(!eLogResponse.isSuccess()) {
-                    OpenMRSCustomHandler.writeLogToFile(eLogResponse.getFullMessage());
-                }
-            LogResponse vLogResponse  = addVisits(patientObject,
-                    patient, "VISIT_EXPORT" + patient.getUuid() + " id" + patient.getId());
-                // check if already EXPORT recapture or base
-                // if UUID is null get the patient again
-                LogResponse    pbsLogResponse = addPBS(patientObject,  patient ,
-                        "PBS_EXPORT" + patient.getUuid() + " id" + patient.getId());
-                    updateNotification(i, "pbs",sucess, fail, pbsLogResponse);
-                    if(!pbsLogResponse.isSuccess()) {
-                        OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
-                    }
-                //
-                 if(pbsLogResponse.isSuccess()&& eLogResponse.isSuccess()
-                        && pLogResponse.isSuccess()){
-                    sucess++;
-                    dataJson.put(patientObject);
+            i++;
+            JSONObject patientObject = new JSONObject();
+            // EXPORT patient
+            LogResponse pLogResponse = addBioData(patientObject, patient, "BIO_EXPORT" + patient.getUuid() + " id" + patient.getId());
+            updateNotification(i + 1, "bio", sucess, fail, pLogResponse);
+            if (!pLogResponse.isSuccess()) {
+                OpenMRSCustomHandler.writeLogToFile(pLogResponse.getFullMessage());
+            }
+            // Encounter EXPORT
+            LogResponse eLogResponse = addEncounters(patientObject,
+                    patient, "ENC_EXPORT" + patient.getUuid() + " id" + patient.getId());
+            updateNotification(i, "eco", sucess, fail, eLogResponse);
+            if (!eLogResponse.isSuccess()) {
+                OpenMRSCustomHandler.writeLogToFile(eLogResponse.getFullMessage());
+            }
 
-                }else{
-                    fail++;
-                }
-                updateNotification(i, "",sucess, fail,new LogResponse(true,
-                        "","","",""));
+            // check if already EXPORT recapture or base
+            // if UUID is null get the patient again
+            LogResponse pbsLogResponse = addPBS(patientObject, patient,
+                    "PBS_EXPORT" + patient.getUuid() + " id" + patient.getId());
+            updateNotification(i, "pbs", sucess, fail, pbsLogResponse);
+            if (!pbsLogResponse.isSuccess()) {
+                OpenMRSCustomHandler.writeLogToFile(pbsLogResponse.getFullMessage() + "\n\n");
+            }
+
+            //
+            if (pbsLogResponse.isSuccess() && eLogResponse.isSuccess()
+                    && pLogResponse.isSuccess()) {
+                sucess++;
+                dataJson.put(patientObject);
+
+            } else {
+                fail++;
+            }
+            updateNotification(i, "", sucess, fail, new LogResponse(true,
+                    "", "", "", ""));
 
         }
         setSyncState(false);
-        updateNotification(i, "",sucess, fail,new LogResponse(true,
-                "","","",""));
+        updateNotification(i, "", sucess, fail, new LogResponse(true,
+                "", "", "", ""));
 
 
         if (dataJson.length() > 0) {
             try {
 
                 JSONObject jsonExport = new JSONObject();
-                JSONObject global= new JSONObject();
+                JSONObject global = new JSONObject();
                 // add location base params
-                global.put("location", openMrs.getLocation());
-                global.put("locationUuid", openMrs.getLocationUUID());
-                global.put("locationDescription", openMrs.getLocationDescription());
-                global.put("locationDisplay", openMrs.getLocationDisplay());
-                global.put("locationParent", openMrs.getLocationParent());
+
+                Location location = new LocationDAO().findLocationByName(OpenMRS.getInstance().getLocation());
                 global.put("exportedTime", System.currentTimeMillis());
+                global.put("location", openMrs.getLocation());
+                global.put("locationId",location.getId());
+                global.put("locationUuid",location.getUuid());
+                global.put("locationName", location.getName());
+                global.put("locationDescription", location.getDescription());
+                global.put("locationDisplay", location.getDisplay());
+                global.put("locationParentUuid", location.getParentLocationUuid());
 
                 // bind the params
-                jsonExport.put("global",global);
+                jsonExport.put("global", global);
                 jsonExport.put("data", dataJson);
                 Date date = new Date();
                 // your date
@@ -189,13 +243,13 @@ public class FullExport {
 
                 //Generate the file name for the day
                 String fileName = "PBS-NMRS-" + day + "-" + month + "-" + year + "-" + timestamp + ".txt";
-                Util.log("Is folder "+openMRSFolder.isDirectory());
-                Util.log("  folder "+openMRSFolder.getAbsolutePath());
-                Util.log("Is file "+openMRSFolder.isFile());
+//                Util.log("Is folder "+openMRSFolder.isDirectory());
+//                Util.log("  folder "+openMRSFolder.getAbsolutePath());
+//                Util.log("Is file "+openMRSFolder.isFile());
                 File fileCreated = new File(openMRSFolder + "/" + fileName);
-                Util.log("Is folder fileCreated "+fileCreated.isDirectory());
-                Util.log("  folder fileCreated "+fileCreated.getAbsolutePath());
-                Util.log("Is file fileCreated "+fileCreated.isFile());
+//                Util.log("Is folder fileCreated "+fileCreated.isDirectory());
+//                Util.log("  folder fileCreated "+fileCreated.getAbsolutePath());
+//                Util.log("Is file fileCreated "+fileCreated.isFile());
                 FileOutputStream fileout = new FileOutputStream(fileCreated);
                 OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
                 outputWriter.write(jsonExport.toString());
@@ -204,7 +258,7 @@ public class FullExport {
                 //display file saved message
                 Toast.makeText(context, "File saved successfully! as " + fileName, Toast.LENGTH_LONG).show();
                 OpenMRSCustomHandler.writeLogToFile(new LogResponse(
-                        fail < 1, "Summary", "Exported: "+sucess+"\t Failed: "+fail+"\tTotal: "+size,
+                        fail < 1, "Summary", "Exported: " + sucess + "\t Failed: " + fail + "\tTotal: " + size,
                         "If failed grater than one check the upper log for the reason", "Export").getFullMessage());
                 // Start activity to Preview all similar patients
 
@@ -216,16 +270,15 @@ public class FullExport {
             //Log.d("TAG_NAME", dataJson.toString());
 
         } else {
-            Toast.makeText(context, "There is no recent Data captured on this device. Please capture and export." , Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "There is no recent Data captured on this device. Please capture and export.", Toast.LENGTH_LONG).show();
 
 
         }
 
 
-
-
     }
-    public @NonNull LogResponse addEncounters(JSONObject patientObject ,@NonNull Patient patient, String identity)  {
+
+    public @NonNull LogResponse addEncounters(JSONObject patientObject, @NonNull Patient patient, String identity) {
         LogResponse logResponse = new LogResponse(identity);
         try {
             List<Encountercreate> encountercreatelist = new Select()
@@ -233,40 +286,48 @@ public class FullExport {
                     .where("patientid = ?", patient.getId())
                     .where("synced = ?", false) // case duplicate forms handle
                     .execute();
-
-
-            JSONArray encounters = new JSONArray();
+            JSONArray encountersArray = new JSONArray();
 
             for (final Encountercreate encountercreate : encountercreatelist) {
-                 encountercreate.pullObslist();
-                //encountercreate.setObslist();
-               // encountercreate.setObslistLocal();
+                try {
+                    JSONObject encounterJSON = new JSONObject();
+                    encountercreate.pullObslist();
+                    encountercreate.setFormUuid(getFormResourceByName(encountercreate.getFormname()).getUuid());
+                    // Call<Encounter> call = apiService.createEncounter(encountercreate);
+                    encounterJSON.put("createEncounter", myGson.toJson(encountercreate));
+                    if (!encountercreate.getSynced() ) {
+                        List<EncounterProvider> encounterProviders = new ArrayList<>();
+                        EncounterProvider encounterProvider = new EncounterProvider();
+                        encounterProvider.setProvider("f9badd80-ab76-11e2-9e96-0800200c9a66");
+                        encounterProvider.setEncounterRole("a0b03050-c99b-11e0-9572-0800200c9a66");
+                        encounterProviders.add(encounterProvider);
+                        encountercreate.setEncounterProviders(encounterProviders);
+                        encounterJSON.put("formName", encountercreate.getFormname());
 
+                        Long visitID = new VisitDAO().getVisitsIDByUUID(encountercreate.getVisit()).toBlocking().single();
+                        if (visitID != 0) {
+                            Visit visit = new VisitDAO().getVisitByIDLocally(visitID);
+                            if (visit != null) {
+                                encounterJSON.put("visitUuid", visit.getUuid());
+                                encounterJSON.put("visitStartDateTime",visit.getStartDatetime());
+                                encounterJSON.put("visitStopDateTime",visit.getStopDatetime());
+                            }
+                        }
+                        encountersArray.put(encounterJSON);
+                    }
+                } catch (Exception e) {
 
-                JSONObject jsonObject = new JSONObject();
-                   jsonObject.put( "visit",encountercreate.getVisit() );
-                jsonObject.put( "patient",encountercreate.getPatient() );
-                jsonObject.put( "patientid",encountercreate.getPatient() );
-                jsonObject.put( "encounterType",encountercreate.getEncounterType() );
-                jsonObject.put( "form",encountercreate.getFormUuid() );
-                jsonObject.put( "formname",encountercreate.getFormname() );
-                jsonObject.put( "obs",encountercreate.getObslist() );
-                jsonObject.put( "encounterDatetime",encountercreate.getEncounterDatetime() );
-                jsonObject.put( "location",encountercreate.getLocation() );
-                jsonObject.put( "identifier",encountercreate.getIdentifier() );
-                jsonObject.put( "identifierType",encountercreate.getIdentifier() );
-                jsonObject.put( "obsLocal",encountercreate.getObslistLocal() );
-                encounters.put(jsonObject);
+                }
+
             }
 
-            patientObject.put("encounters", encounters);
-            logResponse.appendLogs(true, "Success","","addEncounters");
+            patientObject.put("encounters", encountersArray);
+            logResponse.appendLogs(true, "Success", "", "addEncounters");
 
 
         } catch (Exception e) {
-            logResponse.appendLogs(false, e.getMessage(),"","addEncounters");
+            logResponse.appendLogs(false, e.getMessage(), "", "addEncounters");
         }
-
 
 
         return logResponse;
@@ -274,68 +335,42 @@ public class FullExport {
     }
 
 
-    protected  LogResponse addBioData(JSONObject patientObject ,Patient patient,
-                                         @NonNull String identifier    ) {
+    protected LogResponse addBioData(JSONObject patientObject, Patient patient,
+                                     @NonNull String identifier) {
         LogResponse logResponse = new LogResponse(identifier);
         try {
-            Gson gson = new Gson();
-           JSONObject jsonObject = new JSONObject();
-           jsonObject.put("id",patient.getId());
-            jsonObject.put("patientUuid",patient.getUuid());
-            jsonObject.put("birthdate",patient.getPerson().getBirthdate());
-            jsonObject.put("address", gson.toJson(patient.getPerson().getAddresses()));
-            jsonObject.put("attribute",gson.toJson(patient.getAttribute()));
-
-            jsonObject.put("familyName",patient.getPerson().getName().getFamilyName());
-            jsonObject.put("middleName",patient.getPerson().getName().getMiddleName());
-
-            patientObject.put("bio_data",jsonObject );
-            logResponse.appendLogs(true, "Success","","exportBioData");
+            patientObject.put("puuid", patient.getUuid());
+            PatientDto patientDto = patient.getPatientDto();
+            patientObject.put("patientDTO", myGson.toJson(patientDto, PatientDto.class));
+            logResponse.appendLogs(true, "Success", "", "exportBioData");
 
         } catch (Exception e) {
-            logResponse.appendLogs(false, e.getMessage(),"","exportBioData");
+            logResponse.appendLogs(false, e.getMessage(), "", "exportBioData");
         }
-        return  logResponse;
+        return logResponse;
 
     }
-    protected  LogResponse addVisits(JSONObject patientObject ,Patient patient,
-                                      @NonNull String identifier    ) {
+
+    protected LogResponse addPBS(JSONObject patientObject, Patient patient, String identifier) {
         LogResponse logResponse = new LogResponse(identifier);
-        List<Visit> visits = new VisitDAO().getVisitsByPatientID(patient.getId()).toBlocking().single();
         try {
-            JSONArray jsonArray =new JSONArray();
-            for (Visit visit : visits){
-                Gson gson = new Gson();
-                jsonArray.put(gson.toJson(visit));
-            }
-            patientObject.put("visits",jsonArray);
-            logResponse.appendLogs(true, "","","addVisits");
-
-        } catch (Exception e) {
-            logResponse.appendLogs(false, e.getMessage(),"","addVisits");
-        }
-        return  logResponse;
-
-    }
-    protected LogResponse  addPBS(JSONObject patientObject, Patient patient, String identifier) {
-        LogResponse logResponse =new LogResponse(identifier);
-
+            JSONObject jsonObject = new JSONObject();
+            //set pbs object init
+            jsonObject.put("dataAvailable", false);
+            ;
+            patientObject.put("pbs", jsonObject);
             List<PatientBiometricContract> pbs = dao.getAll(false, patient.getId().toString());
             List<PatientBiometricVerificationContract> pbsVerification = daoVerification.getAll(false, patient.getId()
                     .toString());
 
-            if (pbs.size() ==0 && pbsVerification.size() ==0) {
-                try {
-                    patientObject.put("pbs", new JSONArray());
-                    logResponse.appendLogs(
-                            true,
-                            "No fingerprints",
-                            "",
-                            "PBS Export");
-                    return logResponse;
-                }catch (Exception e){
-                    return logResponse;
-                }
+            if (pbs.size() == 0 && pbsVerification.size() == 0) {
+                logResponse.appendLogs(
+                        true,
+                        "No fingerprints",
+                        "",
+                        "PBS Export");
+                return logResponse;
+
             }
 // make patient whom it print as not save not to Export
 //            List<PatientBiometricVerificationContract> confirm = daoVerification.getSinglePatientPBS( patientId );
@@ -350,18 +385,18 @@ public class FullExport {
 //            }
             //minimum prints not reached for both base and recapture
             if (pbs.size() < MINIMUM_REQUIRED_FINGERPRINT && pbsVerification.size() < MINIMUM_REQUIRED_FINGERPRINT) {
-                logResponse.appendLogs(    false,
-                        "Minimum prints not reached", "Capture more prints, do a recapture",  "PBS Export"
+                logResponse.appendLogs(false,
+                        "Minimum prints not reached", "Capture more prints, do a recapture", "PBS Export"
                 );
-                return  logResponse;
+                return logResponse;
 
-            } else { 
+            } else {
                 if (pbs.size() >= MINIMUM_REQUIRED_FINGERPRINT) {
                     PatientBiometricDTO dto = new PatientBiometricDTO();
                     dto.setFingerPrintList(new ArrayList<>(pbs));
                     dto.setPatientUUID(patient.getUuid());
 
-                    
+
                     //set hashing
                     for (int bioIndex = 0; bioIndex < dto.getFingerPrintList().size(); bioIndex++) {
                         PatientBiometricContract b = dto.getFingerPrintList().get(bioIndex);
@@ -375,41 +410,35 @@ public class FullExport {
                         dto.getFingerPrintList().set(bioIndex, b);
                     }
 
-                       try{
+
                     // set values to capture
-                    JSONObject jsonObject = new JSONObject();
+                    jsonObject = new JSONObject();
                     Gson gson = new Gson();
+                    jsonObject.put("dataAvailable", true);
                     jsonObject.put("uuid", patient.getUuid());
                     jsonObject.put("base", true);
                     jsonObject.put("templates", gson.toJson(dto));
                     patientObject.put("pbs", jsonObject);
-                           logResponse.appendLogs(true, "Success",""," addPBS");
+                    logResponse.appendLogs(true, "Success", "", " addPBS");
 
-                       } catch (Exception e) {
-                           logResponse.appendLogs(false, e.getMessage(),""," addPBS");
-                       }
-                    
 
                 } else if (pbsVerification.size() >= MINIMUM_REQUIRED_FINGERPRINT) {
                     PatientBiometricVerificationDTO dto = new PatientBiometricVerificationDTO();
                     dto.setFingerPrintList(new ArrayList<>(pbsVerification));
                     dto.setPatientUUID(patient.getUuid());
-                    try{
-                        // set values to capture
-                        JSONObject jsonObject = new JSONObject();
-                        Gson gson = new Gson();
-                        jsonObject.put("uuid", patient.getUuid());
-                        jsonObject.put("base", false);
-                        jsonObject.put("templates", gson.toJson(dto));
-                        patientObject.put("pbs", jsonObject);
-                        logResponse.appendLogs(true, "Success",""," addPBS");
+                    // set values to capture
+                    jsonObject = new JSONObject();
+                    Gson gson = new Gson();
+                    jsonObject.put("dataAvailable", true);
+                    jsonObject.put("uuid", patient.getUuid());
+                    jsonObject.put("base", false);
+                    jsonObject.put("templates", gson.toJson(dto));
+                    patientObject.put("pbs", jsonObject);
+                    logResponse.appendLogs(true, "Success", "", " addPBS");
 
 
-                    } catch (Exception e) {
-                        logResponse.appendLogs(false, e.getMessage(),""," addPBS");
-                    }
                 } else {
-                     logResponse.appendLogs(
+                    logResponse.appendLogs(
                             false,
                             "No prints found",
                             "Report this error",
@@ -417,8 +446,10 @@ public class FullExport {
                     );
                 }
             }
-
-  return  logResponse;
+        } catch (Exception e) {
+            logResponse.appendLogs(false, e.getMessage(), "", " addPBS");
+        }
+        return logResponse;
     }
 
 }

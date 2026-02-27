@@ -54,10 +54,13 @@ public class Consumption extends Model implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
+
+
+
+    @SerializedName("description")
+    @Expose
+    private String description ;
     @Column(name = "retired")
-//    @SerializedName("description")
-//    @Expose
-//    private String description;
     @SerializedName("retired")
     @Expose
     private String retired;
@@ -130,13 +133,13 @@ public class Consumption extends Model implements Serializable {
         this.name = name;
     }
 
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getRetired() {
         return retired;

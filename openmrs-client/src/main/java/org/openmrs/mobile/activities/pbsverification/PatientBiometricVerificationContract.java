@@ -74,7 +74,19 @@ public class PatientBiometricVerificationContract implements Serializable {
 
     @SerializedName("syncStatus")
     @Expose
-    private int SyncStatus;
+    private int syncStatus;
+
+    public int getReplaceBase() {
+        return replaceBase;
+    }
+
+    public void setReplaceBase(int replaceBase) {
+        this.replaceBase = replaceBase;
+    }
+
+    @SerializedName("replaceBase")
+    @Expose
+    private int replaceBase;
 
 
     public String getManufacturer() {
@@ -159,9 +171,9 @@ public class PatientBiometricVerificationContract implements Serializable {
 
     //
     public int getSyncStatus() {
-        return SyncStatus;
+        return syncStatus;
     }
-    public void setSyncStatus(int syncStatus) { this.SyncStatus = syncStatus;  }
+    public void setSyncStatus(int syncStatus) { this.syncStatus = syncStatus;  }
 }
 
 

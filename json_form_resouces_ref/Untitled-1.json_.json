@@ -1,0 +1,26 @@
+  {
+                    "label": "Others indications for Client verification",
+                    "id": "Others_indications_for_Client_verification",
+                    "defaultDisplay": "hide",
+                    "type": "obs",
+                    "questionOptions": {
+                        "rendering": "text",
+                        "concept": "NEW" ,
+                        "control": {
+                            "conditionOptions": [
+                                {
+                                    "when": "No",
+                                    "displayType": "hide",
+                                    "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                                    "controlType": "check"
+                                },
+                                {
+                                    "when": "Yes",
+                                    "displayType": "show",
+                                    "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                                    "controlType": "check"
+                                }
+                            ]
+                        }
+                    }
+                }

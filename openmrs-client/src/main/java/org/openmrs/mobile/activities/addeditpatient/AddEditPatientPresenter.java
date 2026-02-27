@@ -40,6 +40,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
 
 public class AddEditPatientPresenter extends BasePresenter implements AddEditPatientContract.Presenter {
 
@@ -94,7 +95,18 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
                 mPatientInfoView.setProgressBarVisibility(true);
                 mPatientInfoView.hideSoftKeys();
                 registeringPatient = true;
-                findSimilarPatients(patient);
+
+                new PatientDAO().savePatient(patient)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(id -> {
+                            ToastUtil.notify("New patient data is saved locally ");
+                             //move to another patient details
+                            mPatientInfoView.startPatientDashbordActivity(mPatient);
+                            mPatientInfoView.finishPatientInfoActivity();
+                        });
+
+                //disable syncing the patient immediately
+               // findSimilarPatients(patient);
             } catch (Exception e){
                 ToastUtil.error(e.toString());
             }
@@ -111,7 +123,10 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
             mPatientInfoView.hideSoftKeys();
             registeringPatient = true;
             new PatientDAO().updatePatient(patient.getId(), patient);
-            updatePatient(patient);
+            ToastUtil.notify("Patient Updated data is saved locally ");
+            // disable syncing immediately
+          // updatePatient(patient);
+            mPatientInfoView.finishPatientInfoActivity();
         } else {
             mPatientInfoView.scrollToTop();
         }
@@ -280,7 +295,7 @@ public class AddEditPatientPresenter extends BasePresenter implements AddEditPat
                     }
                 });
             }
-        } else {
+        }    else {
             List<Patient> similarPatient = new PatientComparator().findSimilarPatient(new PatientDAO().getAllPatients().toBlocking().first(), patient);
             if (!similarPatient.isEmpty()) {
                 mPatientInfoView.showSimilarPatientDialog(similarPatient, patient);

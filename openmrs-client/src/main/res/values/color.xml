@@ -47,4 +47,9 @@
 
 <!--    Newly Added Color Resource-->
     <color name="login_button2">#0C480B</color>
+
+    <!-- Added missing resources 26th February 2025 -->
+    <color name="colorPrimary">#00463f</color>
+    <color name="colorPrimaryDark">#01302b</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

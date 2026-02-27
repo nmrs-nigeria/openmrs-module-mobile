@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import rx.Completable;
 import rx.Observable;
 
 import static org.openmrs.mobile.databases.DBOpenHelper.createObservableIO;
@@ -70,34 +71,43 @@ public class PatientDAO {
         boolean isFingerprintsVerificationSafeToDelete = new FingerPrintVerificationDAO().safeToDelete(id);
         // check if there is PBS
         if (isFingerprintSafeToDelete && isFingerprintsVerificationSafeToDelete && isEncounterSafeToDelete) {
-            Util.log("Safe  to delete a patient  "+id);
-            OpenMRS.getInstance().getOpenMRSLogger().w("Patient deleted with id: " + id);
-            DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
-            // Delete its encounter too locally
-            try {
-                new Delete().from(Encountercreate.class).where("patientId = ?", id).execute();
-                // delete already sync fingerprint demographic data  for recapture and capture data
-                openHelper.getReadableDatabase().delete(FingerPrintTable.TABLE_NAME, FingerPrintTable.Column.patient_id
-                        + " = " + id, null);
-                openHelper.getReadableDatabase().delete(FingerPrintVerificationTable.TABLE_NAME, FingerPrintVerificationTable.Column.patient_id
-                        + " = " + id, null);
-                // finally delete patient  itself
-                openHelper.getReadableDatabase().delete(PatientTable.TABLE_NAME, PatientTable.Column.ID
-                        + " = " + id, null);
-                // remove recent date captured and fingerprint out of the phone
-//                new Delete().from(FingerPrintLog.class).where("pid = ?", id)
-//                .execute();
-                Util.log("Successfully deleted "+id );
-            } catch (Exception e){
-                Util.log("Failed to delete all on patient  "+id+"  "+e.getMessage());
-            }
+            Util.log("Safe  to delete a patient  " + id);
+            deletePatientConfirm(id);
         } else {
-            Util.log("You cannot delete a patient with valid data  with patient id: "+id);
-            Util.log("isEncounterSafeToDelete: "+isEncounterSafeToDelete);
-            Util.log("isFingerprintSafeToDelete: "+isFingerprintSafeToDelete);
-            Util.log("isFingerprintsVerificationSafeToDelete: "+isFingerprintsVerificationSafeToDelete);
+            Util.log("You cannot delete a patient with valid data  with patient id: " + id);
+            Util.log("isEncounterSafeToDelete: " + isEncounterSafeToDelete);
+            Util.log("isFingerprintSafeToDelete: " + isFingerprintSafeToDelete);
+            Util.log("isFingerprintsVerificationSafeToDelete: " + isFingerprintsVerificationSafeToDelete);
         }
     }
+
+
+    public void deletePatientConfirm(long id) {
+
+        OpenMRS.getInstance().getOpenMRSLogger().w("Patient deleted with id: " + id);
+        DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+        // Delete its encounter too locally
+        try {
+            new Delete().from(Encountercreate.class).where("patientId = ?", id).execute();
+            new VisitDAO().deleteVisitsByPatientId(id);
+            // delete already sync fingerprint demographic data  for recapture and capture data
+            openHelper.getReadableDatabase().delete(FingerPrintTable.TABLE_NAME, FingerPrintTable.Column.patient_id
+                    + " = " + id, null);
+            openHelper.getReadableDatabase().delete(FingerPrintVerificationTable.TABLE_NAME, FingerPrintVerificationTable.Column.patient_id
+                    + " = " + id, null);
+            // finally delete patient  itself
+            openHelper.getReadableDatabase().delete(PatientTable.TABLE_NAME, PatientTable.Column.ID
+                    + " = " + id, null);
+            // remove recent date captured and fingerprint out of the phone
+//                new Delete().from(FingerPrintLog.class).where("pid = ?", id)
+//                .execute();
+            Util.log("Successfully deleted " + id);
+        } catch (Exception e) {
+            Util.log("Failed to delete all on patient  " + id + "  " + e.getMessage());
+        }
+
+    }
+
 
     public Observable<List<Patient>> getAllPatients() {
         return createObservableIO(() -> {
@@ -105,8 +115,8 @@ public class PatientDAO {
             DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
             Cursor cursor = openHelper.getReadableDatabase().query(PatientTable.TABLE_NAME,
                     null, null, null, null, null, null);
-            DatabaseUtils.dumpCursorToString(cursor);
-            Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+            //   DatabaseUtils.dumpCursorToString(cursor);
+            // Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
             if (null != cursor) {
                 try {
                     while (cursor.moveToNext()) {
@@ -120,6 +130,7 @@ public class PatientDAO {
             return patients;
         });
     }
+
     /*
       EXISTING
       on download patient
@@ -135,21 +146,21 @@ public class PatientDAO {
     public Long insertPatientFully(Patient patient, List<PatientBiometricContract> pbs, boolean saveTemplate) {
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         SQLiteDatabase db = helper.getWritableDatabase();
-       Long isSuccessfully  = -1L ;
-        try{
-           db.beginTransaction();
-            Long pid=  helper.insertPatient(db, patient);
+        Long isSuccessfully = -1L;
+        try {
+            db.beginTransaction();
+            Long pid = helper.insertPatient(db, patient);
             for (PatientBiometricContract item : pbs) {
-                if(!saveTemplate){
+                if (!saveTemplate) {
                     item.setTemplate("");
                 }
                 String patientId = String.valueOf(pid);
                 item.setPatienId(Integer.parseInt(patientId));
                 item.setSyncStatus(1); //set to already synced
-                helper.insertFingerPrint(db,item);
+                helper.insertFingerPrint(db, item);
             }
             db.setTransactionSuccessful();
-           isSuccessfully =pid;
+            isSuccessfully = pid;
         } finally {
             db.endTransaction();
         }
@@ -294,8 +305,8 @@ public class PatientDAO {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         final Cursor cursor = helper.getReadableDatabase().query(PatientTable.TABLE_NAME, null, where, whereArgs, null, null, null);
-        DatabaseUtils.dumpCursorToString(cursor);
-        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+//        DatabaseUtils.dumpCursorToString(cursor);
+//        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
         if (null != cursor) {
             try {
                 while (cursor.moveToNext()) {
@@ -327,8 +338,8 @@ public class PatientDAO {
 
         DBOpenHelper helper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
         final Cursor cursor = helper.getReadableDatabase().query(PatientTable.TABLE_NAME, null, where, whereArgs, null, null, null);
-        DatabaseUtils.dumpCursorToString(cursor);
-        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+//        DatabaseUtils.dumpCursorToString(cursor);
+//        Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
         if (null != cursor) {
             try {
                 if (cursor.moveToFirst()) {
@@ -371,4 +382,53 @@ public class PatientDAO {
         return BitmapFactory.decodeStream(inputStream);
     }
 
+    public Observable<List<Patient>> getAllPatients(String query) {
+        if (query == null || query.isEmpty()) return getAllPatients();
+        else return createObservableIO(() -> {
+            List<Patient> patients = new ArrayList<>();
+            DBOpenHelper openHelper = OpenMRSDBOpenHelper.getInstance().getDBOpenHelper();
+            String wildcardQuery = "%" + query + "%";
+
+            String fullNameQuery = "%" + query.replace(" ", "%") + "%";
+
+            String selection = PatientTable.Column.IDENTIFIER + " LIKE ? OR " +
+                    PatientTable.Column.IDENTIFIER_HTS + " LIKE ? OR " +
+                    PatientTable.Column.IDENTIFIER_HEI + " LIKE ? OR " +
+                    PatientTable.Column.IDENTIFIER_ART + " LIKE ? OR " +
+                    PatientTable.Column.IDENTIFIER_OPENMRS + " LIKE ? OR " +
+                    PatientTable.Column.GIVEN_NAME + " LIKE ? OR " +
+                    PatientTable.Column.MIDDLE_NAME + " LIKE ? OR " +
+                    PatientTable.Column.FAMILY_NAME + " LIKE ? OR " +
+                    "TRIM(" + PatientTable.Column.GIVEN_NAME + " || ' ' || " +
+                    PatientTable.Column.MIDDLE_NAME + " || ' ' || " +
+                    PatientTable.Column.FAMILY_NAME + ") LIKE ?";
+
+            String[] selectionArgs = new String[] {
+                    wildcardQuery, wildcardQuery, wildcardQuery, wildcardQuery,
+                    wildcardQuery, wildcardQuery, wildcardQuery, wildcardQuery,
+                    fullNameQuery
+            };
+
+            Cursor cursor = openHelper.getReadableDatabase().query(
+                    PatientTable.TABLE_NAME,
+                    null, // Columns to return (null for all)
+                    selection, // WHERE clause
+                    selectionArgs, // Values for WHERE clause
+                    null, // groupBy
+                    null, // having
+                    null  // orderBy
+            );
+            if (null != cursor) {
+                try {
+                    while (cursor.moveToNext()) {
+                        Patient patient = cursorToPatient(cursor);
+                        patients.add(patient);
+                    }
+                } finally {
+                    cursor.close();
+                }
+            }
+            return patients;
+        });
+    }
 }

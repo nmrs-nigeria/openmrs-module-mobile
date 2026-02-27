@@ -15,9 +15,11 @@ import android.widget.LinearLayout;
 import org.openmrs.mobile.activities.BasePresenterContract;
 import org.openmrs.mobile.activities.BaseView;
 import org.openmrs.mobile.models.Facility;
+import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.models.States;
 import org.openmrs.mobile.utilities.InputField;
+import org.openmrs.mobile.utilities.RangeEditText;
 import org.openmrs.mobile.utilities.SelectManyFields;
 import org.openmrs.mobile.utilities.SelectOneField;
 
@@ -72,6 +74,10 @@ public interface FormDisplayContract {
 
         interface MainPresenter extends BasePresenterContract {
             void createEncounter(boolean isEligible, boolean isValid,boolean isValidPatientIdentifier, String mMessage);
+
+            void calculateNextAppointment( RangeEditText rangeEditTextDate, RangeEditText rangeEditTextPillBalance);
+
+            Patient getPatient();
         }
 
         interface PagePresenter extends BasePresenterContract {

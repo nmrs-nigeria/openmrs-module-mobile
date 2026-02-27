@@ -20,7 +20,7 @@
     <string name="dbname">openmrs.db</string>
     <string name="aadbname">aaopenmrs.db</string>
 
-    <string name="app_version">Version 23.3.1</string>
+    <string name="app_version">App Version: 26.1.1</string>
 
     <string name="alphanumeric_postal_code">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 </string>
 
@@ -31,7 +31,7 @@
     <string name="alert_message">You don\'t have an active network connection on this device. Ensure you are connected to an active network that is on the same subnet as the NMRS server you wish to connect to and try launching the app again</string>
 
     <string name="login_button">Login</string>
-    <string name="login_url_hint">URL address</string>
+    <string name="login_url_hint">URL address </string>
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="login_location_select">Session Location</string>
@@ -39,7 +39,7 @@
     <string name="req_star"><![CDATA[<font color=\'#cc0029\'> * </font>]]></string>
     <string name="warning_dialog_title">Warning</string>
     <string name="warning_lost_data_dialog">Changing the URL, username or password will erase all the data. Are you sure?</string>
-    <string name="forgot_dialog_title">Unable to login?</string>
+    <string name="forgot_dialog_title">Unable to login? </string>
     <string name="forgot_dialog_message">Please contact the system administrator</string>
     <string name="forgot_button_ok">Dismiss</string>
     <string name="login_offline">Offline</string>
@@ -391,7 +391,7 @@
     <string name="adjustment">New Adjustment</string>
     <string name="transfer">New Transfer</string>
     <string name="distribution">New Distribution</string>
-    <string name="unable_to_login">Unable to login?</string>
+    <string name="unable_to_login">Unable to login? click <b><font color = "#E1DD1A">HERE</font></b> </string>
     <string name="no_patient_selected">No patient selected</string>
 
     <!--Matching Patient Activity-->
@@ -559,7 +559,7 @@
     <string name="action_troubleshoot">Troubleshoot</string>
     <string name="test_pbs_connection">Test PBS Connection</string>
     <string name="troubleshoot_title">Troubleshoot NMRS Connections</string>
-    
+
     <!-- Covid TB Integrator -->
     <string name="covid_tb_hiv_client_intake">Covid TB HIV Client Intake</string>
     <string name="blood_transfusion_in_last_3_months">Blood transfusion in last 3 months:</string>
@@ -605,5 +605,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fingerprint_no">1\n2\n3\n4\n5\n6\n7\n8\n9\n10</string>
     <string name="fingerprint_position">Left thumb\nLeft index\nLeft middle\nLeft ring\nLeft pinky\nRight thumb\nRight index\nRight middle\nRight ring\nRight pinky</string>
+    <string name="data_exchange_Module">Data Exchange Module</string>
+    <string name="title_activity_export">Data exchange</string>
+    <string name="dependency_validation_title">Validation Result</string>
+    <string name="release_res">Clear resources</string>
 
 </resources>

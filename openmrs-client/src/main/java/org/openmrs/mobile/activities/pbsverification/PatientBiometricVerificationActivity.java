@@ -21,8 +21,9 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import org.openmrs.mobile.activities.pbs.PatientBiometricDTO;
 import org.openmrs.mobile.activities.pbs.PatientBiometricSyncResponseModel;
 import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.api.FingerPrintVerificationSyncService;
+import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
 import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
@@ -98,13 +100,14 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
     String patientId = "";
     String visitDate = "";
     String patientUUID = "";
-    FingerPrintVerificationDAO FingerPrintVerificationDAO;
+    FingerPrintVerificationDAO fingerPrintVerificationDAO;
     FingerPrintVerificationUtility fingerPrinVerificationUtility;
     private final int minFingerPrintCount = ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT; //minFingerPrintCount is minimum count to be captured before saving to local/online db
+    private CheckBox replaceBaseCheckBox;
 
 
     public PatientBiometricVerificationActivity() {
-        FingerPrintVerificationDAO = new FingerPrintVerificationDAO();
+        fingerPrintVerificationDAO = new FingerPrintVerificationDAO();
         patientFingerPrints = new ArrayList<>();
     }
 
@@ -189,13 +192,13 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                 theFinger.setSerialNumber(mDeviceSN);
                 theFinger.setImageByte(mRegisterTemplate);
                 theFinger.setSyncStatus(0);
+                theFinger.setReplaceBase(replaceBaseCheckBox.isChecked()?1:0); // replace or not replace
 
 
                 //recapture Additional details
-
                 theFinger.setDateCreated(visitDate);
 
-
+                Util.log("The figer Date created::::"+theFinger.getDateCreated());
                 //reject finger print if already capture for another finger. Accept and replace if this is the same finger
                 String previousCapture = fingerPrinVerificationUtility.CheckIfFingerAlreadyCaptured(theFinger.getTemplate(), patientFingerPrints);
 
@@ -243,11 +246,12 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         //save to temp list to be discard later
         boolean recaptureMatchBase = compareWithBasePrint(theFinger, false);
         theFinger.setSyncStatus(0);// recaptureMatchBase ? 0 : -1   sync to -1 for the one that doest not match the base to disable immediate syncing
+        theFinger.setReplaceBase(replaceBaseCheckBox.isChecked()?1:0); // replace or not replace
         patientFingerPrints.add(theFinger);
 
 
         //save to the database directly
-        Long db_id = FingerPrintVerificationDAO.saveFingerPrint(theFinger);
+        Long db_id = fingerPrintVerificationDAO.saveFingerPrint(theFinger);
         debugMessage(String.valueOf(db_id));
         // print is not existing on list then add counter
         if (!printExist)
@@ -323,16 +327,18 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         List<PatientBiometricVerificationContract> pbs = dao.getSinglePatientPBS(Long.valueOf(patientId));
 // remove all before adding
         patientFingerPrints.clear();
-        if (pbs != null && pbs.size() > 0) {
+        if (pbs != null && !pbs.isEmpty()) {
             if (showDialog) {
                 CustomDebug("Some Finger Print already exit for this patient. You can capture more or clear the existing ones to start afresh",
                         false);
             }
+
             fingerPrintCaptureCount = pbs.size();
             //load in temp list
             patientFingerPrints.addAll(pbs);
-
+          boolean  isReplaceBase= false;
             for (PatientBiometricVerificationContract item : pbs) {
+                if (item.getReplaceBase()>0)  isReplaceBase =true;
                 if (showDialog) {
                     colorCapturedButton(item.getFingerPositions(),
                             android.R.color.holo_green_light, Typeface.NORMAL,
@@ -347,6 +353,8 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                     dao.updatePatientFingerPrintSyncStatus(Long.valueOf(patientId), item );
                 }
             }
+             Util.log("Log replace base: "+isReplaceBase);
+            replaceBaseCheckBox.setChecked(isReplaceBase);
         }
         //
 //        else{ //check if already sync
@@ -480,56 +488,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         if (NetworkUtils.isOnline() && NetworkUtils.hasNetwork() && patientUUID != null) {
 
 
-            if (isBase) {
-                //  base syn here
-                FingerPrintDAO dao  = new FingerPrintDAO();
-                List<PatientBiometricContract> pbs = dao.getAll(false, patientId);
-                org.openmrs.mobile.activities.pbs.PatientBiometricDTO dto = new PatientBiometricDTO();
-                dto.setFingerPrintList(new ArrayList<>(pbs));
-                dto.setPatientUUID(patientUUID);
-
-                new FingerPrintSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
-                    @Override
-                    public void onResponse(PatientBiometricSyncResponseModel obj) {
-
-                        if(obj !=null && obj.getIsSuccessful()){
-                            CustomDebug(obj.getErrorMessage(), false);
-                            dao.updateSync(Long.valueOf(patientId),1, false);
-                            // setting void to one for all records that matches the the UUID
-                            new ServiceLogDAO().set_patient_PBS_void(patientId,patientUUID,1);
-                            CustomDebug("Successfully saved to server.", true);
-                        }else{
-                            if(obj !=null){
-                                CustomDebug(obj.getErrorMessage(), false);
-                            }
-                            CustomDebug("An error occurred while saving prints on the server.", true);
-
-                        }
-                    }
-
-                    @Override
-                    public void onErrorResponse(PatientBiometricSyncResponseModel errorMessage) {
-                        if(errorMessage !=null){
-                            CustomDebug(errorMessage.getErrorMessage(), false);
-                        }
-                        //already saved
-                        //dao.saveFingerPrint(dto.getFingerPrintList());
-                        CustomDebug("An error occurred while saving prints on the server.", true);
-                    }
-
-                    @Override
-                    public void onErrorResponse(String errorMessage) {
-                        Log.d(TAG, "Log_C "+errorMessage);
-                        CustomDebug(errorMessage, false);
-
-                        //save locally
-                        //already saved
-                        //dao.saveFingerPrint(dto.getFingerPrintList());
-                        CustomDebug("Finger Prints saved offline", true);
-                    }
-                });
-            }
-            else {
+            {
 
 // recapture sync here
                 FingerPrintVerificationDAO dao = new FingerPrintVerificationDAO();
@@ -537,7 +496,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                 PatientBiometricVerificationDTO dto = new PatientBiometricVerificationDTO();
                 dto.setFingerPrintList(new ArrayList<>(pbs));
                 dto.setPatientUUID(patientUUID);
-                new FingerPrintVerificationSyncService().startSync(dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
+                new FingerPrintVerificationSyncService().startSync(replaceBaseCheckBox.isChecked(),   dto, new GenericResponseCallbackListener<PatientBiometricSyncResponseModel>() {
                     @Override
                     public void onResponse(PatientBiometricSyncResponseModel obj) {
                         if (obj != null && obj.getIsSuccessful()) {
@@ -547,6 +506,8 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
                             CustomDebug("Successfully saved to server.", true);
                             // setting void to one for all records that matches the the UUID
                             new ServiceLogDAO().set_patient_PBS_void(patientId, patientUUID, 1);
+
+                            OpenMRSCustomHandler.writeLogToFile("Save data directly into server with capture "+patientUUID);
                         } else {
                             if (obj != null) {
                                 CustomDebug(obj.getErrorMessage(), false);
@@ -585,7 +546,7 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
 
         Log.d(TAG, "Enter onCreate()");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_secugen_launcher);
+        setContentView(R.layout.activity_recapture);
 
         if (savedInstanceState != null) {
             patientId = savedInstanceState.getString(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE);
@@ -600,6 +561,8 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
             visitDate = savedInstanceState.getString(ApplicationConstants.BundleKeys.VISIT_DATE);
             haveNotReplace = savedInstanceState.getBoolean(ApplicationConstants.BundleKeys.REPLACE_BASE);
         }
+
+
 
         createViewObject();
         Patient patient = new PatientDAO().findPatientByID(patientId);
@@ -636,7 +599,10 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         //mAutoOnEnabled = false;
         //autoOn = new SGAutoOnEventNotifier(sgfplib, this);
         Log.d(TAG, "Exit onCreate()");
+        setCheckListener();
         CheckIfAlreadyCapturedOnLocalDB(patientId, true);
+
+
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -675,9 +641,59 @@ public class PatientBiometricVerificationActivity extends AppCompatActivity
         openUSBDevice(true);
         Log.d(TAG, "Exit onResume()");
     }
+//listen to check and update database for each change
+  private void setCheckListener(){
+      replaceBaseCheckBox = findViewById(R.id.replaceBase);
+
+      replaceBaseCheckBox.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+              boolean checked= replaceBaseCheckBox.isChecked();
+              showReplaceBaseDialog(checked);
+          }
+      });
+    //
+    }
 
 
     boolean loadingBiometric;
+
+
+
+
+
+    /**
+     * Displays a confirmation dialog to replace or undo the base print for a patient.
+     * @param replaceBase A boolean flag indicating the current state of base print replacement.
+     */
+    private void showReplaceBaseDialog(boolean replaceBase) {
+        // Determine the message based on the current state
+        String message = replaceBase
+                ? "Do you want to replace the base print for this patient?" +
+                "\n\nThis action cannot be undone after syncing to web instance"
+                : "Do you want to undo the base print replacement for this patient?"
+                + "\n\nThis action cannot be done after syncing to web instance";
+
+        String positiveButtonText = replaceBase ? "Replace" : "Undo";
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Action")
+                .setMessage(message)
+                .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Handle the positive button action
+                        fingerPrintVerificationDAO.updateReplaceBase(Long.valueOf(patientId), replaceBase?1:0 );
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        replaceBaseCheckBox.setChecked(!replaceBase);
+                    }
+                })
+                .setCancelable(false) // Prevent closing the dialog by tapping outside
+                .show();
+    }
 
     private void openUSBDevice(boolean isResume) {
         Log.d(TAG, "Enter isResume  " + isResume);

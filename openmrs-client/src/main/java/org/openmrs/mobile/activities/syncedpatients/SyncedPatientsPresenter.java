@@ -38,7 +38,7 @@ public class SyncedPatientsPresenter extends BasePresenter implements SyncedPati
     private String mQuery;
 
     public void deletePatient(Patient mPatient) {
-        new PatientDAO().deletePatient(mPatient.getId());
+        new PatientDAO().deletePatientConfirm(mPatient.getId());
         addSubscription(new VisitDAO().deleteVisitsByPatientId(mPatient.getId())
                 .observeOn(Schedulers.io())
                 .subscribe());
@@ -85,26 +85,33 @@ public class SyncedPatientsPresenter extends BasePresenter implements SyncedPati
      */
     @Override
     public void updateLocalPatientsList() {
-        addSubscription(patientDAO.getAllPatients()
+        addSubscription(patientDAO.getAllPatients(mQuery)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(patientList -> {
-                    boolean isFiltering = StringUtils.notNull(mQuery) && !mQuery.isEmpty();
+                    // commented redundant filter and  synced clean up
+//                    boolean isFiltering = StringUtils.notNull(mQuery) && !mQuery.isEmpty();
+//
+//                    if (isFiltering) {
+//                        patientList = FilterUtil.getPatientsFilteredByQuery(patientList, mQuery);
+//                        if (patientList.isEmpty()) {
+//                            syncedPatientsView.updateListVisibility(false, mQuery);
+//                        } else {
+//                            syncedPatientsView.updateListVisibility(true);
+//                        }
+//                    } else {
+//                        if (patientList.isEmpty()) {
+//                            syncedPatientsView.updateListVisibility(false);
+//                        } else {
+//                            syncedPatientsView.updateListVisibility(true);
+//                        }
+//                    }
+//                    patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
 
-                    if (isFiltering) {
-                        patientList = FilterUtil.getPatientsFilteredByQuery(patientList, mQuery);
-                        if (patientList.isEmpty()) {
-                            syncedPatientsView.updateListVisibility(false, mQuery);
-                        } else {
-                            syncedPatientsView.updateListVisibility(true);
-                        }
+                    if (patientList.isEmpty()) {
+                        syncedPatientsView.updateListVisibility(false);
                     } else {
-                        if (patientList.isEmpty()) {
-                            syncedPatientsView.updateListVisibility(false);
-                        } else {
                             syncedPatientsView.updateListVisibility(true);
                         }
-                    }
-                    patientList = FilterUtil.getPatientsFilteredByQuery(patientList);
                     syncedPatientsView.updateAdapter(patientList);
                 }));
 

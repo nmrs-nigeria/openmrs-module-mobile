@@ -38,6 +38,7 @@ import org.openmrs.mobile.activities.lastviewedpatients.LastViewedPatientsActivi
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsContract;
 import org.openmrs.mobile.activities.syncedpatients.SyncedPatientsRecyclerViewAdapter;
 import org.openmrs.mobile.application.OpenMRS;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Patient;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.NetworkUtils;

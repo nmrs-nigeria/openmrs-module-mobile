@@ -1,0 +1,32 @@
+
+            {
+              "label": "Drug Unit",
+              "type": "obs",
+              "id": "DrugUnit",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "548c793b-5b36-41cd-b675-f26da070fbcb",
+                "answers": [
+                  {
+                    "concept": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Milliliter"
+                  },
+                  {
+                    "concept": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tube"
+                  },
+                  {
+                    "concept": "162427AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Lotion"
+                  },
+                  {
+                    "concept": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Tablet"
+                  },
+                  {
+                    "concept": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Capsule"
+                  }
+                ]
+              }
+            },

@@ -17,7 +17,9 @@ package org.openmrs.mobile.activities.login;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -46,6 +48,7 @@ import org.openmrs.mobile.activities.dialog.CustomFragmentDialog;
 import org.openmrs.mobile.api.FormListService;
 import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.bundle.CustomDialogBundle;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.watcher.LoginValidatorWatcher;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.utilities.ApplicationConstants;
@@ -108,13 +111,13 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         } else {
             mUrl.setText(mLastCorrectURL);
         }
-        hideURLDialog();
+
 
         // Font config
         FontsUtil.setFont(this.getActivity().findViewById(android.R.id.content));
         FontsUtil.setFont((ViewGroup) mRootView);
 
-
+        hideURLDialog();
         return mRootView;
     }
 
@@ -130,6 +133,7 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
 
         loginValidatorWatcher = new LoginValidatorWatcher(mUrl, mUsername, mPassword, mDropdownLocation, mLoginButton);
 
+        mUrlInput.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#E1DD1A")));
         mUrl.setOnFocusChangeListener((view, hasFocus) -> {
             if (StringUtils.notEmpty(mUrl.getText().toString())
                     && !view.isFocused()
@@ -153,6 +157,7 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
             }
         });
 
+        mUsernameInput.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#E1DD1A")));
         mUsername.setOnFocusChangeListener((view, hasFocus) -> {
             if (hasFocus) {
                 mUsername.setHint("");
@@ -163,6 +168,7 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
             }
         });
 
+        mPasswordInput.setDefaultHintTextColor(ColorStateList.valueOf(Color.parseColor("#E1DD1A")));
         mPassword.setOnFocusChangeListener((view, hasFocus) -> {
             if (hasFocus) {
                 mPassword.setHint("");
@@ -439,7 +445,11 @@ public class LoginFragment extends ACBaseFragment<LoginContract.Presenter> imple
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.login_location_select));
         for (int i = 0; i < locationList.size(); i++) {
-            list.add(locationList.get(i).getDisplay());
+            String display =locationList.get(i).getDisplay();
+            if(display==null || display.trim().isEmpty()) {
+                display = locationList.get(i).getName();
+            }
+            list.add(display);
         }
         return list;
     }

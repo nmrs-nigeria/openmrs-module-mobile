@@ -55,6 +55,7 @@ public class EncounterSync {
     private final RestApi apiService = RestServiceBuilder.createService(RestApi.class);
     private RestApi restApi;
     private Context context;
+
     public EncounterSync() {
         //this.context = ctx;
         restApi = RestServiceBuilder.createService(RestApi.class);
@@ -62,7 +63,7 @@ public class EncounterSync {
 
 
     public Visit addEncounter(final Encountercreate encountercreate, String encounterDate, @NonNull LogResponse logResponse) {
-
+        Util.log("");
         if (NetworkUtils.isOnline()) {
             Visit visit = new VisitDAO().getActiveVisitByPatientId(encountercreate.getPatientId()).toBlocking().single();
             if (visit != null) {
@@ -113,23 +114,29 @@ public class EncounterSync {
                     encountercreate.save();
                     logResponse.setSuccess(true);
                     new VisitRepository().syncLastVitals(encountercreate.getPatient(), logResponse);
+                    //Additional log precise
+                    logResponse.addSimpleLogs(new SimpleLog(encountercreate.getFormname(), true));
 
                 } else {
-                    Util.log("syncEncounter fai");
+                   // Util.log("syncEncounter fai");
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
                     logResponse.appendLogs(err, "", "sync encounter");
-
+                    //Additional log precise
+                    logResponse.addSimpleLogs(new SimpleLog(encountercreate.getFormname(), false, err));
                 }
             } catch (Exception e) {
                 Util.log("syncEncounter 04 " + e.getMessage() + e.toString());
                 logResponse.appendLogs(e.getMessage(), "", "sync encounter");
+                //Additional log precise
+                logResponse.addSimpleLogs(new SimpleLog(encountercreate.getFormname(), false, e.getMessage()) );
 
             }
 
         } else {
             ToastUtil.error("Sync is off. Turn on sync to save form data.");
             logResponse.appendLogs("Offline", "Check your connection", "sync encounter");
+            logResponse.addSimpleLogs(new SimpleLog(encountercreate.getFormname(), false, "Offline") );
         }
 
     }
@@ -177,8 +184,17 @@ public class EncounterSync {
                 return logResponse;
             }
             for (final Encountercreate encountercreate : encountercreatelist) {
+
                 try {
+
                     if (!encountercreate.getSynced() && patient.isSynced()) {
+                        if (patient.getUuid() != null && !patient.getUuid().isEmpty()) {
+                            encountercreate.setPatient(patient.getUuid());
+                        } else {
+                            logResponse.appendLogs("Failed to create the patient on web", "Try again and check patient on the server.",
+                                    "Sync Encounter ");
+                        }
+
                         //get the encounter from the server. We are doing this to check
                         restApi.getEncounter(patient.getUuid(), encountercreate.getFormUuid(), encountercreate.getEncounterDatetime(), encountercreate.getEncounterDatetime(), "full");
 
@@ -194,7 +210,7 @@ public class EncounterSync {
                             programEnrollment.setPatient(encountercreate.getPatient());
                             programEnrollment.setProgram("14d6f977-7952-41cd-b243-1c3bcc4a9213");
                             programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
-                            addProgram(restApi, programEnrollment, logResponse);
+                            addProgram(restApi, programEnrollment, logResponse, "HIV Testing Services");
                         }
                         if (encountercreate.getFormname().equals("HIV Enrollment")) {
 
@@ -202,7 +218,7 @@ public class EncounterSync {
                             programEnrollment.setPatient(encountercreate.getPatient());
                             programEnrollment.setProgram("9083deaa-f37f-44b3-9046-b87b134711a1");
                             programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
-                            addProgram(restApi, programEnrollment, logResponse);
+                            addProgram(restApi, programEnrollment, logResponse,"Program for All clients recieving any form of treatment for HIV");
                         }
                         if (encountercreate.getFormname().equals("General Antenatal Care")) {
                             ProgramEnrollment programEnrollment = new ProgramEnrollment();
@@ -210,7 +226,7 @@ public class EncounterSync {
                             programEnrollment.setProgram("c3ae2d33-97d3-4cc4-9206-8a8160593648");
                             programEnrollment.setDateEnrolled(encountercreate.getEncounterDatetime());
 
-                            addProgram(restApi, programEnrollment, logResponse);
+                            addProgram(restApi, programEnrollment, logResponse,"PMTCT");
                         }
 
 
@@ -218,24 +234,30 @@ public class EncounterSync {
                             Visit visit = new VisitDAO().getActiveVisitByUUID(encountercreate.getVisit())
                                     .toBlocking().single();
                             if (visit != null) {
-                                Util.log(" visit id " + visit.getId());
+                                Util.log(" Online " + visit.getId());
                                 mVisit = visit;
-                                new VisitRepository().reOpenVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()), logResponse);
+                                new VisitRepository().reOpenVisitByUUID(new VisitDAO()
+                                        .getVisitByIDLocally(visit.getId()), logResponse);
+                                Util.log(" visit id " + visit.getId());
                                 encountercreate.setVisit(visit.getUuid());
                                 visit.setStopDatetime(null);
                                 new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
                                 syncEncounter(encountercreate, logResponse);
 
                             } else {
+
                                 Visit v = startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime(), logResponse);
                                 if (v != null) {
+                                    Util.log(" Started new visit " + visit.getId());
                                     mVisit = v;
                                 }
                             }
 
                         } else {
+                            Util.log(" Start new visit LLLLLLL");
                             Visit v = startNewVisitForEncounter(encountercreate, encountercreate.getEncounterDatetime(), logResponse);
                             if (v != null) {
+                                Util.log(" Started new visit LLLLLLL");
                                 mVisit = v;
                             }
                         }
@@ -260,28 +282,39 @@ public class EncounterSync {
     }
 
 
-    private void addProgram(RestApi restApi, ProgramEnrollment programEnrollment, LogResponse logResponse) {
+    private void addProgram(RestApi restApi, ProgramEnrollment programEnrollment, LogResponse logResponse, String programName) {
         if (NetworkUtils.isOnline()) {
             try {
                 Response<ProgramEnrollment> res = restApi.addProgram(programEnrollment).execute();
                 if (res.isSuccessful()) {
                     ToastUtil.success(OpenMRS.getInstance().getString(R.string.add_program_success_msg));
                     OpenMRS.getInstance().getOpenMRSLogger().e("Adding Program Successful " + res.raw());
+                    //Additional log precise
                     logResponse.appendLogs("Program added", "", "Sync Encounter addProgram");
+                    //Additional log precise
+                    logResponse.addSimpleLogs(new SimpleLog(programName,  true  ) );
                 } else {
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
                     logResponse.appendLogs(err, "Contact HI", "Sync Encounter addProgram");
+                    //Additional log precise
+                    logResponse.addSimpleLogs(new SimpleLog(programName,  false, err  ) );
 
                 }
             } catch (Exception e) {
                 logResponse.appendLogs(e.getMessage(), "", "Sync Encounter addProgram");
                 ToastUtil.error(OpenMRS.getInstance().getString(R.string.add_program_no_network_msg));
                 OpenMRS.getInstance().getOpenMRSLogger().e("Failed to add provider. Device Offline");
+                //Additional log precise
+                logResponse.addSimpleLogs(new SimpleLog(programName,  false, e.getMessage()  ) );
+
 
             }
         } else {
             logResponse.appendLogs("Offline", "Please let syn complete before going offline", "Sync Encounter addProgram");
+            //Additional log precise
+            logResponse.addSimpleLogs(new SimpleLog(programName,  false, "Offline"  ) );
+
         }
     }
 
@@ -403,6 +436,7 @@ public class EncounterSync {
 
 
         public Long startVisit(final Patient patient, String encounterDate, @NonNull LogResponse logResponse) {
+            Util.log("patient UUID " + patient.getUuid());
             final Visit visit = new Visit();
 //        visit.setStartDatetime(DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
             visit.setStartDatetime(encounterDate);
@@ -415,16 +449,21 @@ public class EncounterSync {
                 Response<Visit> res = call.execute();
                 if (res.isSuccessful()) {
                     Visit newVisit = res.body();
+                    Util.log("Success in starting visit ");
                     return visitDAO.saveOrUpdate(newVisit, patient.getId()).toBlocking().single();
 
                 } else {
+
                     String err = "ErrorBody:" + res.errorBody().string() +
                             "  Message:" + res.message() + "  Code:" + res.code() + "  Body:" + res.body();
                     logResponse.appendLogs(err, "Contact HI", "Sync  startVisit");
 
+                    Util.log("EE in starting visit " + err);
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
+                Util.log("Uncaught  EEEE ");
 
                 logResponse.appendLogs(e.getMessage(), " ", "sync  startVisit");
             }
@@ -434,11 +473,10 @@ public class EncounterSync {
 
 
         public void endVisitByUUID(final Visit visit, LogResponse logResponse) {
-            visit.setStopDatetime(DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+            visit.setStopDatetime(DateUtils.convertTime(DateUtils.convertTime(visit.getStartDatetime()), DateUtils.OPEN_MRS_REQUEST_FORMAT));
             new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
             Visit newVisit = new Visit();
-           newVisit.setStopDatetime(DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
-         if(true ) return;
+            newVisit.setStopDatetime(DateUtils.convertTime(DateUtils.convertTime(visit.getStartDatetime()), DateUtils.OPEN_MRS_REQUEST_FORMAT));
             Call<Visit> call = restApi.endVisitByUUID(visit.getUuid(), newVisit);
             try {
                 Response<Visit> res = call.execute();

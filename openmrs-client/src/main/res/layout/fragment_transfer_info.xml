@@ -729,13 +729,12 @@
                         android:background="@drawable/custom_bg"
                         android:padding="8dp">
 
-                        <Spinner
+                        <EditText
                             android:id="@+id/transferExpirationDate"
-                            style="@style/Widget.AppCompat.Spinner.Underlined"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_gravity="center"
+                            android:inputType="datetime"
                             android:gravity="center"
                             android:textSize="14sp" />
 

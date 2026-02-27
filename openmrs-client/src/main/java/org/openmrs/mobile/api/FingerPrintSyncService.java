@@ -103,7 +103,7 @@ public class FingerPrintSyncService extends Application {
          }
      });
  }
-    public void retrieveCaptureFromServer(String patientUUID, String patientId, boolean saveTemplate) {
+    public void retrieveCaptureFromServer(String patientUUID,  boolean saveTemplate, GenericResponseCallbackListener<Boolean>  callbackListener) {
 
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
 
@@ -111,10 +111,11 @@ public class FingerPrintSyncService extends Application {
         //String url = "http://192.168.0.151:2018/api/FingerPrint/CheckForPreviousCapture"; //baseUrl[1].replaceAll("//","");
         Util.log("public void retrieveCaptureFromServer(String patientUUID, boolean saveTemplate)");
             Call<List<PatientBiometricContract>> call = restApi.checkForExistingPBS(url, patientUUID);
-            call.enqueue(new Callback<List<PatientBiometricContract>>() {
+            call.enqueue(  new Callback<List<PatientBiometricContract>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<PatientBiometricContract>> call, @NonNull retrofit2.Response<List<PatientBiometricContract>> response) {
                     if (response.isSuccessful()) {
+                        callbackListener.onResponse(true);
                      //   retrieveFingerLog(patientUUID, patientId);
                         if (response.body() != null && response.body().size() >= ApplicationConstants.MINIMUM_REQUIRED_FINGERPRINT) {
                            Patient patient =  new PatientDAO().findPatientByUUID(patientUUID);
@@ -131,15 +132,18 @@ public class FingerPrintSyncService extends Application {
                         }else{
                           //  Util.log("LessPrints "+response.body().size());
                         }
+                        ;
                     }else{
-                       // Util.log("retrieveCaptureFromServer ");
+                        callbackListener.onResponse(false);
+                        OpenMRSCustomHandler.writeLogToFile("PBS service request fail. Message: "+response.message());
                     }
                 }
                 @Override
                 public void onFailure(Call<List<PatientBiometricContract>> call, Throwable t) {
-                    ToastUtil.notify("Error: " + t.getMessage());
+                    callbackListener.onResponse(false);
                     Util.log("Failure "+t.getMessage());
-                    OpenMRSCustomHandler.writeLogToFile("Error from retrieve capture from server: Message {" + t.getMessage() + "}");
+                    OpenMRSCustomHandler.writeLogToFile("PBS service, Error from retrieve capture from server: Message {" + t.getMessage() + "}");
+
                 }
         });
     }

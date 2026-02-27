@@ -25,6 +25,17 @@ public class Module extends Resource {
     @Expose
     private String packageName;
 
+    public String getStarted() {
+        return started;
+    }
+
+    public void setStarted(String started) {
+        this.started = started;
+    }
+
+    @Expose
+    private String started;
+
     public String getName() {
         return name;
     }

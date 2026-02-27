@@ -88,8 +88,8 @@ public class FingerPrintDAO {
         return id;
     }
 
-    public void deletePrintPosition(Long patientId, FingerPositions fingerPosition) {
-        new FingerPrintTable().deleteFingerPrintCapture(patientId, fingerPosition);
+    public long deletePrintPosition(Long patientId, FingerPositions fingerPosition) {
+      return  new FingerPrintTable().deleteFingerPrintCapture(patientId, fingerPosition);
     }
 
     public  int updateSync(Long patientID, int syncValue,boolean saveTemplate){

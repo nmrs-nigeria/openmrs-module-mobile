@@ -11,12 +11,13 @@
 package org.openmrs.mobile.activities.formdisplay;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,28 +36,35 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.activeandroid.query.Select;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.activities.ACBaseFragment;
-import org.openmrs.mobile.activities.formprogramlist.FormProgramActivity;
 import org.openmrs.mobile.application.OpenMRS;
-import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.watcher.NumericValidatorWatcher;
 import org.openmrs.mobile.models.Answer;
 import org.openmrs.mobile.models.Condition;
 import org.openmrs.mobile.models.Control;
-import org.openmrs.mobile.models.EncounterType;
-import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Facility;
+import org.openmrs.mobile.models.IdentifierType;
 import org.openmrs.mobile.models.Lga;
+import org.openmrs.mobile.models.Obscreate;
+import org.openmrs.mobile.models.ObscreateLocal;
+import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PatientIdentifier;
+import org.openmrs.mobile.models.PersonAttribute;
 import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.models.States;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FontsUtil;
 import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.RangeEditText;
@@ -64,10 +72,13 @@ import org.openmrs.mobile.utilities.SelectManyFields;
 import org.openmrs.mobile.utilities.SelectOneField;
 import org.openmrs.mobile.utilities.StringUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
+import org.openmrs.mobile.utilities.ViewUtils;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -110,6 +121,35 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         return root;
     }
 
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+         super.onActivityCreated(savedInstanceState);
+//
+//        /*
+//        Pick hospital number as init value when client code is empty
+//         */
+//        RangeEditText patientIdentifierEditText = getActivity().findViewById(customHashCode("162576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+//        if (patientIdentifierEditText != null) {
+//            if (ViewUtils.isEmpty(patientIdentifierEditText)) {
+//         Patient patient=  ((FormDisplayActivity) getActivity()).getPatient();
+//         if(patient!=null) {
+//             List<PatientIdentifier> identifiers = patient.getIdentifiers();
+//             for(PatientIdentifier patientIdentifier:identifiers){
+//                 if(patientIdentifier!=null){
+//                     if("Hospital Number".equals(patientIdentifier.getDisplay())){
+//                         patientIdentifierEditText.setText(patientIdentifier.getIdentifier());
+//                         break;
+//                     }
+//                 }
+//             }
+//         }
+//            }
+//        }
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         FormFieldsWrapper formFieldsWrapper = new FormFieldsWrapper(getInputFields(), getSelectOneFields(), getSelectManyFields());
@@ -136,6 +176,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 }
             }
             selectOneFields = formFieldsWrapper.getSelectOneFields();
+
+
         }
     }
 
@@ -162,6 +204,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             field.setGroupConcept(question.getGroupConcept());
             field.setQuestionLabel(question.getLabel());
             InputField inputField = getInputField(field.getConcept());
+
+
             if (inputField != null) {
                 inputField.setId(field.getId());
             } else {
@@ -178,7 +222,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             if (question.getRepeatConcept() == null) {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT));
             } else {
-                vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+                vv.setId(customHashCode(question.getQuestionOptions().getConcept() + question.getRepeatConcept()+ LABEL_ID_SALT ));
             }
             sectionLinearLayout.addView(vv);
 
@@ -253,7 +297,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             if (question.getRepeatConcept() == null) {
                 vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT));
             } else {
-                vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+                vv.setId(customHashCode(question.getQuestionOptions().getConcept()  + question.getRepeatConcept()+ LABEL_ID_SALT));
             }
             sectionLinearLayout.addView(vv);
 
@@ -289,9 +333,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 } else {
                     ed.setInputType(InputType.TYPE_CLASS_NUMBER);
                 }
-                ed.setId(field.getId());
-//                ed.setId(customHashCode(question.getQuestionOptions().getConcept()));
+             ed.setId(field.getId());
+           //      ed.setId(customHashCode(question.getQuestionOptions().getConcept()));
+
                 sectionLinearLayout.addView(ed, layoutParams);
+
+
             }
             if (question.getGenderSpecificConcept() != null && question.getGenderSpecificConcept().equals("show")) {
                 ed.setVisibility(View.VISIBLE);
@@ -318,6 +365,9 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         RangeEditText ed = new RangeEditText(getActivity());
+
+
+
         if (question.getRepeatConcept() == null) {
             InputField field = new InputField(question.getQuestionOptions().getConcept(), question.getType());
             field.setQuestionLabel(question.getLabel());
@@ -409,7 +459,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + question.getRepeatConcept()+ LABEL_ID_SALT ));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
             //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
@@ -551,7 +601,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             }
             //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept()  + question.getRepeatConcept()+ LABEL_ID_SALT));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 
@@ -723,7 +773,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             TextView textView = new TextView(getActivity());
             textView.setPadding(10, 20, 0, 0);
             textView.setText(question.getLabel());
-            textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept()   + question.getRepeatConcept()+ LABEL_ID_SALT));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
             LinearLayout questionLinearLayout = new LinearLayout(getActivity());
@@ -1043,10 +1093,30 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         textView.setText(question.getLabel());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         FontsUtil.setFont(textView, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
-        textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT));
+        // todo modify view for check id proper setting
+        Util.log( "Create Check "+ question.getQuestionOptions().getConcept()+question.getRepeatConcept() );
+
+        if(question.getRepeatConcept()==null){
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_CHECK));
+        }else{
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept()+question.getRepeatConcept() + LABEL_ID_CHECK));
+
+        }
+       // textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_CHECK));
         final LinearLayout linearLayoutCheckBox = new LinearLayout(getActivity());
         linearLayoutCheckBox.setOrientation(LinearLayout.VERTICAL);
-        linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_CHECK));
+
+       // linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_CHECK));
+
+        //modify view for check id proper setting
+        if(question.getRepeatConcept()==null){
+            linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept()  ));
+        }else{
+            linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept()+question.getRepeatConcept() ));
+
+        }
+
+
         SelectManyFields checkField = new SelectManyFields(question.getQuestionOptions().getAnswers(),
                 question.getQuestionOptions().getConcept(), question.getType());
         checkField.setQuestionLabel(question.getLabel());
@@ -1337,8 +1407,8 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                     }
                 }
             } else if (conditionOptions.getControlType().equals(CONTROL_TYPE_CHECK)) {
-                LinearLayout childCheckBox = (LinearLayout) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_CHECK));
-                TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_SALT));
+                LinearLayout childCheckBox = (LinearLayout) mParent.findViewById(customHashCode(conditionOptions.getChildControl()  ));
+                TextView label = (TextView) mParent.findViewById(customHashCode(conditionOptions.getChildControl() + LABEL_ID_CHECK));
 
                 if (childCheckBox != null) {
                     if (conditionOptions.getDisplayType().equals("show") && answer.getLabel().equals(conditionOptions.getWhen())) {
@@ -1353,6 +1423,9 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                             label.setVisibility(View.GONE);
                         }
                     }
+                }else{
+                    // todo
+                    Util.log("NULL Check Option" +conditionOptions.getChildControl());
                 }
             } else if (conditionOptions.getControlType().equals(CONTROL_TYPE_SECTION)) {
                 LinearLayout linearLayout = (LinearLayout) mParent.findViewById(customHashCode(conditionOptions.getChildControl()));
@@ -1440,9 +1513,9 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 RadioButton radioButton = (RadioButton) radioGroup.getChildAt(selectOneField.getChosenAnswerPosition());
                 radioButton.setChecked(true);
             }
-            setOnCheckedChangeListener(radioGroup, selectOneField);
+            setOnCheckedChangeListener(radioGroup, selectOneField, question);
         } else {
-            setOnCheckedChangeListener(radioGroup, radioGroupField);
+            setOnCheckedChangeListener(radioGroup, radioGroupField, question);
             selectOneFields.add(radioGroupField);
         }
     }
@@ -1452,10 +1525,25 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
         TextView textView = new TextView(getActivity());
         textView.setPadding(10, 10, 0, 10);
         textView.setText(question.getLabel());
+        // todo modify view for check id proper setting
+        Util.log( "Edit Check "+ question.getQuestionOptions().getConcept()+question.getQuestionOptions().getRepeatConcept() );
+        if(question.getRepeatConcept()==null){
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_CHECK));
+        }else{
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept()+question .getRepeatConcept() + LABEL_ID_CHECK));
+
+        }
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         FontsUtil.setFont(textView, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
         final LinearLayout linearLayoutCheckBox = new LinearLayout(getActivity());
         linearLayoutCheckBox.setOrientation(LinearLayout.VERTICAL);
+        //modify view for check id proper setting
+        if(question.getRepeatConcept()==null){
+            linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept()  ));
+        }else{
+            linearLayoutCheckBox.setId(customHashCode(question.getQuestionOptions().getConcept()+question .getRepeatConcept() ));
+
+        }
 
         if (selectManyField != null) {
             selectManyField.setGroupConcept(question.getGroupConcept());
@@ -1534,10 +1622,10 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 RadioButton radioButton = (RadioButton) radioGroup.getChildAt(getIndexRadio(question.getQuestionOptions().getAnswers(), radioField.getChosenAnswer().getConcept()));
                 radioButton.setChecked(true);
             }
-            setOnCheckedChangeListener(radioGroup, radioField);
+            setOnCheckedChangeListener(radioGroup, radioField, question);
         } else {
 
-            setOnCheckedChangeListener(radioGroup, radioGroupField);
+            setOnCheckedChangeListener(radioGroup, radioGroupField, question);
             selectOneFields.add(radioGroupField);
         }
     }
@@ -1621,7 +1709,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
             TextView textView = new TextView(getActivity());
             textView.setPadding(10, 20, 0, 0);
             textView.setText(question.getLabel());
-            textView.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            textView.setId(customHashCode(question.getQuestionOptions().getConcept() +  question.getRepeatConcept()+ LABEL_ID_SALT));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
             Spinner spinner = (Spinner) getActivity().getLayoutInflater().inflate(R.layout.form_dropdown, null);
@@ -1764,7 +1852,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept()   + question.getRepeatConcept()+ LABEL_ID_SALT));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 
@@ -1882,7 +1970,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept() +   question.getRepeatConcept()+ LABEL_ID_SALT));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
@@ -1994,7 +2082,7 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
                 inputFields.add(field);
             }
             View vv = generateTextView(question.getLabel());
-            vv.setId(customHashCode(question.getQuestionOptions().getConcept() + LABEL_ID_SALT + question.getRepeatConcept()));
+            vv.setId(customHashCode(question.getQuestionOptions().getConcept() +   question.getRepeatConcept()+ LABEL_ID_SALT));
             FontsUtil.setFont(vv, FontsUtil.OpenFonts.OPEN_SANS_LIGHT);
             sectionLinearLayout.addView(vv);
 //        sectionLinearLayout.addView(generateTextView(question.getLabel()));
@@ -2060,11 +2148,12 @@ public class FormDisplayPageFragment extends ACBaseFragment<FormDisplayContract.
     }
 
 
-    private void setOnCheckedChangeListener(RadioGroup radioGroup, final SelectOneField radioGroupField) {
+    private void setOnCheckedChangeListener(RadioGroup radioGroup, final SelectOneField radioGroupField, Question question) {
         radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
             View radioButton = radioGroup1.findViewById(i);
             int idx = radioGroup1.indexOfChild(radioButton);
             radioGroupField.setAnswer(idx);
+            showHideControl(question.getQuestionOptions().getControl(), radioGroupField.getChosenAnswer());
         });
     }
 

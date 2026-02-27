@@ -16,7 +16,7 @@ public class FingerPrintVerificationTable extends Table<PatientBiometricVerifica
      *
      * @see Table#values(int)
      */
-    private static final int INSERT_COLUMNS_COUNT = 14;
+    private static final int INSERT_COLUMNS_COUNT = 15;
 
     public class Column extends MasterColumn {
         public static final String biometricInfo_Id = "biometricInfo_Id";
@@ -35,6 +35,7 @@ public class FingerPrintVerificationTable extends Table<PatientBiometricVerifica
         public static final String creator = "creator";
         public static final String dateCreated = "dateCreated";
         public static final String SyncStatus = "syncStatus";
+        public static final String replaceBase = "replaceBase";
     }
 
     @Override
@@ -54,7 +55,8 @@ public class FingerPrintVerificationTable extends Table<PatientBiometricVerifica
                 + Column.manufacturer + Column.Type.TEXT_TYPE_WITH_COMMA
                 + Column.SyncStatus + Column.Type.INT_TYPE_WITH_COMMA
                 + Column.dateCreated + Column.Type.DATE_TYPE_NOT_NULL
-                + Column.creator + Column.Type.INT_TYPE
+                + Column.creator + Column.Type.INT_TYPE_WITH_COMMA
+                + Column.replaceBase + Column.Type.INT_TYPE // add replace base in create table for new installers.
                 + ");";
     }
 
@@ -74,7 +76,9 @@ public class FingerPrintVerificationTable extends Table<PatientBiometricVerifica
                 + Column.manufacturer + Column.COMMA
                 + Column.SyncStatus + Column.COMMA
                 + Column.dateCreated + Column.COMMA
-                + Column.creator + ")"
+                + Column.creator +Column.COMMA+
+                Column.replaceBase +
+                ")"
                 + values(INSERT_COLUMNS_COUNT);
     }
 

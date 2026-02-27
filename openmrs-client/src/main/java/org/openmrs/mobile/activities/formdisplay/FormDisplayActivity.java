@@ -14,6 +14,7 @@ http://www.androprogrammer.com/2015/06/view-pager-with-circular-indicator.html*/
 package org.openmrs.mobile.activities.formdisplay;
 
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,18 +35,26 @@ import org.openmrs.mobile.activities.ACBaseActivity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.bundle.FormFieldsWrapper;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Form;
 import org.openmrs.mobile.models.Page;
 import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.Question;
 import org.openmrs.mobile.utilities.ApplicationConstants;
+import org.openmrs.mobile.utilities.DateUtils;
 import org.openmrs.mobile.utilities.FormService;
+import org.openmrs.mobile.utilities.InputField;
 import org.openmrs.mobile.utilities.RangeEditText;
 import org.openmrs.mobile.utilities.StringUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
 import org.openmrs.mobile.utilities.ViewUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FormDisplayActivity extends ACBaseActivity implements FormDisplayContract.View.MainView {
 
@@ -53,6 +62,9 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     private Button mBtnNext, mBtnFinish, mBtnPrevious;
     private int mDotsCount;
     private ImageView[] mDots;
+
+
+
     private Long personID = null;
     private int mStep = 1;
     private boolean isEligible = false;
@@ -147,7 +159,9 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
     public void setPresenter(FormDisplayContract.Presenter.MainPresenter presenter) {
         this.mPresenter = presenter;
     }
-
+    public Long getPersonID() {
+        return personID;
+    }
     private void initViewComponents(String valueRef) {
         FormPageAdapter formPageAdapter = new FormPageAdapter(getSupportFragmentManager(), valueRef);
         LinearLayout pagerIndicator = findViewById(R.id.viewPagerCountDots);
@@ -285,7 +299,8 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
                     mBtnPrevious.setVisibility(View.VISIBLE);
                     mBtnFinish.setVisibility(View.GONE);
                 }
-
+///  calculate and set next Appointment
+                initNextAppointmentDate();
             }
 
             @Override
@@ -322,6 +337,16 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
             mBtnFinish.setVisibility(View.VISIBLE);
         }
     }
+    //set init values and set listener to pill balance  for next appointment date
+    private void initNextAppointmentDate() {
+        final RangeEditText rangeEditTextDate = findViewById(customHashCode("5096AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+        final RangeEditText rangeEditTextPillBalance = findViewById(customHashCode("6577d9c0-10ec-4e02-b71e-cce212168447"));
+        if (rangeEditTextDate != null && rangeEditTextPillBalance != null) {
+           mPresenter.calculateNextAppointment(   rangeEditTextDate, rangeEditTextPillBalance);
+        }
+    }
+
+
 
 
     @Override
@@ -387,5 +412,9 @@ public class FormDisplayActivity extends ACBaseActivity implements FormDisplayCo
 
     public void setValidPatientIdentifier(boolean validPatientIdentifier) {
         isValidPatientIdentifier = validPatientIdentifier;
+    }
+
+    public Patient getPatient() {
+      return    mPresenter.getPatient();
     }
 }

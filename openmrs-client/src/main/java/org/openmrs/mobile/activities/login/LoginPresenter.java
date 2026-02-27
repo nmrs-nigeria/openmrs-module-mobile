@@ -28,6 +28,7 @@ import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.databases.OpenMRSSQLiteOpenHelper;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.GetVisitTypeCallbackListener;
 import org.openmrs.mobile.models.Location;
 import org.openmrs.mobile.models.Results;
@@ -41,6 +42,7 @@ import org.openmrs.mobile.utilities.StringUtils;
 import org.openmrs.mobile.utilities.ToastUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -120,9 +122,10 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
 
     @Override
     public void authenticateUser(final String username, final String password, final String url, final boolean wipeDatabase) {
-        loginView.showLoadingAnimation();
+       loginView.showLoadingAnimation();
         if (NetworkUtils.isOnline()) {
             mWipeRequired = wipeDatabase;
+            RestServiceBuilder.changeBaseUrl(url); // set Input URL temporary before for the restful API  created at the moment
             RestApi restApi = RestServiceBuilder.createService(RestApi.class, username, password);
             Call<Session> call = restApi.getSession();
             call.enqueue(new Callback<Session>() {
@@ -156,12 +159,17 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                                                 }
                                                 else{
                                                     saveDatimCodeToSharedPreference(datimCode);//save the datim code to shared pref
-                                                    continueWithNormalLogin(session, wipeDatabase, url, username, password);
+                                                    // Datim code equal to store one no need to wipe data
+                                                    continueWithNormalLogin(session, false, url, username, password);
+                                                     //continueWithNormalLogin(session, wipeDatabase, url, username, password);
                                                 }
                                             }
                                             else{
                                                 saveDatimCodeToSharedPreference(datimCode);//save the datim code to shared pref
-                                                continueWithNormalLogin(session, wipeDatabase, url, username, password);
+                                                //datim code code not found so, just updating the app and no need to wipe data,
+                                                continueWithNormalLogin(session, false, url, username, password);
+                                                //
+                                                //continueWithNormalLogin(session, wipeDatabase, url, username, password);
                                             }
 
                                         }
@@ -210,7 +218,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                 if (mOpenMRS.getUsername().equals(username) && BCrypt.checkpw(password, mOpenMRS.getHashedPassword())) {
                     mOpenMRS.deleteSecretKey();
                     mOpenMRS.setPasswordAndHashedPassword(password);
-                    mOpenMRS.setSessionToken(mOpenMRS.getLastSessionToken());
+                    mOpenMRS.setSessionToken("O3"+ new Date()); //mOpenMRS.getLastSessionToken() with time// 03 session not needed
                     loginView.showToast(R.string.login_offline_toast_message,
                             ToastUtil.ToastType.NOTICE);
                     loginView.userAuthenticated();
@@ -236,6 +244,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
 
     public void continueWithNormalLogin(Session session, boolean wipeDatabase, String url, String username, String password)
     {
+        mOpenMRS.setServerUrl(url); // Save the Authenticated URL for every condition
         mOpenMRS.deleteSecretKey();
         if (wipeDatabase) {
             mOpenMRS.deleteDatabase(OpenMRSSQLiteOpenHelper.DATABASE_NAME);
@@ -272,6 +281,7 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
         });
         setLogin(true, url);
         userService.updateUserInformation(username);
+        loginView.startFormListService(); //it require authentication before u can get the forms
 
         loginView.userAuthenticated();
         loginView.finishLoginActivity();
@@ -333,7 +343,8 @@ public class LoginPresenter extends BasePresenter implements LoginContract.Prese
                             RestServiceBuilder.changeBaseUrl(url.trim());
                             mOpenMRS.setServerUrl(url);
                             loginView.initLoginForm(response.body().getResults(), url);
-                            loginView.startFormListService();
+                         // loginView.startFormListService(); //it require authentication before u can get the forms
+
                             loginView.setLocationErrorOccurred(false);
                         } else {
                             loginView.showInvalidURLSnackbar("Failed to fetch server's locations");

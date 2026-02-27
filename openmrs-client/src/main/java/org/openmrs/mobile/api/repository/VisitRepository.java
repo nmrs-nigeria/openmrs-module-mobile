@@ -22,6 +22,7 @@ import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.dao.EncounterDAO;
 import org.openmrs.mobile.dao.LocationDAO;
 import org.openmrs.mobile.dao.VisitDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.GetVisitTypeCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.StartVisitResponseListenerCallback;
@@ -215,12 +216,13 @@ public class VisitRepository {
     }
 
     public void endVisitByUUID(final Visit visit, @Nullable final StartVisitResponseListenerCallback callbackListener) {
-        visit.setStopDatetime(DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+        Util.log("Ending visit S" +visit.getStartDatetime()+" E"+visit.getStopDatetime());
+        visit.setStopDatetime(DateUtils.convertTime(DateUtils.convertTime(visit.getStartDatetime()), DateUtils.OPEN_MRS_REQUEST_FORMAT));
         new VisitDAO().updateVisitLocally(visit, visit.getId(), visit.getPatient().getId());
-        Visit test = new Visit();
-        test.setStopDatetime(DateUtils.convertTime(System.currentTimeMillis(), DateUtils.OPEN_MRS_REQUEST_FORMAT));
-
-        Call<Visit> call = restApi.endVisitByUUID(visit.getUuid(), test );
+        Visit newVisit = new Visit();
+        newVisit.setStopDatetime(DateUtils.convertTime(DateUtils.convertTime(visit.getStartDatetime()), DateUtils.OPEN_MRS_REQUEST_FORMAT));
+        Util.log("sending End visit S" +newVisit.getStartDatetime()+" E"+newVisit.getStopDatetime());
+        Call<Visit> call = restApi.endVisitByUUID(visit.getUuid(), newVisit );
 
         call.enqueue(new Callback<Visit>() {
             @Override
@@ -229,6 +231,8 @@ public class VisitRepository {
                     visitDAO.getVisitByID(visit.getId())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(vis -> {
+                                Util.log("Response End visit S" +response.body().getStartDatetime()+" E"+response.body().getStopDatetime());
+
                                 vis.setStopDatetime(response.body().getStopDatetime());
                                 visitDAO.saveOrUpdate(vis, vis.getPatient().getId())
                                         .observeOn(AndroidSchedulers.mainThread())
@@ -307,7 +311,6 @@ public class VisitRepository {
                     encountercreate.setVisit(newUUID);
                     new Update(Encountercreate.class).set("visit = ?",newUUID).where("visit = ?",visit.getUuid()).execute();
                     new EncounterService().syncEncounter(encountercreate);
-                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                     visit.setUuid(newUUID);
                     visitDAO.saveOrUpdate(visit, patient.getId())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -316,6 +319,7 @@ public class VisitRepository {
                                     callbackListener.onResponse();
                                 }
                             });
+                    new VisitRepository().endVisitByUUID(new VisitDAO().getVisitByIDLocally(visit.getId()));
                 }
                 else {
                     if(callbackListener != null) {

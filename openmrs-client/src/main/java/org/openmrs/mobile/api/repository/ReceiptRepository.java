@@ -27,6 +27,7 @@ import org.openmrs.mobile.api.RestApi;
 import org.openmrs.mobile.api.RestServiceBuilderCommodity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.models.Receipt;
 import org.openmrs.mobile.models.ReceiptItem;
@@ -55,6 +56,8 @@ public class ReceiptRepository extends RetrofitRepository {
     public void syncReceipt(final Receipt receipt, @Nullable final DefaultResponseCallbackListener callbackListener) {
         if (NetworkUtils.isOnline()) {
             Call<Receipt> call = restApi.startReceipt(receipt);
+
+            Util.log(OpenMRSCustomHandler.showJson(receipt,""));
             call.enqueue(new Callback<Receipt>() {
                 @Override
                 public void onResponse(@NonNull Call<Receipt> call, @NonNull Response<Receipt> response) {
@@ -68,13 +71,18 @@ public class ReceiptRepository extends RetrofitRepository {
                                     .set("isSynced = 1")
                                     .where("receiptId = ?", lastInsertReceipt)
                                     .execute();
+                            Util.log("SSS "+response.errorBody().string());
+
                         } else {
                             if (callbackListener != null) {
                                 callbackListener.onErrorResponse(response.message());
                             }
+                            Util.log("FF "+response.errorBody().string());
                             OpenMRSCustomHandler.writeLogToFile("Failed Receipt: " + response.code() + " / " + response.message() + " / " + response.body() + " / " + response.errorBody());
                         }
                     }catch (Exception e){
+                        Util.log("EEEE "+ e.getMessage());
+
                         OpenMRSCustomHandler.writeLogToFile(e.getMessage());
                     }
                 }
@@ -87,6 +95,8 @@ public class ReceiptRepository extends RetrofitRepository {
                        // callbackListener.onResponse();
 
                     }
+                    Util.log("On F "+ t.getMessage());
+
                 }
             });
         }else{

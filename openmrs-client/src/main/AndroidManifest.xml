@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.USB_PERMISSION" />
-
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -396,6 +397,7 @@
             android:label="@string/troubleshoot_title"
             android:theme="@style/AppThemeOrig" />
         <activity
+            android:label="@string/consumption_label"
             android:name=".activities.viewconsumption.ViewConsumptionActivity"
             android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
             android:theme="@style/AppThemeOrig">
@@ -412,6 +414,7 @@
                 android:value=".activities.commodity.CommodityActivity" />
         </activity>
         <activity
+            android:label="@string/receipt_icon_label"
             android:name=".activities.viewreceipt.ViewReceiptActivity"
             android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
             android:theme="@style/AppThemeOrig">
@@ -420,6 +423,7 @@
                 android:value=".activities.findcommodity.FindCommodityActivity" />
         </activity>
         <activity
+            android:label="@string/distribution_label"
             android:name=".activities.viewdistribution.ViewDistributionActivity"
             android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
             android:theme="@style/AppThemeOrig">
@@ -428,6 +432,7 @@
                 android:value=".activities.findcommodity.FindCommodityActivity" />
         </activity>
         <activity
+            android:label="@string/transfer_commodity_label"
             android:name=".activities.viewtransfer.ViewTransferActivity"
             android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
             android:theme="@style/AppThemeOrig">
@@ -436,6 +441,7 @@
                 android:value=".activities.findcommodity.FindCommodityActivity" />
         </activity>
         <activity
+            android:label="@string/adjustment_commodity_label"
             android:name=".activities.viewadjustment.ViewAdjustmentActivity"
             android:parentActivityName=".activities.findcommodity.FindCommodityActivity"
             android:theme="@style/AppThemeOrig">
@@ -453,7 +459,7 @@
         </activity>
         <activity
             android:name=".activities.pbs.ExportPBS"
-            android:label="@string/title_activity_export_p_b_s"
+            android:label="@string/title_activity_export"
             android:parentActivityName=".activities.dashboard.DashboardActivity"
             android:theme="@style/AppThemeOrig">
             <meta-data

@@ -14,15 +14,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import org.openmrs.mobile.sync.SyncNewService;
+import org.openmrs.mobile.utilities.Notifier;
 import org.openmrs.mobile.utilities.ToastUtil;
 
 public class SyncStateReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
-        ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
-        Intent  sy= new Intent(context, SyncNewService.class);
-       context.startService(sy);
+
+        if (Notifier.CANCEL_NOTIFICATION_ACTION.equals(intent.getAction())) {
+            int cancelId=   intent.getIntExtra("cancel_notification_id", -1);
+            if(cancelId!=-1) {
+                Notifier.cancel(context, cancelId);
+            }
+        }
+
+//        ToastUtil.notify("Syncing switched on, attempting to sync patients and form data");
+//        Intent  sy= new Intent(context, SyncNewService.class);
+//       context.startService(sy);
 
 //        Intent i=new Intent(context,PatientService.class);
 //        context.startService(i);

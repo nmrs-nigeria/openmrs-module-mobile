@@ -31,7 +31,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.openmrs.mobile.api.FormListService;
-import org.openmrs.mobile.databases.DBOpenHelper;
 import org.openmrs.mobile.databases.OpenMRSDBOpenHelper;
 import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.Consumption;
@@ -40,7 +39,6 @@ import org.openmrs.mobile.models.Destination;
 import org.openmrs.mobile.models.EncounterType;
 import org.openmrs.mobile.models.Encountercreate;
 import org.openmrs.mobile.models.Facility;
-import org.openmrs.mobile.models.FingerPrintLog;
 import org.openmrs.mobile.models.FormResource;
 import org.openmrs.mobile.models.Item;
 import org.openmrs.mobile.models.ItemBatch;
@@ -72,7 +70,7 @@ public class OpenMRS extends Application {
     public void onCreate() {
         initializeSQLCipher();
         super.onCreate();
-        Util.log("Getting instance ");
+        //Util.log("Getting instance ");
         instance = this;
         if (mExternalDirectoryPath == null) {
             mExternalDirectoryPath = this.getExternalFilesDir(null).toString();
@@ -158,6 +156,20 @@ public class OpenMRS extends Application {
         editor.putString(ApplicationConstants.UserKeys.USER_NAME, username);
         editor.apply();
     }
+
+    public void setMetadataVersion(String version) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.UserKeys.METADATA_VERSION_UUID, version);
+        editor.apply();
+    }
+
+    public void setPBSserverVersion(String version) {
+        SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
+        editor.putString(ApplicationConstants.UserKeys.PBS_SERVER_VERSION, version);
+        editor.apply();
+    }
+
+
 
     public void setPassword(String password) {
         SharedPreferences.Editor editor = getOpenMRSSharedPreferences().edit();
@@ -260,6 +272,14 @@ public class OpenMRS extends Application {
     public String getUsername() {
         SharedPreferences prefs = getOpenMRSSharedPreferences();
         return prefs.getString(ApplicationConstants.UserKeys.USER_NAME, ApplicationConstants.EMPTY_STRING);
+    }
+    public String getMetadataVersion() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.UserKeys.METADATA_VERSION_UUID, ApplicationConstants.EMPTY_STRING);
+    }
+    public String getPBSserverVersion() {
+        SharedPreferences prefs = getOpenMRSSharedPreferences();
+        return prefs.getString(ApplicationConstants.UserKeys.PBS_SERVER_VERSION, ApplicationConstants.EMPTY_STRING);
     }
 
     public String getPassword() {
@@ -3475,4 +3495,6 @@ public class OpenMRS extends Application {
             SQLiteUtils.execSql("INSERT OR REPLACE INTO pharmacy (name,uuid)  VALUES('Darunavir(DRV) 75mg (480)','8ca90610-a0f3-11eb-bcbc-0242ac130002')");
         }
     }
+
+
 }

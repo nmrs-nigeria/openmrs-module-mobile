@@ -342,7 +342,6 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -351,7 +350,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/clientTracView"
+                    android:id="@+id/clientinteakeView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -360,7 +359,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/clientTracButton"
+                        android:id="@+id/clientinteakeButton"
                         android:layout_width="@dimen/dashboard_icon_height_width1"
                         android:layout_height="@dimen/dashboard_icon_height_width1"
                         android:layout_alignParentTop="true"
@@ -369,22 +368,23 @@
                         android:layout_marginTop="@dimen/dashboard_text_bottom_margin1"
                         android:layout_marginEnd="@dimen/dashboard_icon_margin"
                         android:layout_marginBottom="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/client_tracking_label" />
+                        android:contentDescription="@string/client_intake_label" />
 
                     <TextView
-                        android:id="@+id/clientTracLabel"
+                        android:id="@+id/clientinteakeLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/clientTracButton"
+                        android:layout_below="@id/clientinteakeButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin1"
-                        android:text="@string/client_tracking_label"
+                        android:text="@string/client_intake_label"
                         android:textSize="@dimen/dashboard_text_size1" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+
         </TableRow>
 
         <TableRow>
@@ -523,7 +523,6 @@
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -532,7 +531,7 @@
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:id="@+id/clientinteakeView"
+                    android:id="@+id/clientTracView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground"
@@ -541,7 +540,7 @@
                     android:visibility="gone">
 
                     <ImageView
-                        android:id="@+id/clientinteakeButton"
+                        android:id="@+id/clientTracButton"
                         android:layout_width="@dimen/dashboard_icon_height_width1"
                         android:layout_height="@dimen/dashboard_icon_height_width1"
                         android:layout_alignParentTop="true"
@@ -550,22 +549,23 @@
                         android:layout_marginTop="@dimen/dashboard_text_bottom_margin1"
                         android:layout_marginEnd="@dimen/dashboard_icon_margin"
                         android:layout_marginBottom="@dimen/dashboard_icon_margin"
-                        android:contentDescription="@string/client_intake_label" />
+                        android:contentDescription="@string/client_tracking_label" />
 
                     <TextView
-                        android:id="@+id/clientinteakeLabel"
+                        android:id="@+id/clientTracLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/clientinteakeButton"
+                        android:layout_below="@id/clientTracButton"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/dashboard_text_top_margin"
                         android:layout_marginBottom="@dimen/dashboard_text_bottom_margin1"
-                        android:text="@string/client_intake_label"
+                        android:text="@string/client_tracking_label"
                         android:textSize="@dimen/dashboard_text_size1" />
                 </RelativeLayout>
 
             </androidx.cardview.widget.CardView>
+
 
 
         </TableRow>

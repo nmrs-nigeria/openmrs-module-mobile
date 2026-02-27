@@ -84,7 +84,8 @@ public class AddEditTransferFragment extends ACBaseFragment<AddEditTransferContr
     private EditText edwastage;
     private TextView operationdateerror;
     private Button datePicker;
-    private Button transferExpirationDatePicker;
+
+   // private Button transferExpirationDatePicker;
     private Spinner transferItemSpinner;
     private Spinner transferItemPharmacySpinner;
     private Spinner transferDrugTypeSpinner;
@@ -461,7 +462,7 @@ public class AddEditTransferFragment extends ACBaseFragment<AddEditTransferContr
         datasystemerror = v.findViewById(R.id.datasystemerror);
         commodityTypeerror = v.findViewById(R.id.commoditytypeerror);
         datePicker = v.findViewById(R.id.btn_datepicker);
-        transferExpirationDatePicker = v.findViewById(R.id.btn_ExpirationDatedatepicker);
+       // transferExpirationDatePicker = v.findViewById(R.id.btn_ExpirationDatedatepicker);
         transferExpirationDate = v.findViewById(R.id.transferExpirationDate);
         transferItemSpinner = v.findViewById(R.id.transferItem);
         transferItemPharmacySpinner = v.findViewById(R.id.transferItemPharmacy);
@@ -691,7 +692,8 @@ public class AddEditTransferFragment extends ACBaseFragment<AddEditTransferContr
         });
 
         datePicker.setBackgroundColor(Color.GRAY);
-        transferExpirationDatePicker.setBackgroundColor(Color.GRAY);
+        //error comment
+       // transferExpirationDatePicker.setBackgroundColor(Color.GRAY);
 
         datePicker.setOnClickListener(v -> {
             int cYear;
@@ -722,7 +724,8 @@ public class AddEditTransferFragment extends ACBaseFragment<AddEditTransferContr
 
         });
 
-        transferExpirationDatePicker.setOnClickListener(v -> {
+        //modify comment
+        transferExpirationDate.setOnClickListener(v -> {
             int cYear;
             int cMonth;
             int cDay;

@@ -1,0 +1,2573 @@
+{
+    "name": "Client Intake",
+    "uuid": "35cc381b-3b8f-45fa-b9b1-f638d51ad774",
+    "processor": "EncounterFormProcessor",
+    "pages": [
+        {
+            "label": "Client Intake Information",
+            "sections": [
+                {
+                    "label": "Client Intake Information",
+                    "questions": [
+                        {
+                            "label": "Visit Date",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "6bcaf85b-8504-4c7f-b510-a50436236b80"
+                            },
+                            "type": "encounterDate",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Client Code:",
+                            "id": "patient_identifier",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "162576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                            },
+                            "type": "patientIdentifier",
+                            "validators": []
+                        },
+                        {
+                            "label": "Kind of HTS:",
+                            "id": "Kind_of_HTS",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "ddda96ba-4161-45a3-a16f-5ba23c56406f",
+                                "answers": [
+                                    {
+                                        "concept": "159940AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Voluntary"
+                                    },
+                                    {
+                                        "concept": "164163AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "PITC"
+                                    }
+                                ]
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "select "
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Setting:",
+                            "id": "setting",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "3850453a-58b6-4cba-9b04-34de4bc36778",
+                                "answers": [
+                                    {
+                                        "concept": "540fc818-6941-4f49-8d8d-dbf38e914dbf",
+                                        "label": "Blood Bank"
+                                    },
+                                    {
+                                        "concept": "5271AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Family Planning (FP)"
+                                    },
+                                    {
+                                        "concept": "160542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Outpatient department (OPD)"
+                                    },
+                                    {
+                                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Others"
+                                    },
+                                    {
+                                        "concept": "160545AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Outreach"
+                                    },
+                                    {
+                                        "concept": "160546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Sexually transmitted infection program/clinic (STI)"
+                                    },
+                                    {
+                                        "concept": "4cdb3187-6547-4b00-b02a-5f86be4215dd",
+                                        "label": "Standalone HTS"
+                                    },
+                                    {
+                                        "concept": "160529AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Tuberculosis Visit (TB)"
+                                    },
+                                    {
+                                        "concept": "160539AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Voluntary counseling and testing program (VCT)"
+                                    },
+                                    {
+                                        "concept": "161629AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Ward"
+                                    }
+                                ]
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "select "
+                                }
+                            ]
+                        },
+                        {
+                            "label": "MER Modalities:",
+                            "id": "MER_Modalities",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "5b040af7-b6db-4000-990e-a7e00125890d",
+                                "answers": [
+                                    {
+                                        "concept": "1882AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Emergency"
+                                    },
+                                    {
+                                        "concept": "be5b60b4-5312-4dda-b612-05ac0c0e3fbb",
+                                        "label": "Index"
+                                    },
+                                    {
+                                        "concept": "1896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Inpatient"
+                                    },
+                                    {
+                                        "concept": "68AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Malnutrition"
+                                    },
+                                    {
+                                        "concept": "e7456303-5c59-45a3-92cc-3a9fb693093e",
+                                        "label": "Mobile"
+                                    },
+                                    {
+                                        "concept": "163488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Other community"
+                                    },
+                                    {
+                                        "concept": "e76cbb21-da21-4683-9856-d5346ede5c6e",
+                                        "label": "Other PITC"
+                                    },
+                                    {
+                                        "concept": "036205f0-31fb-4404-ac40-d00e4cc12403",
+                                        "label": "Pediatric <5 Clinic"
+                                    },
+                                    {
+                                        "concept": "6beb2084-7908-4737-9b9b-7b1bc2ee4278",
+                                        "label": "PMTCT (ANC1 Only)"
+                                    },
+                                    {
+                                        "concept": "234f00e5-7f4a-4490-a7f2-7352eff30588",
+                                        "label": "PMTCT (Post ANC1: Pregnancy/L&D/BF)"
+                                    },
+                                    {
+                                        "concept": "14550ba8-f5f9-4e9c-a6e6-ecfc80ce341b",
+                                        "label": "SNS"
+                                    },
+                                    {
+                                        "concept": "160546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "STI"
+                                    },
+                                    {
+                                        "concept": "5964AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "TB"
+                                    },
+                                    {
+                                        "concept": "160539AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "VCT"
+                                    }
+                                ]
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "select "
+                                }
+                            ]
+                        },
+                        {
+                            "label": "First Time Visit",
+                            "id": "frst_visit",
+                            "type": "obs",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "ea5e7d97-81e2-4c10-ae32-7f35fb3f6871",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Type of Session:",
+                            "id": "sessiontype",
+                            "type": "obs",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "42c6ec2f-e862-4943-a4f9-17f2fa279ea6",
+                                "answers": [
+                                    {
+                                        "concept": "2114fafb-6377-4d6c-b16c-3c4e1f9276cf",
+                                        "label": "Individual"
+                                    },
+                                    {
+                                        "concept": "bfc04c91-af66-43d6-97ee-3ca55cce5210",
+                                        "label": "Couple"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Previously Self Tested"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Referred from",
+                            "id": "referred_from",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "ea7fc0a1-2ee9-41d1-8e6e-9695b4735395",
+                                "answers": [
+                                    {
+                                        "concept": "978AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Self"
+                                    },
+                                    {
+                                        "concept": "160529AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Tuberculosis Visit (TB)"
+                                    },
+                                    {
+                                        "concept": "160546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Sexually transmitted infection program/clinic (STI)"
+                                    },
+                                    {
+                                        "concept": "5271AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Family Planning (FP)"
+                                    },
+                                    {
+                                        "concept": "160542AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Outpatient department (OPD)"
+                                    },
+                                    {
+                                        "concept": "161629AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Observation Ward"
+                                    },
+                                    {
+                                        "concept": "540fc818-6941-4f49-8d8d-dbf38e914dbf",
+                                        "label": "Blood bank"
+                                    },
+                                    {
+                                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Others"
+                                    }
+                                ]
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "select"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Client's Telephone Number:",
+                            "id": "client_telephone",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Marital Status:",
+                            "type": "obs",
+                            "id": "marita_sttus",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1054AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1057AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Single"
+                                    },
+                                    {
+                                        "concept": "5555AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Married"
+                                    },
+                                    {
+                                        "concept": "1058AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Divorced"
+                                    },
+                                    {
+                                        "concept": "1056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Separated"
+                                    },
+                                    {
+                                        "concept": "1060AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Cohabiting"
+                                    },
+                                    {
+                                        "concept": "1059AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Widow/er"
+                                    },
+                                    {
+                                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Other"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "No. of own children ",
+                            "id": "no_children",
+                            "questionOptions": {
+                                "rendering": "number",
+                                "concept": "160312AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "max": "50",
+                                "min": "0"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Numbers of wives/Co-wives:",
+                            "id": "no_wifes",
+                            "questionOptions": {
+                                "rendering": "number",
+                                "concept": "5557AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "max": "50",
+                                "min": "0"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Index Testing: Is client identified from an index client",
+                            "id": "Index_Testing",
+                            "type": "obs",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "5ada32be-d495-42d5-a2fe-8b2da0cd603f",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "20d152ba-cd6b-40e3-8323-07b75a84c228",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "5ada32be-d495-42d5-a2fe-8b2da0cd603f",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "20d152ba-cd6b-40e3-8323-07b75a84c228",
+                                            "controlType": "text"
+                                        }
+                                    ]
+                                },
+                                "concept": "549a1ef8-4e02-4a68-ae7c-66f84155e8f2",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Index Type:",
+                            "id": "index_type",
+                            "type": "obs",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "5ada32be-d495-42d5-a2fe-8b2da0cd603f",
+                                "answers": [
+                                    {
+                                        "concept": "504d45dc-beaa-432d-9d39-42e99ffa4839",
+                                        "label": "Biological"
+                                    },
+                                    {
+                                        "concept": "f1deb3f1-5e3f-41c2-8406-e7d8310b171e",
+                                        "label": "Sexual"
+                                    },
+                                    {
+                                        "concept": "1041fc95-dcd4-4b3a-b1c5-d6a0c0182aeb",
+                                        "label": "Social (needle sharing)"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Index Client ID: ",
+                            "id": "Index_Client_ID",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "20d152ba-cd6b-40e3-8323-07b75a84c228"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Is client retesting for result verification?:",
+                            "type": "obs",
+                            "id": "client_retesting",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "a6063c8d-d424-429c-9d80-e3486f9a8ebe",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Pre-Test Information",
+            "sections": [
+                {
+                    "label": "Knowledge Assesment",
+                    "questions": [
+                        {
+                            "label": "Previously tested HIV negative:",
+                            "type": "obs",
+                            "id": "previous_test",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "0b57c4ca-eee5-43e5-aebc-a070bda0383a",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client Pregnant (Test and ensure linkage to PMTCT Program):",
+                            "type": "obs",
+                            "id": "client_pregnant",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1434AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client informed about HIV transmission routes :",
+                            "type": "obs",
+                            "id": "client_informedroute",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "6262cc1f-8cfa-4d2a-814d-1ff4c155eca7",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client informed about risk factors for HIV transmission:",
+                            "type": "obs",
+                            "id": "client_informedRisk",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "5eae7f3c-0498-4a65-af0d-d13228a51ec4",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client informed on preventing HIV transmission methods:",
+                            "type": "obs",
+                            "id": "transmission_method",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "3d569fa2-21ed-4254-b39f-d2a04dda6139",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client informed about possible test results:",
+                            "type": "obs",
+                            "id": "Client_informed_about_possible_test_results",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1f3168a5-502d-4a88-901e-a5de78748a3d",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Informed consent for HIV testing given:",
+                            "type": "obs",
+                            "id": "informed_consent",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1710AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Pre-Test Information",
+            "sections": [
+                {
+                    "label": "HIV Risk Assesment",
+                    "questions": [
+                        {
+                            "label": "Ever had sexual intercourse:",
+                            "type": "obs",
+                            "id": "sexual_intercourse",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "d67272b2-3846-408a-8faa-c5a50ab3ff1c",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Blood transfusion in last 3 months:",
+                            "type": "obs",
+                            "id": "last3_months",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1063AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Unprotected sex with casual partner in last 3 months:",
+                            "type": "obs",
+                            "id": "unprotected_sex_3_months",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "159218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    },
+                                    {
+                                        "concept": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Unknown"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Unprotected sex with regular partner in the last 3months: ",
+                            "type": "obs",
+                            "id": "unprotected_sex_regular_partner",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "d6dc77d1-7653-4444-be8e-818fa5cf61b0",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "STI in last 3 months:",
+                            "type": "obs",
+                            "id": "sti_lastmonth",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "164809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "More than 1 sex partner during last 3 months:",
+                            "type": "obs",
+                            "id": "moresex_partner",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "321f1f62-6915-4504-956b-af3f1a715017",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Pre-Test Information",
+            "sections": [
+                {
+                    "label": "Client TB Screening",
+                    "questions": [
+                        {
+                            "label": "Current Cough:",
+                            "type": "obs",
+                            "id": "Current_Cough",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "143264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Weight Loss:",
+                            "type": "obs",
+                            "id": "Weight_Loss",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "832AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Fever",
+                            "type": "obs",
+                            "id": "Fever",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "140238AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    },
+                                    {
+                                        "concept": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Unknown"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Night sweats: ",
+                            "type": "obs",
+                            "id": "Night_sweats",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "133027AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Contact with TB+ patient: ",
+                            "type": "obs",
+                            "id": "contact_with_tb",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "124068AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Pre-Test Information",
+            "sections": [
+                {
+                    "label": "Syndromic STI Screening",
+                    "questions": [
+                        {
+                            "label": "Complaints of vaginal discharge or burning when urinating (Female only):",
+                            "type": "obs",
+                            "id": "Complaints_of_vaginal_discharge",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "2cabc6b8-ec7d-463c-9e47-d3de7599feca",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Complaints of lower abdominal pains with or without vaginal discharge (female only):",
+                            "type": "obs",
+                            "id": "Complaints_of_lower_abdominal_pains",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "4ea92538-9196-4d11-ae72-a61c41260e37",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Complaints of urethral discharge or burning when urinating (Male only)",
+                            "type": "obs",
+                            "id": "Complaints_of_urethral_discharge",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "a0b14cd4-b0d4-49ef-86ed-096c503cf72b",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    },
+                                    {
+                                        "concept": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Unknown"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Complaints of scrotal swelling and pain: ",
+                            "type": "obs",
+                            "id": "Complaints_of_scrotal_swelling_and_pain",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "a86c9235-9b7b-4a9d-8117-68b998a6a5b5",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Complaints of genital sore(s) or swollen inguinal lymph nodes with or without pains)",
+                            "type": "obs",
+                            "id": "Complaints_of_genital_sore",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "2da686d5-71a6-4d3d-8ec8-1b2dea069be3",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    },
+                                    {
+                                        "concept": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Unknown"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "HIV Test Results",
+            "sections": [
+                {
+                    "label": "HIV Test Results",
+                    "questions": [
+                        {
+                            "label": "Screening Test Result:",
+                            "type": "obs",
+                            "id": "Test_1_result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Non-reactive",
+                                            "displayType": "hide",
+                                            "childControl": "1183a13b-cc22-43df-8c57-fefe7acebd3e",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Non-reactive",
+                                            "displayType": "hide",
+                                            "childControl": "68451929-82e8-48a4-a5b3-8c506d36bcd5",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Non-reactive",
+                                            "displayType": "hide",
+                                            "childControl": "2e46d331-a956-49a2-b9eb-f74b8946fa08",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Non-reactive",
+                                            "displayType": "hide",
+                                            "childControl": "13885bb7-3f19-4bd6-bdcd-fe1139726413",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Reactive",
+                                            "displayType": "show",
+                                            "childControl": "1183a13b-cc22-43df-8c57-fefe7acebd3e",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Reactive",
+                                            "displayType": "show",
+                                            "childControl": "68451929-82e8-48a4-a5b3-8c506d36bcd5",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Reactive",
+                                            "displayType": "show",
+                                            "childControl": "2e46d331-a956-49a2-b9eb-f74b8946fa08",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Reactive",
+                                            "displayType": "show",
+                                            "childControl": "13885bb7-3f19-4bd6-bdcd-fe1139726413",
+                                            "controlType": "date"
+                                        }
+                                    ]
+                                },
+                                "concept": "b75f5803-34e9-46ea-bd41-c174670a13c7",
+                                "answers": [
+                                    {
+                                        "concept": "1228AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Reactive"
+                                    },
+                                    {
+                                        "concept": "1229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Non-reactive"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Screening Test Date",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "24f6bb20-7964-4efb-a3ad-d067a26182e7"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Confirmatory Test Result:",
+                            "type": "obs",
+                            "id": "Test_Confirm_result",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1183a13b-cc22-43df-8c57-fefe7acebd3e",
+                                "answers": [
+                                    {
+                                        "concept": "1228AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Reactive"
+                                    },
+                                    {
+                                        "concept": "1229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Non-reactive"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Confirmatory Test Date",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "68451929-82e8-48a4-a5b3-8c506d36bcd5"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Tie Breaker Test Result:",
+                            "type": "obs",
+                            "id": "Test_tie_result",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "2e46d331-a956-49a2-b9eb-f74b8946fa08",
+                                "answers": [
+                                    {
+                                        "concept": "1228AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Reactive"
+                                    },
+                                    {
+                                        "concept": "1229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Non-reactive"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Tie Breaker Test Date",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "13885bb7-3f19-4bd6-bdcd-fe1139726413"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "HIV Test Results",
+            "sections": [
+                {
+                    "label": "HIV Test Results",
+                    "questions": [
+                        {
+                            "label": "Final Result:",
+                            "type": "obs",
+                            "id": "Final_Result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1fb46619-abcd-405a-81c9-3c9018473729",
+                                "answers": [
+                                    {
+                                        "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Positive"
+                                    },
+                                    {
+                                        "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Negative"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Rapid Recency Assay",
+            "sections": [
+                {
+                    "label": "Rapid Recency Assay",
+                    "questions": [
+                        {
+                            "label": "Opt Out of RTRI?",
+                            "type": "obs",
+                            "id": "Opt_Out_of_RTRI",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "0162980d-da26-4427-9955-c971273f7997",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "93aaf29a-fc4c-4b54-8c82-ee70030ef660",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "ff8296d8-6923-4f98-929f-2edc76976d9f",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "f46bd4a2-49df-4f2b-a7e5-b578a767baeb",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "8c8f91a7-ddd5-49ce-8799-af3eb9e5b6f2",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "27118f80-056b-4db4-b794-a76f68773521",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "hide",
+                                            "childControl": "18cb45f2-5043-4f47-b697-b60119a48e4f",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "0162980d-da26-4427-9955-c971273f7997",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "93aaf29a-fc4c-4b54-8c82-ee70030ef660",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "ff8296d8-6923-4f98-929f-2edc76976d9f",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "f46bd4a2-49df-4f2b-a7e5-b578a767baeb",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "8c8f91a7-ddd5-49ce-8799-af3eb9e5b6f2",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "27118f80-056b-4db4-b794-a76f68773521",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "show",
+                                            "childControl": "18cb45f2-5043-4f47-b697-b60119a48e4f",
+                                            "controlType": "select"
+                                        }
+                                    ]
+                                },
+                                "concept": "87a0404d-9ae6-4a65-a6ea-b823337c1db1",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Test name",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Test_name",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "0162980d-da26-4427-9955-c971273f7997",
+                                "answers": [
+                                    {
+                                        "concept": "17100c01-2a2e-4363-a138-32b2df6b0bce",
+                                        "label": "Asante"
+                                    },
+                                    {
+                                        "concept": "34797f81-9835-492e-8875-b4b12d445302",
+                                        "label": "Others"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Test Date",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "93aaf29a-fc4c-4b54-8c82-ee70030ef660"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Verify Participant ID:",
+                            "id": "Verify_Participant_ID",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "ff8296d8-6923-4f98-929f-2edc76976d9f"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Control Line",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Control_Line",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "f46bd4a2-49df-4f2b-a7e5-b578a767baeb",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Verification Line",
+                            "type": "obs",
+                            "defaultDisplay": "hide",
+                            "id": "Verification_Line",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "8c8f91a7-ddd5-49ce-8799-af3eb9e5b6f2",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Long-Term Line",
+                            "type": "obs",
+                            "defaultDisplay": "hide",
+                            "id": "Long-Term Line",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "27118f80-056b-4db4-b794-a76f68773521",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Recency Interpretation:",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Recency_Interpretation",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Recent",
+                                            "displayType": "show",
+                                            "childControl": "7a366561-c6e5-49cd-91c2-05d2229c9c00",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Long Term",
+                                            "displayType": "hide",
+                                            "childControl": "7a366561-c6e5-49cd-91c2-05d2229c9c00",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Negative",
+                                            "displayType": "hide",
+                                            "childControl": "7a366561-c6e5-49cd-91c2-05d2229c9c00",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Invalid",
+                                            "displayType": "hide",
+                                            "childControl": "7a366561-c6e5-49cd-91c2-05d2229c9c00",
+                                            "controlType": "select"
+                                        }
+                                    ]
+                                },
+                                "concept": "18cb45f2-5043-4f47-b697-b60119a48e4f",
+                                "answers": [
+                                    {
+                                        "concept": "066ba58e-28eb-4695-ad94-3ededc441572",
+                                        "label": "Recent"
+                                    },
+                                    {
+                                        "concept": "999a48404-451c-4252-b274-6656979d9498",
+                                        "label": "Long Term"
+                                    },
+                                    {
+                                        "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Negative"
+                                    },
+                                    {
+                                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Invalid"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Has viral load request been made?",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Has_viral_load_request_been_made",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "8c7a723e-33c6-4a98-b5a4-4319827019f5",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "cebe80b3-138e-4961-887d-f506e111da1b",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "73e44861-0103-4f17-90ba-b9c0a5bf2a3b",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "Yes",
+                                            "displayType": "show",
+                                            "childControl": "0a1587ae-c0c6-4680-ad3a-ab921f3ac395",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "8c7a723e-33c6-4a98-b5a4-4319827019f5",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "cebe80b3-138e-4961-887d-f506e111da1b",
+                                            "controlType": "date"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "73e44861-0103-4f17-90ba-b9c0a5bf2a3b",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                            "controlType": "text"
+                                        },
+                                        {
+                                            "when": "No",
+                                            "displayType": "hide",
+                                            "childControl": "0a1587ae-c0c6-4680-ad3a-ab921f3ac395",
+                                            "controlType": "select"
+                                        }
+                                    ]
+                                },
+                                "concept": "7a366561-c6e5-49cd-91c2-05d2229c9c00",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Sample collection date",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "159951AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Sample Reference Number:",
+                            "id": "Sample_Reference_Number",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "34b689bd-eb24-4ad4-8642-fc3b4a9bdd44"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Sample Type",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Sample_Type",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "162476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Plasma"
+                                    },
+                                    {
+                                        "concept": "397afc02-f2d6-4436-895a-7ade17e76d6e",
+                                        "label": "DBS"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Date Sample Sent to PCR Lab",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "9afa14a2-a17d-4f1d-a440-f6ff366bd6fc"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Receiving PCR Lab",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Receiving_PCR_Labe",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "8c7a723e-33c6-4a98-b5a4-4319827019f5",
+                                "answers": [
+                                    {
+                                        "concept": "c902c500-7cea-46cc-82e0-b9448176400d",
+                                        "label": "Anambra State university teaching Hospital (ANSUTH)"
+                                    },
+                                    {
+                                        "concept": "83416945-e821-410a-9366-4cd99efa69bd",
+                                        "label": "Braithewaite memorial Specialist Hospital (BMSH) PortHarcourt"
+                                    },
+                                    {
+                                        "concept": "4df7e83d-36cd-4239-8510-75143703be10",
+                                        "label": "Defence Reference laboratory (DRL) Abuja"
+                                    },
+                                    {
+                                        "concept": "3f895c3e-480f-40a4-931a-a4521583b503",
+                                        "label": "Federal Medical Center Makurdi"
+                                    },
+                                    {
+                                        "concept": "25d0d345-556c-4140-aa7e-76148ef1b699",
+                                        "label": "Federal Teaching Hospital (FTH) Gombe"
+                                    },
+                                    {
+                                        "concept": "b41267a8-3339-42a1-928b-5cca792602e6",
+                                        "label": "Jos University Teaching Hospital (JUTH) Jos"
+                                    },
+                                    {
+                                        "concept": "8c2a07af-f118-48ea-b8aa-2ca646e1daa8",
+                                        "label": "Ahmadu Bello University Teaching Hospital (ABUTH)"
+                                    },
+                                    {
+                                        "concept": "3f88cbb6-f344-4b39-98ce-1a2d65a8d74b",
+                                        "label": "Lagos State University Teaching Hospital (LASUTH) Lagos"
+                                    },
+                                    {
+                                        "concept": "31d17db1-9542-4f88-8e98-342035abe2e1",
+                                        "label": "National Reference Laboratory Gaduwa (NRL) Abuja"
+                                    },
+                                    {
+                                        "concept": "4b33b539-667c-440c-9039-7831ba89c601",
+                                        "label": "Nigerian Institute of Medical Research (NIMR) Lagos"
+                                    },
+                                    {
+                                        "concept": "fbc23062-5955-4870-8868-96b16c37afd3",
+                                        "label": "Nnamdi Azikiwe University Teaching Hospital (NAUTH)"
+                                    },
+                                    {
+                                        "concept": "082d95dd-8c2f-4f93-bc5c-82c836695fab",
+                                        "label": "Obafemi Awolowo University Teaching Hospital (OAUTH) Ile-Ife"
+                                    },
+                                    {
+                                        "concept": "a309be2a-61d8-49d7-9386-4ebe9faed2d3",
+                                        "label": "University of Maiduguri Teaching Hospital (UMTH) Maiduguri"
+                                    },
+                                    {
+                                        "concept": "7d37ef59-d959-4171-bf40-1771be9b0346",
+                                        "label": "University of Uyo teaching Hospital (UUTH) Uyo"
+                                    },
+                                    {
+                                        "concept": "ff18caf2-9b16-405e-bbe0-b8851a656fc6",
+                                        "label": "Usman Danfodio University Teaching Hospital (UDUTH)"
+                                    },
+                                    {
+                                        "concept": "f9401e4a-c4d3-4a6c-9f0d-b9721f5b842f",
+                                        "label": "Federal Medical Center Jalingo"
+                                    },
+                                    {
+                                        "concept": "f468ead1-7ea2-4b99-a1a7-4ede65a97c95",
+                                        "label": "68 NARH Yaba, Lagos"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Sample Test Date",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "cebe80b3-138e-4961-887d-f506e111da1b"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        },
+                        {
+                            "label": "Viral Load Result Classification:",
+                            "defaultDisplay": "hide",
+                            "type": "obs",
+                            "id": "Viral_Load_Result_Classification:",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "73e44861-0103-4f17-90ba-b9c0a5bf2a3b",
+                                "answers": [
+                                    {
+                                        "concept": "937d8693-9ace-4209-ab48-afe8578bd1e9",
+                                        "label": "<1000"
+                                    },
+                                    {
+                                        "concept": "1849589e-656c-4b11-94e3-73427a89ef4e",
+                                        "label": ">1000"
+                                    },
+                                    {
+                                        "concept": "d8c89443-3b82-43ab-a8e0-a86013a2d012",
+                                        "label": "Failed Viral Load"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Result (copies/ml):",
+                            "id": "result_copies_ml_i",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "856AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        },
+                        {
+                            "label": "Final HIV recent infection testing algorithm result:",
+                            "type": "obs",
+                            "id": "Final_HIV_recent_infection_i",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "0a1587ae-c0c6-4680-ad3a-ab921f3ac395",
+                                "answers": [
+                                    {
+                                        "concept": "cc2ca162-9759-4d4a-8de2-2670f49bdb62",
+                                        "label": "RITA Recent"
+                                    },
+                                    {
+                                        "concept": "80b7d7da-48a8-42c0-bbc4-f5ae52fefe77",
+                                        "label": "RITA Long Term"
+                                    },
+                                    {
+                                        "concept": "02c7875f-7246-40f9-8192-747e6c2f9d53",
+                                        "label": "Rita Inconclusive"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Partner Elicitation",
+            "sections": [
+                {
+                    "label": "Partner Elicitation",
+                    "questions": [
+                        {
+                            "type": "obsGroup",
+                            "label": "1. Partner Info",
+                            "questionOptions": {
+                                "rendering": "group",
+                                "concept": "964fefaf-37ea-44b9-b683-206a5a4a37d0",
+                                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dc41"
+                            },
+                            "questions": [
+                                {
+                                    "label": "Partner Name:",
+                                    "id": "Partner_Name",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Gender:",
+                                    "type": "obs",
+                                    "id": "pat_gender",
+                                    "questionOptions": {
+                                        "rendering": "select",
+                                        "concept": "961fcb64-3e41-46c3-b6ce-0eae58deda95",
+                                        "answers": [
+                                            {
+                                                "concept": "3365c591-6f66-40bb-a8c1-d40dfe86d911",
+                                                "label": "Male"
+                                            },
+                                            {
+                                                "concept": "ef9c5190-5086-4105-ae79-c930c7508ef2",
+                                                "label": "Female"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Descriptive Address:",
+                                    "id": "Descriptive_Address",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "007121d8-0855-4d3f-adae-3c22efbae7c0"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Phone:",
+                                    "id": "Partner_Phone",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "2082cf3e-a704-4a9d-b71f-6b56423a181f"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                }
+                            ]
+                        },
+                        {
+                            "type": "obsGroup",
+                            "label": "2. Partner Info",
+                            "questionOptions": {
+                                "rendering": "group",
+                                "concept": "964fefaf-37ea-44b9-b683-206a5a4a37d0",
+                                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dc42"
+                            },
+                            "questions": [
+                                {
+                                    "label": "Partner Name:",
+                                    "id": "Partner_Name",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Gender:",
+                                    "type": "obs",
+                                    "id": "pat_gender",
+                                    "questionOptions": {
+                                        "rendering": "select",
+                                        "concept": "961fcb64-3e41-46c3-b6ce-0eae58deda95",
+                                        "answers": [
+                                            {
+                                                "concept": "3365c591-6f66-40bb-a8c1-d40dfe86d911",
+                                                "label": "Male"
+                                            },
+                                            {
+                                                "concept": "ef9c5190-5086-4105-ae79-c930c7508ef2",
+                                                "label": "Female"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Descriptive Address:",
+                                    "id": "Descriptive_Address",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "007121d8-0855-4d3f-adae-3c22efbae7c0"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Phone:",
+                                    "id": "Partner_Phone",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "2082cf3e-a704-4a9d-b71f-6b56423a181f"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                }
+                            ]
+                        },
+                        {
+                            "type": "obsGroup",
+                            "label": "3. Partner Info",
+                            "questionOptions": {
+                                "rendering": "group",
+                                "concept": "964fefaf-37ea-44b9-b683-206a5a4a37d0",
+                                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dc43"
+                            },
+                            "questions": [
+                                {
+                                    "label": "Partner Name:",
+                                    "id": "Partner_Name",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Gender:",
+                                    "type": "obs",
+                                    "id": "pat_gender",
+                                    "questionOptions": {
+                                        "rendering": "select",
+                                        "concept": "961fcb64-3e41-46c3-b6ce-0eae58deda95",
+                                        "answers": [
+                                            {
+                                                "concept": "3365c591-6f66-40bb-a8c1-d40dfe86d911",
+                                                "label": "Male"
+                                            },
+                                            {
+                                                "concept": "ef9c5190-5086-4105-ae79-c930c7508ef2",
+                                                "label": "Female"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Descriptive Address:",
+                                    "id": "Descriptive_Address",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "007121d8-0855-4d3f-adae-3c22efbae7c0"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Phone:",
+                                    "id": "Partner_Phone",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "2082cf3e-a704-4a9d-b71f-6b56423a181f"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                }
+                            ]
+                        },
+                        {
+                            "type": "obsGroup",
+                            "label": "4. Partner Info",
+                            "questionOptions": {
+                                "rendering": "group",
+                                "concept": "964fefaf-37ea-44b9-b683-206a5a4a37d0",
+                                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dc44"
+                            },
+                            "questions": [
+                                {
+                                    "label": "Partner Name:",
+                                    "id": "Partner_Name",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Gender:",
+                                    "type": "obs",
+                                    "id": "pat_gender",
+                                    "questionOptions": {
+                                        "rendering": "select",
+                                        "concept": "961fcb64-3e41-46c3-b6ce-0eae58deda95",
+                                        "answers": [
+                                            {
+                                                "concept": "3365c591-6f66-40bb-a8c1-d40dfe86d911",
+                                                "label": "Male"
+                                            },
+                                            {
+                                                "concept": "ef9c5190-5086-4105-ae79-c930c7508ef2",
+                                                "label": "Female"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Descriptive Address:",
+                                    "id": "Descriptive_Address",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "007121d8-0855-4d3f-adae-3c22efbae7c0"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Phone:",
+                                    "id": "Partner_Phone",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "2082cf3e-a704-4a9d-b71f-6b56423a181f"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                }
+                            ]
+                        },
+                        {
+                            "type": "obsGroup",
+                            "label": "5. Partner Info",
+                            "questionOptions": {
+                                "rendering": "group",
+                                "concept": "964fefaf-37ea-44b9-b683-206a5a4a37d0",
+                                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dc45"
+                            },
+                            "questions": [
+                                {
+                                    "label": "Partner Name:",
+                                    "id": "Partner_Name",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Gender:",
+                                    "type": "obs",
+                                    "id": "pat_gender",
+                                    "questionOptions": {
+                                        "rendering": "select",
+                                        "concept": "961fcb64-3e41-46c3-b6ce-0eae58deda95",
+                                        "answers": [
+                                            {
+                                                "concept": "3365c591-6f66-40bb-a8c1-d40dfe86d911",
+                                                "label": "Male"
+                                            },
+                                            {
+                                                "concept": "ef9c5190-5086-4105-ae79-c930c7508ef2",
+                                                "label": "Female"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Descriptive Address:",
+                                    "id": "Descriptive_Address",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "007121d8-0855-4d3f-adae-3c22efbae7c0"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                },
+                                {
+                                    "label": "Partner Phone:",
+                                    "id": "Partner_Phone",
+                                    "questionOptions": {
+                                        "rendering": "text",
+                                        "concept": "2082cf3e-a704-4a9d-b71f-6b56423a181f"
+                                    },
+                                    "type": "obs",
+                                    "validators": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Post Test Counseling",
+            "sections": [
+                {
+                    "label": "Post Test Counseling",
+                    "questions": [
+                        {
+                            "label": "Have you been tested for HIV before within this year:",
+                            "type": "obs",
+                            "id": "tested_for_HIV_before_within_this_year",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "8e20ae55-ec39-4967-b43c-59fbc3deb734",
+                                "answers": [
+                                    {
+                                        "concept": "b7ea6078-ed80-4e9a-90b4-fdfbda5bc472",
+                                        "label": "Not previously tested"
+                                    },
+                                    {
+                                        "concept": "d26315d3-eed8-47ec-aa96-17d4cb6899d5",
+                                        "label": "Previously tested negative"
+                                    },
+                                    {
+                                        "concept": "84144326-2228-4450-a25e-c5e00d84d107",
+                                        "label": "Previously tested positive in HIV Care"
+                                    },
+                                    {
+                                        "concept": "7d61af98-d7c0-4c29-bfd2-3f7b2bf77280",
+                                        "label": " Previously tested positive not in HIVCare"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "HIV Request and Result form signed by tester(s):",
+                            "type": "obs",
+                            "id": "HIV_Request_and_Result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "e4fdba8f-dbbb-4849-be1d-d6f2a541ae95",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "HIV Request and Result form filled with CT Intake Form::",
+                            "type": "obs",
+                            "id": "HIV_Request_and_Result_form_filled_with_CT_Intake_Form",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "ba5a6188-139f-46eb-aa8e-8729f88c798a",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client received HIV test result:",
+                            "type": "obs",
+                            "id": "Client_received_HIV_test_result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "164848AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Post test counseling done:",
+                            "type": "obs",
+                            "id": "Post_test_counseling_done",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "159382AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Risk reduction plan developed:",
+                            "type": "obs",
+                            "id": "Risk_reduction_plan_developed",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "70c52b7b-991e-4858-b0be-bc6033305ebe",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Post test disclosure plan developed:",
+                            "type": "obs",
+                            "id": "Post_test_disclosure_plan_developed",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1b674f0d-7c43-4464-9c70-9eb810e564bb",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Post Test Counseling",
+            "sections": [
+                {
+                    "label": "Post Test Counseling",
+                    "questions": [
+                        {
+                            "label": "Will bring partner(s) for HIV testing:",
+                            "type": "obs",
+                            "id": "Will_bring_partner_for_HIV_testing",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "bedad608-6e76-4249-9362-6cdc14503db0",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Will bring own children less than 5 years for HIV testing:",
+                            "type": "obs",
+                            "id": "Will_bring_own_children",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "729ec352-85ec-49ad-bdd0-c69ebccc779e",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Provided with information on FP and dual contraception:",
+                            "type": "obs",
+                            "id": "Provided_with_information",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1382AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client/partner use FP methods (other than condom):",
+                            "type": "obs",
+                            "id": "use_FP_methods",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "130f0d2c-c55d-4c76-943d-dd5f746ea8fe",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client/partner use condoms as (one) FP method:",
+                            "type": "obs",
+                            "id": "use_FP_methods_via_condom",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "5571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Correct condom use demonstrated:",
+                            "type": "obs",
+                            "id": "Correct_condom_use_demonstrated",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "2b84a151-2598-4669-b713-d45a7c170dea",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Condoms provided to client:",
+                            "type": "obs",
+                            "id": "Condoms_provided_to_client",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "159777AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Client referred to other services:",
+                            "type": "obs",
+                            "id": "Client_referred_to_other_services",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "1648AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "true",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "concept": "false",
+                                        "label": "No"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Other Test",
+            "sections": [
+                {
+                    "label": "Other Tests",
+                    "questions": [
+                        {
+                            "label": "Syphilis test result:",
+                            "type": "obs",
+                            "id": "Syphilis_test_result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "299AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "1228AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Reactive"
+                                    },
+                                    {
+                                        "concept": "1229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Non-Reactive"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Hepatitis B virus test result:",
+                            "type": "obs",
+                            "id": "Hepatitis_B_virus_test_result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "159430AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Positive"
+                                    },
+                                    {
+                                        "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Negative"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Hepatitis C virus test result:",
+                            "type": "obs",
+                            "id": "Hepatitis_C_virus_test_result",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "161471AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "answers": [
+                                    {
+                                        "concept": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Positive"
+                                    },
+                                    {
+                                        "concept": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Negative"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Population Type",
+            "sections": [
+                {
+                    "label": "Population Type",
+                    "questions": [
+                        {
+                            "label": "Population Type:",
+                            "type": "obs",
+                            "id": "Population_Type",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "control": {
+                                    "conditionOptions": [
+                                        {
+                                            "when": "Key Population",
+                                            "displayType": "show",
+                                            "childControl": "6a62cbe5-955f-46ce-a038-d023372fc2de",
+                                            "controlType": "select"
+                                        },
+                                        {
+                                            "when": "General Population",
+                                            "displayType": "hide",
+                                            "childControl": "6a62cbe5-955f-46ce-a038-d023372fc2de",
+                                            "controlType": "select"
+                                        }
+                                    ]
+                                },
+                                "concept": "0e708cf9-599a-41cd-af9e-3b18fc436288",
+                                "answers": [
+                                    {
+                                        "concept": "07baaa14-63b6-4668-8e76-100f0e006303",
+                                        "label": "General Population"
+                                    },
+                                    {
+                                        "concept": "d8ea3c11-472a-4a9a-870f-9e282d4d0c98",
+                                        "label": "Key Population"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Key Population Type:",
+                            "type": "obs",
+                            "id": "key_pop_type",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "6a62cbe5-955f-46ce-a038-d023372fc2de",
+                                "answers": [
+                                    {
+                                        "concept": "812b5543-7391-492f-83c9-f3e30aa09595",
+                                        "label": "FSW"
+                                    },
+                                    {
+                                        "concept": "160578AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "MSM"
+                                    },
+                                    {
+                                        "concept": "3cc9f0bb-c3df-43cd-94af-8dc04169cb37",
+                                        "label": "PWID"
+                                    },
+                                    {
+                                        "concept": "027baa4f-84b2-44f4-a9e2-d5138ad7ff9f",
+                                        "label": "Transgender"
+                                    },
+                                    {
+                                        "concept": "162277AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "People in prisons and other enclosed settings"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Signature",
+            "sections": [
+                {
+                    "label": "Signature",
+                    "questions": [
+                        {
+                            "label": "Signature Date",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "c26ab267-c014-4bc8-97b1-c6c5b08a2e93"
+                            },
+                            "type": "obs",
+                            "validators": [
+                                {
+                                    "type": "date"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Thank You",
+            "sections": [
+                {
+                    "label": "Thank You",
+                    "questions": [
+                        {
+                            "label": "Thank you for Testing:",
+                            "id": "Thank You",
+                            "defaultDisplay": "hide",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "b619d4ef-f83f-42e0-8ba8-1b878306be4f"
+                            },
+                            "type": "obs",
+                            "validators": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

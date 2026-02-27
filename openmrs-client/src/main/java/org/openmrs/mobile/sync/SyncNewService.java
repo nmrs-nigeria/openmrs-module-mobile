@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import androidx.annotation.Nullable;
 
-import org.openmrs.mobile.bulksync.SyncData;
+import org.openmrs.mobile.R;
 
 // Team 1 Update
 public class SyncNewService  extends IntentService {
@@ -17,8 +17,13 @@ public class SyncNewService  extends IntentService {
     }
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        //new StartNewSync(getApplicationContext()).runSyncAwait();
-        new SyncData(getApplicationContext()).runSyncAwait();
+        if (intent != null) {
+
+            Boolean fullSync = intent.getBooleanExtra("full_sync", false);
+                             new SyncData(getApplicationContext()).runSyncAwait(fullSync);
+        } else {
+            new SyncData(getApplicationContext()).runSyncAwait(false);
+        }
     }
 
 }

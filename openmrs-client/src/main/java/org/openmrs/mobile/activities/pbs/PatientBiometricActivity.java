@@ -24,23 +24,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
 import org.openmrs.mobile.R;
-import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationContract;
 import org.openmrs.mobile.api.FingerPrintSyncService;
-import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
-import org.openmrs.mobile.dao.FingerPrintVerificationDAO;
 import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.ServiceLogDAO;
 import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.GenericResponseCallbackListener;
 import org.openmrs.mobile.models.Patient;
-import org.openmrs.mobile.security.HashMethods;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.FingerPrintUtility;
 import org.openmrs.mobile.utilities.NetworkUtils;
-import org.w3c.dom.Text;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -53,9 +49,6 @@ import SecuGen.FDxSDKPro.SGFDxErrorCode;
 import SecuGen.FDxSDKPro.SGFDxTemplateFormat;
 import SecuGen.FDxSDKPro.SGFingerInfo;
 import SecuGen.FDxSDKPro.SGImpressionType;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.snackbar.Snackbar;
 
 public class PatientBiometricActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener,  Runnable {
@@ -961,7 +954,7 @@ public class PatientBiometricActivity extends AppCompatActivity
                     printExist = true;
                     patientFingerPrints.remove(item);
                     fingerPrintCaptureCount -= 1;
-                    Long deleteCounts = new FingerPrintVerificationDAO().deletePrintPosition(Long.valueOf(patientId), position);
+                    Long deleteCounts = new FingerPrintDAO().deletePrintPosition(Long.valueOf(patientId), position);
                     if (deleteCounts > 0) {
                         colorCapturedButton(position, android.R.color.black, Typeface.NORMAL, -1);
                         CustomDebug(fingerPrintUtility.decodeFingerPosition(position.name()) +

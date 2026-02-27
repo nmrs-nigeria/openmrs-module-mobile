@@ -52,8 +52,7 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 
 public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
-    private static int DATABASE_VERSION = OpenMRS.getInstance().
-            getResources().getInteger(R.integer.dbversion);
+    private static int DATABASE_VERSION =   OpenMRS.getInstance().  getResources().getInteger(R.integer.dbversion);
     private static final String WHERE_ID_CLAUSE = String.format("%s = ?", Table.MasterColumn.ID);
 
     private PatientTable mPatientTable;
@@ -84,7 +83,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        mLogger.d("Database creating...");
+        Util.log("Database creating...");
         sqLiteDatabase.execSQL(mPatientTable.createTableDefinition());
         logOnCreate(mPatientTable.toString());
         sqLiteDatabase.execSQL(mConceptTable.createTableDefinition());
@@ -111,35 +110,50 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int currentVersion, int newVersion) {
-        mLogger.d( "Updating table from " + currentVersion + " to " + newVersion);
-        switch (currentVersion) {
-            case 8:
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+      Util.log( "Updating table from " + oldVersion + " to " + newVersion);
+        switch (oldVersion) {
+            case 8: {
                 sqLiteDatabase.execSQL(new ConceptTable().createTableDefinition());
-            case 9:
+                break;
+            }
+            case 9: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 10:
+                break;
+            }
+            case 10: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 11:
+                break;
+            }
+            case 11: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 12:
+                break;
+            }
+            case 12: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 13:
+                break;
+            }
+            case 13: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 14:
+                break;
+            }
+            case 14: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 15:
+                break;
+            }
+            case 15: {
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
                 sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
-            case 16:
+                break;
+            }
 
-            case 18:
+      //      case 18:
 
 //                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierOpenmrs TEXT");
 //                sqLiteDatabase.execSQL("ALTER TABLE patients ADD COLUMN identifierTypeOpenmrs TEXT");
@@ -150,7 +164,15 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
 
                 //and so on.. do not add breaks so that switch will
                 //start at oldVersion, and run straight through to the latest
+
+
         }
+
+ // update the table when the update version is 21
+        if (newVersion == 21) {
+                sqLiteDatabase.execSQL("ALTER TABLE biometricverificationinfo ADD COLUMN replaceBase INTEGER DEFAULT 0;");
+        }
+
     }
 
     private void logOnCreate(String tableToString) {
@@ -581,6 +603,15 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
         return db.update(FingerPrintVerificationTable.TABLE_NAME, newValues, _where_clause, whereArgs);
     }
 
+    public int updateVerificationReplaceBase(SQLiteDatabase db,Long patientID, int value) {
+        ContentValues newValues = new ContentValues();
+        newValues.put(FingerPrintVerificationTable.Column.replaceBase,  value);
+        String[] whereArgs = new String[]{String.valueOf( patientID)};
+        String _where_clause = String.format("%s = ?", FingerPrintVerificationTable.Column.patient_id);
+        return db.update(FingerPrintVerificationTable.TABLE_NAME, newValues, _where_clause, whereArgs);
+    }
+
+
     // Verification transactions
     public long insertFingerPrintVerification(SQLiteDatabase db, PatientBiometricVerificationContract fingerPrintObj) {
         long id;
@@ -607,6 +638,7 @@ public class DBOpenHelper extends OpenMRSSQLiteOpenHelper {
             bindLong(12, (long) fingerPrintObj.getSyncStatus(), pbsStatement);
             bindString(13,fingerPrintObj.getDateCreated(),pbsStatement );
             bindLong(14, (long) fingerPrintObj.getCreator(), pbsStatement);
+            bindLong(15, (long) fingerPrintObj.getReplaceBase(), pbsStatement);
 
             id = pbsStatement.executeInsert();
             pbsStatement.clearBindings();

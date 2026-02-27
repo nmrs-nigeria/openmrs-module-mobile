@@ -149,12 +149,14 @@ public class FingerPrintVerificationSyncService extends Application {
     }
 
 */
-    public void startSync(PatientBiometricVerificationDTO PBSObj, GenericResponseCallbackListener<PatientBiometricSyncResponseModel> responseCallbackListener) {
+    public void startSync(boolean isReplaceBase, PatientBiometricVerificationDTO PBSObj, GenericResponseCallbackListener<PatientBiometricSyncResponseModel> responseCallbackListener) {
 
         String json = new Gson().toJson(PBSObj);
         //System.out.print(json);
         String[] baseUrl = OpenMRS.getInstance().getServerUrl().split(":");
-        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/ReSaveFingerprintVerificationToDatabase";
+        String url = baseUrl[0] + "://" + baseUrl[1].replaceAll("//", "") + ":2018/api/FingerPrint/"+ (isReplaceBase?
+                "replaceBaseWithRecaptureMobile":
+        "ReSaveFingerprintVerificationToDatabaseMobile");
 
         if (NetworkUtils.isOnline()) {
 

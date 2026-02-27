@@ -129,6 +129,83 @@ To release the application, make sure to do these steps **in order**:
 
 # Release Notes
 
+### **Version 25.1.1**
+- Base fingerprint recapture replacement 
+- IP change without enforce IP Address
+ - Update Address: Update the geocooordinate address per each encounter. Latitude and Longitude coordinates in openmrs.person_address are updated each time service is provide and data is sync for the patient.  
+ 
+- Excel synchronization line list: An Excel line list is generated after sync for successful and failed sync. An Excel line list is created when the data is synced or data is appended to the existing Excel file line list when data is synced on the same date.
+- Null or Empty Patient Identifier resolved:The patient list should have an identifier for each patient and the patient dashboard should have an identifier for the patient."
+- Patient CMM functionalities: Consumption, adjustment, and transfer  sync without issues.
+- Button to clear all synced data: All sync data are cleared when the action is called.
+- Patient downloading into mobile: Downloading patient PBS and biodata in one transaction.
+- Prevent syncing from entry deadlock and prevent starting afresh when stopped: Stability of syncing after losing connection.
+- Permanence on the patient list and list counter: App performance after having more than 500 patients.List scroll smothly and freely as compare to the older version. Total number of patients on the mobile as well as number of patients with data are visible on the Appbar. 
+- Reporting current version: The current version of NigeriaMRS mobile and the hospital name can be save as an image file.The current version is saved as an image with the device's facility name and unique ID.
+
+
+ **JSON forms** 
+- **PMTCT HTS Register form:** Updated Visit  Date and Previously Known Result fields in the PMTCT HTS Register form.
+
+- **ANC form**: Updated ACN number (Concept Id corrected), Gravidity (max change to 50), Number Alive(corrected the concept), Patient referred(corrected the concept) and Facility referend to(Hepatitis C) (Concept Id corrected)  
+Remove "Unkown" as  option for Treated for syphilis.
+
+
+
+### Version 24.2.1
+- The creation of duplicate ART number has been resolved
+- Availability of Care Card and Client tracking and discontinuation forms: The mentioned forms have been activated on the mobile with an update to the JSON resource.  
+- Added auto onboarding of forms: Forms service starts immediately when login is successful as well as ensuring the availability of forms before the app can load completely.
+- PBS service and Metadata module version view and  Popup: This update provide the mobile NMRS with the functionality to ensure the version of the dependencies are compatible with this apk version before allowing the user to use the mobile app for any data entry.
+- Optimized "form display" mechanism: Updated display to allow effective control for child elements such as showing or hiding child field.
+- Notification pop now shows only the count of patient that had data modified and synced. There is an additional functionality to perform a full scan to sync all patients on the mobile list.
+
+
+### Version 24.2.1(a,b)
+- **Summary:**
+1. Added auto loading of forms
+2. Enable Care Card and Client tracking and discontinuation forms
+3. Form views id rearrange to fit group hide and show.  
+4. Filter syncing done only for patients. Close and full sync button added on the  sync notification.
+5. Pbs service version view (dashboard and settings activities)  **red** for use lower  **black** for normal, **yellow** for  highers version than mobile.
+6. Meatadata module version view (dashboard and settings- activities)  **red** for use lower or not started, **black** for normal, **yellow** for  highers version than mobile.
+7. Poppup block app when you don't have the required dependencies on the web instance connected .
+8.  Duplicate ART number resolved.
+
+-  **JSON forms** 
+1. Added Care Card and Client tracking and discontinuation forms 
+1. Check for more openmrs-module-mobile\json_form_resouces_ref\README.md
+
+
+
+---  
+### Version 24.1.3
+### Summary:
+1. Added auto calcalculation for next appointment in forms
+2. Added JSON forms resources and guide
+3. Enable the hide and show controls functionalities for radio button in forms.
+4. Enhance navigation in form display activity(online case)
+5. Full data export(`Patient Bio, Encounters, and PBS`). Change PBS export module to data exchange module
+###### **JSON forms**
+1. Updated Lab form to contain viral load check and signiture section
+2. Added  Next appointment section( it contains next appointment date and Pill balance) and DSD status condition to Service Delivery Model in Phamarncy order form. 
+---
+### Version 24.1.2
+### Summary:
+1.	Implemented finger recapture functionality: Add a new feature for collecting recapture fingerprints on the mobile.
+2.	Optimize the biometric capture process for user-friendly plug-and-play use: Add a feature to show the capture quality, an edit feature finger that is not captured properly.
+3.	Optimized the data synchronization process for efficient data transfer from mobile to web instances: Make the syncing to support syncing all data accurately without congesting the web instance server with all good monitoring notification bars showing the process.
+4.	Enhance the import of data into the mobile: A feature to bring more than 100 patients from the web instance into the mobile in less than 5 minutes. 
+5.	Optimized user interface: Improve the dashboard, fingerprint-capturing activity view and others for better visualization and understanding.
+6.	Added constraints to the required field for data quality optimization
+7.	Add more constraints for downloading patients to fetch the base biometric data: Added constraint to check all conditions are right for data import before downloading the data. This includes checking the biometric server is running and is connected to the mobile. 
+8.	Regularry update JSON forms for mobile forms new drugs update: Updates on client intake form, laboratory and order result form, and Pharmacy order result form.
+9.	Optimize sync status: Enhance the sync status activity to distinguish encounter data from biometric data sync status.
+10.	Update the App to support variation devices
+11.	Update the App to report errors accurately and more informative: Log to show an action to follow in the case of the app crashing and the process not working
+12.	Resolved crashing of the App: App bugs during the opening of forms such as the Client intake form and Laboratory Order and result form have been fixed.  
+
+
 ### Version 2.8.0
 ### Summary:
 1. Add Dark mode to the app
@@ -241,7 +318,8 @@ To release the application, make sure to do these steps **in order**:
 
 # User Manual
 Check this link for the manual: [Version 2.x](https://wiki.openmrs.org/download/attachments/74252444/User%20Manual%202.0.pdf?version=1&modificationDate=1414759790000&api=v2)
-
+  
+ 
 # License
 This project is licensed under the OpenMRS Public License, see the [copyright](copyright/copyright) file for details.
 
@@ -251,3 +329,5 @@ This project is licensed under the OpenMRS Public License, see the [copyright](c
 - Dashboard https://issues.openmrs.org/secure/Dashboard.jspa?selectPageId=12851
 - CI https://travis-ci.org/openmrs/openmrs-contrib-android-client
 - Google Play https://play.google.com/store/apps/details?id=org.openmrs.mobile
+
+

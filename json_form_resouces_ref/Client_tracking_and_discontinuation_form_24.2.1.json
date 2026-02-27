@@ -1,0 +1,2672 @@
+{
+  "name": "Client Tracking and Termination Form",
+  "uuid": "5fbc99be-9aeb-4f94-85b0-b2fae88a0ced",
+  "processor": "EncounterFormProcessor",
+  "pages": [
+    {
+      "label": "",
+      "sections": [
+        {
+          "label": "Indication for Client Verification and Verification Attempts/Steps",
+          "questions": [
+            {
+              "label": "Client Verification",
+              "id": "client_verification",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "ed586055-dedd-42d3-b87b-2a06715459bd",
+                "answers": [
+                  {
+                    "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "No"
+                  },
+                  {
+                    "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Yes"
+                  }
+                ],
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                      "controlType": "check"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                      "controlType": "check"
+                    }
+                    ,
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "2e76fea9-f6e2-4fa1-844e-78ebe53223de",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "2e76fea9-f6e2-4fa1-844e-78ebe53223de",
+                      "controlType": "text"
+                    }
+
+
+
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+,
+
+
+
+
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "date"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "check"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "text"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "date"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "check"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf1",
+  "controlType": "text"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "date"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "check"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "text"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "date"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "check"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf2",
+  "controlType": "text"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "date"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "check"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "select"
+},
+{
+  "when": "Yes",
+  "displayType": "show",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "text"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "f996800e-eba9-4f8d-9a54-1c878279d5d2c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "date"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "c6f5016d-6e55-46d6-84e8-3d37918abd23c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "check"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "08728221-0130-4016-9b73-dbfd45a1ffbec78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "9a671e64-5ebc-412f-9d46-0231d337e8aac78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "select"
+},
+{
+  "when": "No",
+  "displayType": "hide",
+  "childControl": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82c78cb3a9-f561-435e-a274-1d6adb303dcf3",
+  "controlType": "text"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  ]
+                }
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "select "
+                }
+              ]
+            },
+            {
+              "label": "Indications for Client verification",
+              "id": "indications_for_Client_verification",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "questionOptions": {
+                "rendering": "check",
+                "concept": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                "answers": [
+                  {
+                    "concept": "159d4316-948b-4d84-8d42-4801d9815475",
+                    "label": "Consistently had drug pickup by proxy without viral load sample collection for two quarters"
+                  },
+                  {
+                    "concept": "4586a817-9491-4f86-8094-fc19b17c0b45",
+                    "label": "Duplicated demographic and clinical variables"
+                  },
+                  {
+                    "concept": "b70b2ae5-b76b-411d-9909-15381b3c76a2",
+                    "label": "No biometrics recapture"
+                  },
+                  {
+                    "concept": "0875ba7c-bfe7-4d2b-9655-a795a3c5632e",
+                    "label": "Batched ARV pickup dates"
+                  },
+                  {
+                    "concept": "be100699-ca67-42ed-a196-ff3096ce8522",
+                    "label": "Last clinical visit is over 18 months prior"
+                  },
+                  {
+                    "concept": "28ed9571-a41f-44d4-b420-2bd8cef3059c",
+                    "label": "Batched ART start and pickup dates"
+                  },
+                  {
+                    "concept": "3bcb19cc-f56a-4b32-ba7e-d1b5bf215371",
+                    "label": "No initial biometric capture"
+                  },
+                  {
+                    "concept": "7843063f-7e97-4de1-9968-c18fedfaebd5",
+                    "label": "Incomplete visit data on the care card or pharmacy forms or EMR"
+                  },
+                  {
+                    "concept": "36e53b0a-144f-4098-a5d8-19ec8de5b770",
+                    "label": "Records of repeated clinical encounters with no fingerprint recapture"
+                  },
+                  {
+                    "concept": "f93143cb-3ced-44ef-b64d-e5f3c1ff78fa",
+                    "label": "Long intervals between ARV pick-ups (pick-ups more than one year apart in the same facility)"
+                  },
+                  {
+                    "concept": "83d5f678-dc44-4e9b-85fa-760a1192b42a",
+                    "label": "Same sex, DOB and ART start date"
+                  } 
+                ] 
+              }
+            },
+            {
+              "label": "Others indications for Client verification",
+              "id": "Others_indications_for_Client_verification",
+              "type": "obs",
+              "defaultDisplay": "hide",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "2e76fea9-f6e2-4fa1-844e-78ebe53223de"
+              }
+            },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+            {
+              "type": "obsGroup",
+              "label": "a. 1st Attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf1"
+              },
+              "questions": [
+                {
+                  "defaultDisplay": "hide",
+                  "label": "Date",
+                  "type": "obs",
+                  "id": "Date_ClientT_Tracking",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                  }
+                },
+                {
+                  "defaultDisplay": "hide",
+                  "label": "Verification Attempts",
+                  "type": "obs",
+                  "id": "Verification_Attempts",
+                  "questionOptions": {
+                    "rendering": "check",
+                    "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                    "answers": [
+                      {
+                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                        "label": "1st Biometric capture"
+                      },
+                      {
+                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                        "label": "Biometric recapture"
+                      },
+                      {
+                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                        "label": "Physical document audited-folder / register review"
+                      },
+                      {
+                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                        "label": "Facility Visit"
+                      },
+                      {
+                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                        "label": "Client contacted"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "defaultDisplay": "hide",
+                  "label": "Verification Status",
+                  "type": "obs",
+                  "id": "Verification_Status",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                    "answers": [
+                      {
+                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                        "label": "Verification ongoing"
+                      },
+                      {
+                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                        "label": "Records Discontinued & Archived"
+                      },
+                      {
+                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                        "label": "Record verified"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Outcome",
+                  "type": "obs",
+                  "id": "Outcome",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                    "answers": [
+                      {
+                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                        "label": "Valid"
+                      },
+                      {
+                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Invalid"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "defaultDisplay": "hide",
+                  "label": "Comments (Provide reason for records discontinuation)",
+                  "type": "obs",
+                  "id": "Comments_",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "b. Other attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf2"
+              },
+              "questions": [
+                { "defaultDisplay": "hide",
+                  "label": "Date",
+                  "type": "obs",
+                  "id": "Date_ClientT_Tracking",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Verification Attempts",
+                  "type": "obs",
+                  "id": "Verification_Attempts",
+                  "questionOptions": {
+                    "rendering": "check",
+                    "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                    "answers": [
+                      {
+                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                        "label": "1st Biometric capture"
+                      },
+                      {
+                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                        "label": "Biometric recapture"
+                      },
+                      {
+                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                        "label": "Physical document audited-folder / register review"
+                      },
+                      {
+                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                        "label": "Facility Visit"
+                      },
+                      {
+                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                        "label": "Client contacted"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Verification Status",
+                  "type": "obs",
+                  "id": "Verification_Status",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                    "answers": [
+                      {
+                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                        "label": "Verification ongoing"
+                      },
+                      {
+                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                        "label": "Records Discontinued & Archived"
+                      },
+                      {
+                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                        "label": "Record verified"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Outcome",
+                  "type": "obs",
+                  "id": "Outcome",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                    "answers": [
+                      {
+                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                        "label": "Valid"
+                      },
+                      {
+                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Invalid"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Comments (Provide reason for records discontinuation)",
+                  "type": "obs",
+                  "id": "Comments_",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "c. Last attempted contact (after 28 days)",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf3"
+              },
+              "questions": [
+                { "defaultDisplay": "hide",
+                  "label": "Date",
+                  "type": "obs",
+                  "id": "Date_ClientT_Tracking",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Verification Attempts",
+                  "type": "obs",
+                  "id": "Verification_Attempts",
+                  "questionOptions": {
+                    "rendering": "check",
+                    "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                    "answers": [
+                      {
+                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                        "label": "1st Biometric capture"
+                      },
+                      {
+                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                        "label": "Biometric recapture"
+                      },
+                      {
+                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                        "label": "Physical document audited-folder / register review"
+                      },
+                      {
+                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                        "label": "Facility Visit"
+                      },
+                      {
+                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                        "label": "Client contacted"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Verification Status",
+                  "type": "obs",
+                  "id": "Verification_Status",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                    "answers": [
+                      {
+                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                        "label": "Verification ongoing"
+                      },
+                      {
+                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                        "label": "Records Discontinued & Archived"
+                      },
+                      {
+                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                        "label": "Record verified"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Outcome",
+                  "type": "obs",
+                  "id": "Outcome",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                    "answers": [
+                      {
+                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                        "label": "Valid"
+                      },
+                      {
+                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Invalid"
+                      }
+                    ]
+                  }
+                },
+                { "defaultDisplay": "hide",
+                  "label": "Comments (Provide reason for records discontinuation)",
+                  "type": "obs",
+                  "id": "Comments_",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Client Tracking and Discontinuation",
+      "sections": [
+        {
+          "label": "Client Tracking",
+          "questions": [
+            {
+              "label": "Visit Date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "93aaf29a-fc4c-4b54-8c82-ee70030ef660"
+              },
+              "type": "encounterDate",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Reason for Tracking:",
+              "id": "Reason_for_Tracking",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Other",
+                      "displayType": "show",
+                      "childControl": "68720106-8896-4d0b-ac7e-f9acd5f9cedf",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Couple testing",
+                      "displayType": "hide",
+                      "childControl": "68720106-8896-4d0b-ac7e-f9acd5f9cedf",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Missed Appointment",
+                      "displayType": "hide",
+                      "childControl": "68720106-8896-4d0b-ac7e-f9acd5f9cedf",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Missed Pharmacy Refill",
+                      "displayType": "hide",
+                      "childControl": "68720106-8896-4d0b-ac7e-f9acd5f9cedf",
+                      "controlType": "text"
+                    }
+                  ]
+                },
+                "concept": "f79d8e54-0269-4ee7-bb5f-79df985233e0",
+                "answers": [
+                  {
+                    "concept": "bfc04c91-af66-43d6-97ee-3ca55cce5210",
+                    "label": "Couple testing"
+                  },
+                  {
+                    "concept": "5f40f28e-e74f-4342-aba7-95ca82bd4b3d",
+                    "label": "Missed Appointment"
+                  },
+                  {
+                    "concept": "4e016a0d-0d81-47cd-b798-982e926456f8",
+                    "label": "Missed Pharmacy Refill"
+                  },
+                  {
+                    "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Other"
+                  }
+                ]
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "select "
+                }
+              ]
+            },
+            {
+              "label": "Other reason for tracking:",
+              "defaultDisplay": "hide",
+              "id": "Other_reason_for_tracking",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "68720106-8896-4d0b-ac7e-f9acd5f9cedf"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label":"Guardian / Treatment Partner\'s Name:",
+              "id": "Guardian_Treatment_Partner_Name:",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "161135AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label":"Guardian / Treatment Partner\'s Contact Address:",
+              "id": "Guardian_Treatment_Partner_Contact_Address:",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "160641AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label":"Guardian / Treatment Partner\'s Phone Number:",
+              "id": "Guardian_Treatment_Partner_Phone_Number:",
+              "questionOptions": {
+                "rendering": "number",
+                "concept": "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Date of Last Actual Contact/ Appointment:",
+              "id": "Date_of_Last_Actual_Contact_Appointment:",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "934080ba-0b27-4e35-b82c-543a764822d9"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Date of Missed Scheduled Appointment:",
+              "id": "Date_of_Missed_Scheduled_Appointment:",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "332aa0b0-4d33-437b-a1f0-3bd30db9367b"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Attempt to Contact",
+      "sections": [
+        {
+          "label": "Attempt to Contact",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "a. 1st Attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "8c846b15-9d15-48f3-bdcc-b11cefde3729",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf1"
+              },
+              "questions": [
+                {
+                  "label": "Date:",
+                  "id": "Date_Patient_Contacted",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "c78cb3a9-f561-435e-a274-1d6adb303dcf"
+                  },
+                  "type": "obs",
+                  "validators": [
+                    {
+                      "type": "date"
+                    }
+                  ]
+                },
+                {
+                  "label": "Who attempted contact:",
+                  "id": "who_attempted_contact",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "d68bd9d2-66d0-44bd-b969-b196f877f3dc"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Mode of Communication:",
+                  "type": "obs",
+                  "id": "Mode_of_Communication",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "73ec6fdb-c517-47be-bf5c-cc7de67a51f3",
+                    "answers": [
+                      {
+                        "concept": "169ec22e-1db6-4769-91b0-ab2bee894aeb",
+                        "label": "Home Visit"
+                      },
+                      {
+                        "concept": "1650AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Mobile phone"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Person Contacted:",
+                  "type": "obs",
+                  "id": "Person_Contacted",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "55adc707-7dd1-4fd4-b2a7-c1dbc6d01629",
+                    "answers": [
+                      {
+                        "concept": "162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Patient"
+                      },
+                      {
+                        "concept": "160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Guardian"
+                      },
+                      {
+                        "concept": "161642AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Treatment Supporter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Reason for Defaulting:",
+                  "type": "obs",
+                  "id": "Reason_for_Defaulting",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Others",
+                          "displayType": "show",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Was sick",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No transport fare",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Transferred to new site",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Forgot",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Felt better",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Not permitted to leave work",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Lost appointment card",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Still had drugs",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Taking herbal treatment",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf1",
+                          "controlType": "text"
+                        }
+                      ]
+                    },
+                    "concept": "c2010e51-528a-4e9d-8478-df8cdfdbc484",
+                    "answers": [
+                      {
+                        "concept": "342796eb-230f-4d69-9b1a-fa734101455c",
+                        "label": "Was sick"
+                      },
+                      {
+                        "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "No transport fare"
+                      },
+                      {
+                        "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Transferred to new site"
+                      },
+                      {
+                        "concept": "162192AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Forgot"
+                      },
+                      {
+                        "concept": "160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Felt better"
+                      },
+                      {
+                        "concept": "810d6ac3-67c9-4264-bcbc-89333c2b78c8",
+                        "label": "Not permitted to leave work"
+                      },
+                      {
+                        "concept": "440f76db-a70f-4842-99cd-83b3cb5da382",
+                        "label": "Lost appointment card"
+                      },
+                      {
+                        "concept": "760be591-fda8-4628-801c-baf861dad0ae",
+                        "label": "Still had drugs"
+                      },
+                      {
+                        "concept": "5841AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Taking herbal treatment"
+                      },
+                      {
+                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Others"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Other reason for defaulting:",
+                  "defaultDisplay": "hide",
+                  "id": "Other_reason_for_defaulting",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "692f8b1d-ae72-47c4-add3-193bf71abf7b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "b. Other Attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "8c846b15-9d15-48f3-bdcc-b11cefde3729",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf2"
+              },
+              "questions": [
+                {
+                  "label": "Date:",
+                  "id": "Date_Patient_Contacted",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "c78cb3a9-f561-435e-a274-1d6adb303dcf"
+                  },
+                  "type": "obs",
+                  "validators": [
+                    {
+                      "type": "date"
+                    }
+                  ]
+                },
+                {
+                  "label": "Who attempted contact:",
+                  "id": "who_attempted_contact",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "d68bd9d2-66d0-44bd-b969-b196f877f3dc"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Mode of Communication:",
+                  "type": "obs",
+                  "id": "Mode_of_Communication",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "73ec6fdb-c517-47be-bf5c-cc7de67a51f3",
+                    "answers": [
+                      {
+                        "concept": "169ec22e-1db6-4769-91b0-ab2bee894aeb",
+                        "label": "Home Visit"
+                      },
+                      {
+                        "concept": "1650AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Mobile phone"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Person Contacted:",
+                  "type": "obs",
+                  "id": "Person_Contacted",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "55adc707-7dd1-4fd4-b2a7-c1dbc6d01629",
+                    "answers": [
+                      {
+                        "concept": "162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Patient"
+                      },
+                      {
+                        "concept": "160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Guardian"
+                      },
+                      {
+                        "concept": "161642AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Treatment Supporter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Reason for Defaulting:",
+                  "type": "obs",
+                  "id": "Reason_for_Defaulting",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Others",
+                          "displayType": "show",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Was sick",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No transport fare",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Transferred to new site",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Forgot",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Felt better",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Not permitted to leave work",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Lost appointment card",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Still had drugs",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Taking herbal treatment",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf2",
+                          "controlType": "text"
+                        }
+                      ]
+                    },
+                    "concept": "c2010e51-528a-4e9d-8478-df8cdfdbc484",
+                    "answers": [
+                      {
+                        "concept": "342796eb-230f-4d69-9b1a-fa734101455c",
+                        "label": "Was sick"
+                      },
+                      {
+                        "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "No transport fare"
+                      },
+                      {
+                        "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Transferred to new site"
+                      },
+                      {
+                        "concept": "162192AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Forgot"
+                      },
+                      {
+                        "concept": "160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Felt better"
+                      },
+                      {
+                        "concept": "810d6ac3-67c9-4264-bcbc-89333c2b78c8",
+                        "label": "Not permitted to leave work"
+                      },
+                      {
+                        "concept": "440f76db-a70f-4842-99cd-83b3cb5da382",
+                        "label": "Lost appointment card"
+                      },
+                      {
+                        "concept": "760be591-fda8-4628-801c-baf861dad0ae",
+                        "label": "Still had drugs"
+                      },
+                      {
+                        "concept": "5841AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Taking herbal treatment"
+                      },
+                      {
+                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Others"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Other reason for defaulting:",
+                  "defaultDisplay": "hide",
+                  "id": "Other_reason_for_defaulting",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "692f8b1d-ae72-47c4-add3-193bf71abf7b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Attempt to Contact",
+      "sections": [
+        {
+          "label": "Attempt to Contact",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "c. other Attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "8c846b15-9d15-48f3-bdcc-b11cefde3729",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf3"
+              },
+              "questions": [
+                {
+                  "label": "Date:",
+                  "id": "Date_Patient_Contacted",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "c78cb3a9-f561-435e-a274-1d6adb303dcf"
+                  },
+                  "type": "obs",
+                  "validators": [
+                    {
+                      "type": "date"
+                    }
+                  ]
+                },
+                {
+                  "label": "Who attempted contact:",
+                  "id": "who_attempted_contact",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "d68bd9d2-66d0-44bd-b969-b196f877f3dc"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Mode of Communication:",
+                  "type": "obs",
+                  "id": "Mode_of_Communication",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "73ec6fdb-c517-47be-bf5c-cc7de67a51f3",
+                    "answers": [
+                      {
+                        "concept": "169ec22e-1db6-4769-91b0-ab2bee894aeb",
+                        "label": "Home Visit"
+                      },
+                      {
+                        "concept": "1650AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Mobile phone"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Person Contacted:",
+                  "type": "obs",
+                  "id": "Person_Contacted",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "55adc707-7dd1-4fd4-b2a7-c1dbc6d01629",
+                    "answers": [
+                      {
+                        "concept": "162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Patient"
+                      },
+                      {
+                        "concept": "160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Guardian"
+                      },
+                      {
+                        "concept": "161642AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Treatment Supporter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Reason for Defaulting:",
+                  "type": "obs",
+                  "id": "Reason_for_Defaulting",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Others",
+                          "displayType": "show",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Was sick",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No transport fare",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Transferred to new site",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Forgot",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Felt better",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Not permitted to leave work",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Lost appointment card",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Still had drugs",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Taking herbal treatment",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf3",
+                          "controlType": "text"
+                        }
+                      ]
+                    },
+                    "concept": "c2010e51-528a-4e9d-8478-df8cdfdbc484",
+                    "answers": [
+                      {
+                        "concept": "342796eb-230f-4d69-9b1a-fa734101455c",
+                        "label": "Was sick"
+                      },
+                      {
+                        "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "No transport fare"
+                      },
+                      {
+                        "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Transferred to new site"
+                      },
+                      {
+                        "concept": "162192AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Forgot"
+                      },
+                      {
+                        "concept": "160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Felt better"
+                      },
+                      {
+                        "concept": "810d6ac3-67c9-4264-bcbc-89333c2b78c8",
+                        "label": "Not permitted to leave work"
+                      },
+                      {
+                        "concept": "440f76db-a70f-4842-99cd-83b3cb5da382",
+                        "label": "Lost appointment card"
+                      },
+                      {
+                        "concept": "760be591-fda8-4628-801c-baf861dad0ae",
+                        "label": "Still had drugs"
+                      },
+                      {
+                        "concept": "5841AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Taking herbal treatment"
+                      },
+                      {
+                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Others"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Other reason for defaulting:",
+                  "defaultDisplay": "hide",
+                  "id": "Other_reason_for_defaulting",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "692f8b1d-ae72-47c4-add3-193bf71abf7b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            },
+            {
+              "type": "obsGroup",
+              "label": "d. Other Attempted contact",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "8c846b15-9d15-48f3-bdcc-b11cefde3729",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf5"
+              },
+              "questions": [
+                {
+                  "label": "Date:",
+                  "id": "Date_Patient_Contacted",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "c78cb3a9-f561-435e-a274-1d6adb303dcf"
+                  },
+                  "type": "obs",
+                  "validators": [
+                    {
+                      "type": "date"
+                    }
+                  ]
+                },
+                {
+                  "label": "Who attempted contact:",
+                  "id": "who_attempted_contact",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "d68bd9d2-66d0-44bd-b969-b196f877f3dc"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Mode of Communication:",
+                  "type": "obs",
+                  "id": "Mode_of_Communication",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "73ec6fdb-c517-47be-bf5c-cc7de67a51f3",
+                    "answers": [
+                      {
+                        "concept": "169ec22e-1db6-4769-91b0-ab2bee894aeb",
+                        "label": "Home Visit"
+                      },
+                      {
+                        "concept": "1650AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Mobile phone"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Person Contacted:",
+                  "type": "obs",
+                  "id": "Person_Contacted",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "55adc707-7dd1-4fd4-b2a7-c1dbc6d01629",
+                    "answers": [
+                      {
+                        "concept": "162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Patient"
+                      },
+                      {
+                        "concept": "160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Guardian"
+                      },
+                      {
+                        "concept": "161642AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Treatment Supporter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Reason for Defaulting:",
+                  "type": "obs",
+                  "id": "Reason_for_Defaulting",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Others",
+                          "displayType": "show",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Was sick",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No transport fare",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Transferred to new site",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Forgot",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Felt better",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Not permitted to leave work",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Lost appointment card",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Still had drugs",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Taking herbal treatment",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf5",
+                          "controlType": "text"
+                        }
+                      ]
+                    },
+                    "concept": "c2010e51-528a-4e9d-8478-df8cdfdbc484",
+                    "answers": [
+                      {
+                        "concept": "342796eb-230f-4d69-9b1a-fa734101455c",
+                        "label": "Was sick"
+                      },
+                      {
+                        "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "No transport fare"
+                      },
+                      {
+                        "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Transferred to new site"
+                      },
+                      {
+                        "concept": "162192AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Forgot"
+                      },
+                      {
+                        "concept": "160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Felt better"
+                      },
+                      {
+                        "concept": "810d6ac3-67c9-4264-bcbc-89333c2b78c8",
+                        "label": "Not permitted to leave work"
+                      },
+                      {
+                        "concept": "440f76db-a70f-4842-99cd-83b3cb5da382",
+                        "label": "Lost appointment card"
+                      },
+                      {
+                        "concept": "760be591-fda8-4628-801c-baf861dad0ae",
+                        "label": "Still had drugs"
+                      },
+                      {
+                        "concept": "5841AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Taking herbal treatment"
+                      },
+                      {
+                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Others"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Other reason for defaulting:",
+                  "defaultDisplay": "hide",
+                  "id": "Other_reason_for_defaulting",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "692f8b1d-ae72-47c4-add3-193bf71abf7b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Attempt to Contact",
+      "sections": [
+        {
+          "label": "Attempt to Contact",
+          "questions": [
+            {
+              "type": "obsGroup",
+              "label": "e. Last Attempted contact (By 28 days)",
+              "questionOptions": {
+                "rendering": "group",
+                "concept": "8c846b15-9d15-48f3-bdcc-b11cefde3729",
+                "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf4"
+              },
+              "questions": [
+                {
+                  "label": "Date:",
+                  "id": "Date_Patient_Contacted",
+                  "questionOptions": {
+                    "rendering": "date",
+                    "concept": "c78cb3a9-f561-435e-a274-1d6adb303dcf"
+                  },
+                  "type": "obs",
+                  "validators": [
+                    {
+                      "type": "date"
+                    }
+                  ]
+                },
+                {
+                  "label": "Who attempted contact:",
+                  "id": "who_attempted_contact",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "d68bd9d2-66d0-44bd-b969-b196f877f3dc"
+                  },
+                  "type": "obs",
+                  "validators": []
+                },
+                {
+                  "label": "Mode of Communication:",
+                  "type": "obs",
+                  "id": "Mode_of_Communication",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "73ec6fdb-c517-47be-bf5c-cc7de67a51f3",
+                    "answers": [
+                      {
+                        "concept": "169ec22e-1db6-4769-91b0-ab2bee894aeb",
+                        "label": "Home Visit"
+                      },
+                      {
+                        "concept": "1650AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Mobile phone"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Person Contacted:",
+                  "type": "obs",
+                  "id": "Person_Contacted",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "concept": "55adc707-7dd1-4fd4-b2a7-c1dbc6d01629",
+                    "answers": [
+                      {
+                        "concept": "162571AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Patient"
+                      },
+                      {
+                        "concept": "160639AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Guardian"
+                      },
+                      {
+                        "concept": "161642AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Treatment Supporter"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Reason for Defaulting:",
+                  "type": "obs",
+                  "id": "Reason_for_Defaulting",
+                  "questionOptions": {
+                    "rendering": "select",
+                    "control": {
+                      "conditionOptions": [
+                        {
+                          "when": "Others",
+                          "displayType": "show",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Was sick",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "No transport fare",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Transferred to new site",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Forgot",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Felt better",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Not permitted to leave work",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Lost appointment card",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Still had drugs",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        },
+                        {
+                          "when": "Taking herbal treatment",
+                          "displayType": "hide",
+                          "childControl": "692f8b1d-ae72-47c4-add3-193bf71abf7bc78cb3a9-f561-435e-a274-1d6adb303dcf4",
+                          "controlType": "text"
+                        }
+                      ]
+                    },
+                    "concept": "c2010e51-528a-4e9d-8478-df8cdfdbc484",
+                    "answers": [
+                      {
+                        "concept": "342796eb-230f-4d69-9b1a-fa734101455c",
+                        "label": "Was sick"
+                      },
+                      {
+                        "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "No transport fare"
+                      },
+                      {
+                        "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Transferred to new site"
+                      },
+                      {
+                        "concept": "162192AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Forgot"
+                      },
+                      {
+                        "concept": "160586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Felt better"
+                      },
+                      {
+                        "concept": "810d6ac3-67c9-4264-bcbc-89333c2b78c8",
+                        "label": "Not permitted to leave work"
+                      },
+                      {
+                        "concept": "440f76db-a70f-4842-99cd-83b3cb5da382",
+                        "label": "Lost appointment card"
+                      },
+                      {
+                        "concept": "760be591-fda8-4628-801c-baf861dad0ae",
+                        "label": "Still had drugs"
+                      },
+                      {
+                        "concept": "5841AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Taking herbal treatment"
+                      },
+                      {
+                        "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                        "label": "Others"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "label": "Other reason for defaulting:",
+                  "defaultDisplay": "hide",
+                  "id": "Other_reason_for_defaulting",
+                  "questionOptions": {
+                    "rendering": "text",
+                    "concept": "692f8b1d-ae72-47c4-add3-193bf71abf7b"
+                  },
+                  "type": "obs",
+                  "validators": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sections": [
+        {
+          "label": "Client Discontinuation",
+          "questions": [
+            {
+              "label": "Lost to Follow Up:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Lost_to_Follow_Up",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "hide",
+                      "childControl": "4b24ffc8-dce0-43c9-9663-fc03919c766c",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "show",
+                      "childControl": "4b24ffc8-dce0-43c9-9663-fc03919c766c",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "5240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "answers": [
+                  {
+                    "concept": "true",
+                    "label": "Yes"
+                  },
+                  {
+                    "concept": "false",
+                    "label": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Patient Care in Facility Discontinued:",
+              "type": "obs",
+              "id": "Patient_Care_in_Facility_Terminated",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "4b24ffc8-dce0-43c9-9663-fc03919c766c",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "38e672ba-2fac-4907-8740-9cc1ca0b0a71",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "show",
+                      "childControl": "96cf76ca-1afd-4b3b-a3bf-623d837725fa",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "hide",
+                      "childControl": "d7caaa1e-2a51-4908-a7ad-f4a16494ddca",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Yes",
+                      "displayType": "hide",
+                      "childControl": "1786893e-decf-489e-82a4-ffd9e1b43fe2",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "show",
+                      "childControl": "d7caaa1e-2a51-4908-a7ad-f4a16494ddca",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "show",
+                      "childControl": "1786893e-decf-489e-82a4-ffd9e1b43fe2",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "38e672ba-2fac-4907-8740-9cc1ca0b0a71",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "No",
+                      "displayType": "hide",
+                      "childControl": "96cf76ca-1afd-4b3b-a3bf-623d837725fa",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "answers": [
+                  {
+                    "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Yes"
+                  },
+                  {
+                    "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "No"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Date of Discontinuation",
+              "defaultDisplay": "hide",
+              "id": "Date_of_Termination",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "38e672ba-2fac-4907-8740-9cc1ca0b0a71"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Reason for Discontinuation:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Reason_for_Termination",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "show",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "hide",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "hide",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "hide",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "show",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "show",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "hide",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "show",
+                      "childControl": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "hide",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "hide",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "hide",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "hide",
+                      "childControl": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "hide",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "hide",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "hide",
+                      "childControl": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "hide",
+                      "childControl": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "show",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Lost_to_followup",
+                      "displayType": "show",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Transferred out to another facility",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Death",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Discontinued Care",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Duplicate record",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "01dcbe83-cae1-46ce-9719-0595b648675f",
+                      "controlType": "date"
+                    },
+                    {
+                      "when": "Could not verify client",
+                      "displayType": "hide",
+                      "childControl": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                      "controlType": "select"
+                    }
+                  ]
+                },
+                "concept": "96cf76ca-1afd-4b3b-a3bf-623d837725fa",
+                "answers": [
+                  {
+                    "concept": "159492AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Transferred out to another facility"
+                  },
+                  {
+                    "concept": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                    "label": "Death"
+                  },
+                  {
+                    "concept": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                    "label": "Discontinued Care"
+                  },
+                  {
+                    "concept": "6aceefce-7939-4ef2-8ff0-478859fd181f",
+                    "label": "Duplicate record"
+                  },
+                  {
+                    "concept": "ebb48cd5-cbfe-4779-82de-cdc3baa3ae28",
+                    "label": "Could not verify client"
+                  },
+                  {
+                    "concept": "5240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Lost_to_followup"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Facility transferred to:",
+              "defaultDisplay": "hide",
+              "id": "Facility_transferred_to",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "159495AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Date Returned to Care",
+              "defaultDisplay": "hide",
+              "id": "Date_Returned_to_Care",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "d7caaa1e-2a51-4908-a7ad-f4a16494ddca"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Referred for:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Referred_for",
+              "questionOptions": {
+                "rendering": "select",
+                "concept": "1786893e-decf-489e-82a4-ffd9e1b43fe2",
+                "answers": [
+                  {
+                    "concept": "5488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Adherence counselling"
+                  },
+                  {
+                    "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Others (Specify)"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Reason to Discontinue Care:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Reason_to_Discontinue_Care",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Other",
+                      "displayType": "show",
+                      "childControl": "4f1b0631-e6c1-4a99-bf6f-9797275eebb3",
+                      "controlType": "text"
+                    }
+                  ]
+                },
+                "concept": "bb3c219f-0ada-4e24-8213-ac61d3443834",
+                "answers": [
+                  {
+                    "concept": "45957eaa-93dd-41cc-9ea9-86a6af372b2c",
+                    "label": "Forced Discontinuation(Civil unrest)"
+                  },
+                  {
+                    "concept": "44047deb-3007-4ef2-ba7c-708a5c6dd536",
+                    "label": "Moved out of Area"
+                  },
+                  {
+                    "concept": "5622AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Other"
+                  },
+                  {
+                    "concept": "720ba358-0111-4c12-a1a4-bf359b282231",
+                    "label": "Self Discontinuation"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Discontinue Care Other Specify:",
+              "defaultDisplay": "hide",
+              "id": "Other_Specify",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "4f1b0631-e6c1-4a99-bf6f-9797275eebb3"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Cause of Death:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Cause_of_Death",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Other cause of death",
+                      "displayType": "show",
+                      "childControl": "b0f65454-e372-4951-9b2e-55559e85dd77",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Suspected ARV Side effect",
+                      "displayType": "hide",
+                      "childControl": "b0f65454-e372-4951-9b2e-55559e85dd77",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Suspected Opportunistic Infection",
+                      "displayType": "hide",
+                      "childControl": "b0f65454-e372-4951-9b2e-55559e85dd77",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Unknown",
+                      "displayType": "hide",
+                      "childControl": "b0f65454-e372-4951-9b2e-55559e85dd77",
+                      "controlType": "text"
+                    }
+                  ]
+                },
+                "concept": "b509ba38-9126-4130-9212-5b2fdd8b7f09",
+                "answers": [
+                  {
+                    "concept": "c5be0b70-5015-464e-99ee-337251aac11f",
+                    "label": "Other cause of death"
+                  },
+                  {
+                    "concept": "7c0fe63c-4b58-4cd5-a75f-0e9a8a667cff",
+                    "label": "Suspected ARV Side effect"
+                  },
+                  {
+                    "concept": "ba7f9c1f-11fb-4650-8ac8-e1c0c88d1b96",
+                    "label": "Suspected Opportunistic Infection"
+                  },
+                  {
+                    "concept": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Unknown"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "VA Cause of Death:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Cause_of_Death",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Other cause of death",
+                      "displayType": "show",
+                      "childControl": "b0f65454-e372-4951-9b2e-55559e85dd77",
+                      "controlType": "text"
+                    }
+                  ]
+                },
+                "concept": "35faad10-a6ea-41e8-9e37-8272c8257a03",
+                "answers": [
+                  {
+                    "concept": "4851ea29-4e76-436d-a649-7b92a2c59ec6",
+                    "label": "Adult causes"
+                  },
+                  {
+                    "concept": "2af544d5-3544-4318-bc10-86499b9cf124",
+                    "label": "Child causes"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Other cause of death (specify):",
+              "defaultDisplay": "hide",
+              "id": "Other_cause_of_death_specify",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "b0f65454-e372-4951-9b2e-55559e85dd77"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Date of Lost to follow up",
+              "defaultDisplay": "hide",
+              "id": "Date_of_Lost_to_follow_up",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "01dcbe83-cae1-46ce-9719-0595b648675f"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            },
+            {
+              "label": "Reason for Lost to follow up:",
+              "defaultDisplay": "hide",
+              "type": "obs",
+              "id": "Reason_for_Lost_to_follow_up",
+              "questionOptions": {
+                "rendering": "select",
+                "control": {
+                  "conditionOptions": [
+                    {
+                      "when": "Others",
+                      "displayType": "show",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Tracked but unable to locate",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Did not attempt to track patient",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Travel/Relocation",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Spiritual/Cultural beliefs",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Pill burden",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "ARV side effects",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Stigma/Conduct of staff",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    },
+                    {
+                      "when": "Distance/Economic reasons",
+                      "displayType": "hide",
+                      "childControl": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                      "controlType": "text"
+                    }
+                  ]
+                },
+                "concept": "c02fc015-243d-4f98-b44c-5ddee518b275",
+                "answers": [
+                  {
+                    "concept": "08438b70-08f5-48a4-8de9-25c469fbacf1",
+                    "label": "Tracked but unable to locate"
+                  },
+                  {
+                    "concept": "3a22cdc1-e276-4536-91d6-5fa40d68c950",
+                    "label": "Did not attempt to track patient"
+                  },
+                  {
+                    "concept": "251f8afb-63e8-478e-935a-57df6aa887a3",
+                    "label": "Travel/Relocation"
+                  },
+                  {
+                    "concept": "151231AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Spiritual/Cultural beliefs"
+                  },
+                  {
+                    "concept": "160588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Pill burden"
+                  },
+                  {
+                    "concept": "102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "ARV side effects"
+                  },
+                  {
+                    "concept": "160589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Stigma/Conduct of staff"
+                  },
+                  {
+                    "concept": "1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "label": "Distance/Economic reasons"
+                  },
+                  {
+                    "concept": "fac16fe4-f4cc-4997-83ec-bbda7ea83261",
+                    "label": "Others"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "Other reason for Lost to follow up:",
+              "defaultDisplay": "hide",
+              "id": "Other_reason_for_lost_to_follow_up",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "fac16fe4-f4cc-4997-83ec-bbda7ea83261"
+              },
+              "type": "obs",
+              "validators": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Signature",
+      "sections": [
+        {
+          "label": "Name of Contact Tracer",
+          "questions": [
+            {
+              "label": "Name of Contact Tracer:",
+              "id": "Name_of_Contact_Tracer",
+              "questionOptions": {
+                "rendering": "text",
+                "concept": "19353c95-b68f-42cf-b403-b35bf5fa9a66"
+              },
+              "type": "obs",
+              "validators": []
+            },
+            {
+              "label": "Date:",
+              "id": "Contact_Tracker_Signature_date",
+              "questionOptions": {
+                "rendering": "date",
+                "concept": "20f7b222-e973-43a3-9179-eda99477e1bf"
+              },
+              "type": "obs",
+              "validators": [
+                {
+                  "type": "date"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

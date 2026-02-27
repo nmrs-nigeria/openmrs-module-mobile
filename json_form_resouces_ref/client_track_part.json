@@ -1,0 +1,439 @@
+{
+    "label": "",
+    "sections": [
+        {
+            "label": "Indication for Client Verification: (Reason /Trigger/Indication for Client Verification, you can select multiple triggers) Verification Attempts/Steps",
+            "questions": [ 
+              {
+                    "label": "Client Verification",
+                    "id": "client_verification",
+                    "questionOptions": {
+                        "rendering": "select",
+                        "concept": "ed586055-dedd-42d3-b87b-2a06715459bd",
+                        "control": {
+                            "conditionOptions": [
+                                {
+                                    "when": "No",
+                                    "displayType": "hide",
+                                    "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                                    "controlType": "check"
+                                },
+                                {
+                                    "when": "Yes",
+                                    "displayType": "show",
+                                    "childControl": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                                    "controlType": "check"
+                                }
+                            ]
+                        },
+                        "answers": [
+                            {
+                                "concept": "1066AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "label": "No"
+                            },
+                            {
+                                "concept": "1065AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                "label": "Yes"
+                            }
+                        ]
+                    },
+                    "type": "obs",
+                    "validators": [
+                        {
+                            "type": "select "
+                        }
+                    ]
+                },
+                {
+                    "label": "Others indications for Client verification",
+                    "id": "Others_indications_for_Client_verification",
+                    "defaultDisplay": "hide",
+                    "type": "obs",
+                    "questionOptions": {
+                        "rendering": "check",
+                        "concept": "c42db1b9-46fd-45ea-ae89-f4c30a01be57",
+                        "answers": [
+                            {
+                                "concept": "159d4316-948b-4d84-8d42-4801d9815475",
+                                "label": "Consistently had drug pickup by proxy without viral load sample collection for two quarters"
+                            },
+                            {
+                                "concept": "4586a817-9491-4f86-8094-fc19b17c0b45",
+                                "label": "Duplicated demographic and clinical variables"
+                            },
+                            {
+                                "concept": "b70b2ae5-b76b-411d-9909-15381b3c76a2",
+                                "label": "No biometrics recapture"
+                            },
+                            {
+                                "concept": "0875ba7c-bfe7-4d2b-9655-a795a3c5632e",
+                                "label": "Batched ARV pickup dates"
+                            },
+                            {
+                                "concept": "be100699-ca67-42ed-a196-ff3096ce8522",
+                                "label": "Last clinical visit is over 18 months prior"
+                            },
+                            {
+                                "concept": "28ed9571-a41f-44d4-b420-2bd8cef3059c",
+                                "label": "Batched ART start and pickup dates"
+                            },
+                            {
+                                "concept": "3bcb19cc-f56a-4b32-ba7e-d1b5bf215371",
+                                "label": "No initial biometric capture"
+                            },
+                            {
+                                "concept": "7843063f-7e97-4de1-9968-c18fedfaebd5",
+                                "label": "Incomplete visit data on the care card or pharmacy forms or EMR"
+                            },
+                            {
+                                "concept": "36e53b0a-144f-4098-a5d8-19ec8de5b770",
+                                "label": "Records of repeated clinical encounters with no fingerprint recapture"
+                            },
+                            {
+                                "concept": "f93143cb-3ced-44ef-b64d-e5f3c1ff78fa",
+                                "label": "Long intervals between ARV pick-ups (pick-ups more than one year apart in the same facility)"
+                            },
+                            {
+                                "concept": "83d5f678-dc44-4e9b-85fa-760a1192b42a",
+                                "label": "Same sex, DOB and ART start date"
+                            },
+                            {
+                                "concept": "2e76fea9-f6e2-4fa1-844e-78ebe53223de",
+                                "label": "Others"
+                            }
+                        ],
+
+                        "control": {
+                            "conditionOptions": [ 
+                                {
+                                    "when": "Others",
+                                    "displayType": "show",
+                                    "childControl": "2e76fea9-f6e2-4fa1-844e-78ebe53223de",
+                                    "controlType": "text"
+                                }
+                            ]
+                        }
+                    }
+                } ,
+                {
+                    "label": "Others indications for Client verification",
+                    "id": "Others_indications_for_Client_verification",
+                    "defaultDisplay": "hide",
+                    "type": "obs",
+                    "questionOptions": {
+                        "rendering": "text",
+                        "concept": "2e76fea9-f6e2-4fa1-844e-78ebe53223de" 
+                       
+                    }
+                } 
+                ,
+                {
+                    "type": "obsGroup",
+                    "label": "a. 1st Attempted contact",
+                    "questionOptions": {
+                        "rendering": "group",
+                        "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                        "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf1"
+                    },
+                    "questions": [
+                        {
+                            "label": "Date",
+                            "type": "obs",
+                            "id": "Date_ClientT_Tracking",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                            }
+                        },
+                        {
+                            "label": "Verification Attempts",
+                            "type": "obs",
+                            "id": "Verification_Attempts",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                                "answers": [
+                                    {
+                                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                                        "label": "1st Biometric capture"
+                                    },
+                                    {
+                                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                                        "label": "Biometric recapture"
+                                    },
+                                    {
+                                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                                        "label": "Physical document audited-folder / register review"
+                                    },
+                                    {
+                                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                                        "label": "Facility Visit"
+                                    },
+                                    {
+                                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                                        "label": "Client contacted"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Verification Status",
+                            "type": "obs",
+                            "id": "Verification_Status",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                                "answers": [
+                                    {
+                                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                                        "label": "Verification ongoing"
+                                    },
+                                    {
+                                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                                        "label": "Records Discontinued & Archived"
+                                    },
+                                    {
+                                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                                        "label": "Record verified"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Outcome",
+                            "type": "obs",
+                            "id": "Outcome",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                                "answers": [
+                                    {
+                                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                                        "label": "Valid"
+                                    },
+                                    {
+                                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Invalid"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Comments (Provide reason for records discontinuation)",
+                            "type": "obs",
+                            "id": "Comments_",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "obsGroup",
+                    "label": "b. Other attempted contact",
+                    "questionOptions": {
+                        "rendering": "group",
+                        "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                        "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf2"
+                    },
+                    "questions": [
+                        {
+                            "label": "Date",
+                            "type": "obs",
+                            "id": "Date_ClientT_Tracking",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                            }
+                        },
+                        {
+                            "label": "Verification Attempts",
+                            "type": "obs",
+                            "id": "Verification_Attempts",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                                "answers": [
+                                    {
+                                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                                        "label": "1st Biometric capture"
+                                    },
+                                    {
+                                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                                        "label": "Biometric recapture"
+                                    },
+                                    {
+                                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                                        "label": "Physical document audited-folder / register review"
+                                    },
+                                    {
+                                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                                        "label": "Facility Visit"
+                                    },
+                                    {
+                                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                                        "label": "Client contacted"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Verification Status",
+                            "type": "obs",
+                            "id": "Verification_Status",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                                "answers": [
+                                    {
+                                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                                        "label": "Verification ongoing"
+                                    },
+                                    {
+                                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                                        "label": "Records Discontinued & Archived"
+                                    },
+                                    {
+                                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                                        "label": "Record verified"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Outcome",
+                            "type": "obs",
+                            "id": "Outcome",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                                "answers": [
+                                    {
+                                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                                        "label": "Valid"
+                                    },
+                                    {
+                                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Invalid"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Comments (Provide reason for records discontinuation)",
+                            "type": "obs",
+                            "id": "Comments_",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "obsGroup",
+                    "label": "c. Last attempted contact (after 28 days)",
+                    "questionOptions": {
+                        "rendering": "group",
+                        "concept": "d6bd121e-19d2-49cc-b3a2-9114724d3787",
+                        "repeatConcept": "c78cb3a9-f561-435e-a274-1d6adb303dcf3"
+                    },
+                    "questions": [
+                        {
+                            "label": "Date",
+                            "type": "obs",
+                            "id": "Date_ClientT_Tracking",
+                            "questionOptions": {
+                                "rendering": "date",
+                                "concept": "f996800e-eba9-4f8d-9a54-1c878279d5d2"
+                            }
+                        },
+                        {
+                            "label": "Verification Attempts",
+                            "type": "obs",
+                            "id": "Verification_Attempts",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "c6f5016d-6e55-46d6-84e8-3d37918abd23",
+                                "answers": [
+                                    {
+                                        "concept": "dce41e86-3533-4f31-b3a4-378edccd255c",
+                                        "label": "1st Biometric capture"
+                                    },
+                                    {
+                                        "concept": "5a5f62d4-9688-41a3-bca8-e0f6559ae393",
+                                        "label": "Biometric recapture"
+                                    },
+                                    {
+                                        "concept": "78211f44-c9e2-4507-96e5-f6d46153685b",
+                                        "label": "Physical document audited-folder / register review"
+                                    },
+                                    {
+                                        "concept": "eb5739c6-b747-4301-9976-cde523cc1eb5",
+                                        "label": "Facility Visit"
+                                    },
+                                    {
+                                        "concept": "2b317c32-906e-442d-8028-2bb4213c3d8e",
+                                        "label": "Client contacted"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Verification Status",
+                            "type": "obs",
+                            "id": "Verification_Status",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "08728221-0130-4016-9b73-dbfd45a1ffbe",
+                                "answers": [
+                                    {
+                                        "concept": "a43118e8-7cc3-42ba-8a28-8c7528bd6f02",
+                                        "label": "Verification ongoing"
+                                    },
+                                    {
+                                        "concept": "9b052f1b-0609-4071-ab3b-cc444bd071ef",
+                                        "label": "Records Discontinued & Archived"
+                                    },
+                                    {
+                                        "concept": "199ec5ab-233e-44e9-99ce-5631a546321e",
+                                        "label": "Record verified"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Outcome",
+                            "type": "obs",
+                            "id": "Outcome",
+                            "questionOptions": {
+                                "rendering": "select",
+                                "concept": "9a671e64-5ebc-412f-9d46-0231d337e8aa",
+                                "answers": [
+                                    {
+                                        "concept": "687ae195-e9a6-46f5-9739-57b465c476a4",
+                                        "label": "Valid"
+                                    },
+                                    {
+                                        "concept": "163611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                        "label": "Invalid"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "label": "Comments (Provide reason for records discontinuation)",
+                            "type": "obs",
+                            "id": "Comments_",
+                            "questionOptions": {
+                                "rendering": "text",
+                                "concept": "71c6a4eb-7860-4b7e-90ea-c45aadd26c82"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

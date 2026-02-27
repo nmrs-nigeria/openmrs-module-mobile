@@ -509,7 +509,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             martComView.setVisibility(View.GONE);
                             break;
                         case "Care Card":
-                            mcareCardView.setVisibility(View.GONE);
+                            mcareCardView.setVisibility(View.VISIBLE);
                             break;
                         case "Client Referral Form":
                             mclientRefView.setVisibility(View.GONE);
@@ -521,7 +521,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
                             mpharmacyView.setVisibility(View.VISIBLE);
                             break;
                         case "Client Tracking and Termination":
-                            mclientTracView.setVisibility(View.GONE);
+                            mclientTracView.setVisibility(View.VISIBLE);
                             break;
                         case "HIV Enrollment":
                             mhivEnrollmentView.setVisibility(View.GONE);
@@ -604,7 +604,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         bindDrawableResource(mmaternalButton, R.drawable.ico_vitals);
         bindDrawableResource(mheifButton, R.drawable.ico_vitals);
         bindDrawableResource(mhivEnrollmentButton, R.drawable.web);
-        bindDrawableResource(mcareCardButton, R.drawable.ico_vitals);
+        bindDrawableResource(mcareCardButton, R.drawable.care_card);
         bindDrawableResource(mlabButton, R.drawable.microscope);
         bindDrawableResource(mpharmacyButton, R.drawable.tools_and_utensils);
         bindDrawableResource(madultinitButton, R.drawable.ico_vitals);
@@ -614,7 +614,7 @@ public class FormProgramFragment extends ACBaseFragment<FormProgramContract.Pres
         bindDrawableResource(mclientRefButton, R.drawable.arrow);
         bindDrawableResource(martComButton, R.drawable.ico_vitals);
 
-        bindDrawableResource(mclientTracButton, R.drawable.ico_vitals);
+        bindDrawableResource(mclientTracButton, R.drawable.client_tracking);
         bindDrawableResource(mancTrackingButton, R.drawable.ico_vitals);
         bindDrawableResource(mpartnerButton, R.drawable.couple);
         bindDrawableResource(mclientinteakeButton, R.drawable.medical_client_intake);

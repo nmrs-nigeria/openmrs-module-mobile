@@ -52,14 +52,21 @@ import org.openmrs.mobile.activities.pbs.PatientBiometricContract;
 import org.openmrs.mobile.activities.pbsverification.PatientBiometricVerificationActivity;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.dao.FingerPrintDAO;
+import org.openmrs.mobile.dao.PatientDAO;
 import org.openmrs.mobile.dao.ServiceLogDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.models.FingerPrintLog;
+import org.openmrs.mobile.models.Patient;
+import org.openmrs.mobile.models.PersonAddress;
+import org.openmrs.mobile.sync.GeoCoordinate;
 import org.openmrs.mobile.sync.LogResponse;
 import org.openmrs.mobile.utilities.ApplicationConstants;
 import org.openmrs.mobile.utilities.ImageUtils;
 import org.openmrs.mobile.utilities.LogOutTimerUtil;
 import org.openmrs.mobile.utilities.TabUtil;
+import org.openmrs.mobile.utilities.ToastUtil;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -79,6 +86,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     public static FloatingActionButton additionalActionsFAB, updateFAB, deleteFAB, visitFAB, pbsFAB, commodityFAB;
     public static LinearLayout deleteFabLayout, updateFabLayout;
     public static Resources resources;
+    GeoCoordinate geoCoordinate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +104,9 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
 
         resources = getResources();
         setupUpdateDeleteActionFAB();
+
+        geoCoordinate = new GeoCoordinate(this);
+
     }
 
     @Override
@@ -192,11 +203,13 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
 
     // select the patient PBS base on available PBS base finger prints
     private void autoSelectPBSActivity(long patientId) {
-        //Util.logTable("service_logs");
+        if ( geoCoordinate.updatePatient(patientId)) {
+
+            //  proceed with auto select
         List<PatientBiometricContract> dao = new FingerPrintDAO().getSinglePatientPBS(patientId);
         String visitDate = new ServiceLogDAO().getVisitDate(patientId);
         if (visitDate == null) {
-            registerARTServiceDialog("PBS activity info","PBS Capture/Recapture activity MUST be tied to an ART service.\nKindly ensure you document any of the ART service for this patient and try again." );
+            registerARTServiceDialog("PBS activity info", "PBS Capture/Recapture activity MUST be tied to an ART service.\nKindly ensure you document any of the ART service for this patient and try again.");
             return;
         }
 
@@ -232,6 +245,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
             //no print found base available
             startPatientPBSActivity(patientId, visitDate);
         }
+        }
     }
 
     // check if the capture is not too frequent.
@@ -241,45 +255,45 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
             try {
                 LocalDateTime recentCaptureDate = LocalDateTime.parse(lastCapturedDate);
                 long daysDifference = ChronoUnit.DAYS.between(recentCaptureDate, currentDateTime);
-                if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE){
-                    return  true;
+                if (daysDifference <= ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
+                    return true;
                 } else {
                     registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
                             ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
-                            " days. Recent-capture date is "+ lastCapturedDate);
+                            " days. Recent-capture date is " + lastCapturedDate);
                 }
-            }catch (Exception e){
-                OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
-                        e.getMessage(),"1-Report this bugThe date is "+lastCapturedDate,"recentCaptureIsAbove30").getFullMessage());
+            } catch (Exception e) {
+                OpenMRSCustomHandler.writeLogToFile(new LogResponse(false, String.valueOf(patientId),
+                        e.getMessage(), "1-Report this bugThe date is " + lastCapturedDate, "recentCaptureIsAbove30").getFullMessage());
                 registerARTServiceDialog("PBS activity info", "Patient recent capture  date failed to decoded. Report the log file " +
-                        "\nRecent-capture date is "+ lastCapturedDate);
+                        "\nRecent-capture date is " + lastCapturedDate);
 
             }
 
-        }else{
+        } else {
             try {
-                Date  currentDate= new Date();
-                Long  recentCaptureDate  =Date.parse( lastCapturedDate);
+                Date currentDate = new Date();
+                Long recentCaptureDate = Date.parse(lastCapturedDate);
                 long timeDifference = recentCaptureDate//.getTime()4
                         - currentDate.getTime();
                 // Calculate the number of days in the time difference
                 long daysDifference = timeDifference / (24L * 60L * 60L * 1000L);
-                if(daysDifference<=ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
+                if (daysDifference <= ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE) {
                     return true;
-                }else {
+                } else {
                     registerARTServiceDialog("PBS activity info", "Patient recent capture is not up to " +
                             ApplicationConstants.MINIMUM_REQUIRED_DAYS_BEFORE_RECAPTURE +
-                            " days. Recent-capture date is "+ lastCapturedDate);
+                            " days. Recent-capture date is " + lastCapturedDate);
                 }
-            }catch (Exception e){
-                OpenMRSCustomHandler.writeLogToFile(new LogResponse( false, String.valueOf(patientId),
-                        e.getMessage(),"Report this bug.The date is "+lastCapturedDate,"2-recentCaptureIsAbove30").getFullMessage());
+            } catch (Exception e) {
+                OpenMRSCustomHandler.writeLogToFile(new LogResponse(false, String.valueOf(patientId),
+                        e.getMessage(), "Report this bug.The date is " + lastCapturedDate, "2-recentCaptureIsAbove30").getFullMessage());
                 registerARTServiceDialog("PBS activity info", "Patient recent capture  date failed to decoded. Report the log file " +
-                        "\nRecent-capture date is "+ lastCapturedDate);
+                        "\nRecent-capture date is " + lastCapturedDate);
             }
         }
 
-        return  false;
+        return false;
     }
 
 
@@ -307,7 +321,7 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     }
 
 
-    private void registerARTServiceDialog( String title, String body) {
+    private void registerARTServiceDialog(String title, String body) {
 
 //        Util.log("Date: "+DateUtils.convertTime( DateUtils.convertTime("2023-05-20T00:00:00.000+0100")
 //                , DateUtils.OPEN_MRS_PBS_DATE_FORMAT));
@@ -348,10 +362,12 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     }
 
     public void startPatientProgramActivity(long patientId) {
-        Intent patientProgram = new Intent(this, PatientProgramActivity.class);
-        patientProgram.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE,
-                String.valueOf(patientId));
-        startActivity(patientProgram);
+        if ( geoCoordinate.updatePatient(patientId)) {
+            Intent patientProgram = new Intent(this, PatientProgramActivity.class);
+            patientProgram.putExtra(ApplicationConstants.BundleKeys.PATIENT_ID_BUNDLE,
+                    String.valueOf(patientId));
+            startActivity(patientProgram);
+        }
     }
 
     public void startPatientPBSActivity(long patientId, String visitDate) {
@@ -436,5 +452,11 @@ public class PatientDashboardActivity extends ACBaseActivity implements LogOutTi
     @Override
     public void doLogout() {
         logout();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        geoCoordinate.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

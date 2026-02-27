@@ -15,21 +15,78 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ProgressBar
         android:id="@+id/syncedPatientsInitialProgressBar"
-        android:visibility="visible"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:layout_below="@+id/summaryLayout"
+        tools:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/summaryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:layout_marginHorizontal="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/totalPatientsLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:text="Patients:" />
+
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/totalPatients"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0000" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/unsyncedPatientsLabel"
+            android:layout_width="0dp"
+            android:textAlignment="textEnd"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Data:" />
+
+
+        <TextView
+            android:id="@+id/dataPatients"
+            android:layout_width="0dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:text="0000" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/syncedPatientRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/dashboard_background2" />
+        android:layout_below="@+id/summaryLayout"
+        android:background="@drawable/dashboard_background2"
+        tools:itemCount="30"
+        tools:listitem="@layout/row_find_synced_patients" />
 
     <TextView android:id="@+id/emptySyncedPatientList"
         android:layout_width="wrap_content"

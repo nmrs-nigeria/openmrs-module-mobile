@@ -13,6 +13,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
@@ -55,8 +56,8 @@
                 android:id="@+id/openmrsLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="70dp"
                 android:contentDescription="@string/openmrs_logo" />
 
             <LinearLayout
@@ -66,7 +67,8 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutLoginURL"
@@ -158,6 +160,7 @@
                     android:layout_marginLeft="18dp"
                     android:layout_marginTop="10dp"
                     android:gravity="start"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <LinearLayout
@@ -173,14 +176,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="@string/login_offline" />
+                        android:text="@string/login_offline"
+                        android:textColor="@color/white" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/loginSyncButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/sync_button_selector"
-                        android:tint="@color/cardview_dark_background" />
+                        android:tint="@color/cardview_light_background" />
 
                 </LinearLayout>
 
@@ -198,7 +202,8 @@
                     android:enabled="false"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="@string/login_button"
-                    android:textColor="@color/login_button2" />
+                    android:textColor="@color/login_button2"
+                    android:textStyle="bold" />
 
 
                 <TextView
@@ -206,7 +211,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/unable_to_login"
-                    android:textColor="@color/neutral_green"
+                    android:textColor="@color/white"
                     android:textSize="16sp" />
 
             </LinearLayout>
@@ -219,7 +224,7 @@
                 android:gravity="center"
                 android:text="@string/app_version"
                 android:textColor="#ffffff"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <ProgressBar
@@ -227,7 +232,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                tools:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

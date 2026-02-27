@@ -41,19 +41,20 @@
             android:src="@drawable/finger_full"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
             android:id="@+id/imageViewFingerprint"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="70dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/fingerprint_capture_image"
             android:src="@android:drawable/picture_frame"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/replaceBase"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fingerPrintImage"  />
+            app:layout_constraintTop_toBottomOf="@+id/fingerPrintImage" />
 
         <!--            <ImageView-->
         <!--                android:id="@+id/imageViewRegister"-->
@@ -80,7 +81,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btnSavePrints"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewFingerprint"  />
+            app:layout_constraintTop_toBottomOf="@+id/imageViewFingerprint" />
 
         <Button
             android:id="@+id/btnSavePrints"
@@ -96,7 +97,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buttonRegister"
             app:layout_constraintTop_toTopOf="@+id/buttonRegister"
-            tools:background="@color/grey"  />
+            tools:background="@color/grey" />
 
         <Button
             android:id="@+id/buttonClearUnsyncFingerPrint"
@@ -112,7 +113,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnSavePrints"
             app:layout_constraintTop_toTopOf="@+id/btnSavePrints"
-            tools:background="@color/grey"  />
+            tools:background="@color/grey" />
 
 
         <Button
@@ -124,6 +125,8 @@
             android:gravity="center|start"
             android:paddingStart="8dp"
             android:text="Right Thumb"
+
+            android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -139,6 +142,8 @@
             android:gravity="center|end"
             android:paddingEnd="8dp"
             android:text="Left Thumb"
+
+            android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/fingerRightThumb"
@@ -375,6 +380,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/fingerRightPinky"
             app:layout_constraintTop_toTopOf="@+id/fingerRightPinky" />
+
+        <CheckBox
+            android:id="@+id/replaceBase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Replace Base"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewFingerprint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imageViewFingerprint"
+            app:layout_constraintTop_toTopOf="@+id/imageViewFingerprint" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

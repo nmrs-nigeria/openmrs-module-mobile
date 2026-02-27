@@ -115,6 +115,7 @@ import java.io.FileDescriptor;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -811,6 +812,17 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
             ArrayAdapter<String> state_adapter = new ArrayAdapter<>(getContext(),
                     android.R.layout.simple_dropdown_item_1line, states);
             edstate.setAdapter(state_adapter);
+            edstate.setThreshold(1);
+            edstate.setOnFocusChangeListener((v, hasFocus) -> {
+                if (!hasFocus) {
+                    String input = edstate.getText().toString();
+                    boolean isValid = Arrays.asList(states).contains(input);
+                    if (!isValid) {
+                        edstate.setError("Please select a valid State");
+                        edstate.setText(""); // or reset to previous valid
+                    }
+                }
+            });
         }
     }
 
@@ -840,6 +852,17 @@ public class AddEditPatientFragment extends ACBaseFragment<AddEditPatientContrac
                     ArrayAdapter<String> lga_adapter = new ArrayAdapter<>(getContext(),
                             android.R.layout.simple_dropdown_item_1line, lgas);
                     edcity.setAdapter(lga_adapter);
+                    edcity.setThreshold(1);
+                    edcity.setOnFocusChangeListener((v, hasFocus) -> {
+                        if (!hasFocus) {
+                            String input = edcity.getText().toString();
+                            boolean isValid = Arrays.asList(lgas).contains(input);
+                            if (!isValid) {
+                                edcity.setError("Please select a valid LGA");
+                                edcity.setText(""); // or reset to previous valid
+                            }
+                        }
+                    });
                 }
             }
         });

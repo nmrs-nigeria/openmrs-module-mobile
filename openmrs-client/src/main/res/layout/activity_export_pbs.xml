@@ -26,7 +26,8 @@
             android:background="@drawable/custom_button_shape"
             android:onClick="generatePBS"
             android:text="Export Data"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/import_csc"
@@ -66,9 +67,10 @@
             android:layout_marginTop="@dimen/padding_16"
             android:layout_weight="1"
             android:background="@drawable/custom_button_delete"
-            android:onClick="deleteFingerPrints"
+            android:onClick="deleteData"
             android:text="Clear Data"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

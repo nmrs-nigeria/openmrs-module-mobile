@@ -36,7 +36,7 @@ public class ViewAdjustmentFragment extends ACBaseFragment<ViewAdjustmentContrac
         View root = inflater.inflate(R.layout.fragment_view_adjustment, container, false);
         setHasOptionsMenu(true);
         FontsUtil.setFont((ViewGroup) root);
-        listView = (ListView) root.findViewById(R.id.adjustmentList);
+        listView = root.findViewById(R.id.adjustmentList);
         viewAdjustmentRowItems = new ArrayList<ViewAdjustmentRowItem>();
 
         viewAdjustmentAdapter = new ViewAdjustmentAdapter(getContext(), viewAdjustmentRowItems);

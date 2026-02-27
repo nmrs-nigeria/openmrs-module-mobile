@@ -173,9 +173,13 @@ public class FormProgramPresenter extends BasePresenter implements FormProgramCo
         else if(e_type.equalsIgnoreCase("Maternal Cohort Register")){
             encType = encounterDAO.getEncounterTypeByFormName("PMTCT HIV Testing");
         }
+        else if(e_type.equalsIgnoreCase("Care Card")){
+            encType = encounterDAO.getEncounterTypeByFormName("Care");
+        }
         else{
             encType = encounterDAO.getEncounterTypeByFormName(formsStringArray[position]);
         }
+
         if (encType != null) {
             String encounterType = encType.getUuid();
             view.startFormDisplayActivity(formName, patientId, valueRefString, encounterType);

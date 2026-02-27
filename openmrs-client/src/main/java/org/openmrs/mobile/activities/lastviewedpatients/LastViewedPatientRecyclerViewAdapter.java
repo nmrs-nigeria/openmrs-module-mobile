@@ -32,6 +32,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.openmrs.mobile.R;
 import org.openmrs.mobile.api.FingerPrintSyncService;
 import org.openmrs.mobile.api.repository.PatientRepository;
@@ -96,13 +98,14 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         patients.remove(getItemCount() - 1);
         notifyItemRemoved(getItemCount());
     }
-
+   private View refView;
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_find_last_viewed_patients, parent, false);
             FontsUtil.setFont((ViewGroup) itemView);
+             refView=itemView;
             return new PatientViewHolder(itemView);
         } else {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.progressbar_item, parent, false);
@@ -129,7 +132,7 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
             if (null != patient.getName()) {
                 ((PatientViewHolder) holder).mDisplayName.setText(patient.getName().getNameString());
-            } else if(null != patient.getDisplay()){
+            } else if (null != patient.getDisplay()) {
                 /* if name is null, then we can get the name from 'display' which contains the ID and name
                 separated by a hyphen( - ). */
                 String patientName = patient.getDisplay().split("-")[1];
@@ -364,73 +367,80 @@ class LastViewedPatientRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    /*
+    downloadPatient  response the server.
+     */
     private void downloadPatient(final Patient patient, final Boolean showSnackBar) {
-        // download only when the biometric service is online
-        new FingerPrintSyncService().CheckServiceStatus(new GenericResponseCallbackListener<PbsServerContract>() {
+        //Download patient from the network
+        new PatientRepository().downloadPatientByUuid(patient.getUuid(), new DownloadPatientCallbackListener() {
             @Override
-            public void onResponse(PbsServerContract obj) {
-               // Util.log(obj.getDatabaseServer());
-               // Util.log(obj.getAppVersion());
-            //  Util.log("Return value "+obj);
-              new PatientRepository().downloadPatientByUuid(patient.getUuid(), new DownloadPatientCallbackListener() {
-                    @Override
-                    public void onPatientDownloaded(Patient newPatient) {
-                        new PatientDAO().savePatient(newPatient)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(id -> {
-                                    new VisitRepository().syncVisitsData(newPatient);
-                                    new VisitRepository().syncLastVitals(newPatient.getUuid());
+            public void onPatientDownloaded(Patient newPatient) {
+                // save the patient
+                new PatientDAO().savePatient(newPatient)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(id -> {
+                            // retrieve PBS and if success
+                            new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(),
+                                    false, new GenericResponseCallbackListener<Boolean>() {
+                                        @Override
+                                        public void onResponse(Boolean obj) {
+                                            if (obj) {
+                                                // if succeeded in getting the prints without a network failure or request failure
+                                                new VisitRepository().syncVisitsData(newPatient);
+                                                new VisitRepository().syncLastVitals(newPatient.getUuid());
+                                                patients.remove(patient);
+                                                notifyDataSetChanged();
+                                                if (showSnackBar) {
+                                                    view.showOpenPatientSnackbar(newPatient.getId());
+                                                }
+                                            } else {
+                                                //PBS service failed due to error and remove the patients from database.
+                                               PatientDAO patientDAO=  new PatientDAO();
+                                                Patient patientWithID =  patientDAO.findPatientByUUID(newPatient.getUuid());
+                                                patientDAO.deletePatientConfirm(patientWithID.getId());
+                                                try {
+                                                    Snackbar.make(refView, "Client PBS failed to download. Ensure biometric service is running and the service port is not blocked by firewall.", Snackbar.LENGTH_INDEFINITE).show();
+                                                }catch (Exception e){
 
-                                    //retrieve finger print
-                                  //  Util.log("FingerPrintSyncService().retrieveCaptureFromServer");
-                                    new FingerPrintSyncService().retrieveCaptureFromServer(newPatient.getUuid(), newPatient.getId().toString(),
-                                            false);
-                                    patients.remove(patient);
-                                    notifyDataSetChanged();
-                                    if (showSnackBar) {
-                                        view.showOpenPatientSnackbar(newPatient.getId());
-                                    }
-                                });
+                                                }
 
-                    }
+                                            }
 
-                    @Override
-                    public void onPatientPhotoDownloaded(Patient patient) {
-                        new PatientDAO().updatePatient(patient.getId(), patient);
-                    }
+                                        }
 
-                    @Override
-                    public void onResponse() {
-                        // This method is intentionally empty
-                    }
+                                        @Override
+                                        public void onErrorResponse(Boolean errorMessage) {
+//not used
+                                        }
 
-                    @Override
-                    public void onErrorResponse(String errorMessage) {
-                        ToastUtil.error("Failed to fetch patient data");
-                    }
-                });
+                                        @Override
+                                        public void onErrorResponse(String errorMessage) {
+//not used
+                                        }
+                                    });
+
+                        });
 
             }
 
             @Override
-            public void onErrorResponse(PbsServerContract errorMessage) {
+            public void onPatientPhotoDownloaded(Patient patient) {
+                new PatientDAO().updatePatient(patient.getId(), patient);
+            }
 
-
+            @Override
+            public void onResponse() {
+                // This method is intentionally empty
             }
 
             @Override
             public void onErrorResponse(String errorMessage) {
-                if(view!=null){
-                    Toast.makeText(mContext, "Please start the PBS service:"+errorMessage, Toast.LENGTH_LONG).show() ;
-                    OpenMRSCustomHandler.writeLogToFile("Please start the PBS service ");
-                    Util.log("Please start the PBS service");
-
-                }
+                ToastUtil.error("Failed to fetch patient data");
             }
         });
 
-
     }
+
 
     public void disableCheckBox(PatientViewHolder holder) {
         holder.mAvailableOfflineCheckbox.setChecked(true);

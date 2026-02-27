@@ -279,8 +279,8 @@ public class VisitDAO {
             String[] whereArgs = new String[]{visitUUID};
             String orderBy = VisitTable.Column.START_DATE + " DESC";
             final Cursor cursor = helper.getReadableDatabase().query(VisitTable.TABLE_NAME, null, where, whereArgs, null, null, orderBy);
-            DatabaseUtils.dumpCursorToString(cursor);
-            Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
+//            DatabaseUtils.dumpCursorToString(cursor);
+//            Log.v("Cursor Object", DatabaseUtils.dumpCursorToString(cursor));
             if (null != cursor) {
                 try {
                     if (cursor.moveToFirst()) {

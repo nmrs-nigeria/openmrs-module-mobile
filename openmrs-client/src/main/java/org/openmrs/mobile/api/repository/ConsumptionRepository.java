@@ -35,6 +35,7 @@ import org.openmrs.mobile.application.OpenMRS;
 import org.openmrs.mobile.application.OpenMRSCustomHandler;
 import org.openmrs.mobile.application.OpenMRSLogger;
 import org.openmrs.mobile.dao.PatientDAO;
+import org.openmrs.mobile.databases.Util;
 import org.openmrs.mobile.listeners.retrofit.DefaultResponseCallbackListener;
 import org.openmrs.mobile.listeners.retrofit.DownloadPatientCallbackListener;
 import org.openmrs.mobile.models.Consumption;
@@ -80,6 +81,7 @@ public class ConsumptionRepository extends RetrofitRepository {
 
     public void syncConsumption(final Consumption consumption, @Nullable final DefaultResponseCallbackListener callbackListener) {
         if (NetworkUtils.isOnline()) {
+
             Call<Consumption> call = restApi.startConsumption(consumption);
             call.enqueue(new Callback<Consumption>() {
                 @Override
@@ -93,6 +95,9 @@ public class ConsumptionRepository extends RetrofitRepository {
                             callbackListener.onErrorResponse(response.message());
                         }
                         OpenMRSCustomHandler.writeLogToFile("Failed Consumption: " + response.code() + " / " + response.raw() + " / " + response.body() + " / " + response.errorBody());
+
+
+
                     }
                 }
 

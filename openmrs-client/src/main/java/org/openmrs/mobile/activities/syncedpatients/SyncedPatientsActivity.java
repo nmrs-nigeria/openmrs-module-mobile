@@ -102,23 +102,7 @@ public class SyncedPatientsActivity extends ACBaseActivity {
         return true;
     }
     // Added Start Synching Method
-    private void startSyncing()
-    {
-        final Boolean onlineState = NetworkUtils.hasNetwork();
-        // setSyncButtonState(syncState);
-        if (onlineState){
-            OpenMRS.getInstance().setSyncState(true);
-            Toast.makeText(getApplicationContext(), "Mobile Online", Toast.LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "Start Uploading", Toast.LENGTH_LONG).show();
-            Intent  sy= new Intent(this, SyncNewService.class);
-            startService(sy);
-            Toast.makeText(getApplicationContext(), "Uploading", Toast.LENGTH_LONG).show();
-        }
 
-        else
-            Toast.makeText(getApplicationContext(), "Mobile Offline", Toast.LENGTH_SHORT).show();
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

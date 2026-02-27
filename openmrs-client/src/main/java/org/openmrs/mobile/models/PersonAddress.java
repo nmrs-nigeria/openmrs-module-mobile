@@ -18,7 +18,9 @@ import org.openmrs.mobile.utilities.StringUtils;
 import java.io.Serializable;
 
 public class PersonAddress implements Serializable {
-
+    @SerializedName("uuid")
+    @Expose
+    private String uuid;
     @SerializedName("preferred")
     @Expose
     private Boolean preferred;
@@ -197,4 +199,13 @@ public class PersonAddress implements Serializable {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }
+
